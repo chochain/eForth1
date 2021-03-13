@@ -16,28 +16,34 @@
 #include <stdint.h>
 #include "eforth.h"
 
-extern int  code[];
-U8   *cCode = (U8*)code;
+extern int cs16[];
+U8   *cs8 = (U8*)cs16;
 int  rack[32]  = {0}, *R = rack;
 int  stack[32] = {0}, *S = stack;
 
 int  I, P, IP;
 int  n, w, clock, phase, top;
 
-const PROGMEM char SPC[] = " ";
-
-void dumpStack(void)
+void dump(void)
 {
-    Serial.print(F("\nS=") );
+    Serial.print(clock, HEX);
+    Serial.print(F(":"));
+    Serial.print(IP, HEX);
+    Serial.print(F("]\tP="));
+    Serial.print(P, HEX);
+    Serial.print(F("\tI="));
+    Serial.println(I, HEX);
+    
+    Serial.print(F("S="));      // data stack
     for (int n=0; n<=(S-stack); n++) {
         Serial.print(stack[n], HEX);
-        Serial.print(SPC);
+        Serial.print(F(" "));
     } 
     Serial.println(top, HEX);
-    Serial.print(F("R="));
+    Serial.print(F("R="));      // return stack
     for (int n=0; n<=(R-rack); n++) {
         Serial.print(rack[n], HEX);
-        Serial.print(SPC);
+        Serial.print(F(" "));
     } 
     Serial.println(F("")); 
 }
@@ -46,14 +52,14 @@ void next(void)     { P=AT(P); IP+=2; jump();      }
 void bye()          { exit(0);                     } 
 void qrx(void)
 {
-    while (Serial.available()==0) {};
+    while (!Serial) {};
     push(Serial.read());
     push(0xffff);
 }
 void txsto(void)   { Serial.write((U8)top); pop();  } 
 void emit(void)    { txsto();                       } 
-void docon(void)   { push(AT(P));  P+=2;          }
-void dolit(void)   { push(AT(IP)); IP+=2; next(); }
+void docon(void)   { push(AT(P));  P+=2;            }
+void dolit(void)   { push(AT(IP)); IP+=2; next();   }
 void dolist(void)  { *++R=IP; IP=P; next();         }
 void exitt(void)   { IP=*R--; next();               } 
 void execu(void)   { *++R=IP; P=top; pop(); jump(); } 
@@ -65,8 +71,8 @@ void donext(void)
 } 
 void qbran(void)   { IP = top ? IP+2 : AT(IP); pop(); next(); }
 void bran(void)    { IP = AT(IP); next();                     }
-void store(void)   { data[top>>1] = *S--; pop();              }
-void cstore(void)  { cData[top] = (char) *S--; pop();         }
+void store(void)   { ds16[top>>1] = *S--; pop();              }
+void cstore(void)  { ds8[top] = (char)*S--; pop();            }
 void at(void)      { top = AT(top);     }
 void cat(void)     { top = CAT(top);    }
 void icat(void)    { top = BYTE(top);   } 
@@ -166,17 +172,7 @@ void loop()
     case 2: execute(I >> 8);   break;
     case 3: jump();           
     }
-    Serial.println(n, HEX);
-    Serial.print(F("clock="));
-    Serial.print(clock, HEX);
-    Serial.print(F(" IP="));
-    Serial.print(IP, HEX);
-    Serial.print(F(" P="));
-    Serial.print(P, HEX);
-    Serial.print(F(" I="));
-    Serial.print(I, HEX);
-    
-    dumpStack();
+    dump();
     
     clock += 1; 
 }

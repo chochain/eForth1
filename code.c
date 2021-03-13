@@ -5,7 +5,7 @@
     ADDRESS_RADIX = HEX;
     DATA_RADIX    = HEX;
 */
-const PROGMEM U16 code[] = {
+const PROGMEM U16 cs16[] = {
     /* 0000 */ 0x0000,
     /* 0002 */ 0x0000,
     /* 0004 */ 0x0000,

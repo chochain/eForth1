@@ -1,14 +1,14 @@
 #include "eforth.h"
 
-extern int  assemble(U8 *rom);
-extern void vm_init(U8 *rom);
+extern int  assemble(U8 *cdata, XA *rack);
+extern void vm_init(U8 *cdata, XA *rack, S16 *stack);
 extern void vm_run();
 
-U32 data[FORTH_DATA_SZ] = {};           		// 64K forth memory block
+U8 _mem[FORTH_MEM_SZ] = {};           		// 4K forth memory block
 
 void dump_data(U8* byte, int len) {
-#if DATA_DUMP
-    for (int p=0; p<len; p+=0x20) {
+#if ASM_TRACE
+    for (int p=0; p<len+0x20; p+=0x20) {
         PRINTF("\n%04x: ", p);
         for (int i=0; i<0x20; i++) {
         	U8 c = byte[p+i];
@@ -20,21 +20,21 @@ void dump_data(U8* byte, int len) {
             PRINTF("%c", c ? ((c>32 && c<127) ? c : '_') : '.');
         }
     }
-#endif // DATA_DUMP
+#endif // ASM_TRACE
 }
 
 void setup()
 {
     Serial.begin(115200);
     
-	U8 *rom = (U8*)data;
-	setvbuf(stdout, NULL, _IONBF, 0);		// autoflush (turn STDOUT buffering off)
+	U8  *cdata = _mem;
+    XA  *rack  = (XA*)&_mem[FORTH_RACK_ADDR];
+    S16 *stack = (XA*)&_mem[FORTH_STACK_ADDR];
+	int sz  = assemble(cdata, rack);
+	dump_data(cdata, sz);
 
-	int sz  = assemble(rom);
-	dump_data(rom, sz+0x20);
-
-	PRINTF("\nceForth v4.0 ROM[%04x]\n", sz);
-	vm_init(rom);
+	PRINTF("\nROM[%04x]\n", sz);
+	vm_init(cdata, rack, stack);
 }
 
 void loop()

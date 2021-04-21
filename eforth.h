@@ -4,15 +4,15 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <ESP8266WiFi.h>
+
+#define EFORTH_16BIT    1
 //
 // debugging flags
 //
-#define PRINTF(s, ...)  Serial.printf(s, ##__VA_ARGS__)
-#define GETCHAR()       Serial.read()
-#define ASSEM_DUMP      0
-#define DATA_DUMP       0
-#define FORTH_TRACE     0
+#define PRINTF(s, ...)  
+#define GETCHAR()       0
+#define ASM_TRACE       0
+#define EXE_TRACE       0
 //
 // portable types
 //
@@ -26,25 +26,26 @@ typedef int32_t   S32;
 typedef int16_t   S16;
 typedef int8_t    S8;
 
-typedef U32       XA;				// Address size
+typedef U16       XA;				// Address size
 //
 // capacity and sizing
 //
-#define CELLSZ		     4
+#define CELLSZ		     2
 #define FORTH_PRIMITIVES 64
-#define FORTH_RACK_SZ    64
-#define FORTH_STACK_SZ   64
-#define FORTH_DATA_SZ    0x2000
-#define ASSEM_RACK_SZ    64
+#define FORTH_TIB_SZ     0x40
+#define FORTH_STACK_SZ   0x50
+#define FORTH_RACK_SZ    0x50
+#define FORTH_MEM_SZ     0x2000
 //
 // logic and stack op macros (processor dependent)
 //
 #define FORTH_BOOT_ADDR  0x0
-#define FORTH_TVAR_ADDR  0x80
-#define FORTH_UVAR_ADDR  0x90
-#define FORTH_DIC_ADDR   0x200
-#define FORTH_TIB_ADDR   0x100
-#define FORTH_TIB_SZ     0x100
+#define FORTH_TVAR_ADDR  0X6
+#define FORTH_UVAR_ADDR  0X10
+#define FORTH_TIB_ADDR   0x20
+#define FORTH_RACK_ADDR  (FORTH_TIB_ADDR+FORTH_TIB_SZ)
+#define FORTH_STACK_ADDR (FORTH_RACK_ADDR+FORTH_RACK_SZ)
+#define FORTH_DIC_ADDR   (FORTH_STACK_ADDR+FORTH_STACK_SZ)
 //
 // TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff
 // which does not need boolean op (i.e. in C)

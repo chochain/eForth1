@@ -10,9 +10,8 @@ S16 top;                        // ALU (i.e. cached top of stack value)
 //
 // Forth VM core storage
 //
+S16 *stack;   	                // stack used by stack and rack
 U8  *cdata;             		// linear byte array pointer
-XA  *rack;   	                // return stack (assume FORTH_RACK_SZ is power of 2)
-S16 *stack;   	                // data stack   (assume FORTH_STACK_SZ is power of 2)
 //
 // data and return stack ops
 //  R                   S
@@ -23,12 +22,12 @@ S16 *stack;   	                // data stack   (assume FORTH_STACK_SZ is power o
 //
 #define BOOL(f)     ((f) ? TRUE : FALSE)
 #define CELL(ip)    (*(XA*)(cdata+(XA)(ip)))
-#define RACK(r)     (rack[(r)&(FORTH_RACK_SZ-1)])
-#define STACK(s)    (stack[(s)&(FORTH_STACK_SZ-1)])
-#define RPUSH(a)    (RACK(++R)=(XA)a)
-#define RPOP()      (RACK(R--))
-#define	PUSH(v)	    (STACK(++S)=top, top=(S16)(v))
-#define	POP()		(top=STACK(S--))
+#define STACK(s)    (stack[s])
+#define RACK(r)     (stack[FORTH_STACK_SZ-(r)])
+#define RPUSH(a)    (RACK(++R)=(S16)(a))
+#define RPOP()      ((XA)RACK(R ? R-- : R))
+#define	PUSH(v)	    do { STACK(++S)=top; top=(S16)(v); } while(0)
+#define	POP()		(top=STACK(S ? S-- : S))
 //
 // tracing instrumentation
 //
@@ -45,13 +44,13 @@ void _break_point(U32 pc, char *name)
 #define TRACE(s,v)  if(tCNT) PRINTF(s,v)
 #define LOG(s)      TRACE(" %s", s)
 #define TRACE_COLON() if (tCNT) {              \
-    PRINTF("\n");                              \
-	for (int i=0; i<tTAB; i++) PRINTF("  ");   \
+    LOG("\n");                                 \
+	for (int i=0; i<tTAB; i++) LOG("  ");      \
 	tTAB++;                                    \
-	PRINTF(":");                               \
+	LOG(":");                                  \
 }
 #define TRACE_EXIT()  if (tCNT) {              \
-	PRINTF(" ;");                              \
+    LOG(" ;");                                 \
 	tTAB--;                                    \
 }
 void TRACE_WORD()
@@ -69,7 +68,10 @@ void TRACE_WORD()
 	memcpy(buf, a+1, len);
 	buf[len] = '\0';
 
-	PRINTF(" %x_%x_%x_%s", STACK(S-1), STACK(S), top, buf);
+	TRACE(" %x", STACK(S-1));
+    TRACE("_%x", STACK(S));
+    TRACE("_%x", top);
+    TRACE("_%s", buf);
 
 	_break_point(PC, buf);
 }
@@ -92,15 +94,15 @@ void _qrx()                 // ( -- c t|f) read a char from terminal input devic
 void _txsto()               // (c -- ) send a char to console
 {
 #if !EXE_TRACE
-	PRINTF("%c", (U8)top);
+	TRACE("%c", (U8)top);
 #else  // !EXE_TRACE
 	switch (top) {
-	case 0xa: PRINTF("<LF>");  break;
-	case 0xd: PRINTF("<CR>");  break;
-	case 0x8: PRINTF("<TAB>"); break;
+	case 0xa: LOG("<LF>");  break;
+	case 0xd: LOG("<CR>");  break;
+	case 0x8: LOG("<TAB>"); break;
 	default:
-		if (tCNT) PRINTF("<%c>", (U8)top);
-		else      PRINTF("%c", (U8)top);
+		if (tCNT) TRACE("<%c>", (U8)top);
+		else      TRACE("%c", (U8)top);
 	}
 #endif // !EXE_TRACE
 	POP();
@@ -451,13 +453,13 @@ void _count()               // (b -- b+1 +n) count byte of a string and add 1 to
 	top = cdata[top];
     _next();
 }
-void _max()                 // (n1 n2 -- n) return greater of two top stack items
+void _max_()                // (n1 n2 -- n) return greater of two top stack items
 {
 	if (top < STACK(S)) POP();
 	else (U8)S--;
     _next();
 }
-void _min()                 // (n1 n2 -- n) return smaller of two top stack items
+void _min_()                // (n1 n2 -- n) return smaller of two top stack items
 {
 	if (top < STACK(S)) (U8)S--;
 	else POP();
@@ -532,22 +534,18 @@ void(*prim[FORTH_PRIMITIVES])() = {
 	/* case 59 */ _dat,
 	/* case 60 */ _count,
 	/* case 61 */ _dovar,
-	/* case 62 */ _max,
-	/* case 63 */ _min,
+	/* case 62 */ _max_,
+	/* case 63 */ _min_,
 };
 
-void vm_init(U8 *cdata0, XA *rack0, S16 *stack0) {
+void vm_init(U8 *cdata0, U8 *stack0) {
 	cdata = cdata0;
-    rack  = rack0;
-    stack = stack0;
+    stack = (S16*)stack0;
     
-	R  = S = PC = IP = top = 0;
+	R = S = PC = IP = top = 0;
 }
 
 void vm_run() {
-    //tCNT++;                       // execution tracing
-	for (;;) {
-	    TRACE_WORD();               // tracing stack and word name
-		prim[cdata[PC]]();          // walk bytecode stream
-	}
+    TRACE_WORD();               // tracing stack and word name
+    prim[cdata[PC]]();          // walk bytecode stream
 }

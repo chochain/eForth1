@@ -1,7 +1,8 @@
 #include "eforth.h"
+#include <time.h>
 
-extern int  assemble(U8 *cdata, XA *rack);
-extern void vm_init(U8 *cdata, XA *rack, S16 *stack);
+extern int  assemble(U8 *cdata, U8 *stack);
+extern void vm_init(U8 *cdata, U8 *stack);
 extern void vm_run();
 
 U8 _mem[FORTH_MEM_SZ] = {};           		// 4K forth memory block
@@ -20,28 +21,37 @@ void dump_data(U8* byte, int len) {
             PRINTF("%c", c ? ((c>32 && c<127) ? c : '_') : '.');
         }
     }
+    PRINTF("\nPrimitives=%d, ", FORTH_PRIMITIVES);
+    PRINTF("Addr=%d-bit, ", 8*sizeof(XA));
+    PRINTF("CELLSZ=%d", CELLSZ);
+    PRINTF("\nHEAP = x%x", FORTH_MEM_SZ);
+    PRINTF("\n  BOOT  x%04x", FORTH_BOOT_ADDR);
+    PRINTF("\n  USER  x%04x", FORTH_TVAR_ADDR);  PRINTF("+%04x", FORTH_TIB_ADDR-FORTH_TVAR_ADDR);
+    PRINTF("\n  TIB   x%04x", FORTH_TIB_ADDR);   PRINTF("+%04x", FORTH_TIB_SZ);
+    PRINTF("\n  STACK x%04x", FORTH_STACK_ADDR); PRINTF("+%04x", FORTH_STACK_SZ);
+    PRINTF("\n  DIC   x%04x", FORTH_DIC_ADDR);   PRINTF("+%04x", FORTH_MEM_SZ-FORTH_DIC_ADDR);
+    PRINTF("\nHERE (DIC TOP) x%04x", len);
 #endif // ASM_TRACE
+    PRINTF("\neForth16 v1.0","");
 }
 
 void setup()
 {
     Serial.begin(115200);
     
-	U8  *cdata = _mem;
-    XA  *rack  = (XA*)&_mem[FORTH_RACK_ADDR];
-    S16 *stack = (XA*)&_mem[FORTH_STACK_ADDR];
-	int sz  = assemble(cdata, rack);
+	U8 *cdata = _mem;
+    U8 *stack = &_mem[FORTH_STACK_ADDR];
+	int sz  = assemble(cdata, stack);
 	dump_data(cdata, sz);
 
-	PRINTF("\nROM[%04x]\n", sz);
-	vm_init(cdata, rack, stack);
+	vm_init(cdata, stack);
 }
 
 void loop()
 {
-    while (!Serial.available());
+//    while (!Serial.available());
     
-	vm_run();
+//	vm_run();
 }
 
 

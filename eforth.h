@@ -4,14 +4,15 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdint.h>
+#include <Arduino.h>
 
 #define EFORTH_16BIT    1
 //
 // debugging flags
 //
-#define PRINTF(s, ...)  
-#define GETCHAR()       0
-#define ASM_TRACE       0
+#define PRINTF(s,v)     Serial.printf(s,v)
+#define GETCHAR()       Serial.read()
+#define ASM_TRACE       1
 #define EXE_TRACE       0
 //
 // portable types
@@ -32,20 +33,18 @@ typedef U16       XA;				// Address size
 //
 #define CELLSZ		     2
 #define FORTH_PRIMITIVES 64
+#define FORTH_STACK_SZ   0x40
 #define FORTH_TIB_SZ     0x40
-#define FORTH_STACK_SZ   0x50
-#define FORTH_RACK_SZ    0x50
 #define FORTH_MEM_SZ     0x2000
 //
 // logic and stack op macros (processor dependent)
 //
 #define FORTH_BOOT_ADDR  0x0
-#define FORTH_TVAR_ADDR  0X6
-#define FORTH_UVAR_ADDR  0X10
+#define FORTH_TVAR_ADDR  0x4
+#define FORTH_UVAR_ADDR  0x10
 #define FORTH_TIB_ADDR   0x20
-#define FORTH_RACK_ADDR  (FORTH_TIB_ADDR+FORTH_TIB_SZ)
-#define FORTH_STACK_ADDR (FORTH_RACK_ADDR+FORTH_RACK_SZ)
-#define FORTH_DIC_ADDR   (FORTH_STACK_ADDR+FORTH_STACK_SZ)
+#define FORTH_STACK_ADDR (FORTH_TIB_SZ+FORTH_TIB_SZ)
+#define FORTH_DIC_ADDR   (FORTH_STACK_ADDR+FORTH_STACK_SZ*CELLSZ)
 //
 // TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff
 // which does not need boolean op (i.e. in C)

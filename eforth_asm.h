@@ -4,10 +4,10 @@
 // tracing/logging macros
 //
 #if ASM_TRACE
-#define DEBUG(s, v)     printf(s, v)
-#define SHOWOP(op)      printf("\n%04x: %s\t", aP, op)
+#define DEBUG(s,v)      Serial.printf(s, v)
+#define SHOWOP(op)      Serial.printf("\n%04x: %s\t", aPC, op)
 #else
-#define DEBUG(s, v)
+#define DEBUG(s,v)
 #define SHOWOP(op)
 #endif // ASM_TRACE
 //

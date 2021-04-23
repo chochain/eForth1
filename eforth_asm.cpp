@@ -47,23 +47,27 @@ void _rdump()
 	}
 	DEBUG("%c]", ' ');
 }
-int _strlen(const char *seq) {
-    return strlen(seq);
+int _strlen(FCHAR *seq) {
+    PGM_P p = reinterpret_cast<PGM_P>(seq);
+    int i=0;
+    for (; pgm_read_byte(p); i++, p++);
+    return i;
 }
-void _header(int lex, const char *seq) {
+void _header(int lex, FCHAR *seq) {
     if (aThread) _dump(aThread-sizeof(XA), aPC);         // dump data from previous word to current word
     STORE(aThread);                           // point to previous word
     aThread = aPC;                            // keep pointer to this word
 
     BSET(aPC++, lex);                         // length of word (with optional fIMMED or fCOMPO flags)
     int len = lex & 0x1f;                     // Forth allows word max length 31
+    PGM_P p = reinterpret_cast<PGM_P>(seq);
     for (int i=0; i < len; i++) {             // memcpy word string
-        BSET(aPC++, seq[i]);
+        BSET(aPC++, pgm_read_byte(p++));
     }
     DEBUG("%04x: ", aPC);
     DEBUG("%s", seq);
 }
-int _code(const char *seg, int len, ...) {
+int _code(FCHAR *seg, int len, ...) {
     _header(_strlen(seg), seg);
     int addr = aPC;                           // keep address of current word
     va_list argList;
@@ -88,7 +92,7 @@ int _code(const char *seg, int len, ...) {
 	va_end(argList);							\
 	_rdump();                                   \
 }
-int _colon(const char *seg, int len, ...) {
+int _colon(FCHAR *seg, int len, ...) {
     _header(_strlen(seg), seg);
     DEBUG(" %s", ":06");
     int addr = aPC;
@@ -96,7 +100,7 @@ int _colon(const char *seg, int len, ...) {
     DATACPY(len);
     return addr;
 }
-int _immed(const char *seg, int len, ...) {
+int _immed(FCHAR *seg, int len, ...) {
     _header(fIMMED | _strlen(seg), seg);
     DEBUG(" %s", "i06");
     int addr = aPC;
@@ -188,22 +192,23 @@ void _nxt(int len, ...) {          // _next() is multi-defined in vm
 #define STRCPY(op, seq) {                           \
 	STORE(op);                                      \
 	int len = _strlen(seq);							\
+    PGM_P p = reinterpret_cast<PGM_P>(seq);         \
 	BSET(aPC++, len);                               \
 	for (int i = 0; i < len; i++) {					\
-		BSET(aPC++, seq[i]);                        \
+		BSET(aPC++, pgm_read_byte(p++));            \
 	}												\
 }
-void _dotq(const char *seq) {
+void _dotq(FCHAR *seq) {
     SHOWOP("DOTQ");
     DEBUG("%s", seq);
     STRCPY(DOTQ, seq);
 }
-void _strq(const char *seq) {
+void _strq(FCHAR *seq) {
     SHOWOP("STRQ");
     DEBUG("%s", seq);
     STRCPY(STRQ, seq);
 }
-void _abortq(const char *seq) {
+void _abortq(FCHAR *seq) {
     SHOWOP("ABORTQ");
     DEBUG("%s", seq);
     STRCPY(ABORTQ, seq);
@@ -211,9 +216,9 @@ void _abortq(const char *seq) {
 //
 // assembler macros (calculate number of parameters by compiler)
 //
-#define _CODE(seg, ...)      _code(seg, _NARG(__VA_ARGS__), __VA_ARGS__)
-#define _COLON(seg, ...)     _colon(seg, _NARG(__VA_ARGS__), __VA_ARGS__)
-#define _IMMED(seg, ...)     _immed(seg, _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _CODE(seg, ...)      _code(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _COLON(seg, ...)     _colon(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _IMMED(seg, ...)     _immed(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _LABEL(...)          _label(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _BEGIN(...)          _begin(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _AGAIN(...)          _again(_NARG(__VA_ARGS__), __VA_ARGS__)
@@ -226,9 +231,9 @@ void _abortq(const char *seq) {
 #define _FOR(...)            _for(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _NEXT(...)           _nxt(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _AFT(...)            _aft(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _DOTQ(seq)           _dotq(seq)
-#define _STRQ(seq)           _strq(seq)
-#define _ABORTQ(seq)         _abortq(seq)
+#define _DOTQ(seq)           _dotq(F(seq))
+#define _STRQ(seq)           _strq(F(seq))
+#define _ABORTQ(seq)         _abortq(F(seq))
 
 int assemble(U8 *cdata) {
 	aByte = cdata;
@@ -357,7 +362,6 @@ int assemble(U8 *cdata) {
 		_THEN(NOP);
 		_NEXT(DDROP, EXIT);
 	}
-    return aPC;
 	//
 	// Number Conversions and formatting
 	//
@@ -672,6 +676,7 @@ int assemble(U8 *cdata) {
 	//
 	// Structure Compiler
 	//
+    /*
 	XA iTHEN  = _IMMED("THEN",    HERE, SWAP, STORE, EXIT);
 	XA iFOR   = _IMMED("FOR",     COMPI, TOR, HERE, EXIT);
 	XA iBEGIN = _IMMED("BEGIN",   HERE, EXIT);
@@ -697,6 +702,7 @@ int assemble(U8 *cdata) {
 	XA iBKSLA = _IMMED("\\",      DOLIT, 0xa,  WORDD, DROP,  EXIT);
 	XA iPAREN = _IMMED("(",       DOLIT, 0x29, PARSE, DDROP, EXIT);
 	XA ONLY   = _COLON("COMPILE-ONLY", DOLIT, fCOMPO, vLAST, AT, PSTOR, EXIT);
+    */
 	XA IMMED  = _COLON("IMMEDIATE",    DOLIT, fIMMED, vLAST, AT, PSTOR, EXIT);
 
 	int XDIC  = aPC;                                   // End of dictionary

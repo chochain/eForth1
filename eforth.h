@@ -10,7 +10,7 @@
 //
 // debugging flags
 //
-#define PRINTF(s,v)     Serial.printf(s,v)
+#define PRINTF(s, ...)  Serial.printf(s, ##__VA_ARGS__)
 #define GETCHAR()       Serial.read()
 #define ASM_TRACE       1
 #define EXE_TRACE       0

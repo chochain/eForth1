@@ -14,28 +14,28 @@ XA NOP, TOR;
 //
 // return stack for branching ops
 //
-XA *aRack;          // return stack (4 cells used only, can be independent of Forth return stack)
 U8 *aByte;          // heap
 U8 aR;              // return stack index
 XA aPC, aThread;    // program counter, pointer to previous word
 //
-// stack op macros
+// memory access and stack op macros
 //
-#define SET(d, v)      (*(XA*)(aByte+d)=(XA)(v))
-#define BSET(d, c)     (*(aByte+d)=(U8)(c))
-#define STORE(v)       { SET(aPC, (v)); aPC+=CELLSZ; }
-#define RACK(r)        (aRack[FORTH_STACK_SZ-(r)])
-#define	RPUSH(v)       (RACK(++aR) = (XA)(v))
+#define BSET(d, c)     (*(aByte+(d))=(U8)(c))
+#define BGET(d)        ((U8)*(aByte+(d)))
+#define SET(d, v)      do { BSET(d, (v)&0xff); BSET((d)+1, (v)>>8); } while (0)
+#define GET(d)         ((U16)BGET(d) + ((U16)BGET((d)+1)<<8))
+#define STORE(v)       do { SET(aPC, (v)); aPC+=CELLSZ; } while(0)
+#define RACK(r)        ((XA)GET(FORTH_STACK_ADDR + (r)*CELLSZ))
+#define	RPUSH(v)       SET(FORTH_STACK_ADDR + (++aR)*CELLSZ, v)
 #define	RPOP()         (RACK(aR ? aR-- : aR))
 #define VAR(a, i)      ((a)+CELLSZ*(i))
 
 void _dump(int b, int u) {
     // dump memory between previous word and this
-    DEBUG("%s", "\n    : ");
-    DEBUG("%04x", *(XA*)(aByte+b));
-    for (int i=b+sizeof(XA); i<u; i+=sizeof(XA)) {
-        if ((i+1)<u) DEBUG(" %04x", *(XA*)(aByte+i));
-        else         DEBUG(" %02x", *(aByte+i));
+    DEBUG("%s", "\n    :");
+    for (int i=b; i<u; i+=sizeof(XA)) {
+        if ((i+1)<u) DEBUG(" %04x", GET(i));
+        else         DEBUG(" %02x", BGET(i));
     }
     DEBUG("%c", '\n');
 }
@@ -43,9 +43,12 @@ void _rdump()
 {
 	DEBUG("%cR[", ' ');
 	for (int i=1; i<=aR; i++) {
-        DEBUG(" %04x", aRack[i]);
+        DEBUG(" %04x", RACK(i));
 	}
 	DEBUG("%c]", ' ');
+}
+int _strlen(const char *seq) {
+    return strlen(seq);
 }
 void _header(int lex, const char *seq) {
     if (aThread) _dump(aThread-sizeof(XA), aPC);         // dump data from previous word to current word
@@ -53,15 +56,15 @@ void _header(int lex, const char *seq) {
     aThread = aPC;                            // keep pointer to this word
 
     BSET(aPC++, lex);                         // length of word (with optional fIMMED or fCOMPO flags)
-    U32 len = lex & 0x1f;                     // Forth allows word max length 31
-    for (U32 i = 0; i < len; i++) {           // memcpy word string
+    int len = lex & 0x1f;                     // Forth allows word max length 31
+    for (int i=0; i < len; i++) {             // memcpy word string
         BSET(aPC++, seq[i]);
     }
     DEBUG("%04x: ", aPC);
     DEBUG("%s", seq);
 }
 int _code(const char *seg, int len, ...) {
-    _header(strlen(seg), seg);
+    _header(_strlen(seg), seg);
     int addr = aPC;                           // keep address of current word
     va_list argList;
     va_start(argList, len);
@@ -86,7 +89,7 @@ int _code(const char *seg, int len, ...) {
 	_rdump();                                   \
 }
 int _colon(const char *seg, int len, ...) {
-    _header(strlen(seg), seg);
+    _header(_strlen(seg), seg);
     DEBUG(" %s", ":06");
     int addr = aPC;
     STORE(opENTER);
@@ -94,7 +97,7 @@ int _colon(const char *seg, int len, ...) {
     return addr;
 }
 int _immed(const char *seg, int len, ...) {
-    _header(fIMMED | strlen(seg), seg);
+    _header(fIMMED | _strlen(seg), seg);
     DEBUG(" %s", "i06");
     int addr = aPC;
     STORE(opENTER);
@@ -184,23 +187,23 @@ void _nxt(int len, ...) {          // _next() is multi-defined in vm
 }
 #define STRCPY(op, seq) {                           \
 	STORE(op);                                      \
-	int len = strlen(seq);							\
+	int len = _strlen(seq);							\
 	BSET(aPC++, len);                               \
 	for (int i = 0; i < len; i++) {					\
 		BSET(aPC++, seq[i]);                        \
 	}												\
 }
-void _DOTQ(const char *seq) {
+void _dotq(const char *seq) {
     SHOWOP("DOTQ");
     DEBUG("%s", seq);
     STRCPY(DOTQ, seq);
 }
-void _STRQ(const char *seq) {
+void _strq(const char *seq) {
     SHOWOP("STRQ");
     DEBUG("%s", seq);
     STRCPY(STRQ, seq);
 }
-void _ABORTQ(const char *seq) {
+void _abortq(const char *seq) {
     SHOWOP("ABORTQ");
     DEBUG("%s", seq);
     STRCPY(ABORTQ, seq);
@@ -223,23 +226,23 @@ void _ABORTQ(const char *seq) {
 #define _FOR(...)            _for(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _NEXT(...)           _nxt(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _AFT(...)            _aft(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _DOTQ(seq)           _dotq(seq)
+#define _STRQ(seq)           _strq(seq)
+#define _ABORTQ(seq)         _abortq(seq)
 
-int assemble(U8 *cdata, U8 *stack) {
+int assemble(U8 *cdata) {
 	aByte = cdata;
-	aPC   = FORTH_DIC_ADDR;
-    aRack = (XA*)stack;
 	aR    = aThread = 0;
 	//
 	// Kernel constants
 	//
 	aPC = FORTH_DIC_ADDR;
+
 	XA ta    = FORTH_TVAR_ADDR;
 	XA vHLD  = _CODE("HLD",     opDOCON, VAR(ta,0), 0);
 	XA vSPAN = _CODE("SPAN",    opDOCON, VAR(ta,1), 0);
 	XA vIN   = _CODE(">IN",     opDOCON, VAR(ta,2), 0);
 	XA vNTIB = _CODE("#TIB",    opDOCON, VAR(ta,3), 0);
-
-    return aPC;
 
 	XA ua    = FORTH_UVAR_ADDR;
 	XA vTTIB = _CODE("'TIB",    opDOCON, VAR(ua,0), 0);
@@ -354,6 +357,7 @@ int assemble(U8 *cdata, U8 *stack) {
 		_THEN(NOP);
 		_NEXT(DDROP, EXIT);
 	}
+    return aPC;
 	//
 	// Number Conversions and formatting
 	//

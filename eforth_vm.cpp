@@ -84,7 +84,10 @@ void _next()                // advance instruction pointer
 	IP += sizeof(XA);       // advance, except control flow instructions
 }
 void _nop() { _next(); }    // ( -- )
-void _bye() { exit(0); }    // ( -- ) exit to OS
+void _bye() {
+	R = S = PC = IP = top = 0;
+    PRINTF("\neForth16 v1.0");
+}
 void _qrx()                 // ( -- c t|f) read a char from terminal input device
 {
 	PUSH(GETCHAR());
@@ -542,7 +545,7 @@ void vm_init(U8 *cdata0, U8 *stack0) {
 	cdata = cdata0;
     stack = (S16*)stack0;
     
-	R = S = PC = IP = top = 0;
+    _bye();
 }
 
 void vm_run() {

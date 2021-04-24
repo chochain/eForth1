@@ -1,7 +1,7 @@
 #include "eforth.h"
 #include <time.h>
 
-extern int  assemble(U8 *cdata);
+extern int  assemble(U8 *cdata, U8 *stack);
 extern void vm_init(U8 *cdata, U8 *stack);
 extern void vm_run();
 
@@ -37,11 +37,11 @@ void setup()
     while (!Serial);          // wait for serial port to connect
     
 	U8 *cdata = _mem;
-    U8 *stack = &_mem[FORTH_STACK_ADDR];
-	int sz  = assemble(cdata);
+    U8 stack;
+	int sz  = assemble(cdata, &stack);
 	dump_data(cdata, sz);
 
-	vm_init(cdata, stack);
+	vm_init(cdata, &stack);
 }
 
 void loop()

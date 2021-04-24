@@ -5,6 +5,9 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <Arduino.h>
+#ifdef ESP8266
+//#include "user_interface.h"
+#endif // ESP8266
 
 #define EFORTH_16BIT    1
 //

@@ -90,7 +90,9 @@ void _bye() {
 }
 void _qrx()                 // ( -- c t|f) read a char from terminal input device
 {
-	PUSH(GETCHAR());
+    char c = GETCHAR();
+    Serial.printf("=>%c", c);
+	PUSH(c);
 	if (top) PUSH(TRUE);
     _next();
 }

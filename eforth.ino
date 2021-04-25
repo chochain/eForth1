@@ -1,7 +1,7 @@
 #include "eforth.h"
 #include <time.h>
 
-extern int  assemble(U8 *cdata, U8 *stack);
+extern int  assemble(U8 *cdata);
 extern void vm_init(U8 *cdata);
 extern void vm_run();
 
@@ -37,18 +37,24 @@ void setup()
     while (!Serial);          // wait for serial port to connect
     
 	U8 *cdata = _mem;
-    U8 stack;
-	int sz  = assemble(cdata, &stack);
+	int sz    = assemble(cdata);
 	dump_data(cdata, sz);
 
 	vm_init(cdata);
+    
+    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop()
 {
-    while (!Serial.available());
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(20);
     
-//	vm_run();
+    if (Serial.available()) {
+        digitalWrite(LED_BUILTIN, LOW);
+        delay(100);
+        vm_run();
+    }
 }
 
 

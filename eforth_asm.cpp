@@ -244,7 +244,7 @@ void heapsize(const char *str, int sz) {
     PRINTF("\n%s heap=%x", str, sz);
 }
 
-int assemble(U8 *cdata, U8 *stack) {
+int assemble(U8 *cdata) {
 	aByte = cdata;
 	aR    = aThread = 0;
 	//
@@ -253,8 +253,6 @@ int assemble(U8 *cdata, U8 *stack) {
 	aPC = FORTH_DIC_ADDR;
 
 	XA ta    = FORTH_TVAR_ADDR;
-    heapsize("DIC", (U8*)&ta - stack);
-    
 	XA vHLD  = _CODE("HLD",     opDOCON, VAR(ta,0), 0);
 	XA vSPAN = _CODE("SPAN",    opDOCON, VAR(ta,1), 0);
 	XA vIN   = _CODE(">IN",     opDOCON, VAR(ta,2), 0);
@@ -372,7 +370,6 @@ int assemble(U8 *cdata, U8 *stack) {
 		_THEN(NOP);
 		_NEXT(DDROP, EXIT);
 	}
-    heapsize("FILL", (U8*)&FILL - stack);
 	//
 	// Number Conversions and formatting
 	//
@@ -465,7 +462,6 @@ int assemble(U8 *cdata, U8 *stack) {
 		_THEN(STR, SPACE, TYPE, EXIT);      // other
 	}
 	XA QUEST = _COLON("?", AT, DOT, EXIT);
-    heapsize("QUEST", (U8*)&QUEST - stack);
 	//
 	// Parser
     //
@@ -686,10 +682,10 @@ int assemble(U8 *cdata, U8 *stack) {
 		_IF(CELLM, DUP, vCP, STORE, AT, DUP, vCNTX, STORE, vLAST, STORE, DROP, EXIT);
 		_THEN(ERROR);
 	}
-    heapsize("FORGT", (U8*)&FORGT - stack);
 	//
 	// Compiler - Branching instructions
 	//
+    /*
 	XA iTHEN  = _IMMED("THEN",    HERE, SWAP, STORE, EXIT);
 	XA iFOR   = _IMMED("FOR",     COMPI, TOR, HERE, EXIT);
 	XA iBEGIN = _IMMED("BEGIN",   HERE, EXIT);
@@ -716,7 +712,6 @@ int assemble(U8 *cdata, U8 *stack) {
 	XA iPAREN = _IMMED("(",       DOLIT, 0x29, PARSE, DDROP, EXIT);
 	XA ONLY   = _COLON("COMPILE-ONLY", DOLIT, fCOMPO, vLAST, AT, PSTOR, EXIT);
 	XA IMMED  = _COLON("IMMEDIATE",    DOLIT, fIMMED, vLAST, AT, PSTOR, EXIT);
-    /*
     */
 	int last  = aPC + CELLSZ;                          // name field of last word
 	XA  COLD  = _COLON("COLD", CR, QUIT);              // QUIT is the main query loop

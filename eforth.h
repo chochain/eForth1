@@ -36,9 +36,10 @@ typedef U16       XA;				// Address size
 //
 #define CELLSZ		     2
 #define FORTH_PRIMITIVES 64
-#define FORTH_STACK_SZ   0x40
-#define FORTH_TIB_SZ     0x40
 #define FORTH_MEM_SZ     0x2000
+#define FORTH_STACK_SZ   0x40*CELLSZ
+#define FORTH_TIB_SZ     0x40
+#define FORTH_PAD_SZ     0x20
 //
 // logic and stack op macros (processor dependent)
 //
@@ -46,8 +47,8 @@ typedef U16       XA;				// Address size
 #define FORTH_TVAR_ADDR  0x4
 #define FORTH_UVAR_ADDR  0x10
 #define FORTH_TIB_ADDR   0x20
-#define FORTH_STACK_ADDR (FORTH_TIB_SZ+FORTH_TIB_SZ)
-#define FORTH_DIC_ADDR   (FORTH_STACK_ADDR+FORTH_STACK_SZ*CELLSZ)
+#define FORTH_STACK_ADDR (FORTH_TIB_ADDR+FORTH_TIB_SZ)
+#define FORTH_DIC_ADDR   (FORTH_STACK_ADDR+FORTH_STACK_SZ)
 //
 // TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff
 // which does not need boolean op (i.e. in C)
@@ -79,8 +80,8 @@ enum {
     opRFROM,      // 18
     opRAT,        // 19
     opTOR,        // 20
-    opSPAT,       // 21
-    opSPSTO,      // 22   
+    opONEP,       // 21 Dr. Ting's opSPAT
+    opONEM,       // 22 Dr. Ting's opSPSTO
     opDROP,       // 23
     opDUP,        // 24
     opSWAP,       // 25

@@ -2,7 +2,7 @@
 #include <time.h>
 
 extern int  assemble(U8 *cdata, U8 *stack);
-extern void vm_init(U8 *cdata, U8 *stack);
+extern void vm_init(U8 *cdata);
 extern void vm_run();
 
 U8 _mem[FORTH_MEM_SZ] = {};           		// 4K forth memory block
@@ -41,7 +41,7 @@ void setup()
 	int sz  = assemble(cdata, &stack);
 	dump_data(cdata, sz);
 
-	vm_init(cdata, &stack);
+	vm_init(cdata);
 }
 
 void loop()

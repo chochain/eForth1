@@ -685,7 +685,6 @@ int assemble(U8 *cdata) {
 	//
 	// Compiler - Branching instructions
 	//
-    /*
 	XA iTHEN  = _IMMED("THEN",    HERE, SWAP, STORE, EXIT);
 	XA iFOR   = _IMMED("FOR",     COMPI, TOR, HERE, EXIT);
 	XA iBEGIN = _IMMED("BEGIN",   HERE, EXIT);
@@ -712,7 +711,7 @@ int assemble(U8 *cdata) {
 	XA iPAREN = _IMMED("(",       DOLIT, 0x29, PARSE, DDROP, EXIT);
 	XA ONLY   = _COLON("COMPILE-ONLY", DOLIT, fCOMPO, vLAST, AT, PSTOR, EXIT);
 	XA IMMED  = _COLON("IMMEDIATE",    DOLIT, fIMMED, vLAST, AT, PSTOR, EXIT);
-    */
+
 	int last  = aPC + CELLSZ;                          // name field of last word
 	XA  COLD  = _COLON("COLD", CR, QUIT);              // QUIT is the main query loop
 	int here  = aPC;                                   // End of dictionary

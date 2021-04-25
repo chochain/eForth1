@@ -43,12 +43,7 @@ int tTAB = 0, tCNT = 0;		// trace indentation and depth counters
 void _next();               // forward declaration
 void _trc_on()  	{ tCNT++;               _next(); }
 void _trc_off() 	{ tCNT -= tCNT ? 1 : 0; _next(); }
-void _break_point(U32 pc, char *name)
-{
-	if (name && strcmp("EVAL", name)) return;
 
-	int i=pc;
-}
 #define TRACE(s, ...)  if(tCNT) PRINTF(s, ##__VA_ARGS__)
 #define LOG(s)      TRACE(" %s", s)
 #define TRACE_COLON() if (tCNT) {              \
@@ -69,16 +64,15 @@ void TRACE_WORD()
 
 	//PRINTF(" (pc=%x, ip=%x, R=%x)", PC, IP, RACK(R));
 	U8 *a = &cData[PC];		            // pointer to current code pointer
-	if (!PC || *a==opEXIT) return;
+    if (!PC || *a==opEXIT) return;
+    
 	for (--a; (*a & 0x7f)>0x1f; a--);   // retract pointer to word name (ASCII range: 0x20~0x7f)
 
 	int  len = (int)*a & 0x1f;          // Forth allows 31 char max
 	memcpy(buf, a+1, len);
 	buf[len] = '\0';
 
- 	PRINTF(" %x_%x_%x_%s", S_GET(S-1), S_GET(S), top, buf);
-
-	_break_point(PC, buf);
+    PRINTF(" %x_%x_%x_%s", S_GET(S-1), S_GET(S), top, buf);
 }
 //
 // Forth Virtual Machine (primitive functions)
@@ -90,16 +84,14 @@ void _bye() {
 }
 void _qrx()                 // ( -- c t|f) read a char from terminal input device
 {
-    char c = GETCHAR();
-    Serial.printf("=>%c", c);
-	PUSH(c);
+	PUSH(GETCHAR());
 	if (top) PUSH(TRUE);
     _next();
 }
 void _txsto()               // (c -- ) send a char to console
 {
 #if !EXE_TRACE
-	TRACE("%c", (U8)top);
+	PRINTF("%c", (U8)top);
 #else  // !EXE_TRACE
 	switch (top) {
 	case 0xa: LOG("<LF>");  break;
@@ -176,7 +168,7 @@ void _bran()                // ( -- ) branch to address following
 }
 void _store()               // (n a -- ) store into memory location from top of stack
 {
-	S_SET(top, S_GET(S--));
+	SET(top, S_GET(S--));
 	POP();
     _next();
 }
@@ -551,6 +543,10 @@ void(*prim[FORTH_PRIMITIVES])() = {
 void vm_init(U8 *cData0) {
 	cData = cData0;
     _bye();
+    
+#if EXE_TRACE
+    tCNT=1;
+#endif // EXE_TRACE
 }
 
 void vm_run() {

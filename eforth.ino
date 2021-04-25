@@ -20,6 +20,7 @@ void dump_data(U8* byte, int len) {
             PRINTF("%c", c ? ((c>32 && c<127) ? c : '_') : '.');
         }
     }
+#endif // ASM_TRACE
     PRINTF("\nPrimitives=%d, Addr=%d-bit, CELLSZ=%d", FORTH_PRIMITIVES, 8*sizeof(XA), CELLSZ);
     PRINTF("\nHEAP = x%x", FORTH_MEM_SZ);
     PRINTF("\n  BOOT  x%04x", FORTH_BOOT_ADDR);
@@ -28,7 +29,6 @@ void dump_data(U8* byte, int len) {
     PRINTF("\n  STACK x%04x+%04x", FORTH_STACK_ADDR, FORTH_STACK_SZ);
     PRINTF("\n  DIC   x%04x+%04x", FORTH_DIC_ADDR,   FORTH_MEM_SZ-FORTH_DIC_ADDR);
     PRINTF("\nHERE    x%x", len);
-#endif // ASM_TRACE
 }
 
 void setup()
@@ -47,13 +47,10 @@ void setup()
 
 void loop()
 {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(20);
-    
     if (Serial.available()) {
-        digitalWrite(LED_BUILTIN, LOW);
-        delay(100);
+        digitalWrite(LED_BUILTIN, HIGH);
         vm_run();
+        digitalWrite(LED_BUILTIN, LOW);
     }
 }
 

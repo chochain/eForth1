@@ -10,7 +10,12 @@
 #define DEBUG(s,v)
 #define SHOWOP(op)
 #endif // ASM_TRACE
+#if ARDUINO
 typedef const __FlashStringHelper FCHAR;
+#else
+#define F(s)                      (s)
+typedef const char                FCHAR;
+#endif // ARDUINO
 //
 // variable length parameter handler macros
 //

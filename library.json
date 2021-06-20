@@ -1,0 +1,22 @@
+{
+  "name": "eForthUNO",
+  "keywords": "eForth, Arduino UNO, multi-task",
+  "description": "eForth on Arduino UNO",
+  "authors":
+  [
+    {
+      "name": "Chochain Lee",
+      "email": "chochain@yahoo.com",
+      "maintainer": true
+    }
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/chochain/eForthUNO.git"
+  },
+  "version": "1.0.0",
+  "license": "MIT",
+  "frameworks": "arduino",
+  "platforms": [ "nano", "uno" ]
+}

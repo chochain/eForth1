@@ -169,7 +169,7 @@ typedef const char          *PGM_P;
 
 #endif // ARDUINO
 
-void vm_init(PGM_P rom, U8 *cdata);
+void vm_init(PGM_P rom, U8 *cdata, void *io_stream);
 int  vm_step();
 
 void ef_prompt();

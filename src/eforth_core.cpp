@@ -85,7 +85,7 @@ void ef_setup(Stream &io_stream)
     io = &io_stream;
 
     sys_info(_ram);
-	vm_init((PGM_P)forth_rom, _ram);
+	vm_init((PGM_P)forth_rom, _ram, (void*)&io_stream);
 }
 
 void ef_run()

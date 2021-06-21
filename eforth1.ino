@@ -1,8 +1,5 @@
-#include <Arduino.h>
-#include <AltSoftSerial.h>
-#include <time.h>
-#include <pt.h>
 #include "eforth1.h"
+#include <AltSoftSerial.h>
 
 #define PT_DELAY_msec(th, ms)  do {     \
     static unsigned long t;             \
@@ -33,9 +30,7 @@ void setup()
     bt.begin(9600);
     delay(1000);
 
-    vm_console(bt);
 	ef_setup(bt);
-
     ef_add_task(hw_task);
     
     pinMode(LED_BUILTIN, OUTPUT);

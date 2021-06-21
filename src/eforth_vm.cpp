@@ -1,7 +1,7 @@
 #include "eforth_core.h"
 
 #if ROM_ONLY
-void vm_console(Stream &io_stream) {}
+void vm_console(void *io_stream)   {}
 void vm_init(PGM_P rom, U8 *cdata) {}
 void vm_run() {}
 #else 
@@ -640,12 +640,8 @@ void(*prim[FORTH_PRIMITIVES])() = {
 //   ABORT   = QUIT           (pointer to error handler, QUIT is the main loop)
 //   tmp     = 0              (scratch pad)
 //
-void vm_console(Stream &io_stream)
-{
-    io = &io_stream;
-}
-
-void vm_init(PGM_P rom, U8 *cdata) {
+void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
+    io    = (Stream *)io_stream;
     cRom  = rom;
 	cData = cdata;
     cStack= (S16*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];

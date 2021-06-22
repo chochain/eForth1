@@ -1,9 +1,8 @@
 #include "eforth_core.h"
 
 #if ROM_ONLY
-void vm_console(void *io_stream)   {}
-void vm_init(PGM_P rom, U8 *cdata) {}
-void vm_run() {}
+void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {}
+int  vm_step() { return 0; }
 #else 
 static Stream *io;
 
@@ -59,7 +58,7 @@ int tTAB, tCNT;		// trace indentation and depth counters
 void _trc_on()  { tCNT++;               NEXT(); }
 void _trc_off() { tCNT -= tCNT ? 1 : 0; NEXT(); }
 
-#define TRACE(s, v)   if (tCNT) { LOG_V(s, v); }
+#define TRACE(s, v)   if (tCNT) { LOG_H(s, v); }
 #define TRACE_COLON() if (tCNT) {              \
     LOG("\n");                                 \
 	for (int i=0; i<tTAB; i++) LOG("  ");      \
@@ -77,9 +76,10 @@ void TRACE_WORD()
 	XA pc = PC-1;
 	for (; (BGET(pc) & 0x7f)>0x1f; pc--);  // retract pointer to word name (ASCII range: 0x20~0x7f)
 
-    LOG_V(" ", S_GET(S-1));
-    LOG_V("_", S_GET(S));
-    LOG_V("_", top);
+	for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
+		LOG_H(s==s0 ? " " : "_", S_GET(s+1));
+	}
+    LOG_H(S==0 ? " " : "_", top);
     LOG("_");
 	int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
 	for (int i=0; i<len; i++, pc++) {
@@ -651,7 +651,7 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     
 int vm_step() {
     TRACE_WORD();              // tracing stack and word name
-    prim[BGET(PC)]();          // walk bytecode stream
+    prim[BGET(PC)]();                // walk bytecode stream
 
     return (int)PC;
 }

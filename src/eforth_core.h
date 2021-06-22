@@ -151,7 +151,7 @@ typedef struct ef_task {
 
 #include <stdlib.h>
 typedef const char          *PGM_P;
-#define pgm_read_byte       *(U8*)
+#define pgm_read_byte(b)    *((U8*)(b))
 #define PROGMEM
 #define Stream              char
 #define pinMode(a,b)
@@ -165,7 +165,7 @@ typedef const char          *PGM_P;
 #define LOG(s)              printf("%s", s)
 #define LOG_C(c)            ef_putchar(c)
 #define LOG_V(s, n)         printf("%s%d", s, n)
-#define LOG_H(s, n)         printf("%s%x", s, n)
+#define LOG_H(s, n)         printf("%s%x", s, n&0xffff)
 
 #endif // ARDUINO
 

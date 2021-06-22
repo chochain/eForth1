@@ -4,8 +4,6 @@ static U8 _ram[FORTH_RAM_SZ] = {};         // 4K forth memory block
 static Stream   *io;                       // console interface
 static task_ptr _task_list  = NULL;
 
-extern U32 forth_rom[];                    // from eforth_rom.c
-
 void ef_prompt()
 {
     LOG("\r\neForthUNO v1.0");
@@ -80,6 +78,8 @@ void ef_putchar(char c)
     }
 }
 
+extern U32 forth_rom[];                    // from eforth_rom.c
+
 void ef_setup(Stream &io_stream)
 {
     io = &io_stream;
@@ -98,17 +98,20 @@ void ef_delay(U32 ms)   {}
 U8   ef_getchar()	    { return getchar(); }
 void ef_putchar(char c) { printf("%c", c); }
 
+static U8 _rom[FORTH_ROM_SZ] = {};			// fake rom to simulate run time
+
 int main(int ac, char* av[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0);		// autoflush (turn STDOUT buffering off)
-	U8 *cdata = (U8*)_ram;
 
-	int sz  = ef_assemble(cdata);
-	ef_dump_rom(cdata, sz+0x20);
+	int sz = ef_assemble(_rom);
+	ef_dump_rom(_rom, sz+0x20);
 
-	sys_info(cdata);
-	vm_init((PGM_P)forth_rom, _ram);
+#if !ROM_ONLY
+	sys_info(_rom);
+	vm_init((PGM_P)_rom, _ram, NULL);
 	while (vm_step());
+#endif // !ROM_ONLY
 
 	return 0;
 }

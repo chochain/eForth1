@@ -4,7 +4,7 @@ static U8 _ram[FORTH_RAM_SZ] = {};         // 4K forth memory block
 static Stream   *io;                       // console interface
 static task_ptr _task_list  = NULL;
 
-extern U32 forth_rom[];
+extern U32 forth_rom[];                    // from eforth_rom.c
 
 void ef_prompt()
 {
@@ -12,12 +12,12 @@ void ef_prompt()
 }
 
 void sys_info(U8 *cdata) {
-    LOG_H("\r\nRAM_SZ= x",   FORTH_RAM_SZ);
-    LOG_V(", Primitives=", FORTH_PRIMITIVES);
-    LOG_V(", Addr=",       (U16)sizeof(XA)*8);
-    LOG_V("-bit, CELLSZ=", CELLSZ);
+    LOG_H("\r\nRAM_SZ= x",  FORTH_RAM_SZ);
+    LOG_V(", Primitives=",  FORTH_PRIMITIVES);
+    LOG_V(", Addr=",        (U16)sizeof(XA)*8);
+    LOG_V("-bit, CELLSZ=",  CELLSZ);
     LOG("\r\nMEMMAP:");
-    LOG_H("\r\n  ROM   x", FORTH_BOOT_ADDR);
+    LOG_H("\r\n  ROM   x0000+", FORTH_ROM_SZ);
     LOG_H("\r\n  STACK x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
     LOG_H("\r\n  TIB   x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
     LOG_H("\r\n  USER  x", FORTH_TVAR_ADDR);  LOG_H("+", FORTH_DIC_ADDR-FORTH_TVAR_ADDR);

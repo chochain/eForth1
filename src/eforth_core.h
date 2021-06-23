@@ -8,7 +8,8 @@
 #include "user_interface.h"
 #endif // ESP8266
 
-#define ROM_ONLY        0
+#define CASE_SENSITIVE  0
+#define ROM_DUMP_ONLY   0
 //
 // debugging flags
 //
@@ -115,12 +116,12 @@ enum {
     opUMSTAR,     // 51
     opSTAR,       // 52
     opMSTAR,      // 53
-    opDIN,        // 54 Dr. Ting's opSSMOD
-    opDOUT,       // 55 Dr. Ting's opSTASL
+    opIN,         // 54 Dr. Ting's opSSMOD
+    opOUT,        // 55 Dr. Ting's opSTASL
     opPICK,       // 56
     opPSTOR,      // 57
     opAIN,        // 58 Dr. Ting's opDSTOR
-    opAOUT,       // 59 Dr. Ting's opDAT
+    opPWM,        // 59 Dr. Ting's opDAT
     opCOUNT,      // 60
     opDOVAR,      // 61
     opMAX,        // 62

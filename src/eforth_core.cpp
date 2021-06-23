@@ -107,11 +107,11 @@ int main(int ac, char* av[])
 	int sz = ef_assemble(_rom);
 	ef_dump_rom(_rom, sz+0x20);
 
-#if !ROM_ONLY
+#if !ROM_DUMP_ONLY
 	sys_info(_rom);
 	vm_init((PGM_P)_rom, _ram, NULL);
 	while (vm_step());
-#endif // !ROM_ONLY
+#endif // !ROM_DUMP_ONLY
 
 	return 0;
 }

@@ -379,7 +379,8 @@ int ef_assemble(U8 *cdata)
 	}
 	XA EDIGS = _COLON("#>",     DROP, vHLD, AT, PAD, OVER, SUB, EXIT);
 	XA STR   = _COLON("str",    DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
-	XA TOUPP = _COLON(">UPPER", DUP, DOLIT, 0x61, DOLIT, 0x7b, WITHI); { // [a-z] only?
+    XA UPPER = _COLON("wupper", DOLIT, 0x5f5f, AND, EXIT);
+	XA TOUPP = _COLON(">upper", DUP, DOLIT, 0x61, DOLIT, 0x7b, WITHI); { // [a-z] only?
 		_IF(DOLIT, 0x5f, AND);
 		_THEN(EXIT);
 	}
@@ -482,23 +483,32 @@ int ef_assemble(U8 *cdata)
 	XA TOKEN = _COLON("TOKEN", BLANK, PARSE, DOLIT, 0x1f, MIN, HERE, CELLP, PACKS, EXIT);  // put token at HERE
 	XA WORD  = _COLON("WORD",  PARSE, HERE, CELLP, PACKS, EXIT);
 	XA NAMET = _COLON("NAME>", COUNT, DOLIT, 0x1f, AND, PLUS, EXIT);
-	XA SAMEQ = _COLON("SAME?", NOP); {  // (a1 a2 n - a1 a2 f) compare a1, a2 byte-by-byte
+	XA SAMEQ = _COLON("SAME?", NOP); {  // (a1 a2 n - a1 a2 f) compare a1, a2 byte-by-byte, return 0 if same
         _FOR(DDUP);
-        _AFT(DUP, CAT, TOR, ONEP, SWAP,                                  // *a1++
-             DUP, CAT, TOR, ONEP, SWAP, RFROM, RFROM, SUB, QDUP); {      // *a2++
-            _IF(RFROM, DROP, TOR, DDROP, RFROM, EXIT);                   // pop off loop counter and pointers
+#if CASE_SENSITIVE
+        _AFT(DUP, CAT, TOR, ONEP, SWAP,                                    // *a1++
+             DUP, CAT, TOR, ONEP, SWAP, RFROM, RFROM, SUB, QDUP); {        // *a2++
+#else
+        _AFT(DUP, CAT, TOUPP, TOR, ONEP, SWAP,                             // *a1++
+             DUP, CAT, TOUPP, TOR, ONEP, SWAP, RFROM, RFROM, SUB, QDUP); { // *a2++
+#endif // CASE_SENSITIVE
+            _IF(RFROM, DROP, TOR, DDROP, RFROM, EXIT);                     // pop off loop counter and pointers
             _THEN(NOP);
         }
         _THEN(NOP);
         _NEXT(DDROP, DOLIT, 0, EXIT);
 	}
-	XA FIND = _COLON("find", SWAP, DUP, CAT, vTEMP, STORE,      // keep length in temp
-                     DUP, AT, TOR, CELLP, SWAP); {              // fetch 1st cell
-		_BEGIN(AT, DUP); {                                      // 0000 = end of dic
-			_IF(DUP, AT, DOLIT, 0xff3f, AND, RAT, XOR); {       // compare 2-byte
-				_IF(CELLP, DOLIT, 0xffff);                      // miss, try next word
-				_ELSE(CELLP, vTEMP, AT, ONEM, DUP); {           // -1, since 1st byte has been compared
-                    _IF(SAMEQ);                                 // compare strings if larger than 2 bytes
+	XA FIND = _COLON("find", SWAP, DUP, CAT, vTEMP, STORE,                 // keep length in temp
+                     DUP, AT, TOR, CELLP, SWAP); {                         // fetch 1st cell
+		_BEGIN(AT, DUP); {                                                 // 0000 = end of dic
+#if CASE_SENSITIVE
+			_IF(DUP, AT, DOLIT, 0xff3f, AND, RAT, XOR); {                  // compare 2-byte
+#else
+			_IF(DUP, AT, DOLIT, 0xff3f, AND, UPPER, RAT, UPPER, XOR); {    // compare 2-byte
+#endif // CASE_SENSITIVE
+				_IF(CELLP, DOLIT, 0xffff);                                 // miss, try next word
+				_ELSE(CELLP, vTEMP, AT, ONEM, DUP); {                      // -1, since 1st byte has been compared
+                    _IF(SAMEQ);                                            // compare strings if larger than 2 bytes
                     _THEN(NOP);
                 }
 				_THEN(NOP);
@@ -514,7 +524,7 @@ int ef_assemble(U8 *cdata)
 	// Interpreter Input String handler
 	//
 	XA TAP   = _COLON("TAP", DUP, EMIT, OVER, CSTOR, ONEP, EXIT);                  // echo and store new char to TIB
-	XA KTAP  = _COLON("KTAP", DUP, DOLIT, 0xd, XOR, OVER, DOLIT, 0xa, XOR, AND); { // check <CR><LF>
+	XA KTAP  = _COLON("kTAP", DUP, DOLIT, 0xd, XOR, OVER, DOLIT, 0xa, XOR, AND); { // check <CR><LF>
 		_IF(DOLIT, 8, XOR); {                                                      // check <TAB>
 			_IF(BLANK, TAP);                                                       // check BLANK
 			_ELSE(HATH);
@@ -692,15 +702,15 @@ int ef_assemble(U8 *cdata)
 	//
 	// Debugging Tools
 	//
-	XA DMP   = _COLON("dm+", OVER, DOLIT, 6, UDOTR); {   // dump one row
-		_FOR(NOP);
+	XA DMP   = _COLON("dm+", OVER, DOLIT, 5, UDOTR); {   // dump one row
+		_FOR(DOLIT, 0x3a, EMIT);
 		_AFT(DUP, AT, DOLIT, 5, UDOTR, CELLP);
 		_THEN(NOP);
 		_NEXT(EXIT);
 	}
 	XA DUMP  = _COLON("DUMP", vBASE, AT, TOR, HEX_, DOLIT, 0x1f, PLUS, DOLIT, 0x10, SLASH); {
 		_FOR(NOP);
-		_AFT(CR, DOLIT, 8, DDUP, DMP, TOR, SPACE, CELLS, TYPE, RFROM);
+		_AFT(CR, DOLIT, 8, DDUP, DMP, TOR, SPACE, SPACE, CELLS, TYPE, RFROM);
 		_THEN(NOP);
 		_NEXT(DROP, RFROM, vBASE, STORE, EXIT);         // restore BASE
 	}
@@ -725,10 +735,10 @@ int ef_assemble(U8 *cdata)
     XA CLOCK = _CODE("CLOCK",   opCLOCK  );
 	XA PIN   = _CODE("PINMODE", opPIN    );
 	XA MAP   = _CODE("MAP",     opMAP    );
-    XA DIN   = _CODE("DIN",     opDIN    );
-    XA DOUT  = _CODE("DOUT",    opDOUT   );
+    XA DIN   = _CODE("IN",      opIN     );
+    XA DOUT  = _CODE("OUT",     opOUT    );
     XA AIN   = _CODE("AIN",     opAIN    );
-	XA AOUT  = _CODE("AOUT",    opAOUT   );
+	XA AOUT  = _CODE("PWM",     opPWM    );
     //
     // End of dictionary (cold start here)
     //

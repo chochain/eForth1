@@ -1,9 +1,5 @@
 #include "eforth_core.h"
 
-#if ROM_ONLY
-void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {}
-int  vm_step() { return 0; }
-#else 
 static Stream *io;
 
 //
@@ -77,9 +73,9 @@ void TRACE_WORD()
 	for (; (BGET(pc) & 0x7f)>0x1f; pc--);  // retract pointer to word name (ASCII range: 0x20~0x7f)
 
 	for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
-		LOG_H(s==s0 ? " " : "_", S_GET(s+1));
+        if (s==s0) { LOG_H(" ", S_GET(s+1)); } else { LOG_H("_", S_GET(s+1)); }
 	}
-    LOG_H(S==0 ? " " : "_", top);
+    if (S==0) { LOG_H(" ", top); } else { LOG_H("_", top); }
     LOG("_");
 	int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
 	for (int i=0; i<len; i++, pc++) {
@@ -655,5 +651,4 @@ int vm_step() {
 
     return (int)PC;
 }
-#endif // ROM_ONLY
 

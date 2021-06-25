@@ -1,7 +1,6 @@
 #include "eforth_core.h"
 
 static Stream *io;
-
 //
 // Forth VM control registers
 //
@@ -16,9 +15,9 @@ U8    *cData;             		// linear byte array pointer
 S16   *cStack;                  // pointer to stack/rack memory block
 //
 // data and return stack ops
-//  R                   S
-//  |                   |
-// [R0, R1,..., S2, S1, S0] <- top
+//         S                   R
+//         |                   |
+// top -> [S0, S1, S2..., R1, R0]
 //
 // Dr. Ting uses 256 and U8 for wrap-around control
 //
@@ -26,9 +25,11 @@ S16   *cStack;                  // pointer to stack/rack memory block
 #define OFF_MASK       0x0fff
 #define BOOL(f)        ((f) ? TRUE : FALSE)
 
-U8   BGET(U16 d)       { return (U8)((d&RAM_FLAG) ? cData[d&OFF_MASK] : pgm_read_byte(cRom+d)); }
+U8   BGET(U16 d)       {
+	return (U8)((d&RAM_FLAG) ? cData[d&OFF_MASK] : pgm_read_byte(cRom+d));
+}
 #define BSET(d, c)     (cData[(d)&OFF_MASK]=(U8)(c))
-void SET(U16 d, S16 v) { *((S16*)&cData[d&OFF_MASK])=v; }
+#define SET(d, v)      (*((S16*)&cData[(d)&OFF_MASK])=(v))
 U16  GET(U16 d)        {
     return (d&RAM_FLAG)
         ? *((U16*)&cData[d&OFF_MASK])
@@ -40,10 +41,10 @@ U16  GET(U16 d)        {
 #define R_GET(r)       ((XA)cStack[RS_TOP - (r)])
 #define R_SET(r, v)    (cStack[RS_TOP - (r)]=(S16)(v))
 
-#define	PUSH(v)        do { S_SET(++S, top); top=(S16)(v); } while(0)
+void PUSH(S16 v)       { S_SET(++S, top); top = v;  }
 #define	POP()          (top=S_GET(S ? S-- : S))
-#define RPUSH(v)       R_SET(++R, v)
-#define RPOP()         R_GET(R ? R-- : R)
+#define RPUSH(v)       (R_SET(++R, (v)))
+#define RPOP()         (R_GET(R ? R-- : R))
 
 void NEXT()            { PC=GET(IP); IP+=sizeof(XA); }
 //
@@ -70,7 +71,7 @@ void TRACE_WORD()
 	if (!tCNT) return;
 	if (!PC || BGET(PC)==opEXIT) return;
 	XA pc = PC-1;
-	for (; (BGET(pc) & 0x7f)>0x1f; pc--);  // retract pointer to word name (ASCII range: 0x20~0x7f)
+	for (; (BGET(pc) & 0x7f)>0x20; pc--);  // retract pointer to word name (ASCII range: 0x21~0x7f)
 
 	for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
         if (s==s0) { LOG_H(" ", S_GET(s+1)); } else { LOG_H("_", S_GET(s+1)); }
@@ -103,7 +104,7 @@ void _init() {
 }
 void _qrx()                 // ( -- c t|f) read a char from terminal input device
 {
-	PUSH(ef_getchar());
+	PUSH(ef_getchar());     // yield to user task until console input available
 	if (top) PUSH(TRUE);
     NEXT();
 }
@@ -236,7 +237,7 @@ void _tor()                 // (-- n) pop from data stack and push onto return s
 }
 void _depth()
 {
-    PUSH(S-1);
+    PUSH(S);
     NEXT();
 }
 void _delay()
@@ -270,8 +271,8 @@ void _swap()                // (w1 w2 -- w2 w1) swap top two items on the data s
 }
 void _over()                // (w1 w2 -- w1 w2 w1) copy second stack item to top
 {
-	PUSH(S_GET(S-1));
-    NEXT();
+	PUSH(S_GET(S));			// push w1
+	NEXT();
 }
 void _zless()               // (n -- f) check whether top of stack is negative
 {
@@ -356,21 +357,6 @@ void _great()               // (n1 n2 -- t) true if n1>n2
 	top = BOOL(S_GET(S--) > top);
     NEXT();
 }
-/* deprecated
-void _dnega()               // (d -- -d) two's complement of top double
-{
-	top = -top - 1;         // _inver()
-	RPUSH(top);             // _tor()
-	POP();
-	top = -top - 1;         // _inver()
-	PUSH(1);
-	S_SET(S, S_GET(S)+top); // _uplus()
-	top = (U16)S_GET(S) < (U16)top;
-	PUSH(RPOP());           // _rfrom()
-	top += S_GET(S--);      // _plus()
-    NEXT();
-}
-*/
 void _sub()                 // (n1 n2 -- n1-n2) subtraction
 {
 	top = S_GET(S--) - top;
@@ -558,6 +544,37 @@ void _min_()                // (n1 n2 -- n) return smaller of two top stack item
     NEXT();
 }
 
+void _dplus()
+{
+    S32 d0 = (S32)top        | (S_GET(S)<<16);
+    S32 d1 = (S32)S_GET(S-1) | (S_GET(S-2)<<16);
+    S32 d  = d0+d1;
+    S-=2;
+    S_SET(S, d>>16);
+    top = d&0xffff;
+    NEXT();
+}
+
+void _dless()
+{
+    S32 d0 = (S32)top        | (S_GET(S-1)<<16);
+    S32 d1 = (S32)S_GET(S-2) | (S_GET(S-3)<<16);
+    S32 d  = d1 - d0;
+    S-=2;
+    S_SET(S, d>>16);
+    top = d&0xffff;
+    NEXT();
+}
+
+void _dnegate()             // (d -- -d) two's complemente of top double
+{
+	S32 d0 = ((S32)top<<16) | S_GET(S);
+    S32 d = -d0;
+    S_SET(S, d&0xffff);
+    top = d>>16;
+    NEXT();
+}
+
 void(*prim[FORTH_PRIMITIVES])() = {
 	/* case 0 */ _nop,
 	/* case 1 */ _init,
@@ -647,7 +664,7 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     
 int vm_step() {
     TRACE_WORD();              // tracing stack and word name
-    prim[BGET(PC)]();                // walk bytecode stream
+    prim[BGET(PC)]();          // walk bytecode stream
 
     return (int)PC;
 }

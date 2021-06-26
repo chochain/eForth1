@@ -45,6 +45,10 @@ void PUSH(S16 v)       { S_SET(++S, top); top = v;  }
 #define	POP()          (top=S_GET(S ? S-- : S))
 #define RPUSH(v)       (R_SET(++R, (v)))
 #define RPOP()         (R_GET(R ? R-- : R))
+void DTOP(S32 d) {
+	S_SET(S, d&0xffff);
+	top = d>>16;
+}
 
 void NEXT()            { PC=GET(IP); IP+=sizeof(XA); }
 //
@@ -219,17 +223,17 @@ void _onem()
     top--;
     NEXT();
 }
-void _rfrom()               // (n --) pop from return stack onto data stack (Ting comments different ???)
+void _rfrom()               // (-- w) pop from return stack onto data stack (Ting comments different ???)
 {
 	PUSH(RPOP());
     NEXT();
 }
-void _rat()                 // (-- n) copy a number off the return stack and push onto data stack
+void _rat()                 // (-- w) copy a number off the return stack and push onto data stack
 {
 	PUSH(R_GET(R));
     NEXT();
 }
-void _tor()                 // (-- n) pop from data stack and push onto return stack
+void _tor()                 // (w --) pop from data stack and push onto return stack
 {
 	RPUSH(top);
 	POP();
@@ -247,9 +251,9 @@ void _delay()
 }
 void _clock()               // ( -- d) arduino millis() as double
 {
-    U32 t = millis();
-    PUSH(t & 0xffff);
-    PUSH(t >> 16);
+	U32 t = millis();
+	PUSH(t & 0xffff);
+	PUSH(t >> 16);
     NEXT();
 }
 void _drop()                // (w -- ) drop top of stack item
@@ -313,12 +317,12 @@ void _rot()                 // (w1 w2 w3 -- w2 w3 w1) rotate 3rd item to top
 	top = tmp;
     NEXT();
 }
-void _lshift()
+void _lshift()              // (w n -- w) left shift n bits
 {
 	top = S_GET(S--) << top;
     NEXT();
 }
-void _rshift()
+void _rshift()              // (w n -- w) right shift n bits
 {
     top = S_GET(S--) >> top;
     NEXT();
@@ -438,9 +442,9 @@ void _slash()               // (n n - q) signed divide, return quotient
 }
 void _umstar()              // (u1 u2 -- ud) unsigned multiply return double product
 {
- 	U32 m = (U32)S_GET(S) * top;
- 	S_SET(S, (U16)(m & 0xffff));
- 	top   = (U16)(m >> 16);
+ 	U32 u = (U32)S_GET(S) * top;
+ 	S_SET(S, (U16)(u & 0xffff));
+ 	top = (U16)(u >> 16);
     NEXT();
 }
 void _star()                // (n n -- n) signed multiply, return single product
@@ -450,9 +454,8 @@ void _star()                // (n n -- n) signed multiply, return single product
 }
 void _mstar()               // (n1 n2 -- d) signed multiply, return double product
 {
- 	S32 m = (S32)S_GET(S) * top;
- 	S_SET(S, (S16)(m&0xffff));
-	top   = (S16)(m >> 16);
+ 	S32 d = (S32)S_GET(S) * top;
+ 	DTOP(d);
     NEXT();
 }
 void _din()                 // (pin -- n) read from arduino pin
@@ -510,6 +513,7 @@ void _aout()                // (pin n -- ) write PWM to arduino analog pin
     POP();
     NEXT();
 }
+
 /* deprecated
 void _dstor()               // (d a -- ) store the double to address a
 {
@@ -524,7 +528,6 @@ void _dat()                 // (a -- d) fetch double from address a
 	top = GET(top + CELLSZ);
     NEXT();
 }
-*/
 void _count()               // (b -- b+1 +n) count byte of a string and add 1 to byte address
 {
 	S_SET(++S, top + 1);
@@ -543,35 +546,30 @@ void _min_()                // (n1 n2 -- n) return smaller of two top stack item
 	else POP();
     NEXT();
 }
-
-void _dplus()
-{
-    S32 d0 = (S32)top        | (S_GET(S)<<16);
-    S32 d1 = (S32)S_GET(S-1) | (S_GET(S-2)<<16);
-    S32 d  = d0+d1;
-    S-=2;
-    S_SET(S, d>>16);
-    top = d&0xffff;
-    NEXT();
-}
-
-void _dless()
-{
-    S32 d0 = (S32)top        | (S_GET(S-1)<<16);
-    S32 d1 = (S32)S_GET(S-2) | (S_GET(S-3)<<16);
-    S32 d  = d1 - d0;
-    S-=2;
-    S_SET(S, d>>16);
-    top = d&0xffff;
-    NEXT();
-}
+*/
 
 void _dnegate()             // (d -- -d) two's complemente of top double
 {
-	S32 d0 = ((S32)top<<16) | S_GET(S);
-    S32 d = -d0;
-    S_SET(S, d&0xffff);
-    top = d>>16;
+	S32 d = ((S32)top<<16) | S_GET(S)&0xffff;
+    DTOP(-d);
+    NEXT();
+}
+
+void _dplus()
+{
+    S32 d0 = ((S32)top<<16)        | (S_GET(S)&0xffff);
+    S32 d1 = ((S32)S_GET(S-1)<<16) | (S_GET(S-2)&0xffff);
+    S -= 2;
+    DTOP(d1 + d0);
+    NEXT();
+}
+
+void _dsub()
+{
+    S32 d0 = ((S32)top<<16)        | (S_GET(S)&0xffff);
+    S32 d1 = ((S32)S_GET(S-1)<<16) | (S_GET(S-2)&0xffff);
+    S -= 2;
+    DTOP(d1 - d0);
     NEXT();
 }
 
@@ -636,10 +634,10 @@ void(*prim[FORTH_PRIMITIVES])() = {
 	/* case 57 */ _pstor,
 	/* case 58 opDSTOR */ _ain,
 	/* case 59 opDAT   */ _aout,
-	/* case 60 */ _count,
+	/* case 60 */ _dnegate,
 	/* case 61 */ _dovar,
-	/* case 62 */ _max_,
-	/* case 63 */ _min_,
+	/* case 62 */ _dplus,
+	/* case 63 */ _dsub,
 };
 //
 // Forth internal (user) variables

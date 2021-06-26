@@ -325,21 +325,30 @@ int ef_assemble(U8 *cdata)
 	XA MSTAR = _CODE("M*",      opMSTAR  );
 	XA PICK  = _CODE("PICK",    opPICK   );
 	XA PSTOR = _CODE("+!",      opPSTOR  );
-	XA COUNT = _CODE("COUNT",   opCOUNT  );
+	XA DNEGA = _CODE("DNEGATE", opDNEGA  );
 	XA DOVAR = _CODE("DOVAR",   opDOVAR  );
-	XA MAX   = _CODE("MAX",     opMAX    );
-	XA MIN   = _CODE("MIN",     opMIN    );
+	XA DPLUS = _CODE("D+",      opDPLUS  );
+	XA DSUB  = _CODE("D-",      opDSUB   );
 	//
 	// Common Colon Words (in word streams)
 	//
 	XA HERE  = _COLON("HERE",  vCP, AT, EXIT);                          // top of dictionary
 	XA PAD   = _COLON("PAD",   HERE, DOLIT, FORTH_PAD_SZ, PLUS, EXIT);  // use HERE for output buffer
-	XA CELLP = _COLON("CELL+", CELL,  PLUS,  EXIT);
-	XA CELLM = _COLON("CELL-", CELL,  SUB,   EXIT);
-	XA CELLS = _COLON("CELLS", CELL,  STAR,  EXIT);
+	XA CELLP = _COLON("CELL+", CELL, PLUS,  EXIT);
+	XA CELLM = _COLON("CELL-", CELL, SUB,   EXIT);
+	XA CELLS = _COLON("CELLS", CELL, STAR,  EXIT);
     XA DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     XA DDROP = _COLON("2DROP", DROP, DROP, EXIT);
-	XA WITHI = _COLON("WITHIN",  OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
+	XA WITHI = _COLON("WITHIN",OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
+	XA COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
+	XA MAX   = _COLON("MAX",  DDUP, LESS); {
+		_IF(SWAP);
+		_THEN(DROP, EXIT);
+	}
+	XA MIN   = _COLON("MIN",  DDUP, GREAT); {
+		_IF(SWAP);
+		_THEN(DROP, EXIT);
+	}
 	XA CMOVE = _COLON("CMOVE", NOP); {
 		_FOR(NOP);
 		_AFT(OVER, CAT, OVER, CSTOR, TOR, ONEP, RFROM, ONEP);

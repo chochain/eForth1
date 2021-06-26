@@ -51,7 +51,7 @@ void ef_yield()
 //
 // delay millisecond with yield
 //
-void ef_delay(U32 ms)
+void ef_wait(U32 ms)
 {
     U32 t = millis() + ms;
     while (millis()<t) {
@@ -96,9 +96,9 @@ void ef_run()
 #else // ARDUINO
 
 void ef_yield()         {}
-void ef_delay(U32 ms)   {}
+void ef_wait(U32 ms)    {}
 U8   ef_getchar()	    { return getchar(); }
-void ef_putchar(char c) { printf("%c", c); }
+void ef_putchar(char c) { printf("%c", c);  }
 
 static U8 _rom[FORTH_ROM_SZ] = {};			// fake rom to simulate run time
 

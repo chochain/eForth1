@@ -246,7 +246,8 @@ void _depth()
 }
 void _delay()
 {
-    ef_delay((U32)POP());
+    U32 t = POP();
+    ef_wait(t);
     NEXT();
 }
 void _clock()               // ( -- d) arduino millis() as double

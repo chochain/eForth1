@@ -176,7 +176,7 @@ int  vm_step();
 void ef_prompt();
 U8   ef_getchar();
 void ef_putchar(char c);
-void ef_delay(U32 ms);
+void ef_wait(U32 ms);
 
 int  ef_assemble(U8 *cdata);
 void ef_dump_rom(U8 *cdata, int len);

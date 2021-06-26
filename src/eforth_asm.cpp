@@ -277,24 +277,25 @@ int ef_assemble(U8 *cdata)
 	XA BYE   = _CODE("BYE",     opBYE    );
 	XA QRX   = _CODE("?RX",     opQRX    );
 	XA TXSTO = _CODE("TX!",     opTXSTO  );
-	XA DOCON = _CODE("DOCON",   opDOCON  );
-	XA DOLIT = _CODE("DOLIT",   opDOLIT  );
+	XA DOCON = _CODE("doCON",   opDOCON  );
+	XA DOLIT = _CODE("doLIT",   opDOLIT  );
 	XA ENTER = _CODE("ENTER",   opENTER  );    // aka DOLIST by Dr. Ting
+    XA DOLST = _CODE("doLIST",  opENTER  );
 	XA EXIT  = _CODE("EXIT",    opEXIT   );
 	XA EXECU = _CODE("EXECUTE", opEXECU  );
-	   DONXT = _CODE("DONEXT",  opDONEXT );
-	   QBRAN = _CODE("?BRANCH", opQBRAN  );
-	   BRAN  = _CODE("BRANCH",  opBRAN   );
+	   DONXT = _CODE("doNEXT",  opDONEXT );
+	   QBRAN = _CODE("?branch", opQBRAN  );
+	   BRAN  = _CODE("branch",  opBRAN   );
 	XA STORE = _CODE("!",       opSTORE  );
 	XA AT    = _CODE("@",       opAT     );
 	XA CSTOR = _CODE("C!",      opCSTOR  );
 	XA CAT   = _CODE("C@",      opCAT    );
-    XA ONEP  = _CODE("1+",      opONEP   );
-    XA ONEM  = _CODE("1-",      opONEM   );
+    XA ONEP  = _CODE("1+",      opONEP   );    // HL, RP@
+    XA ONEM  = _CODE("1-",      opONEM   );    // HL, RP!
 	XA RFROM = _CODE("R>",      opRFROM  );
 	XA RAT   = _CODE("R@",      opRAT    );
 	   TOR   = _CODE(">R",      opTOR    );
-    XA DEPTH = _CODE("DEPTH",   opDEPTH  );
+    XA DEPTH = _CODE("DEPTH",   opDEPTH  );    // HL, SP@, SP!
 	XA DROP  = _CODE("DROP",    opDROP   );
 	XA DUP   = _CODE("DUP",     opDUP    );
 	XA SWAP  = _CODE("SWAP",    opSWAP   );
@@ -304,6 +305,9 @@ int ef_assemble(U8 *cdata)
 	XA OR    = _CODE("OR",      opOR     );
 	XA XOR   = _CODE("XOR",     opXOR    );
 	XA UPLUS = _CODE("UM+",     opUPLUS  );
+    //
+    // opcodes that can be coded in high level
+    //
 	XA QDUP  = _CODE("?DUP",    opQDUP   );
 	XA ROT   = _CODE("ROT",     opROT    );
     XA LSHFT = _CODE("<<",      opLSHIFT );
@@ -330,7 +334,7 @@ int ef_assemble(U8 *cdata)
 	XA DPLUS = _CODE("D+",      opDPLUS  );
 	XA DSUB  = _CODE("D-",      opDSUB   );
 	//
-	// Common Colon Words (in word streams)
+	// Common Colon (high level) Words
 	//
 	XA HERE  = _COLON("HERE",  vCP, AT, EXIT);                          // top of dictionary
 	XA PAD   = _COLON("PAD",   HERE, DOLIT, FORTH_PAD_SZ, PLUS, EXIT);  // use HERE for output buffer
@@ -368,7 +372,7 @@ int ef_assemble(U8 *cdata)
 		_NEXT(DDROP, EXIT);
 	}
 	//
-	// Number Conversions and formatting
+	// Number Conversions and output formatting
 	//
 	XA HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
 	XA DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
@@ -541,7 +545,7 @@ int ef_assemble(U8 *cdata)
 		}
 		_THEN(DROP, SWAP, DROP, DUP, EXIT);
 	}
-	XA ACCEP = _COLON("ACCEPT", OVER, PLUS, OVER); {            // accquire token from console 
+	XA ACCEP = _COLON("accept", OVER, PLUS, OVER); {            // accquire token from console 
 		_BEGIN(DDUP, XOR);                                      // loop through input stream
 		_WHILE(KEY, DUP, BLANK, SUB, DOLIT, 0x5f, ULESS); {
 			_IF(TAP);                                           // store new char into TIB

@@ -1,14 +1,22 @@
+///
+/// \file eForthUNO.cpp
+/// \brief eForth core controller module
+///
 #include "eforth_core.h"
 
 static U8 _ram[FORTH_RAM_SZ] = {};         // 4K forth memory block
 static Stream   *io;                       // console interface
 static task_ptr _task_list  = NULL;
-
+///
+/// prompt
+///
 void ef_prompt()
 {
     LOG("\r\neForthUNO v1.0");
 }
-
+///
+/// display eForth system information
+///
 void sys_info(U8 *cdata) {
     LOG_H("\r\nRAM_SZ= x",  FORTH_RAM_SZ);
     LOG_V(", Primitives=",  FORTH_PRIMITIVES);
@@ -29,7 +37,9 @@ void sys_info(U8 *cdata) {
     LOG_H(" <--SP=x", s);
 #endif // ARDUINO
 }
-
+///
+/// add user defined task to task queue
+///
 void ef_add_task(char (*task)()) {
     task_ptr tp = (task_ptr)malloc(sizeof(ef_task));
     
@@ -40,6 +50,9 @@ void ef_add_task(char (*task)()) {
 }
 
 #if ARDUINO
+///
+/// eForth yield to user tasks
+///
 void ef_yield()
 {
     task_ptr tp=_task_list;
@@ -48,9 +61,9 @@ void ef_yield()
         tp = tp->next;
     }
 }
-//
-// delay millisecond with yield
-//
+///
+/// delay millisecond with yield
+///
 void ef_wait(U32 ms)
 {
     U32 t = millis() + ms;
@@ -58,9 +71,9 @@ void ef_wait(U32 ms)
         ef_yield();                        // run hardware tasks while waiting
     }
 }
-// 
-// console input with yield
-//
+/// 
+/// console input with yield
+///
 U8 ef_getchar()
 {
     while (!io->available()) {
@@ -68,9 +81,9 @@ U8 ef_getchar()
     }
     return (U8)io->read();
 }
-//
-// output one char to console
-//
+///
+/// output one char to console
+///
 void ef_putchar(char c)
 {
     io->print(c);
@@ -78,7 +91,9 @@ void ef_putchar(char c)
 }
 
 extern U32 forth_rom[];                    // from eforth_rom.c
-
+///
+/// setup (called by Arduino setup)
+///
 void ef_setup(Stream &io_stream)
 {
     io = &io_stream;
@@ -86,7 +101,9 @@ void ef_setup(Stream &io_stream)
     sys_info(_ram);
 	vm_init((PGM_P)forth_rom, _ram, (void*)&io_stream);
 }
-
+///
+/// single step eForth virtual machine
+///
 void ef_run()
 {
     vm_step();
@@ -101,7 +118,9 @@ U8   ef_getchar()	    { return getchar(); }
 void ef_putchar(char c) { printf("%c", c);  }
 
 static U8 _rom[FORTH_ROM_SZ] = {};			// fake rom to simulate run time
-
+///
+/// main to support C development debugging
+///
 int main(int ac, char* av[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0);		// autoflush (turn STDOUT buffering off)

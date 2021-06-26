@@ -1,3 +1,7 @@
+///
+/// \file eforth_core.h
+/// \brief eForth prototype and interface
+///
 #ifndef __EFORTH_SRC_EFORTH_CORE_H
 #define __EFORTH_SRC_EFORTH_CORE_H
 #include <stdio.h>
@@ -8,42 +12,42 @@
 #include "user_interface.h"
 #endif // ESP8266
 
-#define CASE_SENSITIVE  0
-#define ROM_DUMP_ONLY   0
+#define CASE_SENSITIVE  0             /**< define case sensitivity */
+#define ROM_DUMP_ONLY   0             /**< create ROM only (i.e. no debugging) */
 //
 // debugging flags
 //
-#define ASM_TRACE       0
-#define EXE_TRACE       0
+#define ASM_TRACE       0             /**< assembler tracing flag */
+#define EXE_TRACE       0             /**< virtual machine execution tracing flag */
 //
 // portable types
 //
-typedef uint32_t  U32;              // unsigned integers
-typedef uint16_t  U16;
-typedef uint8_t   U8;
+typedef uint32_t  U32;                ///< 32-bit unsigned integer
+typedef uint16_t  U16;                ///< 16-bit unsigned integer
+typedef uint8_t   U8;                 ///< 8-bit unsigned integer
 
-typedef int32_t   S32;              // signed integers
-typedef int16_t   S16;
-typedef int8_t    S8;
+typedef int32_t   S32;                ///< 32-bit signed integer
+typedef int16_t   S16;                ///< 16-bit signed integer
+typedef int8_t    S8;                 ///< 8-bit signed integer
 
-typedef U16       XA;				// 16-bit address
+typedef U16       XA;				  ///< address sizing (16-bit)
 //
 // capacity and sizing
 //
-#define CELLSZ		     2
-#define FORTH_PRIMITIVES 64
-#define FORTH_ROM_SZ     0x1000
-#define FORTH_RAM_SZ     0x500
-#define FORTH_STACK_SZ   0x60*CELLSZ
-#define FORTH_TIB_SZ     0x40
-#define FORTH_PAD_SZ     0x20
-//
-// note:
-//    Forth only needs a few bytes for Arduino auto (on heap), but
-//    Serial TX/RX buffers uses 0x40 * 2 = 128 bytes
-//
-// logic and stack op macros (processor dependent)
-//
+#define CELLSZ		     2            /**< 16-bit cell size */
+#define FORTH_PRIMITIVES 64           /**< number of primitive words */
+#define FORTH_ROM_SZ     0x1000       /**< size of ROM (for pre-defined words) */
+#define FORTH_RAM_SZ     0x500        /**< size of RAM (for user defined words) */
+#define FORTH_STACK_SZ   0x60*CELLSZ  /**< size of data/return stack */
+#define FORTH_TIB_SZ     0x40         /**< size of terminal input buffer */
+#define FORTH_PAD_SZ     0x20         /**< size of output pad */
+///
+///> note:
+///>    Forth only needs a few bytes for Arduino auto (on heap), but
+///>    Serial TX/RX buffers uses 0x40 * 2 = 128 bytes
+///>
+///> logic and stack op macros (processor dependent)
+///>
 #define FORTH_BOOT_ADDR  0x0000
 #define FORTH_RAM_ADDR   0x1000
 #define FORTH_STACK_ADDR (FORTH_RAM_ADDR+0x0)
@@ -52,15 +56,15 @@ typedef U16       XA;				// 16-bit address
 #define FORTH_TVAR_ADDR  (FORTH_TIB_ADDR+FORTH_TIB_SZ)
 #define FORTH_UVAR_ADDR  (FORTH_TVAR_ADDR+0x10)
 #define FORTH_DIC_ADDR   (FORTH_UVAR_ADDR+0x10)
-//
-// TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff
-// which does not need boolean op (i.e. in C)
-//
+///
+/// TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff
+/// which does not need boolean op (i.e. in C)
+///
 #define	TRUE	         -1
 #define	FALSE	         0
-//
-// Forth VM Opcodes (for Bytecode Assembler)
-//
+///
+/// Forth VM Opcodes (for Bytecode Assembler)
+///
 enum {
     opNOP = 0,    // 0
     opBYE,        // 1
@@ -127,12 +131,12 @@ enum {
     opDPLUS,      // 62 Dr. Ting's opMAX
     opDSUB        // 63 Dr. Ting's opMIN
 };
-//
-// protothread task declaration
-//
+///
+/// protothread task declaration
+///
 typedef struct ef_task {
-    char (*task)();
-    struct ef_task *next;
+    char (*task)();            ///< user defined task (in protothreads)
+    struct ef_task *next;      ///< linked-list
 } *task_ptr;
 //
 // eForth function prototypes
@@ -170,7 +174,11 @@ typedef const char          *PGM_P;
 
 #endif // ARDUINO
 
-void vm_init(PGM_P rom, U8 *cdata, void *io_stream);
+void vm_init(
+    PGM_P rom,              ///< pointer to Arduino flash memory block (ROM)
+    U8 *cdata,              ///< pointer to Arduino RAM block (RAM)
+    void *io_stream         ///< pointer to Stream object of Arduino
+    );
 int  vm_step();
 
 void ef_prompt();
@@ -178,7 +186,12 @@ U8   ef_getchar();
 void ef_putchar(char c);
 void ef_wait(U32 ms);
 
-int  ef_assemble(U8 *cdata);
-void ef_dump_rom(U8 *cdata, int len);
+int  ef_assemble(
+    U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
+    );
+void ef_dump_rom(
+    U8 *cdata,              ///< pointer to assembled memory block (into C syntax)
+    int len                 ///< number of byte to be dump
+    );
 
 #endif // __EFORTH_SRC_EFORTH_CORE_H

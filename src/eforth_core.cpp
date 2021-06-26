@@ -72,10 +72,7 @@ U8 ef_getchar()
 void ef_putchar(char c)
 {
     io->print(c);
-    if (c=='\n') {
-        io->flush();
-        ef_yield();
-    }
+    if (c=='\n') io->flush();
 }
 
 extern U32 forth_rom[];                    // from eforth_rom.c
@@ -91,8 +88,11 @@ void ef_setup(Stream &io_stream)
 void ef_run()
 {
     vm_step();
+    ef_yield();
 }
-#else  // ARDUINO
+
+#else // ARDUINO
+
 void ef_yield()         {}
 void ef_delay(U32 ms)   {}
 U8   ef_getchar()	    { return getchar(); }
@@ -116,4 +116,3 @@ int main(int ac, char* av[])
 	return 0;
 }
 #endif // ARDUINO
-

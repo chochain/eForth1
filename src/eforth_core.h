@@ -122,10 +122,10 @@ enum {
     opPSTOR,      // 57
     opAIN,        // 58 Dr. Ting's opDSTOR
     opPWM,        // 59 Dr. Ting's opDAT
-    opCOUNT,      // 60
+    opDNEGA,      // 60 Dr. Ting's opCOUNT
     opDOVAR,      // 61
-    opMAX,        // 62
-    opMIN         // 63
+    opDPLUS,      // 62 Dr. Ting's opMAX
+    opDSUB        // 63 Dr. Ting's opMIN
 };
 //
 // protothread task declaration
@@ -161,7 +161,7 @@ typedef const char          *PGM_P;
 #define analogRead(p)		(0)
 #define analogWrite(p,v)
 #define map(a,b,c,d,e) 		(0)
-#define millis()       		(0)
+#define millis()       		(0x12345678)
 #define PT_SCHEDULE(t) 		(t)
 #define LOG(s)              printf("%s", s)
 #define LOG_C(c)            ef_putchar(c)

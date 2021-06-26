@@ -1,6 +1,8 @@
 #include "eforth1.h"
 #include <AltSoftSerial.h>
-
+//
+// protothread-based cooporative multi-threading
+//
 #define PT_DELAY_msec(th, ms)  do {     \
     static unsigned long t;             \
     t = millis() + (unsigned long)(ms); \
@@ -19,7 +21,9 @@ PT_THREAD(hw_task())                        // hardward protothread
     }
     PT_END(&ctx_hw);
 }
-
+//
+// Timer-based software serial interface
+//
 AltSoftSerial bt;             // default: RX on pin 8, TX on pin 9
 
 void setup()
@@ -31,7 +35,7 @@ void setup()
     delay(1000);
 
 	ef_setup(bt);
-    ef_add_task(hw_task);
+    ef_add_task(hw_task);     // add user task to task queue
     
     pinMode(LED_BUILTIN, OUTPUT);
 }

@@ -273,66 +273,74 @@ int ef_assemble(U8 *cdata)
 	//
 	// Kernel dictionary (primitive words)
 	//
-       NOP   = _CODE("NOP",     opNOP    );
-	XA BYE   = _CODE("BYE",     opBYE    );
-	XA QRX   = _CODE("?RX",     opQRX    );
-	XA TXSTO = _CODE("TX!",     opTXSTO  );
-	XA DOCON = _CODE("doCON",   opDOCON  );
-	XA DOLIT = _CODE("doLIT",   opDOLIT  );
-	XA ENTER = _CODE("ENTER",   opENTER  );    // aka DOLIST by Dr. Ting
-    XA DOLST = _CODE("doLIST",  opENTER  );
-	XA EXIT  = _CODE("EXIT",    opEXIT   );
-	XA EXECU = _CODE("EXECUTE", opEXECU  );
-	   DONXT = _CODE("doNEXT",  opDONEXT );
-	   QBRAN = _CODE("?branch", opQBRAN  );
-	   BRAN  = _CODE("branch",  opBRAN   );
-	XA STORE = _CODE("!",       opSTORE  );
-	XA AT    = _CODE("@",       opAT     );
-	XA CSTOR = _CODE("C!",      opCSTOR  );
-	XA CAT   = _CODE("C@",      opCAT    );
-    XA ONEP  = _CODE("1+",      opONEP   );    // HL, RP@
-    XA ONEM  = _CODE("1-",      opONEM   );    // HL, RP!
-	XA RFROM = _CODE("R>",      opRFROM  );
-	XA RAT   = _CODE("R@",      opRAT    );
-	   TOR   = _CODE(">R",      opTOR    );
-    XA DEPTH = _CODE("DEPTH",   opDEPTH  );    // HL, SP@, SP!
-	XA DROP  = _CODE("DROP",    opDROP   );
-	XA DUP   = _CODE("DUP",     opDUP    );
-	XA SWAP  = _CODE("SWAP",    opSWAP   );
-	XA OVER  = _CODE("OVER",    opOVER   );
-	XA ZLESS = _CODE("0<",      opZLESS  );
-	XA AND   = _CODE("AND",     opAND    );
-	XA OR    = _CODE("OR",      opOR     );
-	XA XOR   = _CODE("XOR",     opXOR    );
-	XA UPLUS = _CODE("UM+",     opUPLUS  );
+       NOP   = _CODE("NOP",     opNOP    );			// 0
+	XA BYE   = _CODE("BYE",     opBYE    );			// 1
+	XA QRX   = _CODE("?RX",     opQRX    );			// 2
+	XA TXSTO = _CODE("TX!",     opTXSTO  );			// 3
+	XA DOCON = _CODE("doCON",   opDOCON  );			// 4
+	XA DOLIT = _CODE("doLIT",   opDOLIT  );			// 5
+    XA DOLST = _CODE("doLIST",  opENTER  );			// 6
+	XA ENTER = _CODE("ENTER",   opENTER  );    		// 6, alias doLIST
+	XA EXIT  = _CODE("EXIT",    opEXIT   );			// 7
+	XA EXECU = _CODE("EXECUTE", opEXECU  );			// 8
+	   DONXT = _CODE("doNEXT",  opDONEXT );			// 9
+	   QBRAN = _CODE("?branch", opQBRAN  );			// 10
+	   BRAN  = _CODE("branch",  opBRAN   );			// 11
+	XA STORE = _CODE("!",       opSTORE  );			// 12
+	XA AT    = _CODE("@",       opAT     );			// 13
+	XA CSTOR = _CODE("C!",      opCSTOR  );			// 14
+	XA CAT   = _CODE("C@",      opCAT    );			// 15
+    XA ONEP  = _CODE("1+",      opONEP   );    		// 16, Dr. Ting's RP@
+    XA ONEM  = _CODE("1-",      opONEM   );    		// 17, Dr. Ting's RP!
+	XA RFROM = _CODE("R>",      opRFROM  );			// 18
+	XA RAT   = _CODE("R@",      opRAT    );			// 19
+	   TOR   = _CODE(">R",      opTOR    );			// 20
+    // DELAY   (see Arduino section)                // 21, Dr. Ting's SP@
+	// CLOCK   (see Arduino section)                // 22, Dr. Ting's SP!
+	XA DROP  = _CODE("DROP",    opDROP   );			// 23
+	XA DUP   = _CODE("DUP",     opDUP    );			// 24
+	XA SWAP  = _CODE("SWAP",    opSWAP   );         // 25
+	XA OVER  = _CODE("OVER",    opOVER   );         // 26
+	XA ZLESS = _CODE("0<",      opZLESS  );         // 27
+	XA AND   = _CODE("AND",     opAND    );         // 28
+	XA OR    = _CODE("OR",      opOR     );         // 29
+	XA XOR   = _CODE("XOR",     opXOR    );         // 30
+	XA UPLUS = _CODE("UM+",     opUPLUS  );         // 31
+    XA DEPTH = _CODE("DEPTH",   opDEPTH  );    		// 32, Dr. Ting's opNEXT (not needed)
     //
-    // opcodes that can be coded in high level
+    // opcodes (primitives) that can be coded in high level
     //
-	XA QDUP  = _CODE("?DUP",    opQDUP   );
-	XA ROT   = _CODE("ROT",     opROT    );
-    XA LSHFT = _CODE("<<",      opLSHIFT );
-    XA RSHFT = _CODE(">>",      opRSHIFT );
-	XA PLUS  = _CODE("+",       opPLUS   );
-	XA INVER = _CODE("INVERT",  opINVERT );
-	XA NEGAT = _CODE("NEGATE",  opNEGAT  );
-    XA GREAT = _CODE(">",       opGREAT  );
-	XA SUB   = _CODE("-",       opSUB    );
-	XA ABS   = _CODE("ABS",     opABS    );
-	XA EQUAL = _CODE("=",       opEQUAL  );
-	XA ULESS = _CODE("U<",      opULESS  );
-	XA LESS  = _CODE("<",       opLESS   );
-	XA UMMOD = _CODE("UM/MOD",  opUMMOD  );
-	XA MOD   = _CODE("MOD",     opMOD    );
-    XA UMSTA = _CODE("UM*",     opUMSTAR );
-	XA SLASH = _CODE("/",       opSLASH  );
-	XA STAR  = _CODE("*",       opSTAR   );
-	XA MSTAR = _CODE("M*",      opMSTAR  );
-	XA PICK  = _CODE("PICK",    opPICK   );
-	XA PSTOR = _CODE("+!",      opPSTOR  );
-	XA DNEGA = _CODE("DNEGATE", opDNEGA  );
-	XA DOVAR = _CODE("DOVAR",   opDOVAR  );
-	XA DPLUS = _CODE("D+",      opDPLUS  );
-	XA DSUB  = _CODE("D-",      opDSUB   );
+	XA QDUP  = _CODE("?DUP",    opQDUP   );         // 33
+	XA ROT   = _CODE("ROT",     opROT    );         // 34
+    XA LSHFT = _CODE("<<",      opLSHIFT );         // 35, Dr. Ting's opDDROP
+    XA RSHFT = _CODE(">>",      opRSHIFT );         // 36, Dr. Ting's opDDUP
+	XA PLUS  = _CODE("+",       opPLUS   );         // 37
+	XA INVER = _CODE("INVERT",  opINVERT );         // 38
+	XA NEGAT = _CODE("NEGATE",  opNEGAT  );         // 39
+    XA GREAT = _CODE(">",       opGREAT  );         // 40, Dr. Ting's opDNEGA (moved to 60)
+	XA SUB   = _CODE("-",       opSUB    );         // 41
+	XA ABS   = _CODE("ABS",     opABS    );         // 42
+	XA EQUAL = _CODE("=",       opEQUAL  );         // 43
+	XA ULESS = _CODE("U<",      opULESS  );         // 44
+	XA LESS  = _CODE("<",       opLESS   );         // 45
+	XA UMMOD = _CODE("UM/MOD",  opUMMOD  );         // 46
+	// PINMODE (see Arduino section)                // 47, Dr. Ting's opMSMOD
+	// MAP     (see Arduino section)                // 48, Dr. Ting's opSLMOD
+	XA MOD   = _CODE("MOD",     opMOD    );         // 49
+	XA SLASH = _CODE("/",       opSLASH  );         // 50
+    XA UMSTA = _CODE("UM*",     opUMSTAR );         // 51
+	XA STAR  = _CODE("*",       opSTAR   );         // 52
+	XA MSTAR = _CODE("M*",      opMSTAR  );         // 53
+	// IN      (see Arduino section)                // 54, Dr. Ting's opSSMOD
+	// OUT     (see Arduino section)                // 55, Dr. Ting's opSTASL
+	XA PICK  = _CODE("PICK",    opPICK   );         // 56
+	XA PSTOR = _CODE("+!",      opPSTOR  );         // 57
+	// AIN     (see Arduino section)                // 58, Dr. Ting's opDSTOR
+	// PWM     (see Arduino section)                // 59, Dr. Ting's opDAT
+	XA DNEGA = _CODE("DNEGATE", opDNEGA  );         // 60, Dr. Ting's opCOUNT
+	XA DOVAR = _CODE("DOVAR",   opDOVAR  );         // 61
+	XA DPLUS = _CODE("D+",      opDPLUS  );         // 62, Dr. Ting's opMAX
+	XA DSUB  = _CODE("D-",      opDSUB   );         // 63, Dr. Ting's opMIN
 	//
 	// Common Colon (high level) Words
 	//

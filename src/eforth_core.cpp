@@ -32,22 +32,24 @@ void sys_info(U8 *cdata) {
 
 void ef_add_task(char (*task)()) {
     task_ptr tp = (task_ptr)malloc(sizeof(ef_task));
-
+    
     tp->task = task;
     tp->next = _task_list;
+
+    _task_list = tp;                       // linked list
 }
 
 #if ARDUINO
 void ef_yield()
 {
-    task_ptr tp = _task_list;
+    task_ptr tp=_task_list;
     while (tp) {
         PT_SCHEDULE(tp->task());           // steal cycles for hardware tasks
         tp = tp->next;
     }
 }
 //
-// delay with yield
+// delay millisecond with yield
 //
 void ef_delay(U32 ms)
 {

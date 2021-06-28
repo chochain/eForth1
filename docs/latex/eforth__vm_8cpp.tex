@@ -1,0 +1,1379 @@
+\hypertarget{eforth__vm_8cpp}{}\section{src/eforth\+\_\+vm.cpp File Reference}
+\label{eforth__vm_8cpp}\index{src/eforth\+\_\+vm.\+cpp@{src/eforth\+\_\+vm.\+cpp}}
+
+
+e\+Forth Virtual Machine module  
+
+
+{\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
+Include dependency graph for eforth\+\_\+vm.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__vm_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{eforth__vm_8cpp_ad572a768450b0c645d096d7e830c25cc}{R\+A\+M\+\_\+\+F\+L\+AG}~0xf000
+\item 
+\#define \hyperlink{eforth__vm_8cpp_ab57397937f994e7b94ffe50762a7d046}{O\+F\+F\+\_\+\+M\+A\+SK}~0x0fff
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a1f75956c7e91b6411417071ea93f7bfe}{B\+O\+OL}(f)~((f) ? \hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE} \+: \hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE})
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}(d,  c)~(\hyperlink{eforth__vm_8cpp_a0391cce18c6a3f15a0459afaada7bba7}{c\+Data}\mbox{[}(d)\&\hyperlink{eforth__vm_8cpp_ab57397937f994e7b94ffe50762a7d046}{O\+F\+F\+\_\+\+M\+A\+SK}\mbox{]}=(\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8})(c))
+\item 
+\#define \hyperlink{eforth__vm_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}{S\+ET}(d,  v)~($\ast$((\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16}$\ast$)\&\hyperlink{eforth__vm_8cpp_a0391cce18c6a3f15a0459afaada7bba7}{c\+Data}\mbox{[}(d)\&\hyperlink{eforth__vm_8cpp_ab57397937f994e7b94ffe50762a7d046}{O\+F\+F\+\_\+\+M\+A\+SK}\mbox{]})=(v))
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a771c3bf52d4aa7f2519e9cfee1fd9c23}{S\+\_\+\+G\+ET}(s)~(\hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}\mbox{[}s\mbox{]})
+\item 
+\#define \hyperlink{eforth__vm_8cpp_ade2ae74c3fc0b01fbef7d597cee139f7}{S\+\_\+\+S\+ET}(s,  v)~(\hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}\mbox{[}s\mbox{]}=(\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16})(v))
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a42522969ae8f55a05e808729969e1cc4}{R\+S\+\_\+\+T\+OP}~(\hyperlink{eforth__core_8h_ae1c5fa2ddd43bad831ec09b454a87476}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}$>$$>$1)
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a110a3aa1f3ec4a49e7e1cb35a32a6bc5}{R\+\_\+\+G\+ET}(r)~((\hyperlink{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}{XA})\hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}\mbox{[}\hyperlink{eforth__vm_8cpp_a42522969ae8f55a05e808729969e1cc4}{R\+S\+\_\+\+T\+OP} -\/ (r)\mbox{]})
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a2da78cf93857f39aa97699eda16cfb87}{R\+\_\+\+S\+ET}(r,  v)~(\hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}\mbox{[}\hyperlink{eforth__vm_8cpp_a42522969ae8f55a05e808729969e1cc4}{R\+S\+\_\+\+T\+OP} -\/ (r)\mbox{]}=(\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16})(v))
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a2106695e949772f765546777ef34690e}{P\+OP}()~(\hyperlink{eforth__vm_8cpp_a1bd8fab4c582fd9f4b9e4213c43d6e48}{top}=\hyperlink{eforth__vm_8cpp_a771c3bf52d4aa7f2519e9cfee1fd9c23}{S\+\_\+\+G\+ET}(\hyperlink{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}{S} ? \hyperlink{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}{S}-\/-\/ \+: \hyperlink{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}{S}))
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a26fbeab0e94b30a69cd049aef73acbbd}{R\+P\+U\+SH}(v)~(\hyperlink{eforth__vm_8cpp_a2da78cf93857f39aa97699eda16cfb87}{R\+\_\+\+S\+ET}(++\hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R}, (v)))
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a55b5173e6face979deb7372dcbb643df}{R\+P\+OP}()~(\hyperlink{eforth__vm_8cpp_a110a3aa1f3ec4a49e7e1cb35a32a6bc5}{R\+\_\+\+G\+ET}(\hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R} ? \hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R}-\/-\/ \+: \hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R}))
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} \hyperlink{eforth__vm_8cpp_a744929f283ec1bc03a32101bf6250bdd}{B\+G\+ET} (\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16} d)
+\item 
+\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16} \hyperlink{eforth__vm_8cpp_a01969a77decdee7f60072db2f44a0d6f}{G\+ET} (\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16} d)
+\item 
+void \hyperlink{eforth__vm_8cpp_a15b968aed3fba55fccaa0dba5ae6c2d0}{P\+U\+SH} (\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16} v)
+\item 
+void \hyperlink{eforth__vm_8cpp_a19c9c5176c1d3c01fc85d1715686552a}{D\+T\+OP} (\hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32} d)
+\item 
+void \hyperlink{eforth__vm_8cpp_a008f6608167e1ebed9616e2890038dda}{N\+E\+XT} ()
+\item 
+void \hyperlink{eforth__vm_8cpp_a53578094a6e7647b6a9f9ea86975c4c2}{\+\_\+init} ()
+\item 
+void \hyperlink{eforth__vm_8cpp_ace382090630ddc4763abb9ad8d67c731}{\+\_\+nop} ()
+\item 
+void \hyperlink{eforth__vm_8cpp_aa4cce331b74c197758d0b9ada8d58002}{vm\+\_\+init} (P\+G\+M\+\_\+P rom, \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$cdata, void $\ast$io\+\_\+stream)
+\item 
+int \hyperlink{eforth__vm_8cpp_a6c9f04cc7cb8e0c9e3058cb7e9a7682f}{vm\+\_\+step} ()
+\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Console IO}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a45e4c2b5a7216252d29bbb728ed11dd9}{\+\_\+qrx} ()
+\item 
+void \hyperlink{eforth__vm_8cpp_a09be64d1411a4af91dc1ecc60b9a4b36}{\+\_\+txsto} ()
+\begin{DoxyCompactList}\small\item\em (c -- ) send a char to console \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Variables/\+Constant/\+Literal Ops}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_aa29edf92add01911cfc8e326315888bd}{\+\_\+dovar} ()
+\begin{DoxyCompactList}\small\item\em ( -- a) return address of a variable \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_ad656568b56e4229b4e48c30db32f1c6a}{\+\_\+docon} ()
+\begin{DoxyCompactList}\small\item\em ( -- n) push next token onto data stack as constant \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a7ab231aec89bb29e756ca930f84197c9}{\+\_\+dolit} ()
+\begin{DoxyCompactList}\small\item\em ( -- w) push next token as an integer literal \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Call/\+Branching Ops}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a3fdf71d632e58667baa02dfc0e0e5694}{\+\_\+enter} ()
+\begin{DoxyCompactList}\small\item\em ( -- ) push instruction pointer onto return stack and pop, aka D\+O\+L\+I\+ST by Dr. Ting \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_afac7b99250b063f5d1741526a2e917a1}{\+\_\+\+\_\+exit} ()
+\begin{DoxyCompactList}\small\item\em ( -- ) terminate all token lists in colon words \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a338ab0508afffd7d138313e864d1099b}{\+\_\+execu} ()
+\begin{DoxyCompactList}\small\item\em (a -- ) take execution address from data stack and execute the token \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a36dc973c7ea30ab1ac2aab29ace523f5}{\+\_\+donext} ()
+\begin{DoxyCompactList}\small\item\em ( -- ) terminate a F\+O\+R-\/\+N\+E\+XT loop \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_adea51d15a7545b0fd3c1a2fca1202902}{\+\_\+qbran} ()
+\begin{DoxyCompactList}\small\item\em (f -- ) test top as a flag on data stack \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a6bbbcdabfe6ef860951cd2f608d9b21d}{\+\_\+bran} ()
+\begin{DoxyCompactList}\small\item\em ( -- ) branch to address following \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Storage Ops}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a80894ce6400ffb7885e77163338c12f0}{\+\_\+store} ()
+\begin{DoxyCompactList}\small\item\em (n a -- ) store into memory location from top of stack \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a7cba76ca5e4ba4b9f0d8ecfaa43636ec}{\+\_\+at} ()
+\begin{DoxyCompactList}\small\item\em (a -- n) fetch from memory address onto top of stack \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a33e79d21cc70d812799753ee72dede6f}{\+\_\+cstor} ()
+\begin{DoxyCompactList}\small\item\em (c b -- ) store a byte into memory location \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a9c15d610c183e016bd85468d6abe8f4b}{\+\_\+cat} ()
+\begin{DoxyCompactList}\small\item\em (b -- n) fetch a byte from memory location \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a663abe9279a32b873b977caade3969a9}{\+\_\+pstor} ()
+\begin{DoxyCompactList}\small\item\em (n a -- ) add n to content at address a \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Return Stack Ops}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a67b23ceacfbc69dcb323674efa797245}{\+\_\+rfrom} ()
+\begin{DoxyCompactList}\small\item\em (-- w) pop from return stack onto data stack (Ting comments different ???) \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a10f4dc7ca4462de481fa0d2fb6c898bf}{\+\_\+rat} ()
+\begin{DoxyCompactList}\small\item\em (-- w) copy a number off the return stack and push onto data stack \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a933969d64429c488aad4309899b915c4}{\+\_\+tor} ()
+\begin{DoxyCompactList}\small\item\em (w --) pop from data stack and push onto return stack \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Data Stack Ops}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a2a601d7b3e49187761135906da44b3d5}{\+\_\+depth} ()
+\begin{DoxyCompactList}\small\item\em (-- w) fetch current stack depth \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a5fa757e86d41f781707166dbe522d814}{\+\_\+drop} ()
+\begin{DoxyCompactList}\small\item\em (w -- ) drop top of stack item \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a073b094d4c4c2015202aec53dbd4a44b}{\+\_\+dup} ()
+\begin{DoxyCompactList}\small\item\em (w -- w w) duplicate to of stack \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a97146472fef4758c3efbc01e318b7f96}{\+\_\+swap} ()
+\begin{DoxyCompactList}\small\item\em (w1 w2 -- w2 w1) swap top two items on the data stack \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a635f1820cf09aea40167fe0fa82fd60d}{\+\_\+over} ()
+\begin{DoxyCompactList}\small\item\em (w1 w2 -- w1 w2 w1) copy second stack item to top \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a373f43055f3c098365db3cd7d9621370}{\+\_\+rot} ()
+\begin{DoxyCompactList}\small\item\em (w1 w2 w3 -- w2 w3 w1) rotate 3rd item to top \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a7098940f5064b9487923b570e94fc13d}{\+\_\+pick} ()
+\begin{DoxyCompactList}\small\item\em (... +n -- ...w) copy nth stack item to top \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a907b1be1be62e31e87d4a2f944518d94}{\+\_\+qdup} ()
+\begin{DoxyCompactList}\small\item\em (w -- w w $\vert$ 0) dup top of stack if it is not zero \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Logic Ops}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a0cfde6bbdfbe07464ac2e0d74eda81e5}{\+\_\+and} ()
+\begin{DoxyCompactList}\small\item\em (w w -- w) bitwise A\+ND \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a095c25df0002ed38d2e984ac397fcc39}{\+\_\+or} ()
+\begin{DoxyCompactList}\small\item\em (w w -- w) bitwise OR \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a0d6b169b37088c5e94d00b04704dcd41}{\+\_\+xor} ()
+\begin{DoxyCompactList}\small\item\em (w w -- w) bitwise X\+OR \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_abb1bf51e0935f998b82c23ddb3a9201e}{\+\_\+great} ()
+\begin{DoxyCompactList}\small\item\em (n1 n2 -- t) true if n1$>$n2 \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_aaca55d0aa3499a9fbcca5b3683ee3b36}{\+\_\+less} ()
+\begin{DoxyCompactList}\small\item\em (n1 n2 -- t) true if n1$<$n2 \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a3be5da5d1cc0f771fb641005a3a21c50}{\+\_\+equal} ()
+\begin{DoxyCompactList}\small\item\em (w w -- t) true if top two items are equal \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_add33b66284a49431236d5d69d2754948}{\+\_\+invert} ()
+\begin{DoxyCompactList}\small\item\em (w -- $\sim$w) one\textquotesingle{}s complement \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a9b87217dbe26020d31bbed9b679adb63}{\+\_\+zless} ()
+\begin{DoxyCompactList}\small\item\em (n -- f) check whether top of stack is negative \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_ac66b75c52888d8f422f013cec54093ce}{\+\_\+uless} ()
+\begin{DoxyCompactList}\small\item\em (u1 u2 -- t) unsigned compare top two items \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a7ffcd5df21092b6b6a66ca35b6643fe1}{\+\_\+lshift} ()
+\begin{DoxyCompactList}\small\item\em (w n -- w) left shift n bits \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_ad983f62749f3b469c31fa7e172a5534c}{\+\_\+rshift} ()
+\begin{DoxyCompactList}\small\item\em (w n -- w) right shift n bits \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Arithmetic Ops}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a5b25e5f41bf677cec8f081ec610ebb25}{\+\_\+abs} ()
+\begin{DoxyCompactList}\small\item\em (n -- n) absolute value of n \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a59204cf7829c753b6c29fc914e975f74}{\+\_\+mod} ()
+\begin{DoxyCompactList}\small\item\em (n n -- r) signed divide, returns mod \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a43fe67ab639c5931d4fde9082f2b789a}{\+\_\+negate} ()
+\begin{DoxyCompactList}\small\item\em (n -- -\/n) two\textquotesingle{}s complement \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a87e7d8bff6d7358b2689a0c49e36550d}{\+\_\+onep} ()
+\begin{DoxyCompactList}\small\item\em (n -- n+1) add one to top \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a1211a1fe323ea460243f74a482ab08a9}{\+\_\+onem} ()
+\begin{DoxyCompactList}\small\item\em (n -- n-\/1) minus one to top \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_adb1739d122a59725a4d5f55e6e275a83}{\+\_\+plus} ()
+\begin{DoxyCompactList}\small\item\em (w w -- sum) add top two items \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a6e0d016af830b85025c58fb5d1b6f382}{\+\_\+sub} ()
+\begin{DoxyCompactList}\small\item\em (n1 n2 -- n1-\/n2) subtraction \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a4efd89c759ec80fc8cd7bcf09ad64f4e}{\+\_\+star} ()
+\begin{DoxyCompactList}\small\item\em (n n -- n) signed multiply, return single product \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a72d2f46d182df28d78caa47fb424cfe2}{\+\_\+slash} ()
+\begin{DoxyCompactList}\small\item\em (n n -\/ q) signed divide, return quotient \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a552e174d0cc3293f28209ea6709c9bf3}{\+\_\+uplus} ()
+\begin{DoxyCompactList}\small\item\em (w w -- w c) add two numbers, return the sum and carry flag \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_ad5fb5d6f1af336c5ac78bf4e3172a96c}{\+\_\+ummod} ()
+\begin{DoxyCompactList}\small\item\em (udl udh u -- ur uq) unsigned divide of a double by single \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a65cccf066647a204decd6835f5d51782}{\+\_\+umstar} ()
+\begin{DoxyCompactList}\small\item\em (u1 u2 -- ud) unsigned multiply return double product \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Double Precision Ops}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a8a36b02e36ce33e9446042585d330e5b}{\+\_\+mstar} ()
+\begin{DoxyCompactList}\small\item\em (n1 n2 -- d) signed multiply, return double product \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a15950f74335a4e5ebe4b5a7b0f744769}{\+\_\+dnegate} ()
+\begin{DoxyCompactList}\small\item\em (d -- -\/d) two\textquotesingle{}s complemente of top double \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_aebcbd092b140611bc66160457b5106db}{\+\_\+dplus} ()
+\begin{DoxyCompactList}\small\item\em (d1 d2 -- d1+d2) add two double precision numbers \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a3150274511361cb930be4be808f2b115}{\+\_\+dsub} ()
+\begin{DoxyCompactList}\small\item\em (d1 d2 -- d1-\/d2) subtract d2 from d1 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Arduino Specific}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__vm_8cpp_a768de8f4472449a11de1dd4b6bd076dc}{\+\_\+delay} ()
+\begin{DoxyCompactList}\small\item\em (n -- ) delay n milli-\/second \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a8a7468440e3ec325a6488dedfb13997c}{\+\_\+clock} ()
+\begin{DoxyCompactList}\small\item\em ( -- d) current clock value, a double precision number \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a8efd7b4d3a4e29571c57e1f234980fbf}{\+\_\+pinmode} ()
+\begin{DoxyCompactList}\small\item\em (pin mode --) pin\+Mode(pin, mode) \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_aacf9a591adb5cb60b07a68101d68c67f}{\+\_\+map} ()
+\begin{DoxyCompactList}\small\item\em (f1 f2 t1 t2 n -- nx) map(n, f1, f2, t1, t2) \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a3c1a3ed9c3ec6413700044551f4363ac}{\+\_\+din} ()
+\begin{DoxyCompactList}\small\item\em (pin -- n) read from Arduino digital pin \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a4d4b4908a9db7135307c242a7b3dddab}{\+\_\+dout} ()
+\begin{DoxyCompactList}\small\item\em (pin n -- ) write to Arduino digital pin \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_a0c43739a29aae813d1d12475b00cf2bf}{\+\_\+ain} ()
+\begin{DoxyCompactList}\small\item\em (pin -- n) read from Arduino analog pin \end{DoxyCompactList}\item 
+void \hyperlink{eforth__vm_8cpp_acb10c0fa8946d6b69345a7ea3327765b}{\+\_\+aout} ()
+\begin{DoxyCompactList}\small\item\em (pin n -- ) write P\+WM to Arduino analog pin \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static Stream $\ast$ \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}
+\item 
+void($\ast$ \hyperlink{eforth__vm_8cpp_a9106d4a445352acc2fdc12c6bc24a02d}{prim} \mbox{[}\hyperlink{eforth__core_8h_a613f37d66831015d5474ad77766bbb6c}{F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES}\mbox{]})()
+\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Control}\par
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}{XA} \hyperlink{eforth__vm_8cpp_a8f530d5752d2e6c07bb898be8f865a01}{PC}
+\begin{DoxyCompactList}\small\item\em PC (program counter, XA is 16-\/bit) \end{DoxyCompactList}\item 
+\hyperlink{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}{XA} \hyperlink{eforth__vm_8cpp_af98fc6da75d2dec261af83f44733d742}{IP}
+\begin{DoxyCompactList}\small\item\em IP (instruction pointer, XA is 16-\/bit) \end{DoxyCompactList}\item 
+\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} \hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R}
+\begin{DoxyCompactList}\small\item\em return stack index (0-\/255) \end{DoxyCompactList}\item 
+\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} \hyperlink{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}{S}
+\begin{DoxyCompactList}\small\item\em data stack index (0-\/255) \end{DoxyCompactList}\item 
+\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16} \hyperlink{eforth__vm_8cpp_a1bd8fab4c582fd9f4b9e4213c43d6e48}{top}
+\begin{DoxyCompactList}\small\item\em A\+LU (i.\+e. cached top of stack value) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Storage}\par
+\begin{DoxyCompactItemize}
+\item 
+P\+G\+M\+\_\+P \hyperlink{eforth__vm_8cpp_a89c02c6c2f86fad55e19435fd8d5ce35}{c\+Rom}
+\begin{DoxyCompactList}\small\item\em R\+OM, Forth word stored in Arduino Flash Memory. \end{DoxyCompactList}\item 
+\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$ \hyperlink{eforth__vm_8cpp_a0391cce18c6a3f15a0459afaada7bba7}{c\+Data}
+\begin{DoxyCompactList}\small\item\em R\+AM, memory block for user define dictionary. \end{DoxyCompactList}\item 
+\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16} $\ast$ \hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}
+\begin{DoxyCompactList}\small\item\em pointer to stack/rack memory block \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Tracing}\par
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{eforth__vm_8cpp_a1c5ee9900a20f49f9035d0e31b2998c9}{t\+C\+NT}
+\begin{DoxyCompactList}\small\item\em tracing depth counters \end{DoxyCompactList}\item 
+int \hyperlink{eforth__vm_8cpp_a4d864bc05becbdb0f66b481828e12bd0}{t\+T\+AB}
+\begin{DoxyCompactList}\small\item\em tracing indentation counter \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Tracing Functions}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{eforth__vm_8cpp_acb4fb099486d7ee0d3e648b28196c2ae}{T\+R\+A\+CE}(s,  v)~if (\hyperlink{eforth__vm_8cpp_a1c5ee9900a20f49f9035d0e31b2998c9}{t\+C\+NT}) \{ \hyperlink{eforth__core_8h_a58eef1717c4dffedd3a63d061ed1b4a5}{L\+O\+G\+\_\+H}(s, v); \}
+\item 
+\#define \hyperlink{eforth__vm_8cpp_ad35692c45586f7b6ce93785227fef055}{T\+R\+A\+C\+E\+\_\+\+C\+O\+L\+ON}()
+\item 
+\#define \hyperlink{eforth__vm_8cpp_a24c7bc81107a8d0c9530fb636e2a5771}{T\+R\+A\+C\+E\+\_\+\+E\+X\+IT}()
+\item 
+void \hyperlink{eforth__vm_8cpp_a7ca812463edf81cb8f26f0b4a7641cda}{\+\_\+trc\+\_\+on} ()
+\item 
+void \hyperlink{eforth__vm_8cpp_aa7c8ee88f44029e17d5c6cfbf36c308f}{\+\_\+trc\+\_\+off} ()
+\item 
+void \hyperlink{eforth__vm_8cpp_a19b1639fc1da7d770eaa362a932bbec3}{T\+R\+A\+C\+E\+\_\+\+W\+O\+RD} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+e\+Forth Virtual Machine module 
+
+\subparagraph*{e\+Forth Memory map}
+
+
+\begin{DoxyCode}
+0x0000-0x0fff ROM (Flash memory)
+0x1000-0x14ff RAM (dynamic memory)
+    0x1000-0x10bf Return/Data Stack
+    0x10c0-0x1fff TIB (Terminal Input Buffer)
+    0x1100-0x111f PAD (Output Buffer)
+    0x1120-0x14ff User Dictionary
+\end{DoxyCode}
+
+
+\subparagraph*{Data and Return Stack}
+
+
+\begin{DoxyCode}
+        \hyperlink{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}{S}                   \hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R}
+        |                   |
+\hyperlink{eforth__vm_8cpp_a1bd8fab4c582fd9f4b9e4213c43d6e48}{top} -> [S0, S1, S2,..., R1, R0]
+\end{DoxyCode}
+ Note\+: Dr. Ting uses U8 (0$\sim$255) for wrap-\/around control 
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{eforth__vm_8cpp_ad572a768450b0c645d096d7e830c25cc}\label{eforth__vm_8cpp_ad572a768450b0c645d096d7e830c25cc}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!R\+A\+M\+\_\+\+F\+L\+AG@{R\+A\+M\+\_\+\+F\+L\+AG}}
+\index{R\+A\+M\+\_\+\+F\+L\+AG@{R\+A\+M\+\_\+\+F\+L\+AG}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{R\+A\+M\+\_\+\+F\+L\+AG}{RAM\_FLAG}}
+{\footnotesize\ttfamily \#define R\+A\+M\+\_\+\+F\+L\+AG~0xf000}
+
+R\+A\+M/\+R\+OM ranger (0x1000$\sim$0xffff) \mbox{\Hypertarget{eforth__vm_8cpp_ab57397937f994e7b94ffe50762a7d046}\label{eforth__vm_8cpp_ab57397937f994e7b94ffe50762a7d046}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!O\+F\+F\+\_\+\+M\+A\+SK@{O\+F\+F\+\_\+\+M\+A\+SK}}
+\index{O\+F\+F\+\_\+\+M\+A\+SK@{O\+F\+F\+\_\+\+M\+A\+SK}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{O\+F\+F\+\_\+\+M\+A\+SK}{OFF\_MASK}}
+{\footnotesize\ttfamily \#define O\+F\+F\+\_\+\+M\+A\+SK~0x0fff}
+
+R\+A\+M/\+R\+OM range mask (0x000$\sim$0xfff) \mbox{\Hypertarget{eforth__vm_8cpp_a1f75956c7e91b6411417071ea93f7bfe}\label{eforth__vm_8cpp_a1f75956c7e91b6411417071ea93f7bfe}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!B\+O\+OL@{B\+O\+OL}}
+\index{B\+O\+OL@{B\+O\+OL}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{B\+O\+OL}{BOOL}}
+{\footnotesize\ttfamily \#define B\+O\+OL(\begin{DoxyParamCaption}\item[{}]{f }\end{DoxyParamCaption})~((f) ? \hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE} \+: \hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE})}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a77270f01b515a878ec2853760cb20dfa}\label{eforth__vm_8cpp_a77270f01b515a878ec2853760cb20dfa}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!B\+S\+ET@{B\+S\+ET}}
+\index{B\+S\+ET@{B\+S\+ET}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{B\+S\+ET}{BSET}}
+{\footnotesize\ttfamily \#define B\+S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{c }\end{DoxyParamCaption})~(\hyperlink{eforth__vm_8cpp_a0391cce18c6a3f15a0459afaada7bba7}{c\+Data}\mbox{[}(d)\&\hyperlink{eforth__vm_8cpp_ab57397937f994e7b94ffe50762a7d046}{O\+F\+F\+\_\+\+M\+A\+SK}\mbox{]}=(\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8})(c))}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}\label{eforth__vm_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!S\+ET@{S\+ET}}
+\index{S\+ET@{S\+ET}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{S\+ET}{SET}}
+{\footnotesize\ttfamily \#define S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{v }\end{DoxyParamCaption})~($\ast$((\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16}$\ast$)\&\hyperlink{eforth__vm_8cpp_a0391cce18c6a3f15a0459afaada7bba7}{c\+Data}\mbox{[}(d)\&\hyperlink{eforth__vm_8cpp_ab57397937f994e7b94ffe50762a7d046}{O\+F\+F\+\_\+\+M\+A\+SK}\mbox{]})=(v))}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a771c3bf52d4aa7f2519e9cfee1fd9c23}\label{eforth__vm_8cpp_a771c3bf52d4aa7f2519e9cfee1fd9c23}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!S\+\_\+\+G\+ET@{S\+\_\+\+G\+ET}}
+\index{S\+\_\+\+G\+ET@{S\+\_\+\+G\+ET}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{S\+\_\+\+G\+ET}{S\_GET}}
+{\footnotesize\ttfamily \#define S\+\_\+\+G\+ET(\begin{DoxyParamCaption}\item[{}]{s }\end{DoxyParamCaption})~(\hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}\mbox{[}s\mbox{]})}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_ade2ae74c3fc0b01fbef7d597cee139f7}\label{eforth__vm_8cpp_ade2ae74c3fc0b01fbef7d597cee139f7}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!S\+\_\+\+S\+ET@{S\+\_\+\+S\+ET}}
+\index{S\+\_\+\+S\+ET@{S\+\_\+\+S\+ET}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{S\+\_\+\+S\+ET}{S\_SET}}
+{\footnotesize\ttfamily \#define S\+\_\+\+S\+ET(\begin{DoxyParamCaption}\item[{}]{s,  }\item[{}]{v }\end{DoxyParamCaption})~(\hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}\mbox{[}s\mbox{]}=(\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16})(v))}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a42522969ae8f55a05e808729969e1cc4}\label{eforth__vm_8cpp_a42522969ae8f55a05e808729969e1cc4}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!R\+S\+\_\+\+T\+OP@{R\+S\+\_\+\+T\+OP}}
+\index{R\+S\+\_\+\+T\+OP@{R\+S\+\_\+\+T\+OP}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{R\+S\+\_\+\+T\+OP}{RS\_TOP}}
+{\footnotesize\ttfamily \#define R\+S\+\_\+\+T\+OP~(\hyperlink{eforth__core_8h_ae1c5fa2ddd43bad831ec09b454a87476}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}$>$$>$1)}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a110a3aa1f3ec4a49e7e1cb35a32a6bc5}\label{eforth__vm_8cpp_a110a3aa1f3ec4a49e7e1cb35a32a6bc5}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!R\+\_\+\+G\+ET@{R\+\_\+\+G\+ET}}
+\index{R\+\_\+\+G\+ET@{R\+\_\+\+G\+ET}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{R\+\_\+\+G\+ET}{R\_GET}}
+{\footnotesize\ttfamily \#define R\+\_\+\+G\+ET(\begin{DoxyParamCaption}\item[{}]{r }\end{DoxyParamCaption})~((\hyperlink{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}{XA})\hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}\mbox{[}\hyperlink{eforth__vm_8cpp_a42522969ae8f55a05e808729969e1cc4}{R\+S\+\_\+\+T\+OP} -\/ (r)\mbox{]})}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a2da78cf93857f39aa97699eda16cfb87}\label{eforth__vm_8cpp_a2da78cf93857f39aa97699eda16cfb87}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!R\+\_\+\+S\+ET@{R\+\_\+\+S\+ET}}
+\index{R\+\_\+\+S\+ET@{R\+\_\+\+S\+ET}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{R\+\_\+\+S\+ET}{R\_SET}}
+{\footnotesize\ttfamily \#define R\+\_\+\+S\+ET(\begin{DoxyParamCaption}\item[{}]{r,  }\item[{}]{v }\end{DoxyParamCaption})~(\hyperlink{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}{c\+Stack}\mbox{[}\hyperlink{eforth__vm_8cpp_a42522969ae8f55a05e808729969e1cc4}{R\+S\+\_\+\+T\+OP} -\/ (r)\mbox{]}=(\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16})(v))}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a2106695e949772f765546777ef34690e}\label{eforth__vm_8cpp_a2106695e949772f765546777ef34690e}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!P\+OP@{P\+OP}}
+\index{P\+OP@{P\+OP}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{P\+OP}{POP}}
+{\footnotesize\ttfamily \#define P\+OP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(\hyperlink{eforth__vm_8cpp_a1bd8fab4c582fd9f4b9e4213c43d6e48}{top}=\hyperlink{eforth__vm_8cpp_a771c3bf52d4aa7f2519e9cfee1fd9c23}{S\+\_\+\+G\+ET}(\hyperlink{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}{S} ? \hyperlink{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}{S}-\/-\/ \+: \hyperlink{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}{S}))}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a26fbeab0e94b30a69cd049aef73acbbd}\label{eforth__vm_8cpp_a26fbeab0e94b30a69cd049aef73acbbd}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!R\+P\+U\+SH@{R\+P\+U\+SH}}
+\index{R\+P\+U\+SH@{R\+P\+U\+SH}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{R\+P\+U\+SH}{RPUSH}}
+{\footnotesize\ttfamily \#define R\+P\+U\+SH(\begin{DoxyParamCaption}\item[{}]{v }\end{DoxyParamCaption})~(\hyperlink{eforth__vm_8cpp_a2da78cf93857f39aa97699eda16cfb87}{R\+\_\+\+S\+ET}(++\hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R}, (v)))}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a55b5173e6face979deb7372dcbb643df}\label{eforth__vm_8cpp_a55b5173e6face979deb7372dcbb643df}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!R\+P\+OP@{R\+P\+OP}}
+\index{R\+P\+OP@{R\+P\+OP}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{R\+P\+OP}{RPOP}}
+{\footnotesize\ttfamily \#define R\+P\+OP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(\hyperlink{eforth__vm_8cpp_a110a3aa1f3ec4a49e7e1cb35a32a6bc5}{R\+\_\+\+G\+ET}(\hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R} ? \hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R}-\/-\/ \+: \hyperlink{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}{R}))}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_acb4fb099486d7ee0d3e648b28196c2ae}\label{eforth__vm_8cpp_acb4fb099486d7ee0d3e648b28196c2ae}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!T\+R\+A\+CE@{T\+R\+A\+CE}}
+\index{T\+R\+A\+CE@{T\+R\+A\+CE}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{T\+R\+A\+CE}{TRACE}}
+{\footnotesize\ttfamily \#define T\+R\+A\+CE(\begin{DoxyParamCaption}\item[{}]{s,  }\item[{}]{v }\end{DoxyParamCaption})~if (\hyperlink{eforth__vm_8cpp_a1c5ee9900a20f49f9035d0e31b2998c9}{t\+C\+NT}) \{ \hyperlink{eforth__core_8h_a58eef1717c4dffedd3a63d061ed1b4a5}{L\+O\+G\+\_\+H}(s, v); \}}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_ad35692c45586f7b6ce93785227fef055}\label{eforth__vm_8cpp_ad35692c45586f7b6ce93785227fef055}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!T\+R\+A\+C\+E\+\_\+\+C\+O\+L\+ON@{T\+R\+A\+C\+E\+\_\+\+C\+O\+L\+ON}}
+\index{T\+R\+A\+C\+E\+\_\+\+C\+O\+L\+ON@{T\+R\+A\+C\+E\+\_\+\+C\+O\+L\+ON}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{T\+R\+A\+C\+E\+\_\+\+C\+O\+L\+ON}{TRACE\_COLON}}
+{\footnotesize\ttfamily \#define T\+R\+A\+C\+E\+\_\+\+C\+O\+L\+ON(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{if} (\hyperlink{eforth__vm_8cpp_a1c5ee9900a20f49f9035d0e31b2998c9}{tCNT}) \{              \(\backslash\)
+    LOG(\textcolor{stringliteral}{"\(\backslash\)n"});                                 \(\backslash\)
+    for (\textcolor{keywordtype}{int} i=0; i<\hyperlink{eforth__vm_8cpp_a4d864bc05becbdb0f66b481828e12bd0}{tTAB}; i++) \hyperlink{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}{LOG}(\textcolor{stringliteral}{"  "});      \(\backslash\)
+    tTAB++;                                    \(\backslash\)
+    LOG(\textcolor{stringliteral}{":"});                                  \(\backslash\)
+\}
+\end{DoxyCode}
+\mbox{\Hypertarget{eforth__vm_8cpp_a24c7bc81107a8d0c9530fb636e2a5771}\label{eforth__vm_8cpp_a24c7bc81107a8d0c9530fb636e2a5771}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!T\+R\+A\+C\+E\+\_\+\+E\+X\+IT@{T\+R\+A\+C\+E\+\_\+\+E\+X\+IT}}
+\index{T\+R\+A\+C\+E\+\_\+\+E\+X\+IT@{T\+R\+A\+C\+E\+\_\+\+E\+X\+IT}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{T\+R\+A\+C\+E\+\_\+\+E\+X\+IT}{TRACE\_EXIT}}
+{\footnotesize\ttfamily \#define T\+R\+A\+C\+E\+\_\+\+E\+X\+IT(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{if} (\hyperlink{eforth__vm_8cpp_a1c5ee9900a20f49f9035d0e31b2998c9}{tCNT}) \{              \(\backslash\)
+    LOG(\textcolor{stringliteral}{" ;"});                                 \(\backslash\)
+    tTAB--;                                    \(\backslash\)
+\}
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{eforth__vm_8cpp_a744929f283ec1bc03a32101bf6250bdd}\label{eforth__vm_8cpp_a744929f283ec1bc03a32101bf6250bdd}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!B\+G\+ET@{B\+G\+ET}}
+\index{B\+G\+ET@{B\+G\+ET}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{B\+G\+E\+T()}{BGET()}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} B\+G\+ET (\begin{DoxyParamCaption}\item[{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}]{d }\end{DoxyParamCaption})}
+
+byte (8-\/bit) fetch from either R\+AM or R\+OM depends on filtered range \mbox{\Hypertarget{eforth__vm_8cpp_a01969a77decdee7f60072db2f44a0d6f}\label{eforth__vm_8cpp_a01969a77decdee7f60072db2f44a0d6f}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!G\+ET@{G\+ET}}
+\index{G\+ET@{G\+ET}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{G\+E\+T()}{GET()}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16} G\+ET (\begin{DoxyParamCaption}\item[{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}]{d }\end{DoxyParamCaption})}
+
+word (16-\/bit) fetch from either R\+AM or R\+OM depends on filtered range \mbox{\Hypertarget{eforth__vm_8cpp_a15b968aed3fba55fccaa0dba5ae6c2d0}\label{eforth__vm_8cpp_a15b968aed3fba55fccaa0dba5ae6c2d0}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!P\+U\+SH@{P\+U\+SH}}
+\index{P\+U\+SH@{P\+U\+SH}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{P\+U\+S\+H()}{PUSH()}}
+{\footnotesize\ttfamily void P\+U\+SH (\begin{DoxyParamCaption}\item[{\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16}}]{v }\end{DoxyParamCaption})}
+
+push a value onto stack top \mbox{\Hypertarget{eforth__vm_8cpp_a19c9c5176c1d3c01fc85d1715686552a}\label{eforth__vm_8cpp_a19c9c5176c1d3c01fc85d1715686552a}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!D\+T\+OP@{D\+T\+OP}}
+\index{D\+T\+OP@{D\+T\+OP}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{D\+T\+O\+P()}{DTOP()}}
+{\footnotesize\ttfamily void D\+T\+OP (\begin{DoxyParamCaption}\item[{\hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32}}]{d }\end{DoxyParamCaption})}
+
+store a double on data stack top \mbox{\Hypertarget{eforth__vm_8cpp_a008f6608167e1ebed9616e2890038dda}\label{eforth__vm_8cpp_a008f6608167e1ebed9616e2890038dda}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!N\+E\+XT@{N\+E\+XT}}
+\index{N\+E\+XT@{N\+E\+XT}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{N\+E\+X\+T()}{NEXT()}}
+{\footnotesize\ttfamily void N\+E\+XT (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+update program counter (ready to fetch), advance instruction pointer \mbox{\Hypertarget{eforth__vm_8cpp_a7ca812463edf81cb8f26f0b4a7641cda}\label{eforth__vm_8cpp_a7ca812463edf81cb8f26f0b4a7641cda}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+trc\+\_\+on@{\+\_\+trc\+\_\+on}}
+\index{\+\_\+trc\+\_\+on@{\+\_\+trc\+\_\+on}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+trc\+\_\+on()}{\_trc\_on()}}
+{\footnotesize\ttfamily void \+\_\+trc\+\_\+on (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_aa7c8ee88f44029e17d5c6cfbf36c308f}\label{eforth__vm_8cpp_aa7c8ee88f44029e17d5c6cfbf36c308f}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+trc\+\_\+off@{\+\_\+trc\+\_\+off}}
+\index{\+\_\+trc\+\_\+off@{\+\_\+trc\+\_\+off}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+trc\+\_\+off()}{\_trc\_off()}}
+{\footnotesize\ttfamily void \+\_\+trc\+\_\+off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a19b1639fc1da7d770eaa362a932bbec3}\label{eforth__vm_8cpp_a19b1639fc1da7d770eaa362a932bbec3}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!T\+R\+A\+C\+E\+\_\+\+W\+O\+RD@{T\+R\+A\+C\+E\+\_\+\+W\+O\+RD}}
+\index{T\+R\+A\+C\+E\+\_\+\+W\+O\+RD@{T\+R\+A\+C\+E\+\_\+\+W\+O\+RD}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{T\+R\+A\+C\+E\+\_\+\+W\+O\+R\+D()}{TRACE\_WORD()}}
+{\footnotesize\ttfamily void T\+R\+A\+C\+E\+\_\+\+W\+O\+RD (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+display the \textquotesingle{}word\textquotesingle{} to be executed \mbox{\Hypertarget{eforth__vm_8cpp_a53578094a6e7647b6a9f9ea86975c4c2}\label{eforth__vm_8cpp_a53578094a6e7647b6a9f9ea86975c4c2}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+init@{\+\_\+init}}
+\index{\+\_\+init@{\+\_\+init}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+init()}{\_init()}}
+{\footnotesize\ttfamily void \+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+virtual machine initializer \begin{quote}
+setup control variables \end{quote}
+
+
+\begin{quote}
+setup tracing variables \end{quote}
+
+
+\begin{quote}
+setup Forth user variables \end{quote}
+
+
+\begin{quote}
+display prompt \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_ace382090630ddc4763abb9ad8d67c731}\label{eforth__vm_8cpp_ace382090630ddc4763abb9ad8d67c731}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+nop@{\+\_\+nop}}
+\index{\+\_\+nop@{\+\_\+nop}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+nop()}{\_nop()}}
+{\footnotesize\ttfamily void \+\_\+nop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+( -- ) nop, as macro terminator \mbox{\Hypertarget{eforth__vm_8cpp_a45e4c2b5a7216252d29bbb728ed11dd9}\label{eforth__vm_8cpp_a45e4c2b5a7216252d29bbb728ed11dd9}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+qrx@{\+\_\+qrx}}
+\index{\+\_\+qrx@{\+\_\+qrx}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+qrx()}{\_qrx()}}
+{\footnotesize\ttfamily void \+\_\+qrx (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+( -- c t$\vert$f) read a char from terminal input device
+
+\begin{quote}
+yield to user task until console input available \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a09be64d1411a4af91dc1ecc60b9a4b36}\label{eforth__vm_8cpp_a09be64d1411a4af91dc1ecc60b9a4b36}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+txsto@{\+\_\+txsto}}
+\index{\+\_\+txsto@{\+\_\+txsto}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+txsto()}{\_txsto()}}
+{\footnotesize\ttfamily void \+\_\+txsto (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(c -- ) send a char to console 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_aa29edf92add01911cfc8e326315888bd}\label{eforth__vm_8cpp_aa29edf92add01911cfc8e326315888bd}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+dovar@{\+\_\+dovar}}
+\index{\+\_\+dovar@{\+\_\+dovar}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+dovar()}{\_dovar()}}
+{\footnotesize\ttfamily void \+\_\+dovar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+( -- a) return address of a variable 
+
+\begin{quote}
+skip op\+D\+O\+V\+AR opcode \end{quote}
+
+
+\begin{quote}
+push variable address onto stack \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_ad656568b56e4229b4e48c30db32f1c6a}\label{eforth__vm_8cpp_ad656568b56e4229b4e48c30db32f1c6a}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+docon@{\+\_\+docon}}
+\index{\+\_\+docon@{\+\_\+docon}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+docon()}{\_docon()}}
+{\footnotesize\ttfamily void \+\_\+docon (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+( -- n) push next token onto data stack as constant 
+
+\begin{quote}
+skip op\+D\+O\+C\+ON opcode \end{quote}
+
+
+\begin{quote}
+push cell value onto stack \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a7ab231aec89bb29e756ca930f84197c9}\label{eforth__vm_8cpp_a7ab231aec89bb29e756ca930f84197c9}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+dolit@{\+\_\+dolit}}
+\index{\+\_\+dolit@{\+\_\+dolit}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+dolit()}{\_dolit()}}
+{\footnotesize\ttfamily void \+\_\+dolit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+( -- w) push next token as an integer literal 
+
+\begin{quote}
+fetch literal from data \end{quote}
+
+
+\begin{quote}
+push onto data stack \end{quote}
+
+
+\begin{quote}
+skip to next instruction \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a3fdf71d632e58667baa02dfc0e0e5694}\label{eforth__vm_8cpp_a3fdf71d632e58667baa02dfc0e0e5694}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+enter@{\+\_\+enter}}
+\index{\+\_\+enter@{\+\_\+enter}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+enter()}{\_enter()}}
+{\footnotesize\ttfamily void \+\_\+enter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+( -- ) push instruction pointer onto return stack and pop, aka D\+O\+L\+I\+ST by Dr. Ting 
+
+\begin{quote}
+keep return address \end{quote}
+
+
+\begin{quote}
+skip opcode op\+E\+N\+T\+ER, advance to next instruction \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_afac7b99250b063f5d1741526a2e917a1}\label{eforth__vm_8cpp_afac7b99250b063f5d1741526a2e917a1}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+\+\_\+exit@{\+\_\+\+\_\+exit}}
+\index{\+\_\+\+\_\+exit@{\+\_\+\+\_\+exit}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+exit()}{\_\_exit()}}
+{\footnotesize\ttfamily void \+\_\+\+\_\+exit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+( -- ) terminate all token lists in colon words 
+
+\begin{quote}
+pop return address \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a338ab0508afffd7d138313e864d1099b}\label{eforth__vm_8cpp_a338ab0508afffd7d138313e864d1099b}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+execu@{\+\_\+execu}}
+\index{\+\_\+execu@{\+\_\+execu}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+execu()}{\_execu()}}
+{\footnotesize\ttfamily void \+\_\+execu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(a -- ) take execution address from data stack and execute the token 
+
+\begin{quote}
+fetch program counter \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a36dc973c7ea30ab1ac2aab29ace523f5}\label{eforth__vm_8cpp_a36dc973c7ea30ab1ac2aab29ace523f5}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+donext@{\+\_\+donext}}
+\index{\+\_\+donext@{\+\_\+donext}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+donext()}{\_donext()}}
+{\footnotesize\ttfamily void \+\_\+donext (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+( -- ) terminate a F\+O\+R-\/\+N\+E\+XT loop 
+
+\begin{quote}
+loop counter \end{quote}
+
+
+\begin{quote}
+check if loop counter $>$ 0 \end{quote}
+
+
+\begin{quote}
+\begin{quote}
+decrement loop counter \end{quote}
+\end{quote}
+
+
+\begin{quote}
+\begin{quote}
+branch back to F\+OR \end{quote}
+\end{quote}
+
+
+\begin{quote}
+or, \end{quote}
+
+
+\begin{quote}
+\begin{quote}
+skip to next instruction \end{quote}
+\end{quote}
+
+
+\begin{quote}
+\begin{quote}
+pop off return stack \end{quote}
+\end{quote}
+
+
+\begin{quote}
+steal some cycles. Note\+: 17ms/cycle on Arduino U\+NO \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_adea51d15a7545b0fd3c1a2fca1202902}\label{eforth__vm_8cpp_adea51d15a7545b0fd3c1a2fca1202902}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+qbran@{\+\_\+qbran}}
+\index{\+\_\+qbran@{\+\_\+qbran}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+qbran()}{\_qbran()}}
+{\footnotesize\ttfamily void \+\_\+qbran (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(f -- ) test top as a flag on data stack 
+
+\begin{quote}
+next instruction, or \end{quote}
+
+
+\begin{quote}
+fetch branching target address \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a6bbbcdabfe6ef860951cd2f608d9b21d}\label{eforth__vm_8cpp_a6bbbcdabfe6ef860951cd2f608d9b21d}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+bran@{\+\_\+bran}}
+\index{\+\_\+bran@{\+\_\+bran}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+bran()}{\_bran()}}
+{\footnotesize\ttfamily void \+\_\+bran (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+( -- ) branch to address following 
+
+\begin{quote}
+fetch branching target address \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a80894ce6400ffb7885e77163338c12f0}\label{eforth__vm_8cpp_a80894ce6400ffb7885e77163338c12f0}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+store@{\+\_\+store}}
+\index{\+\_\+store@{\+\_\+store}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+store()}{\_store()}}
+{\footnotesize\ttfamily void \+\_\+store (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n a -- ) store into memory location from top of stack 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a7cba76ca5e4ba4b9f0d8ecfaa43636ec}\label{eforth__vm_8cpp_a7cba76ca5e4ba4b9f0d8ecfaa43636ec}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+at@{\+\_\+at}}
+\index{\+\_\+at@{\+\_\+at}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+at()}{\_at()}}
+{\footnotesize\ttfamily void \+\_\+at (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(a -- n) fetch from memory address onto top of stack 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a33e79d21cc70d812799753ee72dede6f}\label{eforth__vm_8cpp_a33e79d21cc70d812799753ee72dede6f}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+cstor@{\+\_\+cstor}}
+\index{\+\_\+cstor@{\+\_\+cstor}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+cstor()}{\_cstor()}}
+{\footnotesize\ttfamily void \+\_\+cstor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(c b -- ) store a byte into memory location 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a9c15d610c183e016bd85468d6abe8f4b}\label{eforth__vm_8cpp_a9c15d610c183e016bd85468d6abe8f4b}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+cat@{\+\_\+cat}}
+\index{\+\_\+cat@{\+\_\+cat}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+cat()}{\_cat()}}
+{\footnotesize\ttfamily void \+\_\+cat (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(b -- n) fetch a byte from memory location 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a663abe9279a32b873b977caade3969a9}\label{eforth__vm_8cpp_a663abe9279a32b873b977caade3969a9}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+pstor@{\+\_\+pstor}}
+\index{\+\_\+pstor@{\+\_\+pstor}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+pstor()}{\_pstor()}}
+{\footnotesize\ttfamily void \+\_\+pstor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n a -- ) add n to content at address a 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a67b23ceacfbc69dcb323674efa797245}\label{eforth__vm_8cpp_a67b23ceacfbc69dcb323674efa797245}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+rfrom@{\+\_\+rfrom}}
+\index{\+\_\+rfrom@{\+\_\+rfrom}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+rfrom()}{\_rfrom()}}
+{\footnotesize\ttfamily void \+\_\+rfrom (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(-- w) pop from return stack onto data stack (Ting comments different ???) 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a10f4dc7ca4462de481fa0d2fb6c898bf}\label{eforth__vm_8cpp_a10f4dc7ca4462de481fa0d2fb6c898bf}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+rat@{\+\_\+rat}}
+\index{\+\_\+rat@{\+\_\+rat}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+rat()}{\_rat()}}
+{\footnotesize\ttfamily void \+\_\+rat (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(-- w) copy a number off the return stack and push onto data stack 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a933969d64429c488aad4309899b915c4}\label{eforth__vm_8cpp_a933969d64429c488aad4309899b915c4}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+tor@{\+\_\+tor}}
+\index{\+\_\+tor@{\+\_\+tor}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+tor()}{\_tor()}}
+{\footnotesize\ttfamily void \+\_\+tor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w --) pop from data stack and push onto return stack 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a2a601d7b3e49187761135906da44b3d5}\label{eforth__vm_8cpp_a2a601d7b3e49187761135906da44b3d5}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+depth@{\+\_\+depth}}
+\index{\+\_\+depth@{\+\_\+depth}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+depth()}{\_depth()}}
+{\footnotesize\ttfamily void \+\_\+depth (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(-- w) fetch current stack depth 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a5fa757e86d41f781707166dbe522d814}\label{eforth__vm_8cpp_a5fa757e86d41f781707166dbe522d814}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+drop@{\+\_\+drop}}
+\index{\+\_\+drop@{\+\_\+drop}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+drop()}{\_drop()}}
+{\footnotesize\ttfamily void \+\_\+drop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w -- ) drop top of stack item 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a073b094d4c4c2015202aec53dbd4a44b}\label{eforth__vm_8cpp_a073b094d4c4c2015202aec53dbd4a44b}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+dup@{\+\_\+dup}}
+\index{\+\_\+dup@{\+\_\+dup}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+dup()}{\_dup()}}
+{\footnotesize\ttfamily void \+\_\+dup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w -- w w) duplicate to of stack 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a97146472fef4758c3efbc01e318b7f96}\label{eforth__vm_8cpp_a97146472fef4758c3efbc01e318b7f96}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+swap@{\+\_\+swap}}
+\index{\+\_\+swap@{\+\_\+swap}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+swap()}{\_swap()}}
+{\footnotesize\ttfamily void \+\_\+swap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w1 w2 -- w2 w1) swap top two items on the data stack 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a635f1820cf09aea40167fe0fa82fd60d}\label{eforth__vm_8cpp_a635f1820cf09aea40167fe0fa82fd60d}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+over@{\+\_\+over}}
+\index{\+\_\+over@{\+\_\+over}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+over()}{\_over()}}
+{\footnotesize\ttfamily void \+\_\+over (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w1 w2 -- w1 w2 w1) copy second stack item to top 
+
+\begin{quote}
+push w1 \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a373f43055f3c098365db3cd7d9621370}\label{eforth__vm_8cpp_a373f43055f3c098365db3cd7d9621370}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+rot@{\+\_\+rot}}
+\index{\+\_\+rot@{\+\_\+rot}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+rot()}{\_rot()}}
+{\footnotesize\ttfamily void \+\_\+rot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w1 w2 w3 -- w2 w3 w1) rotate 3rd item to top 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a7098940f5064b9487923b570e94fc13d}\label{eforth__vm_8cpp_a7098940f5064b9487923b570e94fc13d}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+pick@{\+\_\+pick}}
+\index{\+\_\+pick@{\+\_\+pick}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+pick()}{\_pick()}}
+{\footnotesize\ttfamily void \+\_\+pick (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(... +n -- ...w) copy nth stack item to top 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a907b1be1be62e31e87d4a2f944518d94}\label{eforth__vm_8cpp_a907b1be1be62e31e87d4a2f944518d94}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+qdup@{\+\_\+qdup}}
+\index{\+\_\+qdup@{\+\_\+qdup}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+qdup()}{\_qdup()}}
+{\footnotesize\ttfamily void \+\_\+qdup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w -- w w $\vert$ 0) dup top of stack if it is not zero 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a0cfde6bbdfbe07464ac2e0d74eda81e5}\label{eforth__vm_8cpp_a0cfde6bbdfbe07464ac2e0d74eda81e5}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+and@{\+\_\+and}}
+\index{\+\_\+and@{\+\_\+and}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+and()}{\_and()}}
+{\footnotesize\ttfamily void \+\_\+and (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w w -- w) bitwise A\+ND 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a095c25df0002ed38d2e984ac397fcc39}\label{eforth__vm_8cpp_a095c25df0002ed38d2e984ac397fcc39}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+or@{\+\_\+or}}
+\index{\+\_\+or@{\+\_\+or}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+or()}{\_or()}}
+{\footnotesize\ttfamily void \+\_\+or (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w w -- w) bitwise OR 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a0d6b169b37088c5e94d00b04704dcd41}\label{eforth__vm_8cpp_a0d6b169b37088c5e94d00b04704dcd41}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+xor@{\+\_\+xor}}
+\index{\+\_\+xor@{\+\_\+xor}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+xor()}{\_xor()}}
+{\footnotesize\ttfamily void \+\_\+xor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w w -- w) bitwise X\+OR 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_abb1bf51e0935f998b82c23ddb3a9201e}\label{eforth__vm_8cpp_abb1bf51e0935f998b82c23ddb3a9201e}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+great@{\+\_\+great}}
+\index{\+\_\+great@{\+\_\+great}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+great()}{\_great()}}
+{\footnotesize\ttfamily void \+\_\+great (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n1 n2 -- t) true if n1$>$n2 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_aaca55d0aa3499a9fbcca5b3683ee3b36}\label{eforth__vm_8cpp_aaca55d0aa3499a9fbcca5b3683ee3b36}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+less@{\+\_\+less}}
+\index{\+\_\+less@{\+\_\+less}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+less()}{\_less()}}
+{\footnotesize\ttfamily void \+\_\+less (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n1 n2 -- t) true if n1$<$n2 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a3be5da5d1cc0f771fb641005a3a21c50}\label{eforth__vm_8cpp_a3be5da5d1cc0f771fb641005a3a21c50}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+equal@{\+\_\+equal}}
+\index{\+\_\+equal@{\+\_\+equal}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+equal()}{\_equal()}}
+{\footnotesize\ttfamily void \+\_\+equal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w w -- t) true if top two items are equal 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_add33b66284a49431236d5d69d2754948}\label{eforth__vm_8cpp_add33b66284a49431236d5d69d2754948}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+invert@{\+\_\+invert}}
+\index{\+\_\+invert@{\+\_\+invert}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+invert()}{\_invert()}}
+{\footnotesize\ttfamily void \+\_\+invert (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w -- $\sim$w) one\textquotesingle{}s complement 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a9b87217dbe26020d31bbed9b679adb63}\label{eforth__vm_8cpp_a9b87217dbe26020d31bbed9b679adb63}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+zless@{\+\_\+zless}}
+\index{\+\_\+zless@{\+\_\+zless}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+zless()}{\_zless()}}
+{\footnotesize\ttfamily void \+\_\+zless (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n -- f) check whether top of stack is negative 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_ac66b75c52888d8f422f013cec54093ce}\label{eforth__vm_8cpp_ac66b75c52888d8f422f013cec54093ce}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+uless@{\+\_\+uless}}
+\index{\+\_\+uless@{\+\_\+uless}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+uless()}{\_uless()}}
+{\footnotesize\ttfamily void \+\_\+uless (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(u1 u2 -- t) unsigned compare top two items 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a7ffcd5df21092b6b6a66ca35b6643fe1}\label{eforth__vm_8cpp_a7ffcd5df21092b6b6a66ca35b6643fe1}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+lshift@{\+\_\+lshift}}
+\index{\+\_\+lshift@{\+\_\+lshift}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+lshift()}{\_lshift()}}
+{\footnotesize\ttfamily void \+\_\+lshift (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w n -- w) left shift n bits 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_ad983f62749f3b469c31fa7e172a5534c}\label{eforth__vm_8cpp_ad983f62749f3b469c31fa7e172a5534c}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+rshift@{\+\_\+rshift}}
+\index{\+\_\+rshift@{\+\_\+rshift}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+rshift()}{\_rshift()}}
+{\footnotesize\ttfamily void \+\_\+rshift (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w n -- w) right shift n bits 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a5b25e5f41bf677cec8f081ec610ebb25}\label{eforth__vm_8cpp_a5b25e5f41bf677cec8f081ec610ebb25}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+abs@{\+\_\+abs}}
+\index{\+\_\+abs@{\+\_\+abs}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+abs()}{\_abs()}}
+{\footnotesize\ttfamily void \+\_\+abs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n -- n) absolute value of n 
+
+\begin{quote}
+no branching \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a59204cf7829c753b6c29fc914e975f74}\label{eforth__vm_8cpp_a59204cf7829c753b6c29fc914e975f74}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+mod@{\+\_\+mod}}
+\index{\+\_\+mod@{\+\_\+mod}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+mod()}{\_mod()}}
+{\footnotesize\ttfamily void \+\_\+mod (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n n -- r) signed divide, returns mod 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a43fe67ab639c5931d4fde9082f2b789a}\label{eforth__vm_8cpp_a43fe67ab639c5931d4fde9082f2b789a}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+negate@{\+\_\+negate}}
+\index{\+\_\+negate@{\+\_\+negate}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+negate()}{\_negate()}}
+{\footnotesize\ttfamily void \+\_\+negate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n -- -\/n) two\textquotesingle{}s complement 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a87e7d8bff6d7358b2689a0c49e36550d}\label{eforth__vm_8cpp_a87e7d8bff6d7358b2689a0c49e36550d}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+onep@{\+\_\+onep}}
+\index{\+\_\+onep@{\+\_\+onep}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+onep()}{\_onep()}}
+{\footnotesize\ttfamily void \+\_\+onep (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n -- n+1) add one to top 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a1211a1fe323ea460243f74a482ab08a9}\label{eforth__vm_8cpp_a1211a1fe323ea460243f74a482ab08a9}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+onem@{\+\_\+onem}}
+\index{\+\_\+onem@{\+\_\+onem}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+onem()}{\_onem()}}
+{\footnotesize\ttfamily void \+\_\+onem (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n -- n-\/1) minus one to top 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_adb1739d122a59725a4d5f55e6e275a83}\label{eforth__vm_8cpp_adb1739d122a59725a4d5f55e6e275a83}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+plus@{\+\_\+plus}}
+\index{\+\_\+plus@{\+\_\+plus}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+plus()}{\_plus()}}
+{\footnotesize\ttfamily void \+\_\+plus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w w -- sum) add top two items 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a6e0d016af830b85025c58fb5d1b6f382}\label{eforth__vm_8cpp_a6e0d016af830b85025c58fb5d1b6f382}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+sub@{\+\_\+sub}}
+\index{\+\_\+sub@{\+\_\+sub}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+sub()}{\_sub()}}
+{\footnotesize\ttfamily void \+\_\+sub (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n1 n2 -- n1-\/n2) subtraction 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a4efd89c759ec80fc8cd7bcf09ad64f4e}\label{eforth__vm_8cpp_a4efd89c759ec80fc8cd7bcf09ad64f4e}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+star@{\+\_\+star}}
+\index{\+\_\+star@{\+\_\+star}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+star()}{\_star()}}
+{\footnotesize\ttfamily void \+\_\+star (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n n -- n) signed multiply, return single product 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a72d2f46d182df28d78caa47fb424cfe2}\label{eforth__vm_8cpp_a72d2f46d182df28d78caa47fb424cfe2}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+slash@{\+\_\+slash}}
+\index{\+\_\+slash@{\+\_\+slash}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+slash()}{\_slash()}}
+{\footnotesize\ttfamily void \+\_\+slash (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n n -\/ q) signed divide, return quotient 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a552e174d0cc3293f28209ea6709c9bf3}\label{eforth__vm_8cpp_a552e174d0cc3293f28209ea6709c9bf3}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+uplus@{\+\_\+uplus}}
+\index{\+\_\+uplus@{\+\_\+uplus}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+uplus()}{\_uplus()}}
+{\footnotesize\ttfamily void \+\_\+uplus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(w w -- w c) add two numbers, return the sum and carry flag 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_ad5fb5d6f1af336c5ac78bf4e3172a96c}\label{eforth__vm_8cpp_ad5fb5d6f1af336c5ac78bf4e3172a96c}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+ummod@{\+\_\+ummod}}
+\index{\+\_\+ummod@{\+\_\+ummod}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+ummod()}{\_ummod()}}
+{\footnotesize\ttfamily void \+\_\+ummod (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(udl udh u -- ur uq) unsigned divide of a double by single 
+
+\begin{quote}
+CC\+: auto variable uses C stack \end{quote}
+
+
+\begin{quote}
+remainder \end{quote}
+
+
+\begin{quote}
+quotient \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a65cccf066647a204decd6835f5d51782}\label{eforth__vm_8cpp_a65cccf066647a204decd6835f5d51782}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+umstar@{\+\_\+umstar}}
+\index{\+\_\+umstar@{\+\_\+umstar}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+umstar()}{\_umstar()}}
+{\footnotesize\ttfamily void \+\_\+umstar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(u1 u2 -- ud) unsigned multiply return double product 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a8a36b02e36ce33e9446042585d330e5b}\label{eforth__vm_8cpp_a8a36b02e36ce33e9446042585d330e5b}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+mstar@{\+\_\+mstar}}
+\index{\+\_\+mstar@{\+\_\+mstar}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+mstar()}{\_mstar()}}
+{\footnotesize\ttfamily void \+\_\+mstar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n1 n2 -- d) signed multiply, return double product 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a15950f74335a4e5ebe4b5a7b0f744769}\label{eforth__vm_8cpp_a15950f74335a4e5ebe4b5a7b0f744769}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+dnegate@{\+\_\+dnegate}}
+\index{\+\_\+dnegate@{\+\_\+dnegate}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+dnegate()}{\_dnegate()}}
+{\footnotesize\ttfamily void \+\_\+dnegate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(d -- -\/d) two\textquotesingle{}s complemente of top double 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_aebcbd092b140611bc66160457b5106db}\label{eforth__vm_8cpp_aebcbd092b140611bc66160457b5106db}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+dplus@{\+\_\+dplus}}
+\index{\+\_\+dplus@{\+\_\+dplus}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+dplus()}{\_dplus()}}
+{\footnotesize\ttfamily void \+\_\+dplus (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(d1 d2 -- d1+d2) add two double precision numbers 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a3150274511361cb930be4be808f2b115}\label{eforth__vm_8cpp_a3150274511361cb930be4be808f2b115}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+dsub@{\+\_\+dsub}}
+\index{\+\_\+dsub@{\+\_\+dsub}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+dsub()}{\_dsub()}}
+{\footnotesize\ttfamily void \+\_\+dsub (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(d1 d2 -- d1-\/d2) subtract d2 from d1 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a768de8f4472449a11de1dd4b6bd076dc}\label{eforth__vm_8cpp_a768de8f4472449a11de1dd4b6bd076dc}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+delay@{\+\_\+delay}}
+\index{\+\_\+delay@{\+\_\+delay}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+delay()}{\_delay()}}
+{\footnotesize\ttfamily void \+\_\+delay (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n -- ) delay n milli-\/second 
+
+\begin{quote}
+calculate break time \end{quote}
+
+
+\begin{quote}
+loop until break time reached \end{quote}
+
+
+\begin{quote}
+or, run hardware tasks while waiting \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a8a7468440e3ec325a6488dedfb13997c}\label{eforth__vm_8cpp_a8a7468440e3ec325a6488dedfb13997c}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+clock@{\+\_\+clock}}
+\index{\+\_\+clock@{\+\_\+clock}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+clock()}{\_clock()}}
+{\footnotesize\ttfamily void \+\_\+clock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+( -- d) current clock value, a double precision number 
+
+\begin{quote}
+stored double on stack top \end{quote}
+\mbox{\Hypertarget{eforth__vm_8cpp_a8efd7b4d3a4e29571c57e1f234980fbf}\label{eforth__vm_8cpp_a8efd7b4d3a4e29571c57e1f234980fbf}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+pinmode@{\+\_\+pinmode}}
+\index{\+\_\+pinmode@{\+\_\+pinmode}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+pinmode()}{\_pinmode()}}
+{\footnotesize\ttfamily void \+\_\+pinmode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(pin mode --) pin\+Mode(pin, mode) 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_aacf9a591adb5cb60b07a68101d68c67f}\label{eforth__vm_8cpp_aacf9a591adb5cb60b07a68101d68c67f}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+map@{\+\_\+map}}
+\index{\+\_\+map@{\+\_\+map}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+map()}{\_map()}}
+{\footnotesize\ttfamily void \+\_\+map (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(f1 f2 t1 t2 n -- nx) map(n, f1, f2, t1, t2) 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a3c1a3ed9c3ec6413700044551f4363ac}\label{eforth__vm_8cpp_a3c1a3ed9c3ec6413700044551f4363ac}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+din@{\+\_\+din}}
+\index{\+\_\+din@{\+\_\+din}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+din()}{\_din()}}
+{\footnotesize\ttfamily void \+\_\+din (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(pin -- n) read from Arduino digital pin 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a4d4b4908a9db7135307c242a7b3dddab}\label{eforth__vm_8cpp_a4d4b4908a9db7135307c242a7b3dddab}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+dout@{\+\_\+dout}}
+\index{\+\_\+dout@{\+\_\+dout}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+dout()}{\_dout()}}
+{\footnotesize\ttfamily void \+\_\+dout (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(pin n -- ) write to Arduino digital pin 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a0c43739a29aae813d1d12475b00cf2bf}\label{eforth__vm_8cpp_a0c43739a29aae813d1d12475b00cf2bf}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+ain@{\+\_\+ain}}
+\index{\+\_\+ain@{\+\_\+ain}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+ain()}{\_ain()}}
+{\footnotesize\ttfamily void \+\_\+ain (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(pin -- n) read from Arduino analog pin 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_acb10c0fa8946d6b69345a7ea3327765b}\label{eforth__vm_8cpp_acb10c0fa8946d6b69345a7ea3327765b}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!\+\_\+aout@{\+\_\+aout}}
+\index{\+\_\+aout@{\+\_\+aout}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+aout()}{\_aout()}}
+{\footnotesize\ttfamily void \+\_\+aout (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(pin n -- ) write P\+WM to Arduino analog pin 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_aa4cce331b74c197758d0b9ada8d58002}\label{eforth__vm_8cpp_aa4cce331b74c197758d0b9ada8d58002}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!vm\+\_\+init@{vm\+\_\+init}}
+\index{vm\+\_\+init@{vm\+\_\+init}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{vm\+\_\+init()}{vm\_init()}}
+{\footnotesize\ttfamily void vm\+\_\+init (\begin{DoxyParamCaption}\item[{P\+G\+M\+\_\+P}]{rom,  }\item[{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$}]{cdata,  }\item[{void $\ast$}]{io\+\_\+stream }\end{DoxyParamCaption})}
+
+e\+Forth virtual machine initialization
+
+\begin{quote}
+internal (user) variables
+\begin{DoxyItemize}
+\item \textquotesingle{}T\+IB = F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR (pointer to input buffer)
+\item B\+A\+SE = 0x10 (numerical base 0xa for decimal, 0x10 for hex)
+\item CP = here (pointer to top of dictionary, first memory location to add new word)
+\item C\+O\+N\+T\+E\+XT = last (pointer to name field of the most recently defined word in dictionary)
+\item L\+A\+ST = last (pointer to name field of last word in dictionary)
+\item \textquotesingle{}E\+V\+AL = I\+N\+T\+ER (\$\+C\+O\+M\+P\+I\+LE for compiler or \$\+I\+N\+T\+E\+R\+P\+R\+ET for interpreter)
+\item A\+B\+O\+RT = Q\+U\+IT (pointer to error handler, Q\+U\+IT is the main loop)
+\item tmp = 0 (scratch pad)
+\end{DoxyItemize}\end{quote}
+
+\begin{DoxyParams}{Parameters}
+{\em rom} & pointer to Arduino flash memory block (R\+OM) \\
+\hline
+{\em cdata} & pointer to Arduino R\+AM block (R\+AM) \\
+\hline
+{\em io\+\_\+stream} & pointer to Stream object of Arduino \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{eforth__vm_8cpp_a6c9f04cc7cb8e0c9e3058cb7e9a7682f}\label{eforth__vm_8cpp_a6c9f04cc7cb8e0c9e3058cb7e9a7682f}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!vm\+\_\+step@{vm\+\_\+step}}
+\index{vm\+\_\+step@{vm\+\_\+step}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{vm\+\_\+step()}{vm\_step()}}
+{\footnotesize\ttfamily int vm\+\_\+step (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+e\+Forth virtual machine (single-\/step) execution unit \begin{DoxyReturn}{Returns}
+0 -\/ exit 
+\end{DoxyReturn}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}\label{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!io@{io}}
+\index{io@{io}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{io}{io}}
+{\footnotesize\ttfamily Stream$\ast$ io\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a8f530d5752d2e6c07bb898be8f865a01}\label{eforth__vm_8cpp_a8f530d5752d2e6c07bb898be8f865a01}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!PC@{PC}}
+\index{PC@{PC}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{PC}{PC}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}{XA} PC}
+
+
+
+PC (program counter, XA is 16-\/bit) 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_af98fc6da75d2dec261af83f44733d742}\label{eforth__vm_8cpp_af98fc6da75d2dec261af83f44733d742}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!IP@{IP}}
+\index{IP@{IP}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{IP}{IP}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}{XA} IP}
+
+
+
+IP (instruction pointer, XA is 16-\/bit) 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}\label{eforth__vm_8cpp_a0c9180f85bdd5d780671eda881105c18}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!R@{R}}
+\index{R@{R}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{R}{R}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} R}
+
+
+
+return stack index (0-\/255) 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}\label{eforth__vm_8cpp_a9b6bb514a433af9f2b640fe8a8ebbe6e}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!S@{S}}
+\index{S@{S}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{S}{S}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} S}
+
+
+
+data stack index (0-\/255) 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a1bd8fab4c582fd9f4b9e4213c43d6e48}\label{eforth__vm_8cpp_a1bd8fab4c582fd9f4b9e4213c43d6e48}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!top@{top}}
+\index{top@{top}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{top}{top}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16} top}
+
+
+
+A\+LU (i.\+e. cached top of stack value) 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a89c02c6c2f86fad55e19435fd8d5ce35}\label{eforth__vm_8cpp_a89c02c6c2f86fad55e19435fd8d5ce35}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!c\+Rom@{c\+Rom}}
+\index{c\+Rom@{c\+Rom}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{c\+Rom}{cRom}}
+{\footnotesize\ttfamily P\+G\+M\+\_\+P c\+Rom}
+
+
+
+R\+OM, Forth word stored in Arduino Flash Memory. 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a0391cce18c6a3f15a0459afaada7bba7}\label{eforth__vm_8cpp_a0391cce18c6a3f15a0459afaada7bba7}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!c\+Data@{c\+Data}}
+\index{c\+Data@{c\+Data}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{c\+Data}{cData}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}$\ast$ c\+Data}
+
+
+
+R\+AM, memory block for user define dictionary. 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}\label{eforth__vm_8cpp_a4ed405a89f86c39fac2b86701f8437a7}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!c\+Stack@{c\+Stack}}
+\index{c\+Stack@{c\+Stack}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{c\+Stack}{cStack}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16}$\ast$ c\+Stack}
+
+
+
+pointer to stack/rack memory block 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a1c5ee9900a20f49f9035d0e31b2998c9}\label{eforth__vm_8cpp_a1c5ee9900a20f49f9035d0e31b2998c9}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!t\+C\+NT@{t\+C\+NT}}
+\index{t\+C\+NT@{t\+C\+NT}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{t\+C\+NT}{tCNT}}
+{\footnotesize\ttfamily int t\+C\+NT}
+
+
+
+tracing depth counters 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a4d864bc05becbdb0f66b481828e12bd0}\label{eforth__vm_8cpp_a4d864bc05becbdb0f66b481828e12bd0}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!t\+T\+AB@{t\+T\+AB}}
+\index{t\+T\+AB@{t\+T\+AB}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{t\+T\+AB}{tTAB}}
+{\footnotesize\ttfamily int t\+T\+AB}
+
+
+
+tracing indentation counter 
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a9106d4a445352acc2fdc12c6bc24a02d}\label{eforth__vm_8cpp_a9106d4a445352acc2fdc12c6bc24a02d}} 
+\index{eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}!prim@{prim}}
+\index{prim@{prim}!eforth\+\_\+vm.\+cpp@{eforth\+\_\+vm.\+cpp}}
+\subsubsection{\texorpdfstring{prim}{prim}}
+{\footnotesize\ttfamily void($\ast$ prim\mbox{[}\hyperlink{eforth__core_8h_a613f37d66831015d5474ad77766bbb6c}{F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES}\mbox{]})()}
+
+primitive function lookup table 

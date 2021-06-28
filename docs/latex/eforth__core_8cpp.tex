@@ -1,0 +1,136 @@
+\hypertarget{eforth__core_8cpp}{}\section{src/eforth\+\_\+core.cpp File Reference}
+\label{eforth__core_8cpp}\index{src/eforth\+\_\+core.\+cpp@{src/eforth\+\_\+core.\+cpp}}
+
+
+e\+Forth core controller module  
+
+
+{\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
+Include dependency graph for eforth\+\_\+core.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__core_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__core_8cpp_a75c4f0a5617f054de717a51818148453}{ef\+\_\+prompt} ()
+\item 
+void \hyperlink{eforth__core_8cpp_a2843c5da9756fec667482890a6979cad}{sys\+\_\+info} (\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$cdata)
+\item 
+void \hyperlink{eforth__core_8cpp_aea4091360271209f9c241998aaaf9186}{ef\+\_\+add\+\_\+task} (char($\ast$task)())
+\item 
+void \hyperlink{eforth__core_8cpp_aa084a3e268cc140b2c8602dc52396ce4}{ef\+\_\+yield} ()
+\item 
+\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} \hyperlink{eforth__core_8cpp_a41032b0ebdc389f0c30d15b6b7e8b025}{ef\+\_\+getchar} ()
+\item 
+void \hyperlink{eforth__core_8cpp_a40485405ab5338788520ef0380b01b70}{ef\+\_\+putchar} (char c)
+\item 
+void \hyperlink{eforth__core_8cpp_aaa322a7cd3f9173185b22bc07b8d3216}{ef\+\_\+setup} (Stream \&io\+\_\+stream)
+\item 
+void \hyperlink{eforth__core_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}{ef\+\_\+run} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} \hyperlink{eforth__core_8cpp_aafaece2eab08745cd7d9b1d146a0a0e4}{\+\_\+ram} \mbox{[}\hyperlink{eforth__core_8h_ac13ec61d2b1799e4ab11371a4254e7dd}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ}\mbox{]} = \{\}
+\begin{DoxyCompactList}\small\item\em 4K forth memory block \end{DoxyCompactList}\item 
+static Stream $\ast$ \hyperlink{eforth__core_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}
+\begin{DoxyCompactList}\small\item\em console interface \end{DoxyCompactList}\item 
+static \hyperlink{eforth__core_8h_a044d568097ad0fa593f8cdc9dd33c79c}{task\+\_\+ptr} \hyperlink{eforth__core_8cpp_a90ad412149ff6716f67c3ec68ca88849}{\+\_\+task\+\_\+list} = N\+U\+LL
+\item 
+\hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32} \hyperlink{eforth__core_8cpp_af110dc75592fc34933b72803f5edce79}{forth\+\_\+rom} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+e\+Forth core controller module 
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{eforth__core_8cpp_a75c4f0a5617f054de717a51818148453}\label{eforth__core_8cpp_a75c4f0a5617f054de717a51818148453}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!ef\+\_\+prompt@{ef\+\_\+prompt}}
+\index{ef\+\_\+prompt@{ef\+\_\+prompt}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{ef\+\_\+prompt()}{ef\_prompt()}}
+{\footnotesize\ttfamily void ef\+\_\+prompt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+version prompt \mbox{\Hypertarget{eforth__core_8cpp_a2843c5da9756fec667482890a6979cad}\label{eforth__core_8cpp_a2843c5da9756fec667482890a6979cad}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!sys\+\_\+info@{sys\+\_\+info}}
+\index{sys\+\_\+info@{sys\+\_\+info}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{sys\+\_\+info()}{sys\_info()}}
+{\footnotesize\ttfamily void sys\+\_\+info (\begin{DoxyParamCaption}\item[{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$}]{cdata }\end{DoxyParamCaption})}
+
+display e\+Forth system information \mbox{\Hypertarget{eforth__core_8cpp_aea4091360271209f9c241998aaaf9186}\label{eforth__core_8cpp_aea4091360271209f9c241998aaaf9186}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!ef\+\_\+add\+\_\+task@{ef\+\_\+add\+\_\+task}}
+\index{ef\+\_\+add\+\_\+task@{ef\+\_\+add\+\_\+task}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{ef\+\_\+add\+\_\+task()}{ef\_add\_task()}}
+{\footnotesize\ttfamily void ef\+\_\+add\+\_\+task (\begin{DoxyParamCaption}\item[{char($\ast$)()}]{task }\end{DoxyParamCaption})}
+
+add user defined task to task queue \mbox{\Hypertarget{eforth__core_8cpp_aa084a3e268cc140b2c8602dc52396ce4}\label{eforth__core_8cpp_aa084a3e268cc140b2c8602dc52396ce4}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!ef\+\_\+yield@{ef\+\_\+yield}}
+\index{ef\+\_\+yield@{ef\+\_\+yield}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{ef\+\_\+yield()}{ef\_yield()}}
+{\footnotesize\ttfamily void ef\+\_\+yield (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+e\+Forth yield to user tasks \mbox{\Hypertarget{eforth__core_8cpp_a41032b0ebdc389f0c30d15b6b7e8b025}\label{eforth__core_8cpp_a41032b0ebdc389f0c30d15b6b7e8b025}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!ef\+\_\+getchar@{ef\+\_\+getchar}}
+\index{ef\+\_\+getchar@{ef\+\_\+getchar}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{ef\+\_\+getchar()}{ef\_getchar()}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} ef\+\_\+getchar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+console input with yield \mbox{\Hypertarget{eforth__core_8cpp_a40485405ab5338788520ef0380b01b70}\label{eforth__core_8cpp_a40485405ab5338788520ef0380b01b70}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!ef\+\_\+putchar@{ef\+\_\+putchar}}
+\index{ef\+\_\+putchar@{ef\+\_\+putchar}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{ef\+\_\+putchar()}{ef\_putchar()}}
+{\footnotesize\ttfamily void ef\+\_\+putchar (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+output one char to console \mbox{\Hypertarget{eforth__core_8cpp_aaa322a7cd3f9173185b22bc07b8d3216}\label{eforth__core_8cpp_aaa322a7cd3f9173185b22bc07b8d3216}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!ef\+\_\+setup@{ef\+\_\+setup}}
+\index{ef\+\_\+setup@{ef\+\_\+setup}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{ef\+\_\+setup()}{ef\_setup()}}
+{\footnotesize\ttfamily void ef\+\_\+setup (\begin{DoxyParamCaption}\item[{Stream \&}]{io\+\_\+stream }\end{DoxyParamCaption})}
+
+setup (called by Arduino setup) \mbox{\Hypertarget{eforth__core_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}\label{eforth__core_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!ef\+\_\+run@{ef\+\_\+run}}
+\index{ef\+\_\+run@{ef\+\_\+run}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{ef\+\_\+run()}{ef\_run()}}
+{\footnotesize\ttfamily void ef\+\_\+run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+single step e\+Forth virtual machine 
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{eforth__core_8cpp_aafaece2eab08745cd7d9b1d146a0a0e4}\label{eforth__core_8cpp_aafaece2eab08745cd7d9b1d146a0a0e4}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!\+\_\+ram@{\+\_\+ram}}
+\index{\+\_\+ram@{\+\_\+ram}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+ram}{\_ram}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} \+\_\+ram\mbox{[}\hyperlink{eforth__core_8h_ac13ec61d2b1799e4ab11371a4254e7dd}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ}\mbox{]} = \{\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+4K forth memory block 
+
+\mbox{\Hypertarget{eforth__core_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}\label{eforth__core_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!io@{io}}
+\index{io@{io}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{io}{io}}
+{\footnotesize\ttfamily Stream$\ast$ io\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+console interface 
+
+\mbox{\Hypertarget{eforth__core_8cpp_a90ad412149ff6716f67c3ec68ca88849}\label{eforth__core_8cpp_a90ad412149ff6716f67c3ec68ca88849}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!\+\_\+task\+\_\+list@{\+\_\+task\+\_\+list}}
+\index{\+\_\+task\+\_\+list@{\+\_\+task\+\_\+list}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{\+\_\+task\+\_\+list}{\_task\_list}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_a044d568097ad0fa593f8cdc9dd33c79c}{task\+\_\+ptr} \+\_\+task\+\_\+list = N\+U\+LL\hspace{0.3cm}{\ttfamily [static]}}
+
+user task linked-\/list \mbox{\Hypertarget{eforth__core_8cpp_af110dc75592fc34933b72803f5edce79}\label{eforth__core_8cpp_af110dc75592fc34933b72803f5edce79}} 
+\index{eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}!forth\+\_\+rom@{forth\+\_\+rom}}
+\index{forth\+\_\+rom@{forth\+\_\+rom}!eforth\+\_\+core.\+cpp@{eforth\+\_\+core.\+cpp}}
+\subsubsection{\texorpdfstring{forth\+\_\+rom}{forth\_rom}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32} forth\+\_\+rom\mbox{[}$\,$\mbox{]}}
+

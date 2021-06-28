@@ -1,0 +1,1057 @@
+\hypertarget{eforth__core_8h}{}\section{src/eforth\+\_\+core.h File Reference}
+\label{eforth__core_8h}\index{src/eforth\+\_\+core.\+h@{src/eforth\+\_\+core.\+h}}
+
+
+e\+Forth prototype and interface  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include $<$avr/pgmspace.\+h$>$}\newline
+{\ttfamily \#include $<$pt.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+Include dependency graph for eforth\+\_\+core.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__core_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__core_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structef__task}{ef\+\_\+task}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{eforth__core_8h_a6094f5f4a8aa099faa6d80b4f020927b}{C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE}~0
+\item 
+\#define \hyperlink{eforth__core_8h_a5d19d8279a130dc6cc9766bfe9d421b4}{R\+O\+M\+\_\+\+D\+U\+M\+P\+\_\+\+O\+N\+LY}~0
+\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Debug Tracing Flags}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{eforth__core_8h_afd97bab563464ed479ba96d704adf0bc}{A\+S\+M\+\_\+\+T\+R\+A\+CE}~0
+\item 
+\#define \hyperlink{eforth__core_8h_a4e7ebf605b9379a385139d145f5b1fc5}{E\+X\+E\+\_\+\+T\+R\+A\+CE}~0
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Capacity and Sizing}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{eforth__core_8h_a483d8c32764af688ede31fdc4d9707dc}{C\+E\+L\+L\+SZ}~2
+\item 
+\#define \hyperlink{eforth__core_8h_a613f37d66831015d5474ad77766bbb6c}{F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES}~64
+\item 
+\#define \hyperlink{eforth__core_8h_a68b9e34d65501f01d02ed377146ef0bb}{F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ}~0x1000
+\item 
+\#define \hyperlink{eforth__core_8h_ac13ec61d2b1799e4ab11371a4254e7dd}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ}~0x500
+\item 
+\#define \hyperlink{eforth__core_8h_ae1c5fa2ddd43bad831ec09b454a87476}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}~0x60$\ast$\+C\+E\+L\+L\+SZ
+\item 
+\#define \hyperlink{eforth__core_8h_ae58acffa6250f628ad15cdc182d146bc}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ}~0x40
+\item 
+\#define \hyperlink{eforth__core_8h_a2d3ef7004f16db9f741d7aa5351ebc5d}{F\+O\+R\+T\+H\+\_\+\+P\+A\+D\+\_\+\+SZ}~0x20
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Memory Map Addressing}\par
+{\em \begin{quote}
+note\+: Forth only needs a few bytes for Arduino auto (on heap), but Serial T\+X/\+RX buffers uses 0x40 $\ast$ 2 = 128 bytes
+
+logic and stack op macros (processor dependent) \end{quote}
+}\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{eforth__core_8h_a8854972678927e0868e458eab4d789a2}{F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR}~0x0000
+\item 
+\#define \hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}~0x1000
+\item 
+\#define \hyperlink{eforth__core_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}~(\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}+0x0)
+\item 
+\#define \hyperlink{eforth__core_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP}~(\hyperlink{eforth__core_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}+\hyperlink{eforth__core_8h_ae1c5fa2ddd43bad831ec09b454a87476}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ})
+\item 
+\#define \hyperlink{eforth__core_8h_a7b21761447b5ce2df53bcd72baa34c73}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}~(\hyperlink{eforth__core_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP})
+\item 
+\#define \hyperlink{eforth__core_8h_a6aafb664b4fe319418deaa00d3b8918b}{F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR}~(\hyperlink{eforth__core_8h_a7b21761447b5ce2df53bcd72baa34c73}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}+\hyperlink{eforth__core_8h_ae58acffa6250f628ad15cdc182d146bc}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ})
+\item 
+\#define \hyperlink{eforth__core_8h_af15f803ea14ff0e9a3fa11fe533d0393}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}~(\hyperlink{eforth__core_8h_a6aafb664b4fe319418deaa00d3b8918b}{F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR}+0x10)
+\item 
+\#define \hyperlink{eforth__core_8h_a9574a362044eba73eb09283aaa5d6ad3}{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR}~(\hyperlink{eforth__core_8h_af15f803ea14ff0e9a3fa11fe533d0393}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}+0x10)
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Logical}\par
+{\em T\+R\+UE cannot use 1 because N\+O\+T(ffffffff)==0 while N\+O\+T(1)==ffffffff which does not need boolean op (i.\+e. in C) }\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}~-\/1
+\item 
+\#define \hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}~0
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Arduino Support Macros}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}{L\+OG}(s)~\hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print(F(s))
+\item 
+\#define \hyperlink{eforth__core_8h_ad1115aa0a8df497fe7c107d2ac3ab66e}{L\+O\+G\+\_\+C}(c)~\hyperlink{eforth__core_8h_a40485405ab5338788520ef0380b01b70}{ef\+\_\+putchar}(c)
+\item 
+\#define \hyperlink{eforth__core_8h_a8089c2bc0d4770d10e62c7d74031d497}{L\+O\+G\+\_\+V}(s,  n)~\{ \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print(F(s)); \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print((\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16})n); \}
+\item 
+\#define \hyperlink{eforth__core_8h_a58eef1717c4dffedd3a63d061ed1b4a5}{L\+O\+G\+\_\+H}(s,  n)~\{ \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print(F(s)); \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print(n, H\+EX); \}
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structef__task}{ef\+\_\+task} $\ast$ \hyperlink{eforth__core_8h_a044d568097ad0fa593f8cdc9dd33c79c}{task\+\_\+ptr}
+\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Portable Types}\par
+\begin{DoxyCompactItemize}
+\item 
+typedef uint32\+\_\+t \hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}
+\begin{DoxyCompactList}\small\item\em 32-\/bit unsigned integer \end{DoxyCompactList}\item 
+typedef uint16\+\_\+t \hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}
+\begin{DoxyCompactList}\small\item\em 16-\/bit unsigned integer \end{DoxyCompactList}\item 
+typedef uint8\+\_\+t \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}
+\begin{DoxyCompactList}\small\item\em 8-\/bit unsigned integer \end{DoxyCompactList}\item 
+typedef int32\+\_\+t \hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32}
+\begin{DoxyCompactList}\small\item\em 32-\/bit signed integer \end{DoxyCompactList}\item 
+typedef int16\+\_\+t \hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16}
+\begin{DoxyCompactList}\small\item\em 16-\/bit signed integer \end{DoxyCompactList}\item 
+typedef int8\+\_\+t \hyperlink{eforth__core_8h_af1475a0bb1962ef08dd1f78bd5dba87a}{S8}
+\begin{DoxyCompactList}\small\item\em 8-\/bit signed integer \end{DoxyCompactList}\item 
+typedef \hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16} \hyperlink{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}{XA}
+\begin{DoxyCompactList}\small\item\em address sizing (16-\/bit) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba40ca1718b18204c5206b1cdf98ddead4}{op\+N\+OP} = 0, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55babdbdb9e14a5237ac628b4f9c69627736}{op\+B\+YE}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baebaa0e46aed409c884806f32fc5f7a7f}{op\+Q\+RX}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bafcb58b7850785e155103ca83725991bf}{op\+T\+X\+S\+TO}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bada6151d1b7fabc30d699f82853f253d3}{op\+D\+O\+C\+ON}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba969d43b6d1f9508768d95b360baa9009}{op\+D\+O\+L\+IT}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba240ec8a86a3b5b10152275f0ecabedc7}{op\+E\+N\+T\+ER}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba73e35469ed105c72cabf07c948a9c722}{op\+E\+X\+IT}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab5a1aff301470b80c06032a34892753d}{op\+E\+X\+E\+CU}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baa214d513757c175fa89d8ac8d154ace3}{op\+D\+O\+N\+E\+XT}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3312da77fd6b9330be29bd68d44c7917}{op\+Q\+B\+R\+AN}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6936c39194500887b1130fc93ebb4ea9}{op\+B\+R\+AN}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba55cb7a5732ef390095ce2d05601fd92d}{op\+S\+T\+O\+RE}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9f88239b61fec6047412cea9827f1f11}{op\+AT}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae6509eaa167908ac672168133ff8bdd0}{op\+C\+S\+T\+OR}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6bf658d364192c57f82636239ff6360a}{op\+C\+AT}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6304262a44f46c2a8ba22922ed57cf08}{op\+O\+N\+EP}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3a040f0ed34d1b736434074fa0e4bf50}{op\+O\+N\+EM}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba15fe51358ee843ca1814b47da7ba440c}{op\+R\+F\+R\+OM}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bafb4f12702063f827ce32f40a06a4e01b}{op\+R\+AT}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6b7602cdc2cc072c4a121db475daa5ee}{op\+T\+OR}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae929736b38305839c02177a417cd775c}{op\+D\+E\+L\+AY}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badf04b48267376700ee36240ac900b421}{op\+C\+L\+O\+CK}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba313045f803dfca614e4fe096d74629a8}{op\+D\+R\+OP}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baf202436ae5aaafebb2c5e5563d555359}{op\+D\+UP}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baab76136a0414042be3adf2df82f2bbda}{op\+S\+W\+AP}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba088c34301636340570ba6ab9aa0a4038}{op\+O\+V\+ER}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba859ec61fb3dee9a05439059c84c4b827}{op\+Z\+L\+E\+SS}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba8ad71c06f847ad5e07a9e55400f0a15c}{op\+A\+ND}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6dbfaf7862714abcef797ff073f516e6}{op\+OR}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba891ad41062297003d2ac1cbacff0e737}{op\+X\+OR}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba21acdd7aec8ed96f9e578aba29f7c1f9}{op\+U\+P\+L\+US}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba958efeacfcd610b7f92723176746a02f}{op\+D\+E\+P\+TH}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badd6bdf0a98a7e3598f055f9fc02d153a}{op\+Q\+D\+UP}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba76212226bc673857eba49bc1a8d2d93f}{op\+R\+OT}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baf2ad06d641170c6105688284e9312261}{op\+L\+S\+H\+I\+FT}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bad27343e5c07ac5c39fa844d21486f4b6}{op\+R\+S\+H\+I\+FT}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba908e616726d3e4ad1b716550fa06e961}{op\+P\+L\+US}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2ddca9d0f7afe8d63dafe11d1b012007}{op\+I\+N\+V\+E\+RT}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9483c7f9c6d682b08e2cee98ebde0467}{op\+N\+E\+G\+AT}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab591b137f50e2b3b980a8ff3ba26ee8c}{op\+G\+R\+E\+AT}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6ab3ccda9331a66ddee789a345fb01ba}{op\+S\+UB}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab898dd53604631568d573f9de62f79ed}{op\+A\+BS}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badf0c1a1437e0d07f1767b625a90a913e}{op\+E\+Q\+U\+AL}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae94ae92cd424f365b0f973c924364da5}{op\+U\+L\+E\+SS}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba760fc6cf5a47b7627cf0c0ab8d324834}{op\+L\+E\+SS}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bace40c332f87f1f23413cb098ff071ad9}{op\+U\+M\+M\+OD}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba538f063b52fbe9ea53655457ef1f2b57}{op\+P\+IN}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba48c88f6e4b6689b137f76ebfe4dfe1a4}{op\+M\+AP}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2afa116c8bc9aff11a51aa73ccb7ee08}{op\+M\+OD}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba62d9d9c3937fbebde5b577d3489b4cbc}{op\+S\+L\+A\+SH}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba72530d92428dd975932bd29a990ea0e8}{op\+U\+M\+S\+T\+AR}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baa242e68230cc6e4563bb12218b5f00bf}{op\+S\+T\+AR}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba8dcb18e1c8ae4ad70635be324b89b7f4}{op\+M\+S\+T\+AR}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9e66575f3d421c4832476276a81ae1b0}{op\+IN}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba072efc6fe9d69c4837eb0b3aba576144}{op\+O\+UT}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae50042d6290270fd42eac9910ce220f1}{op\+P\+I\+CK}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bad92196bc41387a9ebfcb885d2f2e464a}{op\+P\+S\+T\+OR}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3f4add284684b0122101d8151aa6f8ed}{op\+A\+IN}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba398c79160b73f3b2eacfd9acee82b7dd}{op\+P\+WM}, 
+\newline
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba217e08591be820408003bc277c2876c2}{op\+D\+N\+E\+GA}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba636134653cae46bec5b395d7f15ba7b5}{op\+D\+O\+V\+AR}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba16a1bb6611e8c11fb026727744541ecc}{op\+D\+P\+L\+US}, 
+\hyperlink{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2bb5221cde147239dadb7c3c705a48d7}{op\+D\+S\+UB}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{Indent}\textbf{ e\+Forth Virtual Machin Functions}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__core_8h_aa4cce331b74c197758d0b9ada8d58002}{vm\+\_\+init} (P\+G\+M\+\_\+P rom, \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$cdata, void $\ast$io\+\_\+stream)
+\item 
+int \hyperlink{eforth__core_8h_a6c9f04cc7cb8e0c9e3058cb7e9a7682f}{vm\+\_\+step} ()
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ e\+Forth IO Functions}\par
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{eforth__core_8h_a75c4f0a5617f054de717a51818148453}{ef\+\_\+prompt} ()
+\item 
+\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} \hyperlink{eforth__core_8h_a41032b0ebdc389f0c30d15b6b7e8b025}{ef\+\_\+getchar} ()
+\item 
+void \hyperlink{eforth__core_8h_a40485405ab5338788520ef0380b01b70}{ef\+\_\+putchar} (char c)
+\item 
+void \hyperlink{eforth__core_8h_aa084a3e268cc140b2c8602dc52396ce4}{ef\+\_\+yield} ()
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ e\+Forth Assembler Functions}\par
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{eforth__core_8h_a94e10412bf5e1f89d12efb94e80979c8}{ef\+\_\+assemble} (\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$cdata)
+\item 
+void \hyperlink{eforth__core_8h_aa3879a9e8a3d830749a64d45675f72c5}{ef\+\_\+dump\+\_\+rom} (\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$cdata, int len)
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\subsection{Detailed Description}
+e\+Forth prototype and interface 
+
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{eforth__core_8h_a6094f5f4a8aa099faa6d80b4f020927b}\label{eforth__core_8h_a6094f5f4a8aa099faa6d80b4f020927b}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE@{C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE}}
+\index{C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE@{C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE}{CASE\_SENSITIVE}}
+{\footnotesize\ttfamily \#define C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE~0}
+
+define case sensitivity \mbox{\Hypertarget{eforth__core_8h_a5d19d8279a130dc6cc9766bfe9d421b4}\label{eforth__core_8h_a5d19d8279a130dc6cc9766bfe9d421b4}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!R\+O\+M\+\_\+\+D\+U\+M\+P\+\_\+\+O\+N\+LY@{R\+O\+M\+\_\+\+D\+U\+M\+P\+\_\+\+O\+N\+LY}}
+\index{R\+O\+M\+\_\+\+D\+U\+M\+P\+\_\+\+O\+N\+LY@{R\+O\+M\+\_\+\+D\+U\+M\+P\+\_\+\+O\+N\+LY}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{R\+O\+M\+\_\+\+D\+U\+M\+P\+\_\+\+O\+N\+LY}{ROM\_DUMP\_ONLY}}
+{\footnotesize\ttfamily \#define R\+O\+M\+\_\+\+D\+U\+M\+P\+\_\+\+O\+N\+LY~0}
+
+create R\+OM only (i.\+e. no debugging) \mbox{\Hypertarget{eforth__core_8h_afd97bab563464ed479ba96d704adf0bc}\label{eforth__core_8h_afd97bab563464ed479ba96d704adf0bc}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!A\+S\+M\+\_\+\+T\+R\+A\+CE@{A\+S\+M\+\_\+\+T\+R\+A\+CE}}
+\index{A\+S\+M\+\_\+\+T\+R\+A\+CE@{A\+S\+M\+\_\+\+T\+R\+A\+CE}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{A\+S\+M\+\_\+\+T\+R\+A\+CE}{ASM\_TRACE}}
+{\footnotesize\ttfamily \#define A\+S\+M\+\_\+\+T\+R\+A\+CE~0}
+
+assembler tracing flag \mbox{\Hypertarget{eforth__core_8h_a4e7ebf605b9379a385139d145f5b1fc5}\label{eforth__core_8h_a4e7ebf605b9379a385139d145f5b1fc5}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!E\+X\+E\+\_\+\+T\+R\+A\+CE@{E\+X\+E\+\_\+\+T\+R\+A\+CE}}
+\index{E\+X\+E\+\_\+\+T\+R\+A\+CE@{E\+X\+E\+\_\+\+T\+R\+A\+CE}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{E\+X\+E\+\_\+\+T\+R\+A\+CE}{EXE\_TRACE}}
+{\footnotesize\ttfamily \#define E\+X\+E\+\_\+\+T\+R\+A\+CE~0}
+
+virtual machine execution tracing flag \mbox{\Hypertarget{eforth__core_8h_a483d8c32764af688ede31fdc4d9707dc}\label{eforth__core_8h_a483d8c32764af688ede31fdc4d9707dc}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!C\+E\+L\+L\+SZ@{C\+E\+L\+L\+SZ}}
+\index{C\+E\+L\+L\+SZ@{C\+E\+L\+L\+SZ}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{C\+E\+L\+L\+SZ}{CELLSZ}}
+{\footnotesize\ttfamily \#define C\+E\+L\+L\+SZ~2}
+
+16-\/bit cell size \mbox{\Hypertarget{eforth__core_8h_a613f37d66831015d5474ad77766bbb6c}\label{eforth__core_8h_a613f37d66831015d5474ad77766bbb6c}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES@{F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES}}
+\index{F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES@{F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES}{FORTH\_PRIMITIVES}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+ES~64}
+
+number of primitive words \mbox{\Hypertarget{eforth__core_8h_a68b9e34d65501f01d02ed377146ef0bb}\label{eforth__core_8h_a68b9e34d65501f01d02ed377146ef0bb}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ}}
+\index{F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ}{FORTH\_ROM\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ~0x1000}
+
+size of R\+OM (for pre-\/defined words) \mbox{\Hypertarget{eforth__core_8h_ac13ec61d2b1799e4ab11371a4254e7dd}\label{eforth__core_8h_ac13ec61d2b1799e4ab11371a4254e7dd}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ}}
+\index{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ}{FORTH\_RAM\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ~0x500}
+
+size of R\+AM (for user defined words) \mbox{\Hypertarget{eforth__core_8h_ae1c5fa2ddd43bad831ec09b454a87476}\label{eforth__core_8h_ae1c5fa2ddd43bad831ec09b454a87476}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}}
+\index{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}{FORTH\_STACK\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ~0x60$\ast$\+C\+E\+L\+L\+SZ}
+
+size of data/return stack \mbox{\Hypertarget{eforth__core_8h_ae58acffa6250f628ad15cdc182d146bc}\label{eforth__core_8h_ae58acffa6250f628ad15cdc182d146bc}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ}}
+\index{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ}{FORTH\_TIB\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ~0x40}
+
+size of terminal input buffer \mbox{\Hypertarget{eforth__core_8h_a2d3ef7004f16db9f741d7aa5351ebc5d}\label{eforth__core_8h_a2d3ef7004f16db9f741d7aa5351ebc5d}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+P\+A\+D\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+P\+A\+D\+\_\+\+SZ}}
+\index{F\+O\+R\+T\+H\+\_\+\+P\+A\+D\+\_\+\+SZ@{F\+O\+R\+T\+H\+\_\+\+P\+A\+D\+\_\+\+SZ}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+P\+A\+D\+\_\+\+SZ}{FORTH\_PAD\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+P\+A\+D\+\_\+\+SZ~0x20}
+
+size of output pad \mbox{\Hypertarget{eforth__core_8h_a8854972678927e0868e458eab4d789a2}\label{eforth__core_8h_a8854972678927e0868e458eab4d789a2}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR}}
+\index{F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR}{FORTH\_BOOT\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR~0x0000}
+
+\mbox{\Hypertarget{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}\label{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}
+\index{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}{FORTH\_RAM\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR~0x1000}
+
+\mbox{\Hypertarget{eforth__core_8h_af278ea3f0013fa26db155c0945bcb9d2}\label{eforth__core_8h_af278ea3f0013fa26db155c0945bcb9d2}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}}
+\index{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}{FORTH\_STACK\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR~(\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}+0x0)}
+
+\mbox{\Hypertarget{eforth__core_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}\label{eforth__core_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP@{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP}}
+\index{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP@{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP}{FORTH\_STACK\_TOP}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP~(\hyperlink{eforth__core_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}+\hyperlink{eforth__core_8h_ae1c5fa2ddd43bad831ec09b454a87476}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ})}
+
+\mbox{\Hypertarget{eforth__core_8h_a7b21761447b5ce2df53bcd72baa34c73}\label{eforth__core_8h_a7b21761447b5ce2df53bcd72baa34c73}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}}
+\index{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}{FORTH\_TIB\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR~(\hyperlink{eforth__core_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP})}
+
+\mbox{\Hypertarget{eforth__core_8h_a6aafb664b4fe319418deaa00d3b8918b}\label{eforth__core_8h_a6aafb664b4fe319418deaa00d3b8918b}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR}}
+\index{F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR}{FORTH\_TVAR\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR~(\hyperlink{eforth__core_8h_a7b21761447b5ce2df53bcd72baa34c73}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}+\hyperlink{eforth__core_8h_ae58acffa6250f628ad15cdc182d146bc}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ})}
+
+\mbox{\Hypertarget{eforth__core_8h_af15f803ea14ff0e9a3fa11fe533d0393}\label{eforth__core_8h_af15f803ea14ff0e9a3fa11fe533d0393}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}}
+\index{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}{FORTH\_UVAR\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR~(\hyperlink{eforth__core_8h_a6aafb664b4fe319418deaa00d3b8918b}{F\+O\+R\+T\+H\+\_\+\+T\+V\+A\+R\+\_\+\+A\+D\+DR}+0x10)}
+
+\mbox{\Hypertarget{eforth__core_8h_a9574a362044eba73eb09283aaa5d6ad3}\label{eforth__core_8h_a9574a362044eba73eb09283aaa5d6ad3}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR}}
+\index{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR@{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR}{FORTH\_DIC\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR~(\hyperlink{eforth__core_8h_af15f803ea14ff0e9a3fa11fe533d0393}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}+0x10)}
+
+\mbox{\Hypertarget{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}\label{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!T\+R\+UE@{T\+R\+UE}}
+\index{T\+R\+UE@{T\+R\+UE}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{T\+R\+UE}{TRUE}}
+{\footnotesize\ttfamily \#define T\+R\+UE~-\/1}
+
+\mbox{\Hypertarget{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}\label{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!F\+A\+L\+SE@{F\+A\+L\+SE}}
+\index{F\+A\+L\+SE@{F\+A\+L\+SE}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{F\+A\+L\+SE}{FALSE}}
+{\footnotesize\ttfamily \#define F\+A\+L\+SE~0}
+
+\mbox{\Hypertarget{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}\label{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!L\+OG@{L\+OG}}
+\index{L\+OG@{L\+OG}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{L\+OG}{LOG}}
+{\footnotesize\ttfamily \#define L\+OG(\begin{DoxyParamCaption}\item[{}]{s }\end{DoxyParamCaption})~\hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print(F(s))}
+
+\mbox{\Hypertarget{eforth__core_8h_ad1115aa0a8df497fe7c107d2ac3ab66e}\label{eforth__core_8h_ad1115aa0a8df497fe7c107d2ac3ab66e}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!L\+O\+G\+\_\+C@{L\+O\+G\+\_\+C}}
+\index{L\+O\+G\+\_\+C@{L\+O\+G\+\_\+C}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{L\+O\+G\+\_\+C}{LOG\_C}}
+{\footnotesize\ttfamily \#define L\+O\+G\+\_\+C(\begin{DoxyParamCaption}\item[{}]{c }\end{DoxyParamCaption})~\hyperlink{eforth__core_8h_a40485405ab5338788520ef0380b01b70}{ef\+\_\+putchar}(c)}
+
+\mbox{\Hypertarget{eforth__core_8h_a8089c2bc0d4770d10e62c7d74031d497}\label{eforth__core_8h_a8089c2bc0d4770d10e62c7d74031d497}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!L\+O\+G\+\_\+V@{L\+O\+G\+\_\+V}}
+\index{L\+O\+G\+\_\+V@{L\+O\+G\+\_\+V}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{L\+O\+G\+\_\+V}{LOG\_V}}
+{\footnotesize\ttfamily \#define L\+O\+G\+\_\+V(\begin{DoxyParamCaption}\item[{}]{s,  }\item[{}]{n }\end{DoxyParamCaption})~\{ \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print(F(s)); \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print((\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16})n); \}}
+
+\mbox{\Hypertarget{eforth__core_8h_a58eef1717c4dffedd3a63d061ed1b4a5}\label{eforth__core_8h_a58eef1717c4dffedd3a63d061ed1b4a5}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!L\+O\+G\+\_\+H@{L\+O\+G\+\_\+H}}
+\index{L\+O\+G\+\_\+H@{L\+O\+G\+\_\+H}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{L\+O\+G\+\_\+H}{LOG\_H}}
+{\footnotesize\ttfamily \#define L\+O\+G\+\_\+H(\begin{DoxyParamCaption}\item[{}]{s,  }\item[{}]{n }\end{DoxyParamCaption})~\{ \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print(F(s)); \hyperlink{eforth__vm_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}-\/$>$print(n, H\+EX); \}}
+
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}\label{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!U32@{U32}}
+\index{U32@{U32}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{U32}{U32}}
+{\footnotesize\ttfamily typedef uint32\+\_\+t \hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}}
+
+
+
+32-\/bit unsigned integer 
+
+\mbox{\Hypertarget{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}\label{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!U16@{U16}}
+\index{U16@{U16}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{U16}{U16}}
+{\footnotesize\ttfamily typedef uint16\+\_\+t \hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}
+
+
+
+16-\/bit unsigned integer 
+
+\mbox{\Hypertarget{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}\label{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!U8@{U8}}
+\index{U8@{U8}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{U8}{U8}}
+{\footnotesize\ttfamily typedef uint8\+\_\+t \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}
+
+
+
+8-\/bit unsigned integer 
+
+\mbox{\Hypertarget{eforth__core_8h_a39c786017723555afb9e8b85accec0de}\label{eforth__core_8h_a39c786017723555afb9e8b85accec0de}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!S32@{S32}}
+\index{S32@{S32}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{S32}{S32}}
+{\footnotesize\ttfamily typedef int32\+\_\+t \hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32}}
+
+
+
+32-\/bit signed integer 
+
+\mbox{\Hypertarget{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}\label{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!S16@{S16}}
+\index{S16@{S16}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{S16}{S16}}
+{\footnotesize\ttfamily typedef int16\+\_\+t \hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16}}
+
+
+
+16-\/bit signed integer 
+
+\mbox{\Hypertarget{eforth__core_8h_af1475a0bb1962ef08dd1f78bd5dba87a}\label{eforth__core_8h_af1475a0bb1962ef08dd1f78bd5dba87a}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!S8@{S8}}
+\index{S8@{S8}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{S8}{S8}}
+{\footnotesize\ttfamily typedef int8\+\_\+t \hyperlink{eforth__core_8h_af1475a0bb1962ef08dd1f78bd5dba87a}{S8}}
+
+
+
+8-\/bit signed integer 
+
+\mbox{\Hypertarget{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}\label{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!XA@{XA}}
+\index{XA@{XA}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{XA}{XA}}
+{\footnotesize\ttfamily typedef \hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16} \hyperlink{eforth__core_8h_accf7ba9fde171a20a17e07bc8f59cc0a}{XA}}
+
+
+
+address sizing (16-\/bit) 
+
+\mbox{\Hypertarget{eforth__core_8h_a044d568097ad0fa593f8cdc9dd33c79c}\label{eforth__core_8h_a044d568097ad0fa593f8cdc9dd33c79c}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!task\+\_\+ptr@{task\+\_\+ptr}}
+\index{task\+\_\+ptr@{task\+\_\+ptr}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{task\+\_\+ptr}{task\_ptr}}
+{\footnotesize\ttfamily typedef struct \hyperlink{structef__task}{ef\+\_\+task} $\ast$ \hyperlink{eforth__core_8h_a044d568097ad0fa593f8cdc9dd33c79c}{task\+\_\+ptr}}
+
+protothread task declaration 
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55b}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55b}} 
+\subsubsection{\texorpdfstring{anonymous enum}{anonymous enum}}
+{\footnotesize\ttfamily anonymous enum}
+
+Forth VM Opcodes (for Bytecode Assembler) \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+N\+OP@{op\+N\+OP}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+N\+OP@{op\+N\+OP}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba40ca1718b18204c5206b1cdf98ddead4}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba40ca1718b18204c5206b1cdf98ddead4}} 
+op\+N\+OP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+B\+YE@{op\+B\+YE}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+B\+YE@{op\+B\+YE}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55babdbdb9e14a5237ac628b4f9c69627736}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55babdbdb9e14a5237ac628b4f9c69627736}} 
+op\+B\+YE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+Q\+RX@{op\+Q\+RX}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+Q\+RX@{op\+Q\+RX}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baebaa0e46aed409c884806f32fc5f7a7f}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baebaa0e46aed409c884806f32fc5f7a7f}} 
+op\+Q\+RX&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+T\+X\+S\+TO@{op\+T\+X\+S\+TO}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+T\+X\+S\+TO@{op\+T\+X\+S\+TO}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bafcb58b7850785e155103ca83725991bf}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bafcb58b7850785e155103ca83725991bf}} 
+op\+T\+X\+S\+TO&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+O\+C\+ON@{op\+D\+O\+C\+ON}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+O\+C\+ON@{op\+D\+O\+C\+ON}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bada6151d1b7fabc30d699f82853f253d3}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bada6151d1b7fabc30d699f82853f253d3}} 
+op\+D\+O\+C\+ON&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+O\+L\+IT@{op\+D\+O\+L\+IT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+O\+L\+IT@{op\+D\+O\+L\+IT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba969d43b6d1f9508768d95b360baa9009}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba969d43b6d1f9508768d95b360baa9009}} 
+op\+D\+O\+L\+IT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+E\+N\+T\+ER@{op\+E\+N\+T\+ER}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+E\+N\+T\+ER@{op\+E\+N\+T\+ER}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba240ec8a86a3b5b10152275f0ecabedc7}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba240ec8a86a3b5b10152275f0ecabedc7}} 
+op\+E\+N\+T\+ER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+E\+X\+IT@{op\+E\+X\+IT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+E\+X\+IT@{op\+E\+X\+IT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba73e35469ed105c72cabf07c948a9c722}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba73e35469ed105c72cabf07c948a9c722}} 
+op\+E\+X\+IT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+E\+X\+E\+CU@{op\+E\+X\+E\+CU}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+E\+X\+E\+CU@{op\+E\+X\+E\+CU}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab5a1aff301470b80c06032a34892753d}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab5a1aff301470b80c06032a34892753d}} 
+op\+E\+X\+E\+CU&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+O\+N\+E\+XT@{op\+D\+O\+N\+E\+XT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+O\+N\+E\+XT@{op\+D\+O\+N\+E\+XT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baa214d513757c175fa89d8ac8d154ace3}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baa214d513757c175fa89d8ac8d154ace3}} 
+op\+D\+O\+N\+E\+XT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+Q\+B\+R\+AN@{op\+Q\+B\+R\+AN}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+Q\+B\+R\+AN@{op\+Q\+B\+R\+AN}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3312da77fd6b9330be29bd68d44c7917}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3312da77fd6b9330be29bd68d44c7917}} 
+op\+Q\+B\+R\+AN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+B\+R\+AN@{op\+B\+R\+AN}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+B\+R\+AN@{op\+B\+R\+AN}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6936c39194500887b1130fc93ebb4ea9}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6936c39194500887b1130fc93ebb4ea9}} 
+op\+B\+R\+AN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+S\+T\+O\+RE@{op\+S\+T\+O\+RE}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+S\+T\+O\+RE@{op\+S\+T\+O\+RE}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba55cb7a5732ef390095ce2d05601fd92d}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba55cb7a5732ef390095ce2d05601fd92d}} 
+op\+S\+T\+O\+RE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+AT@{op\+AT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+AT@{op\+AT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9f88239b61fec6047412cea9827f1f11}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9f88239b61fec6047412cea9827f1f11}} 
+op\+AT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+C\+S\+T\+OR@{op\+C\+S\+T\+OR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+C\+S\+T\+OR@{op\+C\+S\+T\+OR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae6509eaa167908ac672168133ff8bdd0}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae6509eaa167908ac672168133ff8bdd0}} 
+op\+C\+S\+T\+OR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+C\+AT@{op\+C\+AT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+C\+AT@{op\+C\+AT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6bf658d364192c57f82636239ff6360a}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6bf658d364192c57f82636239ff6360a}} 
+op\+C\+AT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+O\+N\+EP@{op\+O\+N\+EP}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+O\+N\+EP@{op\+O\+N\+EP}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6304262a44f46c2a8ba22922ed57cf08}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6304262a44f46c2a8ba22922ed57cf08}} 
+op\+O\+N\+EP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+O\+N\+EM@{op\+O\+N\+EM}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+O\+N\+EM@{op\+O\+N\+EM}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3a040f0ed34d1b736434074fa0e4bf50}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3a040f0ed34d1b736434074fa0e4bf50}} 
+op\+O\+N\+EM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+R\+F\+R\+OM@{op\+R\+F\+R\+OM}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+R\+F\+R\+OM@{op\+R\+F\+R\+OM}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba15fe51358ee843ca1814b47da7ba440c}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba15fe51358ee843ca1814b47da7ba440c}} 
+op\+R\+F\+R\+OM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+R\+AT@{op\+R\+AT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+R\+AT@{op\+R\+AT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bafb4f12702063f827ce32f40a06a4e01b}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bafb4f12702063f827ce32f40a06a4e01b}} 
+op\+R\+AT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+T\+OR@{op\+T\+OR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+T\+OR@{op\+T\+OR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6b7602cdc2cc072c4a121db475daa5ee}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6b7602cdc2cc072c4a121db475daa5ee}} 
+op\+T\+OR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+E\+L\+AY@{op\+D\+E\+L\+AY}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+E\+L\+AY@{op\+D\+E\+L\+AY}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae929736b38305839c02177a417cd775c}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae929736b38305839c02177a417cd775c}} 
+op\+D\+E\+L\+AY&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+C\+L\+O\+CK@{op\+C\+L\+O\+CK}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+C\+L\+O\+CK@{op\+C\+L\+O\+CK}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badf04b48267376700ee36240ac900b421}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badf04b48267376700ee36240ac900b421}} 
+op\+C\+L\+O\+CK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+R\+OP@{op\+D\+R\+OP}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+R\+OP@{op\+D\+R\+OP}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba313045f803dfca614e4fe096d74629a8}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba313045f803dfca614e4fe096d74629a8}} 
+op\+D\+R\+OP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+UP@{op\+D\+UP}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+UP@{op\+D\+UP}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baf202436ae5aaafebb2c5e5563d555359}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baf202436ae5aaafebb2c5e5563d555359}} 
+op\+D\+UP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+S\+W\+AP@{op\+S\+W\+AP}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+S\+W\+AP@{op\+S\+W\+AP}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baab76136a0414042be3adf2df82f2bbda}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baab76136a0414042be3adf2df82f2bbda}} 
+op\+S\+W\+AP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+O\+V\+ER@{op\+O\+V\+ER}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+O\+V\+ER@{op\+O\+V\+ER}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba088c34301636340570ba6ab9aa0a4038}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba088c34301636340570ba6ab9aa0a4038}} 
+op\+O\+V\+ER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+Z\+L\+E\+SS@{op\+Z\+L\+E\+SS}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+Z\+L\+E\+SS@{op\+Z\+L\+E\+SS}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba859ec61fb3dee9a05439059c84c4b827}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba859ec61fb3dee9a05439059c84c4b827}} 
+op\+Z\+L\+E\+SS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+A\+ND@{op\+A\+ND}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+A\+ND@{op\+A\+ND}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba8ad71c06f847ad5e07a9e55400f0a15c}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba8ad71c06f847ad5e07a9e55400f0a15c}} 
+op\+A\+ND&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+OR@{op\+OR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+OR@{op\+OR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6dbfaf7862714abcef797ff073f516e6}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6dbfaf7862714abcef797ff073f516e6}} 
+op\+OR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+X\+OR@{op\+X\+OR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+X\+OR@{op\+X\+OR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba891ad41062297003d2ac1cbacff0e737}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba891ad41062297003d2ac1cbacff0e737}} 
+op\+X\+OR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+U\+P\+L\+US@{op\+U\+P\+L\+US}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+U\+P\+L\+US@{op\+U\+P\+L\+US}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba21acdd7aec8ed96f9e578aba29f7c1f9}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba21acdd7aec8ed96f9e578aba29f7c1f9}} 
+op\+U\+P\+L\+US&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+E\+P\+TH@{op\+D\+E\+P\+TH}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+E\+P\+TH@{op\+D\+E\+P\+TH}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba958efeacfcd610b7f92723176746a02f}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba958efeacfcd610b7f92723176746a02f}} 
+op\+D\+E\+P\+TH&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+Q\+D\+UP@{op\+Q\+D\+UP}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+Q\+D\+UP@{op\+Q\+D\+UP}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badd6bdf0a98a7e3598f055f9fc02d153a}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badd6bdf0a98a7e3598f055f9fc02d153a}} 
+op\+Q\+D\+UP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+R\+OT@{op\+R\+OT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+R\+OT@{op\+R\+OT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba76212226bc673857eba49bc1a8d2d93f}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba76212226bc673857eba49bc1a8d2d93f}} 
+op\+R\+OT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+L\+S\+H\+I\+FT@{op\+L\+S\+H\+I\+FT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+L\+S\+H\+I\+FT@{op\+L\+S\+H\+I\+FT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baf2ad06d641170c6105688284e9312261}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baf2ad06d641170c6105688284e9312261}} 
+op\+L\+S\+H\+I\+FT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+R\+S\+H\+I\+FT@{op\+R\+S\+H\+I\+FT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+R\+S\+H\+I\+FT@{op\+R\+S\+H\+I\+FT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bad27343e5c07ac5c39fa844d21486f4b6}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bad27343e5c07ac5c39fa844d21486f4b6}} 
+op\+R\+S\+H\+I\+FT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+P\+L\+US@{op\+P\+L\+US}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+P\+L\+US@{op\+P\+L\+US}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba908e616726d3e4ad1b716550fa06e961}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba908e616726d3e4ad1b716550fa06e961}} 
+op\+P\+L\+US&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+I\+N\+V\+E\+RT@{op\+I\+N\+V\+E\+RT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+I\+N\+V\+E\+RT@{op\+I\+N\+V\+E\+RT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2ddca9d0f7afe8d63dafe11d1b012007}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2ddca9d0f7afe8d63dafe11d1b012007}} 
+op\+I\+N\+V\+E\+RT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+N\+E\+G\+AT@{op\+N\+E\+G\+AT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+N\+E\+G\+AT@{op\+N\+E\+G\+AT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9483c7f9c6d682b08e2cee98ebde0467}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9483c7f9c6d682b08e2cee98ebde0467}} 
+op\+N\+E\+G\+AT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+G\+R\+E\+AT@{op\+G\+R\+E\+AT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+G\+R\+E\+AT@{op\+G\+R\+E\+AT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab591b137f50e2b3b980a8ff3ba26ee8c}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab591b137f50e2b3b980a8ff3ba26ee8c}} 
+op\+G\+R\+E\+AT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+S\+UB@{op\+S\+UB}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+S\+UB@{op\+S\+UB}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6ab3ccda9331a66ddee789a345fb01ba}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba6ab3ccda9331a66ddee789a345fb01ba}} 
+op\+S\+UB&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+A\+BS@{op\+A\+BS}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+A\+BS@{op\+A\+BS}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab898dd53604631568d573f9de62f79ed}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bab898dd53604631568d573f9de62f79ed}} 
+op\+A\+BS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+E\+Q\+U\+AL@{op\+E\+Q\+U\+AL}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+E\+Q\+U\+AL@{op\+E\+Q\+U\+AL}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badf0c1a1437e0d07f1767b625a90a913e}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55badf0c1a1437e0d07f1767b625a90a913e}} 
+op\+E\+Q\+U\+AL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+U\+L\+E\+SS@{op\+U\+L\+E\+SS}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+U\+L\+E\+SS@{op\+U\+L\+E\+SS}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae94ae92cd424f365b0f973c924364da5}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae94ae92cd424f365b0f973c924364da5}} 
+op\+U\+L\+E\+SS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+L\+E\+SS@{op\+L\+E\+SS}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+L\+E\+SS@{op\+L\+E\+SS}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba760fc6cf5a47b7627cf0c0ab8d324834}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba760fc6cf5a47b7627cf0c0ab8d324834}} 
+op\+L\+E\+SS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+U\+M\+M\+OD@{op\+U\+M\+M\+OD}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+U\+M\+M\+OD@{op\+U\+M\+M\+OD}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bace40c332f87f1f23413cb098ff071ad9}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bace40c332f87f1f23413cb098ff071ad9}} 
+op\+U\+M\+M\+OD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+P\+IN@{op\+P\+IN}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+P\+IN@{op\+P\+IN}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba538f063b52fbe9ea53655457ef1f2b57}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba538f063b52fbe9ea53655457ef1f2b57}} 
+op\+P\+IN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+M\+AP@{op\+M\+AP}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+M\+AP@{op\+M\+AP}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba48c88f6e4b6689b137f76ebfe4dfe1a4}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba48c88f6e4b6689b137f76ebfe4dfe1a4}} 
+op\+M\+AP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+M\+OD@{op\+M\+OD}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+M\+OD@{op\+M\+OD}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2afa116c8bc9aff11a51aa73ccb7ee08}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2afa116c8bc9aff11a51aa73ccb7ee08}} 
+op\+M\+OD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+S\+L\+A\+SH@{op\+S\+L\+A\+SH}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+S\+L\+A\+SH@{op\+S\+L\+A\+SH}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba62d9d9c3937fbebde5b577d3489b4cbc}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba62d9d9c3937fbebde5b577d3489b4cbc}} 
+op\+S\+L\+A\+SH&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+U\+M\+S\+T\+AR@{op\+U\+M\+S\+T\+AR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+U\+M\+S\+T\+AR@{op\+U\+M\+S\+T\+AR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba72530d92428dd975932bd29a990ea0e8}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba72530d92428dd975932bd29a990ea0e8}} 
+op\+U\+M\+S\+T\+AR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+S\+T\+AR@{op\+S\+T\+AR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+S\+T\+AR@{op\+S\+T\+AR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baa242e68230cc6e4563bb12218b5f00bf}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55baa242e68230cc6e4563bb12218b5f00bf}} 
+op\+S\+T\+AR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+M\+S\+T\+AR@{op\+M\+S\+T\+AR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+M\+S\+T\+AR@{op\+M\+S\+T\+AR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba8dcb18e1c8ae4ad70635be324b89b7f4}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba8dcb18e1c8ae4ad70635be324b89b7f4}} 
+op\+M\+S\+T\+AR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+IN@{op\+IN}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+IN@{op\+IN}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9e66575f3d421c4832476276a81ae1b0}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba9e66575f3d421c4832476276a81ae1b0}} 
+op\+IN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+O\+UT@{op\+O\+UT}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+O\+UT@{op\+O\+UT}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba072efc6fe9d69c4837eb0b3aba576144}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba072efc6fe9d69c4837eb0b3aba576144}} 
+op\+O\+UT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+P\+I\+CK@{op\+P\+I\+CK}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+P\+I\+CK@{op\+P\+I\+CK}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae50042d6290270fd42eac9910ce220f1}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bae50042d6290270fd42eac9910ce220f1}} 
+op\+P\+I\+CK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+P\+S\+T\+OR@{op\+P\+S\+T\+OR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+P\+S\+T\+OR@{op\+P\+S\+T\+OR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bad92196bc41387a9ebfcb885d2f2e464a}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55bad92196bc41387a9ebfcb885d2f2e464a}} 
+op\+P\+S\+T\+OR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+A\+IN@{op\+A\+IN}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+A\+IN@{op\+A\+IN}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3f4add284684b0122101d8151aa6f8ed}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba3f4add284684b0122101d8151aa6f8ed}} 
+op\+A\+IN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+P\+WM@{op\+P\+WM}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+P\+WM@{op\+P\+WM}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba398c79160b73f3b2eacfd9acee82b7dd}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba398c79160b73f3b2eacfd9acee82b7dd}} 
+op\+P\+WM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+N\+E\+GA@{op\+D\+N\+E\+GA}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+N\+E\+GA@{op\+D\+N\+E\+GA}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba217e08591be820408003bc277c2876c2}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba217e08591be820408003bc277c2876c2}} 
+op\+D\+N\+E\+GA&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+O\+V\+AR@{op\+D\+O\+V\+AR}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+O\+V\+AR@{op\+D\+O\+V\+AR}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba636134653cae46bec5b395d7f15ba7b5}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba636134653cae46bec5b395d7f15ba7b5}} 
+op\+D\+O\+V\+AR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+P\+L\+US@{op\+D\+P\+L\+US}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+P\+L\+US@{op\+D\+P\+L\+US}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba16a1bb6611e8c11fb026727744541ecc}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba16a1bb6611e8c11fb026727744541ecc}} 
+op\+D\+P\+L\+US&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{op\+D\+S\+UB@{op\+D\+S\+UB}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!op\+D\+S\+UB@{op\+D\+S\+UB}}}\mbox{\Hypertarget{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2bb5221cde147239dadb7c3c705a48d7}\label{eforth__core_8h_a06fc87d81c62e9abb8790b6e5713c55ba2bb5221cde147239dadb7c3c705a48d7}} 
+op\+D\+S\+UB&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{eforth__core_8h_aa4cce331b74c197758d0b9ada8d58002}\label{eforth__core_8h_aa4cce331b74c197758d0b9ada8d58002}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!vm\+\_\+init@{vm\+\_\+init}}
+\index{vm\+\_\+init@{vm\+\_\+init}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{vm\+\_\+init()}{vm\_init()}}
+{\footnotesize\ttfamily void vm\+\_\+init (\begin{DoxyParamCaption}\item[{P\+G\+M\+\_\+P}]{rom,  }\item[{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$}]{cdata,  }\item[{void $\ast$}]{io\+\_\+stream }\end{DoxyParamCaption})}
+
+e\+Forth virtual machine initialization
+
+\begin{quote}
+internal (user) variables
+\begin{DoxyItemize}
+\item \textquotesingle{}T\+IB = F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR (pointer to input buffer)
+\item B\+A\+SE = 0x10 (numerical base 0xa for decimal, 0x10 for hex)
+\item CP = here (pointer to top of dictionary, first memory location to add new word)
+\item C\+O\+N\+T\+E\+XT = last (pointer to name field of the most recently defined word in dictionary)
+\item L\+A\+ST = last (pointer to name field of last word in dictionary)
+\item \textquotesingle{}E\+V\+AL = I\+N\+T\+ER (\$\+C\+O\+M\+P\+I\+LE for compiler or \$\+I\+N\+T\+E\+R\+P\+R\+ET for interpreter)
+\item A\+B\+O\+RT = Q\+U\+IT (pointer to error handler, Q\+U\+IT is the main loop)
+\item tmp = 0 (scratch pad)
+\end{DoxyItemize}\end{quote}
+
+\begin{DoxyParams}{Parameters}
+{\em rom} & pointer to Arduino flash memory block (R\+OM) \\
+\hline
+{\em cdata} & pointer to Arduino R\+AM block (R\+AM) \\
+\hline
+{\em io\+\_\+stream} & pointer to Stream object of Arduino \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{eforth__core_8h_a6c9f04cc7cb8e0c9e3058cb7e9a7682f}\label{eforth__core_8h_a6c9f04cc7cb8e0c9e3058cb7e9a7682f}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!vm\+\_\+step@{vm\+\_\+step}}
+\index{vm\+\_\+step@{vm\+\_\+step}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{vm\+\_\+step()}{vm\_step()}}
+{\footnotesize\ttfamily int vm\+\_\+step (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+e\+Forth virtual machine (single-\/step) execution unit \begin{DoxyReturn}{Returns}
+0 -\/ exit 
+\end{DoxyReturn}
+\mbox{\Hypertarget{eforth__core_8h_a75c4f0a5617f054de717a51818148453}\label{eforth__core_8h_a75c4f0a5617f054de717a51818148453}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!ef\+\_\+prompt@{ef\+\_\+prompt}}
+\index{ef\+\_\+prompt@{ef\+\_\+prompt}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{ef\+\_\+prompt()}{ef\_prompt()}}
+{\footnotesize\ttfamily void ef\+\_\+prompt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+version prompt \mbox{\Hypertarget{eforth__core_8h_a41032b0ebdc389f0c30d15b6b7e8b025}\label{eforth__core_8h_a41032b0ebdc389f0c30d15b6b7e8b025}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!ef\+\_\+getchar@{ef\+\_\+getchar}}
+\index{ef\+\_\+getchar@{ef\+\_\+getchar}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{ef\+\_\+getchar()}{ef\_getchar()}}
+{\footnotesize\ttfamily \hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} ef\+\_\+getchar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+console input with yield \mbox{\Hypertarget{eforth__core_8h_a40485405ab5338788520ef0380b01b70}\label{eforth__core_8h_a40485405ab5338788520ef0380b01b70}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!ef\+\_\+putchar@{ef\+\_\+putchar}}
+\index{ef\+\_\+putchar@{ef\+\_\+putchar}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{ef\+\_\+putchar()}{ef\_putchar()}}
+{\footnotesize\ttfamily void ef\+\_\+putchar (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+output one char to console \mbox{\Hypertarget{eforth__core_8h_aa084a3e268cc140b2c8602dc52396ce4}\label{eforth__core_8h_aa084a3e268cc140b2c8602dc52396ce4}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!ef\+\_\+yield@{ef\+\_\+yield}}
+\index{ef\+\_\+yield@{ef\+\_\+yield}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{ef\+\_\+yield()}{ef\_yield()}}
+{\footnotesize\ttfamily void ef\+\_\+yield (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+e\+Forth yield to user tasks \mbox{\Hypertarget{eforth__core_8h_a94e10412bf5e1f89d12efb94e80979c8}\label{eforth__core_8h_a94e10412bf5e1f89d12efb94e80979c8}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!ef\+\_\+assemble@{ef\+\_\+assemble}}
+\index{ef\+\_\+assemble@{ef\+\_\+assemble}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{ef\+\_\+assemble()}{ef\_assemble()}}
+{\footnotesize\ttfamily int ef\+\_\+assemble (\begin{DoxyParamCaption}\item[{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$}]{cdata }\end{DoxyParamCaption})}
+
+e\+Forth Assembler \begin{quote}
+Kernel constants \end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item H\+LD char pointer to output buffer 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item S\+P\+AN number of character accepted 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item $>$IN interpreter pointer to next char 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item \#\+T\+IB number of character received in T\+IB 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item \textquotesingle{}T\+IB console input buffer pointer 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item B\+A\+SE current radix for numeric ops 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item CP, top of dictionary, same as H\+E\+RE 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item C\+O\+N\+T\+E\+XT name field of last word 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item L\+A\+ST, same as C\+O\+N\+T\+E\+XT 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item \textquotesingle{}E\+V\+AL eval mode (interpreter or compiler) 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item A\+B\+O\+RT exception rescue handler (Q\+U\+IT) 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item tmp storage (alternative to return stack) 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+common constants and variable spec \end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item BL blank 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item C\+E\+LL cell size 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+Kernel dictionary (primitive words) \end{quote}
+
+
+\begin{quote}
+opcodes (primitives) that can be coded in high level \end{quote}
+
+
+\begin{quote}
+Common Colon Words (in word streams) \end{quote}
+
+
+\begin{quote}
+Number Conversions and formatting \end{quote}
+
+
+\begin{quote}
+Console I/O \end{quote}
+
+
+\begin{quote}
+Parser \end{quote}
+
+
+\begin{quote}
+Interpreter Input String handler \end{quote}
+
+
+\begin{quote}
+Text Interpreter \end{quote}
+\begin{DoxyVerb}QUERY/TIB/ACCEPT - start the interpreter loop <-------<------.
+TOKEN/PARSE - get a space delimited word                      \
+EXECUTE - attempt to look up that word in the dictionary       \
+  NAME?/find - was the word found?                              ^
+  |-Yes:                                                        |
+  |   $INTERPRET - are we in compile mode?                      |
+  |   |-Yes:                                                    ^
+  |   |  \-Is the Word an Immediate word?                       |
+  |   |   |-Yes:                                                |
+  |   |   |    \- EXECUTE Execute the word -------------------->.
+  |   |    \-No:                                                |
+  |   |        \-Compile the word into the dictionary --------->.
+  |    \-No:                                                    |
+  |       \- EXECUTE Execute the word ----->------------------->.
+   \-No:                                                        ^
+      NUMBER? - Can the word be treated as a number?            |
+      |-Yes:                                                    |
+      | \-Are we in compile mode?                               |
+      |  |-Yes:                                                 |
+      |  |   \-Compile a literal into the dictionary >--------->.
+      |   \-No:                                                 |
+      |      \-Push the number to the variable stack >--------->.
+       \-No:                                                    /
+          \-An Error has occurred, prXA out an error message ->
+\end{DoxyVerb}
+
+
+\begin{quote}
+Forth Compiler -\/ utility functions \end{quote}
+
+
+\begin{quote}
+Forth Compiler -\/ define new word \end{quote}
+
+
+\begin{quote}
+Forth Compiler -\/ variable, constant, and comments \end{quote}
+
+
+\begin{quote}
+Forth Compiler -\/ branching instructions \end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item B\+E\+G\+IN...A\+G\+A\+IN, B\+E\+G\+IN... f U\+N\+T\+IL, B\+E\+G\+IN...(once)...f W\+H\+I\+LE...(loop)...R\+E\+P\+E\+AT 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item f IF...T\+H\+EN, f IF...E\+L\+SE...T\+H\+EN 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item n F\+OR...N\+E\+XT, n F\+OR...(first)... f A\+FT...(2nd,...)...T\+H\+EN...(every)...N\+E\+XT 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+Forth Compiler -\/ String specification \end{quote}
+
+
+\begin{quote}
+Debugging Tools \end{quote}
+
+
+\begin{quote}
+Arduino specific opcodes \end{quote}
+
+
+\begin{quote}
+Cold Start address (End of dictionary) \end{quote}
+
+
+\begin{quote}
+Boot Vector Setup \end{quote}
+
+\begin{DoxyParams}{Parameters}
+{\em cdata} & pointer to Arduino memory block where assembled data will be populated \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{eforth__core_8h_aa3879a9e8a3d830749a64d45675f72c5}\label{eforth__core_8h_aa3879a9e8a3d830749a64d45675f72c5}} 
+\index{eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}!ef\+\_\+dump\+\_\+rom@{ef\+\_\+dump\+\_\+rom}}
+\index{ef\+\_\+dump\+\_\+rom@{ef\+\_\+dump\+\_\+rom}!eforth\+\_\+core.\+h@{eforth\+\_\+core.\+h}}
+\subsubsection{\texorpdfstring{ef\+\_\+dump\+\_\+rom()}{ef\_dump\_rom()}}
+{\footnotesize\ttfamily void ef\+\_\+dump\+\_\+rom (\begin{DoxyParamCaption}\item[{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8} $\ast$}]{cdata,  }\item[{int}]{len }\end{DoxyParamCaption})}
+
+create C array dump for R\+OM 
+\begin{DoxyParams}{Parameters}
+{\em cdata} & pointer to assembled memory block (into C syntax) \\
+\hline
+{\em len} & number of byte to be dump \\
+\hline
+\end{DoxyParams}

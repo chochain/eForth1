@@ -1,3 +1,7 @@
+///
+/// @file eforth_rom.c
+/// @brief eForth ROM (loaded in Arduino Flash Memory)
+///
 #include "eforth_core.h"
 
 const U32 forth_rom[] PROGMEM = {

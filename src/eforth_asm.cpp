@@ -1,27 +1,34 @@
+/**
+ * @file eforth_asm.cpp
+ * @brief eForth Assembler module
+ *
+ * Forth Macro Assembler
+ *
+ */
 #include "eforth_core.h"
 #include "eforth_asm.h"
-//
-// Forth Macro Assembler
-//
+
 #define fIMMED  0x80           		/**< immediate flag    */
 #define fCOMPO  0x40                /**< compile only flag */
-//
-// variables to keep branching addresses
-//
+///
+///@name Compiled Address for Branching
+///@{
 XA BRAN, QBRAN, DONXT;
 XA DOTQ, STRQ, ABORTQ;
 XA TOR;
 XA NOP = 0xffff;				    ///< NOP set to ffff to prevent access before initialized
-//
-// return stack for branching ops
-//
+///@}
+///
+///@name Return Stack for Branching Ops
+///@{
 U8 *aByte;                          ///< heap
 U8 aR;                              ///< return stack index
 XA aPC;                             ///< program counter
 XA aThread;                         ///< pointer to previous word
-//
-// memory access and stack op macros
-//
+///@}
+///
+///@name Memory Access and Stack Op
+///@{
 #define BSET(d, c)  (*(aByte+(d))=(U8)(c))
 #define BGET(d)     ((U8)*(aByte+(d)))
 #define SET(d, v)   do { U16 a=(d); U16 x=(v); BSET(a, (x)&0xff); BSET((a)+1, (x)>>8); } while (0)
@@ -33,10 +40,12 @@ XA aThread;                         ///< pointer to previous word
 #define RPOP()      R_GET(aR ? aR-- : aR)
 #define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
+///@}
 ///
-/// dump memory between previous word and this
+///@name Memory Dumpers
+///@{
 ///
-void _dump(int b, int u) {
+void _dump(int b, int u) {      /// dump memory between previous word and this
     DEBUG("%s", "\n    :");
     for (int i=b; i<u; i+=sizeof(XA)) {
         if ((i+1)<u) DEBUG(" %04x", GET(i));
@@ -44,10 +53,7 @@ void _dump(int b, int u) {
     }
     DEBUG("%c", '\n');
 }
-///
-/// dump return stack
-///
-void _rdump()
+void _rdump()                   /// dump return stack
 {
 	DEBUG("%cR[", ' ');
 	for (int i=1; i<=aR; i++) {
@@ -55,19 +61,44 @@ void _rdump()
 	}
 	DEBUG("%c]", ' ');
 }
+///@}
 ///
-/// string length (in Arduino Flash memory block)
+///@name Assembler - String/Byte Movers
+///@{
 ///
-int _strlen(FCHAR *seq) {
+int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     PGM_P p = reinterpret_cast<PGM_P>(seq);
     int i=0;
     for (; pgm_read_byte(p); i++, p++);
     return i;
 }
+#define CELLCPY(n) {                            \
+    va_list argList;                            \
+	va_start(argList, n);						\
+	for (; n; n--) {							\
+		XA j = (XA)va_arg(argList, int);        \
+		if (j==NOP) continue;                   \
+		STORE(j);								\
+		DEBUG(" %04x", j);						\
+	}											\
+	va_end(argList);							\
+	_rdump();                                   \
+}
+#define STRCPY(op, seq) {                       \
+	STORE(op);                                  \
+	int len = _strlen(seq);                     \
+    PGM_P p = reinterpret_cast<PGM_P>(seq);     \
+	BSET(aPC++, len);                           \
+	for (int i=0; i < len; i++) {               \
+    BSET(aPC++, pgm_read_byte(p++));            \
+	}											\
+}
+///@}
 ///
-/// create a word header in dictionary
+///@name Assembler - Word Creation Headers
+///@{
 ///
-void _header(int lex, FCHAR *seq) {
+void _header(int lex, FCHAR *seq) {           /// create a word header in dictionary
     if (aThread) {
         if (aPC >= FORTH_ROM_SZ) DEBUG("ROM %s", "max!");
         _dump(aThread-sizeof(XA), aPC);       /// * dump data from previous word to current word
@@ -99,18 +130,6 @@ int _code(FCHAR *seg, int len, ...) {
     }
     va_end(argList);
     return addr;
-}
-#define CELLCPY(n) {                            \
-    va_list argList;                            \
-	va_start(argList, n);						\
-	for (; n; n--) {							\
-		XA j = (XA)va_arg(argList, int);        \
-		if (j==NOP) continue;                   \
-		STORE(j);								\
-		DEBUG(" %04x", j);						\
-	}											\
-	va_end(argList);							\
-	_rdump();                                   \
 }
 ///
 /// create a colon word
@@ -144,19 +163,16 @@ int _label(int len, ...) {
     CELLCPY(len);
     return addr;
 }
+///@}
 ///
-/// **BEGIN**-(once)-WHILE-(loop)-UNTIL/REPEAT
-/// **BEGIN**-AGAIN
-///
-void _begin(int len, ...) {
-    SHOWOP("BEGIN");
+///@name Assembler - Branching Ops
+///@{
+void _begin(int len, ...) {         /// **BEGIN**-(once)-WHILE-(loop)-UNTIL/REPEAT
+    SHOWOP("BEGIN");                /// **BEGIN**-AGAIN
     RPUSH(aPC);                     /// * keep current address for looping
     CELLCPY(len);
 }
-///
-/// BEGIN-(once)-**WHILE**-(loop)-UNTIL/REPEAT
-///
-void _while(int len, ...) {        
+void _while(int len, ...) {         /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPEAT
     SHOWOP("WHILE");
     STORE(QBRAN);
     STORE(0);                       /// * branching address
@@ -165,48 +181,33 @@ void _while(int len, ...) {
     RPUSH(k);
     CELLCPY(len);
 }
-///
-/// BEGIN-(once)-WHILE-(loop)-**REPEAT**
-///
-void _repeat(int len, ...) {
+void _repeat(int len, ...) {        /// BEGIN-(once)-WHILE-(loop)- **REPEAT**
     SHOWOP("REPEAT");
     STORE(BRAN);
     STORE(RPOP());
     SET(RPOP(), aPC);
     CELLCPY(len);
 }
-///
-/// BEGIN-(once)-WHILE-(loop)-**UNTIL**
-///
-void _until(int len, ...) {
+void _until(int len, ...) {         /// BEGIN-(once)-WHILE-(loop)--**UNTIL**
     SHOWOP("UNTIL");
     STORE(QBRAN);                   /// * conditional branch
     STORE(RPOP());                  /// * loop begin address
     CELLCPY(len);
 }
-///
-/// BEGIN-**AGAIN**
-///
-void _again(int len, ...) {
+void _again(int len, ...) {        /// BEGIN--**AGAIN**
     SHOWOP("AGAIN");
     STORE(BRAN);                   /// * unconditional branch
     STORE(RPOP());                 /// * store return address
     CELLCPY(len);
 }
-///
-/// **FOR**-(first)-AFT-(2nd,...)-THEN-(every)-NEXT
-///
-void _for(int len, ...) {
+void _for(int len, ...) {          /// **FOR**-(first)-AFT-(2nd,...)-THEN-(every)-NEXT
     SHOWOP("FOR");                 
     STORE(TOR);                    /// * put loop counter on return stack
     RPUSH(aPC);                    /// * keep 1st loop repeat address A0
     CELLCPY(len);
 }
-///
-/// FOR-(first)-**AFT**-(2nd,...)-THEN-(every)-NEXT
-///
-void _aft(int len, ...) {          /// * code between FOR-AFT run only once
-    SHOWOP("AFT");
+void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(every)-NEXT
+    SHOWOP("AFT");                 /// * code between FOR-AFT run only once
     STORE(BRAN);                   /// * unconditional branch
     STORE(0);                      /// * forward jump address (A1)NOP,
     RPOP();                        /// * pop-off A0 (FOR-AFT once only)
@@ -214,30 +215,23 @@ void _aft(int len, ...) {          /// * code between FOR-AFT run only once
     RPUSH(aPC - CELLSZ);           /// * keep A1 address on return stack for AFT-THEN
     CELLCPY(len);
 }
-///
-/// FOR-(first)-AFT-(2nd,...)-THEN-(every)-**NEXT**
-/// Note: _next() is multi-defined in vm
-///
-void _nxt(int len, ...) {
+//
+// Note: _next() is multi-defined in vm
+//
+void _nxt(int len, ...) {          /// FOR-(first)-AFT-(2nd,...)-THEN-(every)--**NEXT**
     SHOWOP("NEXT");
     STORE(DONXT);                  /// * check loop counter (on return stack)
     STORE(RPOP());                 /// * add A0 (FOR-NEXT) or 
     CELLCPY(len);                  /// * A1 to repeat loop (conditional branch by DONXT)
 }
-///
-/// **IF**-THEN, **IF**-ELSE-THEN
-///
-void _if(int len, ...) {
+void _if(int len, ...) {           /// **IF**-THEN, **IF**-ELSE-THEN
     SHOWOP("IF");
 	STORE(QBRAN);                  /// * conditional branch
     RPUSH(aPC);                    /// * keep A0 address on return stack for ELSE or THEN
     STORE(0);                      /// * reserve branching address (A0)
     CELLCPY(len);
 }
-///
-/// IF-**ELSE**-THEN
-///
-void _else(int len, ...) {
+void _else(int len, ...) {         /// IF--**ELSE**-THEN
     SHOWOP("ELSE");
     STORE(BRAN);                   /// * unconditional branch
     STORE(0);                      /// * reserve branching address (A1)
@@ -245,23 +239,15 @@ void _else(int len, ...) {
     RPUSH(aPC - CELLSZ);           /// * keep A1 address on return stack for THEN
     CELLCPY(len);
 }
-///
-/// IF-ELSE-**THEN**
-///
-void _then(int len, ...) {
+void _then(int len, ...) {         /// IF-ELSE--**THEN**
     SHOWOP("THEN");
     SET(RPOP(), aPC);              /// * backfill branching address (A0) or (A1)
     CELLCPY(len);
 }
-#define STRCPY(op, seq) {                           \
-	STORE(op);                                      \
-	int len = _strlen(seq);							\
-    PGM_P p = reinterpret_cast<PGM_P>(seq);         \
-	BSET(aPC++, len);                               \
-	for (int i=0; i < len; i++) {					\
-		BSET(aPC++, pgm_read_byte(p++));            \
-	}												\
-}
+///@}
+///
+///@name Assembler - IO Functions
+///@{
 void _dotq(FCHAR *seq) {
     SHOWOP("DOTQ");
     DEBUG("%s", seq);
@@ -277,13 +263,17 @@ void _abortq(FCHAR *seq) {
     DEBUG("%s", seq);
     STRCPY(ABORTQ, seq);
 }
-//
-// assembler macros (calculate number of parameters by compiler)
-//
+///@}
+///
+///@name Vargs Header (calculate number of parameters by compiler)
+///@{
 #define _CODE(seg, ...)      _code(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _COLON(seg, ...)     _colon(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _IMMED(seg, ...)     _immed(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _LABEL(...)          _label(_NARG(__VA_ARGS__), __VA_ARGS__)
+///@}
+///@name Vargs Branching
+///@{
 #define _BEGIN(...)          _begin(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _AGAIN(...)          _again(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _UNTIL(...)          _until(_NARG(__VA_ARGS__), __VA_ARGS__)
@@ -295,9 +285,13 @@ void _abortq(FCHAR *seq) {
 #define _FOR(...)            _for(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _NEXT(...)           _nxt(_NARG(__VA_ARGS__), __VA_ARGS__)
 #define _AFT(...)            _aft(_NARG(__VA_ARGS__), __VA_ARGS__)
+///@}
+///@name Vargs IO
+///@{
 #define _DOTQ(seq)           _dotq(F(seq))
 #define _STRQ(seq)           _strq(F(seq))
 #define _ABORTQ(seq)         _abortq(F(seq))
+///@}
 ///
 /// eForth Assembler
 ///

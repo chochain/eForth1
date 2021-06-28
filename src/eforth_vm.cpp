@@ -1,61 +1,97 @@
+/**
+ * @file eforth_vm.cpp
+ * @brief eForth Virtual Machine module
+ *
+ * ####eForth Memory map
+ *
+ * @code
+ *     0x0000-0x0fff ROM (Flash memory)
+ *     0x1000-0x14ff RAM (dynamic memory)
+ *         0x1000-0x10bf Return/Data Stack
+ *         0x10c0-0x1fff TIB (Terminal Input Buffer)
+ *         0x1100-0x111f PAD (Output Buffer)
+ *         0x1120-0x14ff User Dictionary
+ * @endcode
+ *
+ * ####Data and Return Stack
+ *
+ * @code
+ *            S                   R
+ *            |                   |
+ *    top -> [S0, S1, S2,..., R1, R0]
+ * @endcode
+ * Note: Dr. Ting uses U8 (0~255) for wrap-around control
+ */
 #include "eforth_core.h"
 
 static Stream *io;
-//
-// Forth VM control registers
-//
-XA  PC, IP;                     // PC (program counter), IP (instruction pointer)
-U8  R, S;                       // return stack index, data stack index
-S16 top;                        // ALU (i.e. cached top of stack value)
-//
-// Forth VM core storage
-//
-PGM_P cRom;
-U8    *cData;             		// linear byte array pointer
-S16   *cStack;                  // pointer to stack/rack memory block
-//
-// data and return stack ops
-//         S                   R
-//         |                   |
-// top -> [S0, S1, S2..., R1, R0]
-//
-// Dr. Ting uses 256 and U8 for wrap-around control
-//
-#define RAM_FLAG       0xf000
-#define OFF_MASK       0x0fff
+///
+///@name Control
+///@{
+XA  PC;                         ///< PC (program counter, XA is 16-bit)
+XA  IP;                         ///< IP (instruction pointer, XA is 16-bit)
+U8  R;                          ///< return stack index (0-255)
+U8  S;                          ///< data stack index (0-255)
+S16 top;                        ///< ALU (i.e. cached top of stack value)
+///@}
+///
+///@name Storage
+///@{
+PGM_P cRom;                     ///< ROM, Forth word stored in Arduino Flash Memory
+U8    *cData;             		///< RAM, memory block for user define dictionary
+S16   *cStack;                  ///< pointer to stack/rack memory block
+///@}
+#define RAM_FLAG       0xf000   /**< RAM/ROM ranger (0x1000~0xffff)   */
+#define OFF_MASK       0x0fff   /**< RAM/ROM range mask (0x000~0xfff) */
 #define BOOL(f)        ((f) ? TRUE : FALSE)
-
+///
+/// byte (8-bit) fetch from either RAM or ROM depends on filtered range
+///
 U8   BGET(U16 d)       {
 	return (U8)((d&RAM_FLAG) ? cData[d&OFF_MASK] : pgm_read_byte(cRom+d));
 }
-#define BSET(d, c)     (cData[(d)&OFF_MASK]=(U8)(c))
-#define SET(d, v)      (*((S16*)&cData[(d)&OFF_MASK])=(v))
+///
+/// word (16-bit) fetch from either RAM or ROM depends on filtered range
+///
 U16  GET(U16 d)        {
     return (d&RAM_FLAG)
         ? *((U16*)&cData[d&OFF_MASK])
         : (U16)pgm_read_byte(cRom+d) + ((U16)pgm_read_byte(cRom+d+1)<<8);
 }
+#define BSET(d, c)     (cData[(d)&OFF_MASK]=(U8)(c))
+#define SET(d, v)      (*((S16*)&cData[(d)&OFF_MASK])=(v))
 #define S_GET(s)       (cStack[s])
 #define S_SET(s, v)    (cStack[s]=(S16)(v))
 #define RS_TOP         (FORTH_STACK_SZ>>1)
 #define R_GET(r)       ((XA)cStack[RS_TOP - (r)])
 #define R_SET(r, v)    (cStack[RS_TOP - (r)]=(S16)(v))
-
+///
+/// push a value onto stack top
+///
 void PUSH(S16 v)       { S_SET(++S, top); top = v;  }
 #define	POP()          (top=S_GET(S ? S-- : S))
 #define RPUSH(v)       (R_SET(++R, (v)))
 #define RPOP()         (R_GET(R ? R-- : R))
+///
+/// store a double on data stack top
+///
 void DTOP(S32 d) {
 	S_SET(S, d&0xffff);
 	top = d>>16;
 }
-
+///
+/// update program counter (ready to fetch), advance instruction pointer
+///
 void NEXT()            { PC=GET(IP); IP+=sizeof(XA); }
-//
-// tracing instrumentation
-//
-int tTAB, tCNT;		// trace indentation and depth counters
-
+///
+///@name Tracing
+///@{
+int tCNT;		    ///< tracing depth counters
+int tTAB;		    ///< tracing indentation counter
+///@}
+///
+///@name Tracing Functions
+///@{
 void _trc_on()  { tCNT++;               NEXT(); }
 void _trc_off() { tCNT -= tCNT ? 1 : 0; NEXT(); }
 
@@ -70,6 +106,9 @@ void _trc_off() { tCNT -= tCNT ? 1 : 0; NEXT(); }
     LOG(" ;");                                 \
 	tTAB--;                                    \
 }
+///
+/// display the 'word' to be executed
+///
 void TRACE_WORD()
 {
 	if (!tCNT) return;
@@ -87,32 +126,38 @@ void TRACE_WORD()
 		LOG_C((char)BGET(pc));
 	}
 }
+///@}
 //
-// Forth Virtual Machine (primitive functions)
+// Forth Virtual Machine primitive functions
 //
-void _nop() { NEXT(); }    // ( -- )
+/// virtual machine initializer
+///
 void _init() {
-	R = S = PC = IP = top = 0;
-	tCNT = tTAB = 0;
+	R = S = PC = IP = top = 0;  ///> setup control variables
+	tCNT = tTAB = 0;            ///> setup tracing variables
     
-	XA pc = FORTH_UVAR_ADDR;
+	XA pc = FORTH_UVAR_ADDR;    ///> setup Forth user variables
 	SET(pc,   FORTH_TIB_ADDR);
 	SET(pc+2, 0x10);
 	SET(pc+4, FORTH_DIC_ADDR);
     
 #if EXE_TRACE
-    tCNT=1;
+    tCNT=1;                     ///> optionally enable tracing
 #endif // EXE_TRACE
 
-    ef_prompt();
+    ef_prompt();                ///> display prompt
 }
-void _qrx()                 // ( -- c t|f) read a char from terminal input device
-{
-	PUSH(ef_getchar());     // yield to user task until console input available
+void _nop() { NEXT(); }     ///< ( -- ) nop, as macro terminator
+///
+///@name Console IO
+///@{
+void _qrx() {               ///  ( -- c t|f) read a char from terminal input device
+	PUSH(ef_getchar());     ///> yield to user task until console input available
 	if (top) PUSH(TRUE);
     NEXT();
 }
-void _txsto()               // (c -- ) send a char to console
+
+void _txsto()               /// (c -- ) send a char to console
 {
 #if !EXE_TRACE
 	LOG_C((char)top);
@@ -129,192 +174,160 @@ void _txsto()               // (c -- ) send a char to console
 	POP();
     NEXT();
 }
-void _dovar()               // ( -- a) return address of a variable
+///@}
+///
+///@name Variables/Constant/Literal Ops
+///@{
+void _dovar()               /// ( -- a) return address of a variable
 {
-    ++PC;                   // skip opDOVAR opcode
-	PUSH(PC);               // push variable address onto stack
+    ++PC;                   ///> skip opDOVAR opcode
+	PUSH(PC);               ///> push variable address onto stack
 	NEXT();
 }
-void _docon()               // ( -- n) push next token onto data stack as constant
+void _docon()               /// ( -- n) push next token onto data stack as constant
 {
-    ++PC;                   // skip opDOCON opcode
- 	PUSH(GET(PC));          // push cell value onto stack
+    ++PC;                   ///> skip opDOCON opcode
+ 	PUSH(GET(PC));          ///> push cell value onto stack
     NEXT();
 }
-void _dolit()               // ( -- w) push next token as an integer literal
+void _dolit()               /// ( -- w) push next token as an integer literal
 {
-	TRACE(" ", GET(IP));    // fetch literal from data
-	PUSH(GET(IP));	        // push onto data stack
-	IP += CELLSZ;			// skip to next instruction
+	TRACE(" ", GET(IP));    ///> fetch literal from data
+	PUSH(GET(IP));	        ///> push onto data stack
+	IP += CELLSZ;			///> skip to next instruction
     NEXT();
 }
-void _enter()               // ( -- ) push instruction pointer onto return stack and pop, aka DOLIST by Dr. Ting
+///@}
+///@name Call/Branching Ops
+///@{
+void _enter()               /// ( -- ) push instruction pointer onto return stack and pop, aka DOLIST by Dr. Ting
 {
 	TRACE_COLON();
-	RPUSH(IP);              // keep return address
-	IP = ++PC;              // skip opcode opENTER, advance to next instruction
+	RPUSH(IP);              ///> keep return address
+	IP = ++PC;              ///> skip opcode opENTER, advance to next instruction
     NEXT();
 }
-void __exit()               // ( -- ) terminate all token lists in colon words
+void __exit()               /// ( -- ) terminate all token lists in colon words
 {
 	TRACE_EXIT();
-	IP = RPOP();            // pop return address
+	IP = RPOP();            ///> pop return address
     NEXT();
 }
-void _execu()               // (a -- ) take execution address from data stack and execute the token
+void _execu()               /// (a -- ) take execution address from data stack and execute the token
 {
-	PC = (XA)top;           // fetch program counter
+	PC = (XA)top;           ///> fetch program counter
 	POP();
 }
-void _donext()              // ( -- ) terminate a FOR-NEXT loop
+void _donext()              /// ( -- ) terminate a FOR-NEXT loop
 {
-    XA i = R_GET(R);        // loop counter
-	if (i) {			    // check if loop counter > 0
-		R_SET(R, i-1);		// decrement loop counter
-		IP = GET(IP);		// branch back to FOR
+    XA i = R_GET(R);        ///> loop counter
+	if (i) {			    ///> check if loop counter > 0
+		R_SET(R, i-1);		///>> decrement loop counter
+		IP = GET(IP);		///>> branch back to FOR
 	}
-	else {
-		IP += CELLSZ;		// skip to next instruction
-		RPOP();				// pop off return stack
+	else {                  ///> or, 
+		IP += CELLSZ;		///>> skip to next instruction
+		RPOP();				///>> pop off return stack
 	}
-    ef_yield();             // steal some cycles. Note: 17ms/cycle on Arduino UNO
+    ef_yield();             ///> steal some cycles. Note: 17ms/cycle on Arduino UNO
     NEXT();
 }
-void _qbran()               // (f -- ) test top as a flag on data stack
+void _qbran()               /// (f -- ) test top as a flag on data stack
 {
-	if (top) IP += CELLSZ;	// next instruction
-    else     IP = GET(IP);	// fetch branching target address
+	if (top) IP += CELLSZ;	///> next instruction, or
+    else     IP = GET(IP);	///> fetch branching target address
 	POP();
     NEXT();
 }
-void _bran()                // ( -- ) branch to address following
+void _bran()                /// ( -- ) branch to address following
 {
-	IP = GET(IP);			// fetch branching target address
+	IP = GET(IP);			///> fetch branching target address
     NEXT();
 }
-void _store()               // (n a -- ) store into memory location from top of stack
+///@}
+///
+///@name Storage Ops
+///@{
+void _store()               /// (n a -- ) store into memory location from top of stack
 {
 	SET(top, S_GET(S--));
 	POP();
     NEXT();
 }
-void _at()                  // (a -- n) fetch from memory address onto top of stack
+void _at()                  /// (a -- n) fetch from memory address onto top of stack
 {
 	top = (S16)GET(top);
     NEXT();
 }
-void _cstor()               // (c b -- ) store a byte into memory location
+void _cstor()               /// (c b -- ) store a byte into memory location
 {
 	BSET(top, S_GET(S--));
 	POP();
     NEXT();
 }
-void _cat()                 // (b -- n) fetch a byte from memory location
+void _cat()                 /// (b -- n) fetch a byte from memory location
 {
 	top = (S16)BGET(top);
     NEXT();
 }
-void _onep()
+void _pstor()               /// (n a -- ) add n to content at address a
 {
-    top++;
+	SET(top, GET(top)+S_GET(S--));
+    POP();
     NEXT();
 }
-void _onem()
-{
-    top--;
-    NEXT();
-}
-void _rfrom()               // (-- w) pop from return stack onto data stack (Ting comments different ???)
+///@}
+///
+///@name Return Stack Ops
+///@{
+void _rfrom()               /// (-- w) pop from return stack onto data stack (Ting comments different ???)
 {
 	PUSH(RPOP());
     NEXT();
 }
-void _rat()                 // (-- w) copy a number off the return stack and push onto data stack
+void _rat()                 /// (-- w) copy a number off the return stack and push onto data stack
 {
 	PUSH(R_GET(R));
     NEXT();
 }
-void _tor()                 // (w --) pop from data stack and push onto return stack
+void _tor()                 /// (w --) pop from data stack and push onto return stack
 {
 	RPUSH(top);
 	POP();
     NEXT();
 }
-void _depth()
+///@}
+///
+///@name Data Stack Ops
+///@{
+void _depth()               /// (-- w) fetch current stack depth
 {
     PUSH(S);
     NEXT();
 }
-void _delay()
-{
-    U32 t  = millis() + top;
-    POP();
-    while (millis()<t) {
-        ef_yield();         // run hardware tasks while waiting
-    }
-    NEXT();
-}
-void _clock()               // ( -- d) arduino millis() as double
-{
-	U32 t = millis();
-	PUSH(t & 0xffff);
-	PUSH(t >> 16);
-    NEXT();
-}
-void _drop()                // (w -- ) drop top of stack item
+void _drop()                /// (w -- ) drop top of stack item
 {
 	POP();
     NEXT();
 }
-void _dup()                 // (w -- w w) duplicate to of stack
+void _dup()                 /// (w -- w w) duplicate to of stack
 {
 	S_SET(++S, top);
     NEXT();
 }
-void _swap()                // (w1 w2 -- w2 w1) swap top two items on the data stack
+void _swap()                /// (w1 w2 -- w2 w1) swap top two items on the data stack
 {
 	S16 tmp  = top;
 	top = S_GET(S);
 	S_SET(S, tmp);
     NEXT();
 }
-void _over()                // (w1 w2 -- w1 w2 w1) copy second stack item to top
+void _over()                /// (w1 w2 -- w1 w2 w1) copy second stack item to top
 {
-	PUSH(S_GET(S));			// push w1
+	PUSH(S_GET(S));			///> push w1
 	NEXT();
 }
-void _zless()               // (n -- f) check whether top of stack is negative
-{
-	top = BOOL(top < 0);
-    NEXT();
-}
-void _and()                 // (w w -- w) bitwise AND
-{
-	top &= S_GET(S--);
-    NEXT();
-}
-void _or()                  // (w w -- w) bitwise OR
-{
-	top |= S_GET(S--);
-    NEXT();
-}
-void _xor()                 // (w w -- w) bitwise XOR
-{
-	top ^= S_GET(S--);
-	NEXT();
-}
-void _uplus()               // (w w -- w c) add two numbers, return the sum and carry flag
-{
-	S_SET(S, S_GET(S)+top);
-	top = (U16)S_GET(S) < (U16)top;
-    NEXT();
-}
-void _qdup()                // (w -- w w | 0) dup top of stack if it is not zero
-{
-	if (top) S_SET(++S, top);
-    NEXT();
-}
-void _rot()                 // (w1 w2 w3 -- w2 w3 w1) rotate 3rd item to top
+void _rot()                 /// (w1 w2 w3 -- w2 w3 w1) rotate 3rd item to top
 {
 	S16 tmp = S_GET(S-1);
 	S_SET(S-1, S_GET(S));
@@ -322,101 +335,127 @@ void _rot()                 // (w1 w2 w3 -- w2 w3 w1) rotate 3rd item to top
 	top = tmp;
     NEXT();
 }
-void _lshift()              // (w n -- w) left shift n bits
+void _pick()                /// (... +n -- ...w) copy nth stack item to top
 {
-	top = S_GET(S--) << top;
+	top = S_GET(S - (U8)top);
     NEXT();
 }
-void _rshift()              // (w n -- w) right shift n bits
+void _qdup()                /// (w -- w w | 0) dup top of stack if it is not zero
 {
-    top = S_GET(S--) >> top;
+	if (top) S_SET(++S, top);
     NEXT();
 }
-/* deprecated
-void _ddrop()               // (w w --) drop top two items
+///@}
+///
+///@name Logic Ops
+///@{
+void _and()                 /// (w w -- w) bitwise AND
 {
-	POP();
-	POP();
+	top &= S_GET(S--);
     NEXT();
 }
-void _ddup()                // (w1 w2 -- w1 w2 w1 w2) duplicate top two items
+void _or()                  /// (w w -- w) bitwise OR
 {
-	PUSH(S_GET(S-1));
-	PUSH(S_GET(S-1));
+	top |= S_GET(S--);
     NEXT();
 }
-*/
-void _plus()                // (w w -- sum) add top two items
+void _xor()                 /// (w w -- w) bitwise XOR
 {
-	top += S_GET(S--);
-    NEXT();
+	top ^= S_GET(S--);
+	NEXT();
 }
-void _invert()             // (w -- w) one's complement
-{
-	top = -top - 1;
-    NEXT();
-}
-void _negate()             // (n -- -n) two's complement
-{
-	top = 0 - top;
-    NEXT();
-}
-void _great()               // (n1 n2 -- t) true if n1>n2
+void _great()               /// (n1 n2 -- t) true if n1>n2
 {
 	top = BOOL(S_GET(S--) > top);
     NEXT();
 }
-void _sub()                 // (n1 n2 -- n1-n2) subtraction
-{
-	top = S_GET(S--) - top;
-    NEXT();
-}
-void _abs()                 // (n -- n) absolute value of n
-{
-    U16 m = top>>15;
-    top = (top + m) ^ m;    // no branching
-    NEXT();
-}
-void _less()                // (n1 n2 -- t) true if n1<n2
+void _less()                /// (n1 n2 -- t) true if n1<n2
 {
 	top = BOOL(S_GET(S--) < top);
     NEXT();
 }
-void _equal()               // (w w -- t) true if top two items are equal
+void _equal()               /// (w w -- t) true if top two items are equal
 {
 	top = BOOL(S_GET(S--)==top);
     NEXT();
 }
-void _uless()               // (u1 u2 -- t) unsigned compare top two items
+void _invert()             /// (w -- ~w) one's complement
+{
+	top = -top - 1;
+    NEXT();
+}
+void _zless()               /// (n -- f) check whether top of stack is negative
+{
+	top = BOOL(top < 0);
+    NEXT();
+}
+void _uless()               /// (u1 u2 -- t) unsigned compare top two items
 {
 	top = BOOL((U16)(S_GET(S--)) < (U16)top);
     NEXT();
 }
-void _ummod()               // (udl udh u -- ur uq) unsigned divide of a double by single
+void _lshift()              /// (w n -- w) left shift n bits
 {
-	U32 d = (U32)top;       // CC: auto variable uses C stack 
- 	U32 m = ((U32)S_GET(S)<<16) + (U16)S_GET(S-1);
-	POP();
- 	S_SET(S, (S16)(m % d)); // remainder
- 	top   = (S16)(m / d);   // quotient
+	top = S_GET(S--) << top;
     NEXT();
 }
-void _pinmode()             // (pin mode --) arduino pinMode(pin, mode)
+void _rshift()              /// (w n -- w) right shift n bits
 {
-    pinMode(S_GET(S), top ? INPUT : OUTPUT);
-    POP();
-    POP();
+    top = S_GET(S--) >> top;
     NEXT();
 }
-void _map()                 // (f1 f2 t1 t2 n -- nx) arduino map(n, f1, f2, t1, t2)
+///@}
+///
+///@name Arithmetic Ops
+///@{
+void _abs()                 /// (n -- n) absolute value of n
 {
-    U16 tmp = map(top, S_GET(S-3), S_GET(S-2), S_GET(S-1), S_GET(S));
-    S -= 4;
-    top = tmp;
+    U16 m = top>>15;
+    top = (top + m) ^ m;    ///> no branching
+    NEXT();
+}
+void _mod()                 /// (n n -- r) signed divide, returns mod
+{
+	top = (top) ? S_GET(S--) % top : S_GET(S--);
+    NEXT();
+}
+void _negate()             /// (n -- -n) two's complement
+{
+	top = 0 - top;
+    NEXT();
+}
+void _onep()                /// (n -- n+1) add one to top
+{
+    top++;
+    NEXT();
+}
+void _onem()               /// (n -- n-1) minus one to top
+{
+    top--;
+    NEXT();
+}
+void _plus()                /// (w w -- sum) add top two items
+{
+	top += S_GET(S--);
+    NEXT();
+}
+void _sub()                 /// (n1 n2 -- n1-n2) subtraction
+{
+	top = S_GET(S--) - top;
+    NEXT();
+}
+void _star()                /// (n n -- n) signed multiply, return single product
+{
+	top *= S_GET(S--);
+    NEXT();
+}
+void _slash()               /// (n n - q) signed divide, return quotient
+{
+	top = (top) ? S_GET(S--) / top : (S_GET(S--), 0);
     NEXT();
 }
 /* deprecated
-void _msmod()               // (d n -- r q) signed floored divide of double by single
+void _msmod()               /// (d n -- r q) signed floored divide of double by single
 {
 	S32 d = (S32)top;
  	S32 m = ((S32)S_GET(S)<<16) + S_GET(S-1);
@@ -425,7 +464,7 @@ void _msmod()               // (d n -- r q) signed floored divide of double by s
 	top   = (S16)(m / d);   // quotient
     NEXT();
 }
-void _slmod()               // (n1 n2 -- r q) signed devide, return mod and quotient
+void _slmod()               /// (n1 n2 -- r q) signed devide, return mod and quotient
 {
 	if (top) {
 		S16 tmp = S_GET(S) / top;
@@ -435,48 +474,30 @@ void _slmod()               // (n1 n2 -- r q) signed devide, return mod and quot
     NEXT();
 }
 */
-void _mod()                 // (n n -- r) signed divide, returns mod
+void _uplus()               /// (w w -- w c) add two numbers, return the sum and carry flag
 {
-	top = (top) ? S_GET(S--) % top : S_GET(S--);
+	S_SET(S, S_GET(S)+top);
+	top = (U16)S_GET(S) < (U16)top;
     NEXT();
 }
-void _slash()               // (n n - q) signed divide, return quotient
+void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double by single
 {
-	top = (top) ? S_GET(S--) / top : (S_GET(S--), 0);
+	U32 d = (U32)top;       ///> CC: auto variable uses C stack 
+ 	U32 m = ((U32)S_GET(S)<<16) + (U16)S_GET(S-1);
+	POP();
+ 	S_SET(S, (S16)(m % d)); ///> remainder
+ 	top   = (S16)(m / d);   ///> quotient
     NEXT();
 }
-void _umstar()              // (u1 u2 -- ud) unsigned multiply return double product
+void _umstar()              /// (u1 u2 -- ud) unsigned multiply return double product
 {
  	U32 u = (U32)S_GET(S) * top;
  	S_SET(S, (U16)(u & 0xffff));
  	top = (U16)(u >> 16);
     NEXT();
 }
-void _star()                // (n n -- n) signed multiply, return single product
-{
-	top *= S_GET(S--);
-    NEXT();
-}
-void _mstar()               // (n1 n2 -- d) signed multiply, return double product
-{
- 	S32 d = (S32)S_GET(S) * top;
- 	DTOP(d);
-    NEXT();
-}
-void _din()                 // (pin -- n) read from arduino pin
-{
-    PUSH(digitalRead(POP()));
-    NEXT();
-}
-void _dout()                // (pin n -- ) output to arduino pin
-{
-    digitalWrite(top, S_GET(S));
-    POP();
-    POP();
-    NEXT();
-}
-/* deprecated
-void _ssmod()               // (n1 n2 n3 -- r q) n1*n2/n3, return mod and quotion
+/* deprecated (use high-level FORTH)
+void _ssmod()               /// (n1 n2 n3 -- r q) n1*n2/n3, return mod and quotion
 {
 	S32 m = (S32)S_GET(S-1) * S_GET(S);
 	S16 d = top;
@@ -485,7 +506,7 @@ void _ssmod()               // (n1 n2 n3 -- r q) n1*n2/n3, return mod and quotio
 	top   = (S16)(m / d);
     NEXT();
 }
-void _stasl()               // (n1 n2 n3 -- q) n1*n2/n3 return quotient
+void _stasl()               /// (n1 n2 n3 -- q) n1*n2/n3 return quotient
 {
 	S32 m = (S32)S_GET(S-1) * S_GET(S);
     S16 d = top;
@@ -494,73 +515,69 @@ void _stasl()               // (n1 n2 n3 -- q) n1*n2/n3 return quotient
 	top = (S16)(m / d);
     NEXT();
 }
-*/
-void _pick()                // (... +n -- ...w) copy nth stack item to top
-{
-	top = S_GET(S - (U8)top);
-    NEXT();
-}
-void _pstor()               // (n a -- ) add n to content at address a
-{
-	SET(top, GET(top)+S_GET(S--));
-    POP();
-    NEXT();
-}
-void _ain()                 // (pin -- n) read from arduino analog pin
-{
-    PUSH(analogRead(POP()));
-    NEXT();
-}
-void _aout()                // (pin n -- ) write PWM to arduino analog pin
-{
-    analogWrite(top, S_GET(S));
-    POP();
-    POP();
-    NEXT();
-}
-
-/* deprecated
-void _dstor()               // (d a -- ) store the double to address a
-{
-	SET(top+CELLSZ, S_GET(S--));
-	SET(top,        S_GET(S--));
-	POP();
-    NEXT();
-}
-void _dat()                 // (a -- d) fetch double from address a
-{
-	PUSH(GET(top));
-	top = GET(top + CELLSZ);
-    NEXT();
-}
-void _count()               // (b -- b+1 +n) count byte of a string and add 1 to byte address
+void _count()               /// (b -- b+1 +n) count byte of a string and add 1 to byte address
 {
 	S_SET(++S, top + 1);
 	top = (S16)BGET(top);
     NEXT();
 }
-void _max_()                // (n1 n2 -- n) return greater of two top stack items
+void _max_()                /// (n1 n2 -- n) return greater of two top stack items
 {
 	if (top < S_GET(S)) POP();
 	else (U8)S--;
     NEXT();
 }
-void _min_()                // (n1 n2 -- n) return smaller of two top stack items
+void _min_()                /// (n1 n2 -- n) return smaller of two top stack items
 {
 	if (top < S_GET(S)) S--;
 	else POP();
     NEXT();
 }
 */
-
-void _dnegate()             // (d -- -d) two's complemente of top double
+///@}
+///
+///@name Double Precision Ops
+///@{
+/* deprecated (used high-level FORTH)
+void _ddrop()               /// (w w --) drop top two items
+{
+	POP();
+	POP();
+    NEXT();
+}
+void _ddup()                /// (w1 w2 -- w1 w2 w1 w2) duplicate top two items
+{
+	PUSH(S_GET(S-1));
+	PUSH(S_GET(S-1));
+    NEXT();
+}
+void _dstor()               /// (d a -- ) store the double to address a
+{
+	SET(top+CELLSZ, S_GET(S--));
+	SET(top,        S_GET(S--));
+	POP();
+    NEXT();
+}
+void _dat()                 /// (a -- d) fetch double from address a
+{
+	PUSH(GET(top));
+	top = GET(top + CELLSZ);
+    NEXT();
+}
+*/
+void _mstar()               /// (n1 n2 -- d) signed multiply, return double product
+{
+ 	S32 d = (S32)S_GET(S) * top;
+ 	DTOP(d);
+    NEXT();
+}
+void _dnegate()             /// (d -- -d) two's complemente of top double
 {
 	S32 d = ((S32)top<<16) | S_GET(S)&0xffff;
     DTOP(-d);
     NEXT();
 }
-
-void _dplus()
+void _dplus()               /// (d1 d2 -- d1+d2) add two double precision numbers
 {
     S32 d0 = ((S32)top<<16)        | (S_GET(S)&0xffff);
     S32 d1 = ((S32)S_GET(S-1)<<16) | (S_GET(S-2)&0xffff);
@@ -568,8 +585,7 @@ void _dplus()
     DTOP(d1 + d0);
     NEXT();
 }
-
-void _dsub()
+void _dsub()                /// (d1 d2 -- d1-d2) subtract d2 from d1
 {
     S32 d0 = ((S32)top<<16)        | (S_GET(S)&0xffff);
     S32 d1 = ((S32)S_GET(S-1)<<16) | (S_GET(S-2)&0xffff);
@@ -577,7 +593,68 @@ void _dsub()
     DTOP(d1 - d0);
     NEXT();
 }
-
+///@}
+///
+///@name Arduino Specific
+///@{
+void _delay()               /// (n -- ) delay n milli-second
+{
+    U32 t  = millis() + top;///> calculate break time
+    POP();
+    while (millis()<t) {    ///> loop until break time reached
+        ef_yield();         ///> or, run hardware tasks while waiting
+    }
+    NEXT();
+}
+void _clock()               /// ( -- d) current clock value, a double precision number
+{
+	U32 t = millis();
+	PUSH(t & 0xffff);       ///> stored double on stack top
+	PUSH(t >> 16);
+    NEXT();
+}
+void _pinmode()             /// (pin mode --) pinMode(pin, mode)
+{
+    pinMode(S_GET(S), top ? INPUT : OUTPUT);
+    POP();
+    POP();
+    NEXT();
+}
+void _map()                 /// (f1 f2 t1 t2 n -- nx) map(n, f1, f2, t1, t2)
+{
+    U16 tmp = map(top, S_GET(S-3), S_GET(S-2), S_GET(S-1), S_GET(S));
+    S -= 4;
+    top = tmp;
+    NEXT();
+}
+void _din()                 /// (pin -- n) read from Arduino digital pin
+{
+    PUSH(digitalRead(POP()));
+    NEXT();
+}
+void _dout()                /// (pin n -- ) write to Arduino digital pin
+{
+    digitalWrite(top, S_GET(S));
+    POP();
+    POP();
+    NEXT();
+}
+void _ain()                 /// (pin -- n) read from Arduino analog pin
+{
+    PUSH(analogRead(POP()));
+    NEXT();
+}
+void _aout()                /// (pin n -- ) write PWM to Arduino analog pin
+{
+    analogWrite(top, S_GET(S));
+    POP();
+    POP();
+    NEXT();
+}
+///@}
+///
+/// primitive function lookup table
+///
 void(*prim[FORTH_PRIMITIVES])() = {
 	/* case 0 */ _nop,
 	/* case 1 */ _init,
@@ -644,18 +721,19 @@ void(*prim[FORTH_PRIMITIVES])() = {
 	/* case 62 */ _dplus,
 	/* case 63 */ _dsub,
 };
-//
-// Forth internal (user) variables
-//
-//   'TIB    = FORTH_TIB_ADDR (pointer to input buffer)
-//   BASE    = 0x10           (numerical base 0xa for decimal, 0x10 for hex)
-//   CP      = here           (pointer to top of dictionary, first memory location to add new word)
-//   CONTEXT = last           (pointer to name field of the most recently defined word in dictionary)
-//   LAST    = last           (pointer to name field of last word in dictionary)
-//   'EVAL   = INTER          ($COMPILE for compiler or $INTERPRET for interpreter)
-//   ABORT   = QUIT           (pointer to error handler, QUIT is the main loop)
-//   tmp     = 0              (scratch pad)
-//
+///
+/// eForth virtual machine initialization
+///
+///> internal (user) variables
+///> *  'TIB    = FORTH_TIB_ADDR (pointer to input buffer)
+///> *  BASE    = 0x10           (numerical base 0xa for decimal, 0x10 for hex)
+///> *  CP      = here           (pointer to top of dictionary, first memory location to add new word)
+///> *  CONTEXT = last           (pointer to name field of the most recently defined word in dictionary)
+///> *  LAST    = last           (pointer to name field of last word in dictionary)
+///> *  'EVAL   = INTER          ($COMPILE for compiler or $INTERPRET for interpreter)
+///> *  ABORT   = QUIT           (pointer to error handler, QUIT is the main loop)
+///> *  tmp     = 0              (scratch pad)
+///
 void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     io    = (Stream *)io_stream;
     cRom  = rom;
@@ -664,7 +742,11 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     
     _init();                   // resetting user variables
 }
-    
+///
+/// eForth virtual machine (single-step) execution unit
+/// @return
+///   0 - exit
+///
 int vm_step() {
     TRACE_WORD();              // tracing stack and word name
     prim[BGET(PC)]();          // walk bytecode stream

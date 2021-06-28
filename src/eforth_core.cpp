@@ -1,14 +1,14 @@
-///
-/// \file eForthUNO.cpp
-/// \brief eForth core controller module
-///
+/**
+ * @file eforth_core.cpp
+ * @brief eForth core controller module
+ */
 #include "eforth_core.h"
 
-static U8 _ram[FORTH_RAM_SZ] = {};         // 4K forth memory block
-static Stream   *io;                       // console interface
-static task_ptr _task_list  = NULL;
+static U8 _ram[FORTH_RAM_SZ] = {};         ///< 4K forth memory block
+static Stream   *io;                       ///< console interface
+static task_ptr _task_list  = NULL;        ///< user task linked-list
 ///
-/// prompt
+/// version prompt
 ///
 void ef_prompt()
 {

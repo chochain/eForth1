@@ -1,3 +1,9 @@
+/**
+ * @file eforth_asm.h
+ * @brief eForth assember module header
+ *
+ * Usage of VA_ARGS veriable argument for assembler parameter counting
+ */
 #ifndef __EFORTH_SRC_EFORTH_ASM_H
 #define __EFORTH_SRC_EFORTH_ASM_H
 //
@@ -16,9 +22,9 @@ typedef const __FlashStringHelper FCHAR;
 #define F(s)                      (s)
 typedef const char                FCHAR;
 #endif // ARDUINO
-//
-// variable length parameter handler macros
-//
+///
+/// variable length parameter handler macros
+///
 #define _ARG_N(                                            \
           _1,  _2,  _3,  _4,  _5,  _6,  _7,  _8,  _9, _10, \
          _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, \

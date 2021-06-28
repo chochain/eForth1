@@ -184,7 +184,7 @@ int  vm_step();
 void ef_prompt();
 U8   ef_getchar();
 void ef_putchar(char c);
-void ef_wait(U32 ms);
+void ef_yield();
 
 int  ef_assemble(
     U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated

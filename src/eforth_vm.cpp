@@ -246,8 +246,11 @@ void _depth()
 }
 void _delay()
 {
-    U32 t = POP();
-    ef_wait(t);
+    U32 t  = millis() + top;
+    POP();
+    while (millis()<t) {
+        ef_yield();         // run hardware tasks while waiting
+    }
     NEXT();
 }
 void _clock()               // ( -- d) arduino millis() as double

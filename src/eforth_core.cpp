@@ -61,16 +61,6 @@ void ef_yield()
         tp = tp->next;
     }
 }
-///
-/// delay millisecond with yield
-///
-void ef_wait(U32 ms)
-{
-    U32 t = millis() + ms;
-    while (millis()<t) {
-        ef_yield();                        // run hardware tasks while waiting
-    }
-}
 /// 
 /// console input with yield
 ///

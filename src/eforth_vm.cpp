@@ -177,6 +177,7 @@ void _donext()              // ( -- ) terminate a FOR-NEXT loop
 		IP += CELLSZ;		// skip to next instruction
 		RPOP();				// pop off return stack
 	}
+    ef_yield();             // steal some cycles. Note: 17ms/cycle on Arduino UNO
     NEXT();
 }
 void _qbran()               // (f -- ) test top as a flag on data stack

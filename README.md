@@ -1,3 +1,3 @@
 # eForthUNO
-<a href="https://chochain.github.io/eForthUNO/">eForth on Arduino UNO</a>
+<a href="https://chochain.github.io/eForthUNO/html/index.html">eForth on Arduino UNO</a>
 

@@ -26,7 +26,7 @@ void setup()
     Serial.begin(115200);
     while (!Serial);          // wait for serial port to connect
 
-	ef_setup();
+    ef_setup();
     ef_add_task(hw_task);
     
     pinMode(LED_BUILTIN, OUTPUT);

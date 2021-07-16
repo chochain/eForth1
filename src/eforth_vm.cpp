@@ -5,12 +5,12 @@
  * ####eForth Memory map
  *
  * @code
- *     0x0000-0x0fff ROM (Flash memory)
- *     0x1000-0x14ff RAM (dynamic memory)
- *         0x1000-0x10bf Return/Data Stack
- *         0x10c0-0x1fff TIB (Terminal Input Buffer)
- *         0x1100-0x111f PAD (Output Buffer)
- *         0x1120-0x14ff User Dictionary
+ *     0x0000-0x1fff ROM (8K Flash memory)
+ *     0x2000-0x27ff RAM (2K dynamic memory)
+ *         0x2000-0x201f User Variables
+ *         0x2020-0x23ff User Dictionary
+ *         0x2400-0x24bf Return/Data Stack
+ *         0x24c0-0x253f TIB (Terminal Input Buffer)
  * @endcode
  *
  * ####Data and Return Stack
@@ -41,8 +41,8 @@ PGM_P cRom;                     ///< ROM, Forth word stored in Arduino Flash Mem
 U8    *cData;             		///< RAM, memory block for user define dictionary
 S16   *cStack;                  ///< pointer to stack/rack memory block
 ///@}
-#define RAM_FLAG       0xf000   /**< RAM/ROM ranger (0x1000~0xffff)   */
-#define OFF_MASK       0x0fff   /**< RAM/ROM range mask (0x000~0xfff) */
+#define RAM_FLAG       0xe000   /**< RAM ranger      (0x2000~0xffff) */
+#define OFF_MASK       0x07ff   /**< RAM offset mask (0x0000~0x07ff) */
 #define BOOL(f)        ((f) ? TRUE : FALSE)
 ///
 /// byte (8-bit) fetch from either RAM or ROM depends on filtered range
@@ -454,26 +454,6 @@ void _slash()               /// (n n - q) signed divide, return quotient
 	top = (top) ? S_GET(S--) / top : (S_GET(S--), 0);
     NEXT();
 }
-/* deprecated
-void _msmod()               /// (d n -- r q) signed floored divide of double by single
-{
-	S32 d = (S32)top;
- 	S32 m = ((S32)S_GET(S)<<16) + S_GET(S-1);
-	POP();
-	S_SET(S, (S16)(m % d)); // remainder
-	top   = (S16)(m / d);   // quotient
-    NEXT();
-}
-void _slmod()               /// (n1 n2 -- r q) signed devide, return mod and quotient
-{
-	if (top) {
-		S16 tmp = S_GET(S) / top;
-		S_SET(S, S_GET(S) % top);
-		top = tmp;
-	}
-    NEXT();
-}
-*/
 void _uplus()               /// (w w -- w c) add two numbers, return the sum and carry flag
 {
 	S_SET(S, S_GET(S)+top);
@@ -496,7 +476,29 @@ void _umstar()              /// (u1 u2 -- ud) unsigned multiply return double pr
  	top = (U16)(u >> 16);
     NEXT();
 }
+///@}
+///
+///@name HighLevel Ops
+///@{
 /* deprecated (use high-level FORTH)
+void _msmod()               /// (d n -- r q) signed floored divide of double by single
+{
+	S32 d = (S32)top;
+ 	S32 m = ((S32)S_GET(S)<<16) + S_GET(S-1);
+	POP();
+	S_SET(S, (S16)(m % d)); // remainder
+	top   = (S16)(m / d);   // quotient
+    NEXT();
+}
+void _slmod()               /// (n1 n2 -- r q) signed devide, return mod and quotient
+{
+	if (top) {
+		S16 tmp = S_GET(S) / top;
+		S_SET(S, S_GET(S) % top);
+		top = tmp;
+	}
+    NEXT();
+}
 void _ssmod()               /// (n1 n2 n3 -- r q) n1*n2/n3, return mod and quotion
 {
 	S32 m = (S32)S_GET(S-1) * S_GET(S);
@@ -533,24 +535,8 @@ void _min_()                /// (n1 n2 -- n) return smaller of two top stack ite
 	else POP();
     NEXT();
 }
-*/
-///@}
-///
-///@name Double Precision Ops
-///@{
-/* deprecated (used high-level FORTH)
 void _ddrop()               /// (w w --) drop top two items
-{
-	POP();
-	POP();
-    NEXT();
-}
 void _ddup()                /// (w1 w2 -- w1 w2 w1 w2) duplicate top two items
-{
-	PUSH(S_GET(S-1));
-	PUSH(S_GET(S-1));
-    NEXT();
-}
 void _dstor()               /// (d a -- ) store the double to address a
 {
 	SET(top+CELLSZ, S_GET(S--));
@@ -565,6 +551,10 @@ void _dat()                 /// (a -- d) fetch double from address a
     NEXT();
 }
 */
+///@}
+///
+///@name Double Precision Ops
+///@{
 void _mstar()               /// (n1 n2 -- d) signed multiply, return double product
 {
  	S32 d = (S32)S_GET(S) * top;

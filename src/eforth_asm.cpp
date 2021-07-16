@@ -367,8 +367,8 @@ int ef_assemble(U8 *cdata)
     ///
 	XA QDUP  = _CODE("?DUP",    opQDUP   );         // 33
 	XA ROT   = _CODE("ROT",     opROT    );         // 34
-    XA LSHFT = _CODE("<<",      opLSHIFT );         // 35, Dr. Ting's opDDROP
-    XA RSHFT = _CODE(">>",      opRSHIFT );         // 36, Dr. Ting's opDDUP
+    XA LSHFT = _CODE("<<",      opLSHIFT );         // 35, Dr. Ting's DDROP "2DROP"
+    XA RSHFT = _CODE(">>",      opRSHIFT );         // 36, Dr. Ting's DDUP "2DUP"
 	XA PLUS  = _CODE("+",       opPLUS   );         // 37
 	XA INVER = _CODE("INVERT",  opINVERT );         // 38
 	XA NEGAT = _CODE("NEGATE",  opNEGAT  );         // 39
@@ -379,18 +379,18 @@ int ef_assemble(U8 *cdata)
 	XA ULESS = _CODE("U<",      opULESS  );         // 44
 	XA LESS  = _CODE("<",       opLESS   );         // 45
 	XA UMMOD = _CODE("UM/MOD",  opUMMOD  );         // 46
-	// PINMODE (see Arduino section)                // 47, Dr. Ting's opMSMOD
-	// MAP     (see Arduino section)                // 48, Dr. Ting's opSLMOD
+	// PINMODE (see Arduino section)                // 47, Dr. Ting's opMSMOD "M/MOD"
+	// MAP     (see Arduino section)                // 48, Dr. Ting's opSLMOD "/MOD"
 	XA MOD   = _CODE("MOD",     opMOD    );         // 49
 	XA SLASH = _CODE("/",       opSLASH  );         // 50
     XA UMSTA = _CODE("UM*",     opUMSTAR );         // 51
 	XA STAR  = _CODE("*",       opSTAR   );         // 52
 	XA MSTAR = _CODE("M*",      opMSTAR  );         // 53
-	// IN      (see Arduino section)                // 54, Dr. Ting's opSSMOD
-	// OUT     (see Arduino section)                // 55, Dr. Ting's opSTASL
+	// IN      (see Arduino section)                // 54, Dr. Ting's opSSMOD "*/MOD"
+	// OUT     (see Arduino section)                // 55, Dr. Ting's opSTASL "*/"
 	XA PICK  = _CODE("PICK",    opPICK   );         // 56
 	XA PSTOR = _CODE("+!",      opPSTOR  );         // 57
-	// AIN     (see Arduino section)                // 58, Dr. Ting's opDSTOR
+	// AIN     (see Arduino section)                // 58, Dr. Ting's opDSTOR 
 	// PWM     (see Arduino section)                // 59, Dr. Ting's opDAT
 	XA DNEGA = _CODE("DNEGATE", opDNEGA  );         // 60, Dr. Ting's opCOUNT
 	XA DOVAR = _CODE("DOVAR",   opDOVAR  );         // 61
@@ -404,8 +404,15 @@ int ef_assemble(U8 *cdata)
 	XA CELLP = _COLON("CELL+", CELL,  PLUS,  EXIT);
 	XA CELLM = _COLON("CELL-", CELL,  SUB,   EXIT);
 	XA CELLS = _COLON("CELLS", CELL,  STAR,  EXIT);
+    // Dr. Ting's alternate opcodes
     XA DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     XA DDROP = _COLON("2DROP", DROP, DROP, EXIT);
+    //XA MSMOD = _COLON("M/MOD", /* not implemented */ EXIT);			// 4K maxed out
+    XA SLMOD = _COLON("/MOD", DDUP, SLASH, TOR, MOD, RFROM, EXIT);
+    XA SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
+    XA STASL = _COLON("*/", SSMOD, SWAP, DROP, EXIT);
+    XA DSTOR = _COLON("2!", DUP, TOR, CELL, PLUS, STORE, RFROM, STORE, EXIT);
+    XA DAT   = _COLON("2@", DUP, TOR, AT, RFROM, CELL, PLUS, AT, EXIT);
 	XA WITHI = _COLON("WITHIN", OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
 	XA COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
 	XA MAX   = _COLON("MAX",  DDUP, LESS); {

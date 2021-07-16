@@ -24,10 +24,10 @@ void sys_info(U8 *cdata) {
     LOG_V("-bit, CELLSZ=",  CELLSZ);
     LOG("\r\nMEMMAP:");
     LOG_H("\r\n  ROM   x0000+", FORTH_ROM_SZ);
+    LOG_H("\r\n  UVAR  x", FORTH_TVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
+    LOG_H("\r\n  DIC   x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ-FORTH_UVAR_SZ);
     LOG_H("\r\n  STACK x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
     LOG_H("\r\n  TIB   x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
-    LOG_H("\r\n  USER  x", FORTH_TVAR_ADDR);  LOG_H("+", FORTH_DIC_ADDR-FORTH_TVAR_ADDR);
-    LOG_H("\r\n  DIC   x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_RAM_ADDR+FORTH_RAM_SZ-FORTH_DIC_ADDR);
 
 #if ARDUINO
     U16 h = (U16)&cdata[FORTH_RAM_SZ];
@@ -84,7 +84,7 @@ extern U32 forth_rom[];                    // from eforth_rom.c
 ///
 /// setup (called by Arduino setup)
 ///
-void ef_setup(Stream &io_stream)
+void ef_setup(Stream &io_stream=Serial)
 {
     io = &io_stream;
 

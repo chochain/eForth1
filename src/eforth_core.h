@@ -35,14 +35,21 @@ typedef U16       XA;				  ///< address sizing (16-bit)
 ///@}
 ///
 ///@name Capacity and Sizing
+///@attention reassemble ROM needed if FORTH_TIB_SZ or FORTH_PAD_SZ changed
 ///@{
-#define CELLSZ		     2            /**< 16-bit cell size */
-#define FORTH_PRIMITIVES 64           /**< number of primitive words */
-#define FORTH_ROM_SZ     0x1000       /**< size of ROM (for pre-defined words) */
-#define FORTH_RAM_SZ     0x500        /**< size of RAM (for user defined words) */
-#define FORTH_STACK_SZ   0x60*CELLSZ  /**< size of data/return stack */
-#define FORTH_TIB_SZ     0x40         /**< size of terminal input buffer */
-#define FORTH_PAD_SZ     0x20         /**< size of output pad */
+#define CELLSZ		     2                     /**< 16-bit cell size                    */
+#define FORTH_PRIMITIVES 64                    /**< number of primitive words           */
+#define FORTH_ROM_SZ     0x2000                /**< size of ROM (for pre-defined words) */
+#define FORTH_DIC_SZ     0x400 				   /**< size of dictionary space            */
+#define FORTH_UVAR_SZ    0x20                  /**< size of Forth user variables        */
+#define FORTH_STACK_SZ   0x60*CELLSZ           /**< size of data/return stack           */
+#define FORTH_TIB_SZ     0x80                  /**< size of terminal input buffer       */
+#define FORTH_PAD_SZ     0x20                  /**< size of output pad (in DIC space )  */
+/// size of total RAM needed
+#define FORTH_RAM_SZ     (  \
+           FORTH_DIC_SZ  +  \
+           FORTH_STACK_SZ+  \
+           FORTH_TIB_SZ) 
 ///@}
 ///
 ///> note:
@@ -54,13 +61,13 @@ typedef U16       XA;				  ///< address sizing (16-bit)
 ///@name Memory Map Addressing
 ///@{
 #define FORTH_BOOT_ADDR  0x0000
-#define FORTH_RAM_ADDR   0x1000
-#define FORTH_STACK_ADDR (FORTH_RAM_ADDR+0x0)
-#define FORTH_STACK_TOP  (FORTH_STACK_ADDR+FORTH_STACK_SZ)
-#define FORTH_TIB_ADDR   (FORTH_STACK_TOP)
-#define FORTH_TVAR_ADDR  (FORTH_TIB_ADDR+FORTH_TIB_SZ)
+#define FORTH_RAM_ADDR   FORTH_ROM_SZ
+#define FORTH_TVAR_ADDR  (FORTH_RAM_ADDR+0x0)
 #define FORTH_UVAR_ADDR  (FORTH_TVAR_ADDR+0x10)
 #define FORTH_DIC_ADDR   (FORTH_UVAR_ADDR+0x10)
+#define FORTH_STACK_ADDR (FORTH_RAM_ADDR+FORTH_DIC_SZ)
+#define FORTH_STACK_TOP  (FORTH_STACK_ADDR+FORTH_STACK_SZ)
+#define FORTH_TIB_ADDR   (FORTH_STACK_TOP)
 ///@}
 ///
 ///@name Logical

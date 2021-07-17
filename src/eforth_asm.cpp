@@ -8,7 +8,7 @@
 #include "eforth_core.h"
 #include "eforth_asm.h"
 
-#define fIMMED  0x80           		/**< immediate flag    */
+#define fIMMED  0x80                /**< immediate flag    */
 #define fCOMPO  0x40                /**< compile only flag */
 ///
 ///@name Compiled Address for Branching
@@ -16,7 +16,7 @@
 XA BRAN, QBRAN, DONXT;
 XA DOTQ, STRQ, ABORTQ;
 XA TOR;
-XA NOP = 0xffff;				    ///< NOP set to ffff to prevent access before initialized
+XA NOP = 0xffff;                    ///< NOP set to ffff to prevent access before initialized
 ///@}
 ///
 ///@name Return Stack for Branching Ops
@@ -55,11 +55,11 @@ void _dump(int b, int u) {      /// dump memory between previous word and this
 }
 void _rdump()                   /// dump return stack
 {
-	DEBUG("%cR[", ' ');
-	for (int i=1; i<=aR; i++) {
+    DEBUG("%cR[", ' ');
+    for (int i=1; i<=aR; i++) {
         DEBUG(" %04x", R_GET(i));
-	}
-	DEBUG("%c]", ' ');
+    }
+    DEBUG("%c]", ' ');
 }
 ///@}
 ///
@@ -74,24 +74,24 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
 }
 #define CELLCPY(n) {                            \
     va_list argList;                            \
-	va_start(argList, n);						\
-	for (; n; n--) {							\
-		XA j = (XA)va_arg(argList, int);        \
-		if (j==NOP) continue;                   \
-		STORE(j);								\
-		DEBUG(" %04x", j);						\
-	}											\
-	va_end(argList);							\
-	_rdump();                                   \
+    va_start(argList, n);                       \
+    for (; n; n--) {                            \
+        XA j = (XA)va_arg(argList, int);        \
+        if (j==NOP) continue;                   \
+        STORE(j);                               \
+        DEBUG(" %04x", j);                      \
+    }                                           \
+    va_end(argList);                            \
+    _rdump();                                   \
 }
 #define STRCPY(op, seq) {                       \
-	STORE(op);                                  \
-	int len = _strlen(seq);                     \
+    STORE(op);                                  \
+    int len = _strlen(seq);                     \
     PGM_P p = reinterpret_cast<PGM_P>(seq);     \
-	BSET(aPC++, len);                           \
-	for (int i=0; i < len; i++) {               \
+    BSET(aPC++, len);                           \
+    for (int i=0; i < len; i++) {               \
     BSET(aPC++, pgm_read_byte(p++));            \
-	}											\
+    }                                           \
 }
 ///@}
 ///
@@ -226,7 +226,7 @@ void _nxt(int len, ...) {          /// FOR-(first)-AFT-(2nd,...)-THEN-(every)--*
 }
 void _if(int len, ...) {           /// **IF**-THEN, **IF**-ELSE-THEN
     SHOWOP("IF");
-	STORE(QBRAN);                  /// * conditional branch
+    STORE(QBRAN);                  /// * conditional branch
     RPUSH(aPC);                    /// * keep A0 address on return stack for ELSE or THEN
     STORE(0);                      /// * reserve branching address (A0)
     CELLCPY(len);
@@ -297,207 +297,207 @@ void _abortq(FCHAR *seq) {
 ///
 int ef_assemble(U8 *cdata)
 {
-	aByte = cdata;
-	aR    = aThread = 0;
-	///
-	///> Kernel constants
-	///
-	aPC = FORTH_BOOT_ADDR;
+    aByte = cdata;
+    aR    = aThread = 0;
+    ///
+    ///> Kernel constants
+    ///
+    aPC = FORTH_BOOT_ADDR;
     XA BOOT  = _LABEL(opENTER, 0);      // reserved for boot vectors
 
     XA ta    = FORTH_TVAR_ADDR;
-	XA vHLD  = _CODE("HLD",     opDOCON, VL(ta,0), VH(ta,0));   ///> * HLD  char pointer to output buffer
-	XA vSPAN = _CODE("SPAN",    opDOCON, VL(ta,1), VH(ta,1));   ///> * SPAN number of character accepted
-	XA vIN   = _CODE(">IN",     opDOCON, VL(ta,2), VH(ta,2));   ///> * >IN  interpreter pointer to next char
-	XA vNTIB = _CODE("#TIB",    opDOCON, VL(ta,3), VH(ta,3));   ///> * #TIB number of character received in TIB
+    XA vHLD  = _CODE("HLD",     opDOCON, VL(ta,0), VH(ta,0));   ///> * HLD  char pointer to output buffer
+    XA vSPAN = _CODE("SPAN",    opDOCON, VL(ta,1), VH(ta,1));   ///> * SPAN number of character accepted
+    XA vIN   = _CODE(">IN",     opDOCON, VL(ta,2), VH(ta,2));   ///> * >IN  interpreter pointer to next char
+    XA vNTIB = _CODE("#TIB",    opDOCON, VL(ta,3), VH(ta,3));   ///> * #TIB number of character received in TIB
     
-	XA ua    = FORTH_UVAR_ADDR;
-	XA vTTIB = _CODE("'TIB",    opDOCON, VL(ua,0), VH(ua,0));   ///> * 'TIB console input buffer pointer
-	XA vBASE = _CODE("BASE",    opDOCON, VL(ua,1), VH(ua,1));   ///> * BASE current radix for numeric ops
-	XA vCP   = _CODE("CP",      opDOCON, VL(ua,2), VH(ua,2));   ///> * CP,  top of dictionary, same as HERE
-	XA vCNTX = _CODE("CONTEXT", opDOCON, VL(ua,3), VH(ua,3));   ///> * CONTEXT name field of last word
-	XA vLAST = _CODE("LAST",    opDOCON, VL(ua,4), VH(ua,4));   ///> * LAST, same as CONTEXT
-	XA vTEVL = _CODE("'EVAL",   opDOCON, VL(ua,5), VH(ua,5));   ///> * 'EVAL eval mode (interpreter or compiler)
-	XA vTABRT= _CODE("'ABORT",  opDOCON, VL(ua,6), VH(ua,6));   ///> * ABORT exception rescue handler (QUIT)
-	XA vTEMP = _CODE("tmp",     opDOCON, VL(ua,7), VH(ua,7));   ///> * tmp storage (alternative to return stack)
-	///
-	///> common constants and variable spec
-	///
-	XA BLANK = _CODE("BL",      opDOCON, 0x20,      0);         ///> * BL blank
-	XA CELL  = _CODE("CELL",    opDOCON, CELLSZ,    0);         ///> * CELL cell size
-	///
-	///> Kernel dictionary (primitive words)
-	///
-       NOP   = _CODE("NOP",     opNOP    );			// 0
-	XA BYE   = _CODE("BYE",     opBYE    );			// 1
-	XA QRX   = _CODE("?RX",     opQRX    );			// 2
-	XA TXSTO = _CODE("TX!",     opTXSTO  );			// 3
-	XA DOCON = _CODE("doCON",   opDOCON  );			// 4
-	XA DOLIT = _CODE("doLIT",   opDOLIT  );			// 5
-    XA DOLST = _CODE("doLIST",  opENTER  );			// 6
-	XA ENTER = _CODE("ENTER",   opENTER  );    		// 6, alias doLIST
-	XA EXIT  = _CODE("EXIT",    opEXIT   );			// 7
-	XA EXECU = _CODE("EXECUTE", opEXECU  );			// 8
-	   DONXT = _CODE("doNEXT",  opDONEXT );			// 9
-	   QBRAN = _CODE("?branch", opQBRAN  );			// 10
-	   BRAN  = _CODE("branch",  opBRAN   );			// 11
-	XA STORE = _CODE("!",       opSTORE  );			// 12
-	XA AT    = _CODE("@",       opAT     );			// 13
-	XA CSTOR = _CODE("C!",      opCSTOR  );			// 14
-	XA CAT   = _CODE("C@",      opCAT    );			// 15
-    XA ONEP  = _CODE("1+",      opONEP   );    		// 16, Dr. Ting's RP@
-    XA ONEM  = _CODE("1-",      opONEM   );    		// 17, Dr. Ting's RP!
-	XA RFROM = _CODE("R>",      opRFROM  );			// 18
-	XA RAT   = _CODE("R@",      opRAT    );			// 19
-	   TOR   = _CODE(">R",      opTOR    );			// 20
+    XA ua    = FORTH_UVAR_ADDR;
+    XA vTTIB = _CODE("'TIB",    opDOCON, VL(ua,0), VH(ua,0));   ///> * 'TIB console input buffer pointer
+    XA vBASE = _CODE("BASE",    opDOCON, VL(ua,1), VH(ua,1));   ///> * BASE current radix for numeric ops
+    XA vCP   = _CODE("CP",      opDOCON, VL(ua,2), VH(ua,2));   ///> * CP,  top of dictionary, same as HERE
+    XA vCNTX = _CODE("CONTEXT", opDOCON, VL(ua,3), VH(ua,3));   ///> * CONTEXT name field of last word
+    XA vLAST = _CODE("LAST",    opDOCON, VL(ua,4), VH(ua,4));   ///> * LAST, same as CONTEXT
+    XA vTEVL = _CODE("'EVAL",   opDOCON, VL(ua,5), VH(ua,5));   ///> * 'EVAL eval mode (interpreter or compiler)
+    XA vTABRT= _CODE("'ABORT",  opDOCON, VL(ua,6), VH(ua,6));   ///> * ABORT exception rescue handler (QUIT)
+    XA vTEMP = _CODE("tmp",     opDOCON, VL(ua,7), VH(ua,7));   ///> * tmp storage (alternative to return stack)
+    ///
+    ///> common constants and variable spec
+    ///
+    XA BLANK = _CODE("BL",      opDOCON, 0x20,      0);         ///> * BL blank
+    XA CELL  = _CODE("CELL",    opDOCON, CELLSZ,    0);         ///> * CELL cell size
+    ///
+    ///> Kernel dictionary (primitive words)
+    ///
+       NOP   = _CODE("NOP",     opNOP    );         // 0
+    XA BYE   = _CODE("BYE",     opBYE    );         // 1
+    XA QRX   = _CODE("?RX",     opQRX    );         // 2
+    XA TXSTO = _CODE("TX!",     opTXSTO  );         // 3
+    XA DOCON = _CODE("doCON",   opDOCON  );         // 4
+    XA DOLIT = _CODE("doLIT",   opDOLIT  );         // 5
+    XA DOLST = _CODE("doLIST",  opENTER  );         // 6
+    XA ENTER = _CODE("ENTER",   opENTER  );         // 6, alias doLIST
+    XA EXIT  = _CODE("EXIT",    opEXIT   );         // 7
+    XA EXECU = _CODE("EXECUTE", opEXECU  );         // 8
+       DONXT = _CODE("doNEXT",  opDONEXT );         // 9
+       QBRAN = _CODE("?branch", opQBRAN  );         // 10
+       BRAN  = _CODE("branch",  opBRAN   );         // 11
+    XA STORE = _CODE("!",       opSTORE  );         // 12
+    XA AT    = _CODE("@",       opAT     );         // 13
+    XA CSTOR = _CODE("C!",      opCSTOR  );         // 14
+    XA CAT   = _CODE("C@",      opCAT    );         // 15
+    XA ONEP  = _CODE("1+",      opONEP   );         // 16, Dr. Ting's RP@
+    XA ONEM  = _CODE("1-",      opONEM   );         // 17, Dr. Ting's RP!
+    XA RFROM = _CODE("R>",      opRFROM  );         // 18
+    XA RAT   = _CODE("R@",      opRAT    );         // 19
+       TOR   = _CODE(">R",      opTOR    );         // 20
     // DELAY   (see Arduino section)                // 21, Dr. Ting's SP@
-	// CLOCK   (see Arduino section)                // 22, Dr. Ting's SP!
-	XA DROP  = _CODE("DROP",    opDROP   );			// 23
-	XA DUP   = _CODE("DUP",     opDUP    );			// 24
-	XA SWAP  = _CODE("SWAP",    opSWAP   );         // 25
-	XA OVER  = _CODE("OVER",    opOVER   );         // 26
-	XA ZLESS = _CODE("0<",      opZLESS  );         // 27
-	XA AND   = _CODE("AND",     opAND    );         // 28
-	XA OR    = _CODE("OR",      opOR     );         // 29
-	XA XOR   = _CODE("XOR",     opXOR    );         // 30
-	XA UPLUS = _CODE("UM+",     opUPLUS  );         // 31
-    XA DEPTH = _CODE("DEPTH",   opDEPTH  );    		// 32, Dr. Ting's opNEXT (not needed)
+    // CLOCK   (see Arduino section)                // 22, Dr. Ting's SP!
+    XA DROP  = _CODE("DROP",    opDROP   );         // 23
+    XA DUP   = _CODE("DUP",     opDUP    );         // 24
+    XA SWAP  = _CODE("SWAP",    opSWAP   );         // 25
+    XA OVER  = _CODE("OVER",    opOVER   );         // 26
+    XA ZLESS = _CODE("0<",      opZLESS  );         // 27
+    XA AND   = _CODE("AND",     opAND    );         // 28
+    XA OR    = _CODE("OR",      opOR     );         // 29
+    XA XOR   = _CODE("XOR",     opXOR    );         // 30
+    XA UPLUS = _CODE("UM+",     opUPLUS  );         // 31
+    XA DEPTH = _CODE("DEPTH",   opDEPTH  );         // 32, Dr. Ting's opNEXT (not needed)
     ///
     ///> opcodes (primitives) that can be coded in high level
     ///
-	XA QDUP  = _CODE("?DUP",    opQDUP   );         // 33
-	XA ROT   = _CODE("ROT",     opROT    );         // 34
+    XA QDUP  = _CODE("?DUP",    opQDUP   );         // 33
+    XA ROT   = _CODE("ROT",     opROT    );         // 34
     XA LSHFT = _CODE("<<",      opLSHIFT );         // 35, Dr. Ting's DDROP "2DROP"
     XA RSHFT = _CODE(">>",      opRSHIFT );         // 36, Dr. Ting's DDUP "2DUP"
-	XA PLUS  = _CODE("+",       opPLUS   );         // 37
-	XA INVER = _CODE("INVERT",  opINVERT );         // 38
-	XA NEGAT = _CODE("NEGATE",  opNEGAT  );         // 39
+    XA PLUS  = _CODE("+",       opPLUS   );         // 37
+    XA INVER = _CODE("INVERT",  opINVERT );         // 38
+    XA NEGAT = _CODE("NEGATE",  opNEGAT  );         // 39
     XA GREAT = _CODE(">",       opGREAT  );         // 40, Dr. Ting's opDNEGA (moved to 60)
-	XA SUB   = _CODE("-",       opSUB    );         // 41
-	XA ABS   = _CODE("ABS",     opABS    );         // 42
-	XA EQUAL = _CODE("=",       opEQUAL  );         // 43
-	XA ULESS = _CODE("U<",      opULESS  );         // 44
-	XA LESS  = _CODE("<",       opLESS   );         // 45
-	XA UMMOD = _CODE("UM/MOD",  opUMMOD  );         // 46
-	// PINMODE (see Arduino section)                // 47, Dr. Ting's opMSMOD "M/MOD"
-	// MAP     (see Arduino section)                // 48, Dr. Ting's opSLMOD "/MOD"
-	XA MOD   = _CODE("MOD",     opMOD    );         // 49
-	XA SLASH = _CODE("/",       opSLASH  );         // 50
+    XA SUB   = _CODE("-",       opSUB    );         // 41
+    XA ABS   = _CODE("ABS",     opABS    );         // 42
+    XA EQUAL = _CODE("=",       opEQUAL  );         // 43
+    XA ULESS = _CODE("U<",      opULESS  );         // 44
+    XA LESS  = _CODE("<",       opLESS   );         // 45
+    XA UMMOD = _CODE("UM/MOD",  opUMMOD  );         // 46
+    // PINMODE (see Arduino section)                // 47, Dr. Ting's opMSMOD "M/MOD"
+    // MAP     (see Arduino section)                // 48, Dr. Ting's opSLMOD "/MOD"
+    XA MOD   = _CODE("MOD",     opMOD    );         // 49
+    XA SLASH = _CODE("/",       opSLASH  );         // 50
     XA UMSTA = _CODE("UM*",     opUMSTAR );         // 51
-	XA STAR  = _CODE("*",       opSTAR   );         // 52
-	XA MSTAR = _CODE("M*",      opMSTAR  );         // 53
-	// IN      (see Arduino section)                // 54, Dr. Ting's opSSMOD "*/MOD"
-	// OUT     (see Arduino section)                // 55, Dr. Ting's opSTASL "*/"
-	XA PICK  = _CODE("PICK",    opPICK   );         // 56
-	XA PSTOR = _CODE("+!",      opPSTOR  );         // 57
-	// AIN     (see Arduino section)                // 58, Dr. Ting's opDSTOR 
-	// PWM     (see Arduino section)                // 59, Dr. Ting's opDAT
-	XA DNEGA = _CODE("DNEGATE", opDNEGA  );         // 60, Dr. Ting's opCOUNT
-	XA DOVAR = _CODE("DOVAR",   opDOVAR  );         // 61
-	XA DPLUS = _CODE("D+",      opDPLUS  );         // 62, Dr. Ting's opMAX
-	XA DSUB  = _CODE("D-",      opDSUB   );         // 63, Dr. Ting's opMIN
-	///
-	///> Common Colon Words (in word streams)
-	///
-	XA HERE  = _COLON("HERE",  vCP, AT, EXIT);                          // top of dictionary
-	XA PAD   = _COLON("PAD",   HERE, DOLIT, FORTH_PAD_SZ, PLUS, EXIT);  // use HERE for output buffer
-	XA CELLP = _COLON("CELL+", CELL,  PLUS,  EXIT);
-	XA CELLM = _COLON("CELL-", CELL,  SUB,   EXIT);
-	XA CELLS = _COLON("CELLS", CELL,  STAR,  EXIT);
+    XA STAR  = _CODE("*",       opSTAR   );         // 52
+    XA MSTAR = _CODE("M*",      opMSTAR  );         // 53
+    // IN      (see Arduino section)                // 54, Dr. Ting's opSSMOD "*/MOD"
+    // OUT     (see Arduino section)                // 55, Dr. Ting's opSTASL "*/"
+    XA PICK  = _CODE("PICK",    opPICK   );         // 56
+    XA PSTOR = _CODE("+!",      opPSTOR  );         // 57
+    // AIN     (see Arduino section)                // 58, Dr. Ting's opDSTOR 
+    // PWM     (see Arduino section)                // 59, Dr. Ting's opDAT
+    XA DNEGA = _CODE("DNEGATE", opDNEGA  );         // 60, Dr. Ting's opCOUNT
+    XA DOVAR = _CODE("DOVAR",   opDOVAR  );         // 61
+    XA DPLUS = _CODE("D+",      opDPLUS  );         // 62, Dr. Ting's opMAX
+    XA DSUB  = _CODE("D-",      opDSUB   );         // 63, Dr. Ting's opMIN
+    ///
+    ///> Common Colon Words (in word streams)
+    ///
+    XA HERE  = _COLON("HERE",  vCP, AT, EXIT);                          // top of dictionary
+    XA PAD   = _COLON("PAD",   HERE, DOLIT, FORTH_PAD_SZ, PLUS, EXIT);  // use HERE for output buffer
+    XA CELLP = _COLON("CELL+", CELL,  PLUS,  EXIT);
+    XA CELLM = _COLON("CELL-", CELL,  SUB,   EXIT);
+    XA CELLS = _COLON("CELLS", CELL,  STAR,  EXIT);
     // Dr. Ting's alternate opcodes
     XA DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     XA DDROP = _COLON("2DROP", DROP, DROP, EXIT);
-    //XA MSMOD = _COLON("M/MOD", /* not implemented */ EXIT);			// 4K maxed out
-    XA SLMOD = _COLON("/MOD", DDUP, SLASH, TOR, MOD, RFROM, EXIT);
+    //XA MSMOD = _COLON("M/MOD", /* not implemented */ EXIT);
+    XA SLMOD = _COLON("/MOD",  DDUP, SLASH, TOR, MOD, RFROM, EXIT);
     XA SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
-    XA STASL = _COLON("*/", SSMOD, SWAP, DROP, EXIT);
-    XA DSTOR = _COLON("2!", DUP, TOR, CELL, PLUS, STORE, RFROM, STORE, EXIT);
-    XA DAT   = _COLON("2@", DUP, TOR, AT, RFROM, CELL, PLUS, AT, EXIT);
-	XA WITHI = _COLON("WITHIN", OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
-	XA COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
-	XA MAX   = _COLON("MAX",  DDUP, LESS); {
-		_IF(SWAP);
-		_THEN(DROP, EXIT);
-	}
-	XA MIN   = _COLON("MIN",  DDUP, GREAT); {
-		_IF(SWAP);
-		_THEN(DROP, EXIT);
-	}
-	XA CMOVE = _COLON("CMOVE", NOP); {
-		_FOR(NOP);
-		_AFT(OVER, CAT, OVER, CSTOR, TOR, ONEP, RFROM, ONEP);
-		_THEN(NOP);
-		_NEXT(DDROP, EXIT);
-	}
-	XA MOVE  = _COLON("MOVE", CELL, SLASH); {
-		_FOR(NOP);
-		_AFT(OVER, AT, OVER, STORE, TOR, CELLP, RFROM, CELLP);
-		_THEN(NOP);
-		_NEXT(DDROP, EXIT);
-	}
-	XA FILL = _COLON("FILL", SWAP); {
-		_FOR(SWAP);
-		_AFT(DDUP, CSTOR, ONEP);
-		_THEN(NOP);
-		_NEXT(DDROP, EXIT);
-	}
-	///
-	///> Number Conversions and formatting
-	///
-	XA HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
-	XA DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
-	XA DIGIT = _COLON("DIGIT",   DOLIT, 9, OVER, LESS, DOLIT, 7, AND, PLUS, DOLIT, 0x30, PLUS, EXIT);
-	XA EXTRC = _COLON("EXTRACT", DOLIT, 0, SWAP, UMMOD, SWAP, DIGIT, EXIT);
-	XA BDIGS = _COLON("<#",      PAD, vHLD, STORE, EXIT);
-	XA HOLD  = _COLON("HOLD",    vHLD, AT, ONEM, DUP, vHLD, STORE, CSTOR, EXIT);
-	XA DIG   = _COLON("#",       vBASE, AT, EXTRC, HOLD, EXIT);
-	XA DIGS  = _COLON("#S", NOP); {
-		_BEGIN(DIG, DUP);
-		_WHILE(NOP);
-		_REPEAT(EXIT);
-	}
-	XA SIGN  = _COLON("SIGN",   ZLESS); {
-		_IF(DOLIT, 0x2d, HOLD);
-		_THEN(EXIT);
-	}
-	XA EDIGS = _COLON("#>",     DROP, vHLD, AT, PAD, OVER, SUB, EXIT);
-	XA STR   = _COLON("str",    DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
+    XA STASL = _COLON("*/",    SSMOD, SWAP, DROP, EXIT);
+    XA DSTOR = _COLON("2!",    DUP, TOR, CELL, PLUS, STORE, RFROM, STORE, EXIT);
+    XA DAT   = _COLON("2@",    DUP, TOR, AT, RFROM, CELL, PLUS, AT, EXIT);
+    XA WITHI = _COLON("WITHIN",OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
+    XA COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
+    XA MAX   = _COLON("MAX", DDUP, LESS); {
+        _IF(SWAP);
+        _THEN(DROP, EXIT);
+    }
+    XA MIN   = _COLON("MIN",  DDUP, GREAT); {
+        _IF(SWAP);
+        _THEN(DROP, EXIT);
+    }
+    XA CMOVE = _COLON("CMOVE", NOP); {
+        _FOR(NOP);
+        _AFT(OVER, CAT, OVER, CSTOR, TOR, ONEP, RFROM, ONEP);
+        _THEN(NOP);
+        _NEXT(DDROP, EXIT);
+    }
+    XA MOVE  = _COLON("MOVE", CELL, SLASH); {
+        _FOR(NOP);
+        _AFT(OVER, AT, OVER, STORE, TOR, CELLP, RFROM, CELLP);
+        _THEN(NOP);
+        _NEXT(DDROP, EXIT);
+    }
+    XA FILL = _COLON("FILL", SWAP); {
+        _FOR(SWAP);
+        _AFT(DDUP, CSTOR, ONEP);
+        _THEN(NOP);
+        _NEXT(DDROP, EXIT);
+    }
+    ///
+    ///> Number Conversions and formatting
+    ///
+    XA HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
+    XA DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
+    XA DIGIT = _COLON("DIGIT",   DOLIT, 9, OVER, LESS, DOLIT, 7, AND, PLUS, DOLIT, 0x30, PLUS, EXIT);
+    XA EXTRC = _COLON("EXTRACT", DOLIT, 0, SWAP, UMMOD, SWAP, DIGIT, EXIT);
+    XA BDIGS = _COLON("<#",      PAD, vHLD, STORE, EXIT);
+    XA HOLD  = _COLON("HOLD",    vHLD, AT, ONEM, DUP, vHLD, STORE, CSTOR, EXIT);
+    XA DIG   = _COLON("#",       vBASE, AT, EXTRC, HOLD, EXIT);
+    XA DIGS  = _COLON("#S", NOP); {
+        _BEGIN(DIG, DUP);
+        _WHILE(NOP);
+        _REPEAT(EXIT);
+    }
+    XA SIGN  = _COLON("SIGN",   ZLESS); {
+        _IF(DOLIT, 0x2d, HOLD);
+        _THEN(EXIT);
+    }
+    XA EDIGS = _COLON("#>",     DROP, vHLD, AT, PAD, OVER, SUB, EXIT);
+    XA STR   = _COLON("str",    DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
     XA UPPER = _COLON("wupper", DOLIT, 0x5f5f, AND, EXIT);
-	XA TOUPP = _COLON(">upper", DUP, DOLIT, 0x61, DOLIT, 0x7b, WITHI); { // [a-z] only?
-		_IF(DOLIT, 0x5f, AND);
-		_THEN(EXIT);
-	}
-	XA DIGTQ = _COLON("DIGIT?", TOR, TOUPP, DOLIT, 0x30, SUB, DOLIT, 9, OVER, LESS); {
-		_IF(DOLIT, 7, SUB, DUP, DOLIT, 10, LESS, OR);           // handle hex number
-		_THEN(DUP, RFROM, ULESS, EXIT);                         // handle base > 10
-	}
-	XA NUMBQ = _COLON("NUMBER?", vBASE, AT, TOR, DOLIT, 0, OVER, COUNT,
+    XA TOUPP = _COLON(">upper", DUP, DOLIT, 0x61, DOLIT, 0x7b, WITHI); { // [a-z] only?
+        _IF(DOLIT, 0x5f, AND);
+        _THEN(EXIT);
+    }
+    XA DIGTQ = _COLON("DIGIT?", TOR, TOUPP, DOLIT, 0x30, SUB, DOLIT, 9, OVER, LESS); {
+        _IF(DOLIT, 7, SUB, DUP, DOLIT, 10, LESS, OR);           // handle hex number
+        _THEN(DUP, RFROM, ULESS, EXIT);                         // handle base > 10
+    }
+    XA NUMBQ = _COLON("NUMBER?", vBASE, AT, TOR, DOLIT, 0, OVER, COUNT,
                       OVER, CAT, DOLIT, 0x24, EQUAL); {         // leading with $ (i.e. 0x24)
-		_IF(HEX_, SWAP, ONEP, SWAP, ONEM);
-		_THEN(OVER, CAT, DOLIT, 0x2d, EQUAL,                    // handle negative sign (i.e. 0x2d)
+        _IF(HEX_, SWAP, ONEP, SWAP, ONEM);
+        _THEN(OVER, CAT, DOLIT, 0x2d, EQUAL,                    // handle negative sign (i.e. 0x2d)
               TOR, SWAP, RAT, SUB, SWAP, RAT, PLUS, QDUP);
-		_IF(ONEM); {
+        _IF(ONEM); {
             // a FOR..WHILE..NEXT..ELSE..THEN construct =~ for {..break..}
             _FOR(DUP, TOR, CAT, vBASE, AT, DIGTQ);                    
-			_WHILE(SWAP, vBASE, AT, STAR, PLUS, RFROM, ONEP);   // if digit, xBASE, else break to ELSE
+            _WHILE(SWAP, vBASE, AT, STAR, PLUS, RFROM, ONEP);   // if digit, xBASE, else break to ELSE
             _NEXT(DROP, RAT); {                                 // whether negative number
                 _IF(NEGAT);
-			    _THEN(SWAP);
+                _THEN(SWAP);
             }
-  			_ELSE(RFROM, RFROM, DDROP, DDROP, DOLIT, 0);
-			_THEN(DUP);
+            _ELSE(RFROM, RFROM, DDROP, DDROP, DOLIT, 0);
+            _THEN(DUP);
          }
-  		 _THEN(RFROM, DDROP, RFROM, vBASE, STORE, EXIT);
-	}
-	///
-	///> Console I/O
-	///
-	XA TIB   = _COLON("TIB",   vTTIB, AT, EXIT);
-	XA QKEY  = _COLON("?KEY",  QRX, EXIT);
-	XA KEY   = _COLON("KEY",   NOP); {
-		_BEGIN(QKEY);
-		_UNTIL(EXIT);
-	}
+         _THEN(RFROM, DDROP, RFROM, vBASE, STORE, EXIT);
+    }
+    ///
+    ///> Console I/O
+    ///
+    XA TIB   = _COLON("TIB",   vTTIB, AT, EXIT);
+    XA QKEY  = _COLON("?KEY",  QRX, EXIT);
+    XA KEY   = _COLON("KEY",   NOP); {
+        _BEGIN(QKEY);
+        _UNTIL(EXIT);
+}
 	XA EMIT  = _COLON("EMIT",  TXSTO, EXIT);
 	XA HATH  = _COLON("^H", TOR, OVER, RFROM, SWAP, OVER, XOR); {
 		_IF(DOLIT, 8, EMIT, ONEM, BLANK, EMIT, DOLIT, 8, EMIT);

@@ -31,16 +31,16 @@ typedef int32_t   S32;                ///< 32-bit signed integer
 typedef int16_t   S16;                ///< 16-bit signed integer
 typedef int8_t    S8;                 ///< 8-bit signed integer
 
-typedef U16       XA;				  ///< address sizing (16-bit)
+typedef U16       XA;                 ///< address sizing (16-bit)
 ///@}
 ///
 ///@name Capacity and Sizing
 ///@attention reassemble ROM needed if FORTH_TIB_SZ or FORTH_PAD_SZ changed
 ///@{
-#define CELLSZ		     2                     /**< 16-bit cell size                    */
+#define CELLSZ           2                     /**< 16-bit cell size                    */
 #define FORTH_PRIMITIVES 64                    /**< number of primitive words           */
 #define FORTH_ROM_SZ     0x2000                /**< size of ROM (for pre-defined words) */
-#define FORTH_DIC_SZ     0x400 				   /**< size of dictionary space            */
+#define FORTH_DIC_SZ     0x400                 /**< size of dictionary space            */
 #define FORTH_UVAR_SZ    0x20                  /**< size of Forth user variables        */
 #define FORTH_STACK_SZ   0x60*CELLSZ           /**< size of data/return stack           */
 #define FORTH_TIB_SZ     0x80                  /**< size of terminal input buffer       */
@@ -74,8 +74,8 @@ typedef U16       XA;				  ///< address sizing (16-bit)
 /// TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff
 /// which does not need boolean op (i.e. in C)
 /// @{
-#define	TRUE	         -1
-#define	FALSE	         0
+#define TRUE             -1
+#define FALSE            0
 ///@}
 ///
 /// Forth VM Opcodes (for Bytecode Assembler)
@@ -178,11 +178,11 @@ typedef const char          *PGM_P;
 #define pinMode(a,b)
 #define digitalRead(p)      (0)
 #define digitalWrite(p,v)
-#define analogRead(p)		(0)
+#define analogRead(p)       (0)
 #define analogWrite(p,v)
-#define map(a,b,c,d,e) 		(0)
-#define millis()       		(0x12345678)
-#define PT_SCHEDULE(t) 		(t)
+#define map(a,b,c,d,e)      (0)
+#define millis()            (0x12345678)
+#define PT_SCHEDULE(t)      (t)
 #define LOG(s)              printf("%s", s)
 #define LOG_C(c)            ef_putchar(c)
 #define LOG_V(s, n)         printf("%s%d", s, n)

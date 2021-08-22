@@ -5,8 +5,9 @@ int Code::fence = 0;
 ///
 /// Code class constructors
 ///
-Code::Code(string n, fop fn, bool im) {
-    name = n; token = fence++; xt = fn; immd = im;
+template<typename F>
+Code::Code(string n, F fn, bool im) {
+	name = n; token = fence++; immd = im; xt = new XT<F>(fn);
 }
 Code::Code(string n, bool f)   { name = n; if (f) token = fence++; }
 Code::Code(Code *c, int v)     { name = c->name; xt = c->xt; qf.push(v); }
@@ -31,7 +32,7 @@ string Code::see(int dp) {
     return cout.str();
 }
 void  Code::exec() {
-    if (xt) xt(this);                           /// * execute primitive word
+    if (xt) (*xt)(this);                        /// * execute primitive word
     else {
         for (Code* w : pf.v) w->exec();         /// * or, run inner interpreter
     }
@@ -48,7 +49,7 @@ inline int ForthVM::PUSH(int v) { ss.push(top); return top = v; }
 
 /// search dictionary reversely
 Code *ForthVM::find(string s) {
-        for (int i = dict.v.size() - 1; i >= 0; --i) {
+        for (int i = (int)dict.v.size() - 1; i >= 0; --i) {
         if (s == dict.v[i]->name) return dict.v[i];
     }
     return NULL;
@@ -73,24 +74,29 @@ void ForthVM::words() {
 void ForthVM::call(Code *w) {
     int tmp = WP;                                       /// * setup call frame
     WP = w->token;
+    w->exec();
+#if 0
     try { w->exec(); }                                  /// * run inner interpreter recursively
     catch (exception& e) {
         string msg = e.what();                          /// * capture exception message
         if (msg!=string()) cout << msg << ENDL;
     }
+#endif
     WP = tmp;                                           /// * restore call frame
 }
 ///
 /// macros to reduce verbosity (but harder to single-step debug)
 ///
-#define CODE(s, g) new Code(string(s), [&](Code *c){ g; })
-#define IMMD(s, g) new Code(string(s), [&](Code *c){ g; }, true)
+#define CODE(s, g) new Code(string(s), [this](Code *c){ g; })
+#define IMMD(s, g) new Code(string(s), [this](Code *c){ g; }, true)
 #define ALU(a, OP, b)  (static_cast<int>(a) OP static_cast<int>(b))
 #define BOOL(f) ((f) ? -1 : 0)
 ///
 /// dictionary initializer
 ///
 void ForthVM::init() {
+	auto f = [this](Code *c) { PUSH(top); };
+
     static vector<Code*> prim = {                       /// singleton, build once only
     // stack op
     CODE("dup",  PUSH(top)),
@@ -242,7 +248,7 @@ void ForthVM::init() {
         if (last->stage == 0) last->pf.merge(temp->pf.v);
         else last->pf2.merge(temp->pf.v); dict.pop()),
     // compiler
-    CODE("exit", throw domain_error(string())),
+    CODE("exit", exit(0)),
     CODE("exec", int n = top; call(dict[n])),
     CODE(":",
         dict.push(new Code(next_idiom(), true));    // create new word
@@ -272,13 +278,14 @@ void ForthVM::init() {
         last->pf[0]->qf.clear()),
     CODE("does",
         vector<Code*> src = dict[WP]->pf.v;                 // source word : xx create...does...;
-        int i = 0; int n = src.size();
+        int i = 0; int n = (int)src.size();
         while (i < n && src[i]->name != "does") i++;        // find the "does"
         while (++i < n) dict[-1]->pf.push(src[i]);          // copy words after "does" to new the word
-        throw domain_error(string())),                      // break out of for { c->exec() } loop
+//         __throw_out_of_range("")),                         // break out of for { c->exec() } loop
+         ),
     CODE("[to]",
         vector<Code*> src = dict[WP]->pf.v;                 // source word : xx create...does...;
-        int i = 0; int n = src.size();
+        int i = 0; int n = (int)src.size();
         while (i < n && src[i]->name != "[to]") i++;        // find the "does"
         src[++i]->pf[0]->qf[0] = POP()),                    // change the following constant
     CODE("to",                                              // n -- , compile only
@@ -291,6 +298,7 @@ void ForthVM::init() {
             tgt->pf.merge(dict[POP()]->pf.v);
         }),
     // tools
+    CODE("bye",   exit(0)),
     CODE("here",  PUSH(dict[-1]->token)),
     CODE("words", words()),
     CODE(".s",    ss_dump()),
@@ -337,28 +345,3 @@ void ForthVM::outer() {
     }
     if (!compile) ss_dump();  /// * dump stack and display ok prompt
 }
-
-#ifndef WIN32
-#include <iostream>
-/// main program
-int main(int ac, char* av[]) {
-    istringstream forth_in;
-    ostringstream forth_out;
-    string cmd;
-
-    ForthVM *vm = new ForthVM(forth_in, forth_out);		// create FVM instance
-    vm->init();                                 		// initialize dictionary
-
-    cout << "ceforth 5.01" << ENDL;
-    while (getline(cin, cmd)) {							// fetch user input
-    	//printf("cmd=<%s>\n", line.c_str());
-    	forth_in.clear();								// clear any input stream error bit
-    	forth_in.str(cmd);								// send command to FVM
-        vm->outer();									// execute outer interpreter
-        cout << forth_out.str();						// send VM result to output
-        forth_out.str(string());						// clear output buffer
-    }
-    cout << "done!" << ENDL;
-    return 0;
-}
-#endif // WIN32

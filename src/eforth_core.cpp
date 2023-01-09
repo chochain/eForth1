@@ -4,7 +4,7 @@
  */
 #include "eforth_core.h"
 
-static U8     _ram[FORTH_RAM_SZ];        ///< 4K forth memory block dynamic allocated
+static U8     *_ram;                     ///< forth memory block dynamic allocated
 static Stream *io;                       ///< console interface
 static task_ptr _task_list  = NULL;      ///< user task linked-list
 ///
@@ -12,30 +12,29 @@ static task_ptr _task_list  = NULL;      ///< user task linked-list
 ///
 void ef_prompt()
 {
-    LOG("\neForthUNO v1.0");
+    LOG("\neForth1 v1.0");
 }
 ///
 /// display eForth system information
 ///
 void sys_info(U8 *cdata) {
-    LOG_H("\nRAM_SZ= x",  FORTH_RAM_SZ);
+    LOG_H("\nRAM_SZ= x",    FORTH_RAM_SZ);
     LOG_V(", Primitives=",  FORTH_PRIMITIVES);
-    LOG_V(", Addr=",        (U16)sizeof(XA)*8);
-    LOG_V("-bit, CELLSZ=",  CELLSZ);
-    LOG("\nMEMMAP:");
-    LOG_H("\n  ROM   x0000+", FORTH_ROM_SZ);
-    LOG_H("\n  UVAR  x", FORTH_TVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
-    LOG_H("\n  DIC   x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ-FORTH_UVAR_SZ);
-    LOG_H("\n  STACK x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
-    LOG_H("\n  TIB   x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
-
+    LOG_V(", Addr=",        (U16)sizeof(IU)*8);
+    LOG_V("-bit, CELL=",    CELLSZ);
+    LOG("bytes\nMEMMAP:");
 #if ARDUINO
     U16 h = (U16)&cdata[FORTH_RAM_SZ];
     U16 s = (U16)&h;
-    LOG_H("\nHEAP=x", h);
+    LOG_H(" heap=x", h);
     LOG_H("--> x",    s-h);
-    LOG_H(" <--SP=x", s);
+    LOG_H(" <--auto=x", s);
 #endif // ARDUINO
+    LOG_H("\n  ROM  :x0000+", FORTH_ROM_SZ);
+    LOG_H("\n  UVAR :x", FORTH_TVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
+    LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ-FORTH_UVAR_SZ);
+    LOG_H("\n  STACK:x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
+    LOG_H("\n  TIB  :x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
 }
 ///
 /// add user defined task to task queue
@@ -53,8 +52,12 @@ void ef_add_task(char (*task)()) {
 ///
 /// eForth yield to user tasks
 ///
+#define YIELD_PERIOD    10
 void ef_yield()
 {
+    static U8 n = 0;
+    if (++n < 10) return;                 // give more cycles to VM
+    n = 0;
     task_ptr tp=_task_list;
     while (tp) {
         PT_SCHEDULE(tp->task());           // steal cycles for hardware tasks
@@ -87,7 +90,7 @@ extern U32 forth_rom[];                    // from eforth_rom.c
 void ef_setup(Stream &io_stream=Serial)
 {
     io   = &io_stream;
-//    _ram = (U8*)malloc(FORTH_RAM_SZ);   // used about 100 more bytes RAM
+    _ram = (U8*)malloc(FORTH_RAM_SZ);   // dynamically allocated
     
     sys_info(_ram);
     vm_init((PGM_P)forth_rom, _ram, (void*)&io_stream);

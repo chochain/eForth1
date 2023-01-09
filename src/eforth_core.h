@@ -31,7 +31,7 @@ typedef int32_t   S32;                ///< 32-bit signed integer
 typedef int16_t   S16;                ///< 16-bit signed integer
 typedef int8_t    S8;                 ///< 8-bit signed integer
 
-typedef U16       XA;                 ///< address sizing (16-bit)
+typedef U16       IU;                 ///< instruction/address unit (16-bit)
 ///@}
 ///
 ///@name Capacity and Sizing
@@ -43,13 +43,9 @@ typedef U16       XA;                 ///< address sizing (16-bit)
 #define FORTH_DIC_SZ     0x400                 /**< size of dictionary space            */
 #define FORTH_UVAR_SZ    0x20                  /**< size of Forth user variables        */
 #define FORTH_STACK_SZ   0x60*CELLSZ           /**< size of data/return stack           */
-#define FORTH_TIB_SZ     0x80                  /**< size of terminal input buffer       */
 #define FORTH_PAD_SZ     0x20                  /**< size of output pad (in DIC space )  */
-/// size of total RAM needed
-#define FORTH_RAM_SZ     (  \
-           FORTH_DIC_SZ  +  \
-           FORTH_STACK_SZ+  \
-           FORTH_TIB_SZ) 
+#define FORTH_TIB_SZ     0x80                  /**< size of terminal input buffer       */
+#define FORTH_RAM_SZ     (FORTH_DIC_SZ + FORTH_STACK_SZ)  /**< size of total RAM needed */
 ///@}
 ///
 ///> note:

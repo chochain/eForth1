@@ -1,6 +1,6 @@
 #include <time.h>
 #include <pt.h>
-#include "eforth1.h"
+#include <eforth1.h>
 
 #define PT_DELAY_msec(th, ms)  do {     \
     static unsigned long t;             \

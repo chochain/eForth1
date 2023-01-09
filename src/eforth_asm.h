@@ -43,5 +43,45 @@ typedef const char                FCHAR;
           9,  8,  7,  6,  5,  4,  3,  2,  1,  0
 #define _NARG0(...)          _ARG_N(__VA_ARGS__)
 #define _NARG(...)           _NARG0(_, ##__VA_ARGS__, _NUM_N())
-
+///
+///@name Vargs Header (calculate number of parameters by compiler)
+///@{
+#define _CODE(seg, ...)      _code(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _COLON(seg, ...)     _colon(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _IMMED(seg, ...)     _immed(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _LABEL(...)          _label(_NARG(__VA_ARGS__), __VA_ARGS__)
+///@}
+///@name Vargs Branching
+///@{
+#define _BEGIN(...)          _begin(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _AGAIN(...)          _again(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _UNTIL(...)          _until(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _WHILE(...)          _while(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _REPEAT(...)         _repeat(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _IF(...)             _if(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _ELSE(...)           _else(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _THEN(...)           _then(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _FOR(...)            _for(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _NEXT(...)           _nxt(_NARG(__VA_ARGS__), __VA_ARGS__)
+#define _AFT(...)            _aft(_NARG(__VA_ARGS__), __VA_ARGS__)
+///@}
+///@name Vargs IO
+///@{
+#define _DOTQ(seq)           _dotq(F(seq))
+#define _STRQ(seq)           _strq(F(seq))
+#define _ABORTQ(seq)         _abortq(F(seq))
+///@}
+///@name Memory Access and Stack Op
+///@{
+#define BSET(d, c)  (*(aByte+(d))=(U8)(c))
+#define BGET(d)     ((U8)*(aByte+(d)))
+#define SET(d, v)   do { U16 a=(d); U16 x=(v); BSET(a, (x)&0xff); BSET((a)+1, (x)>>8); } while (0)
+#define GET(d)      ({ U16 a=(d); (U16)BGET(a) + ((U16)BGET((a)+1)<<8); })
+#define STORE(v)    do { SET(aPC, (v)); aPC+=CELLSZ; } while(0)
+#define RPUSH(a)    SET(FORTH_ROM_SZ - (++aR)*CELLSZ, (a))
+#define RPOP()      ((U16)GET(FORTH_ROM_SZ - (aR ? aR-- : aR)*CELLSZ))
+#define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
+#define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
+///@}
+///
 #endif // __EFORTH_SRC_EFORTH_ASM_H

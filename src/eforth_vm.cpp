@@ -60,24 +60,22 @@ U16  GET(U16 d)        {
 }
 #define BSET(d, c)     (cData[(d)&OFF_MASK]=(U8)(c))
 #define SET(d, v)      (*((S16*)&cData[(d)&OFF_MASK])=(v))
-#define S_GET(s)       (cStack[s])
-#define S_SET(s, v)    (cStack[s]=(S16)(v))
+#define SS(s)          (cStack[s])
+#define RS(r)          (cStack[RS_TOP - (r)])
 #define RS_TOP         (FORTH_STACK_SZ>>1)
-#define R_GET(r)       ((IU)cStack[RS_TOP - (r)])
-#define R_SET(r, v)    (cStack[RS_TOP - (r)]=(S16)(v))
 ///
 /// push a value onto stack top
 ///
-void PUSH(S16 v)       { S_SET(++S, top); top = v;  }
-#define POP()          (top=S_GET(S ? S-- : S))
-#define RPUSH(v)       (R_SET(++R, (v)))
-#define RPOP()         (R_GET(R ? R-- : R))
+void PUSH(S16 v)       { SS(++S) = top; top = v; }
+void RPUSH(S16 v)      { RS(++R) = v; }
+#define POP()          (top=SS(S ? S-- : S))
+#define RPOP()         (RS(R ? R-- : R))
 ///
 /// store a double on data stack top
 ///
 void DTOP(S32 d) {
-    S_SET(S, d&0xffff);
-    top = d>>16;
+    SS(S) = d&0xffff;
+    top   = d>>16;
 }
 ///
 /// update program counter (ready to fetch), advance instruction pointer
@@ -117,7 +115,7 @@ void TRACE_WORD()
     for (; (BGET(pc) & 0x7f)>0x20; pc--);  // retract pointer to word name (ASCII range: 0x21~0x7f)
 
     for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
-        if (s==s0) { LOG_H(" ", S_GET(s+1)); } else { LOG_H("_", S_GET(s+1)); }
+        if (s==s0) { LOG_H(" ", SS(s+1)); } else { LOG_H("_", SS(s+1)); }
     }
     if (S==0) { LOG_H(" ", top); } else { LOG_H("_", top); }
     LOG("_");
@@ -220,9 +218,9 @@ void _execu()               /// (a -- ) take execution address from data stack a
 }
 void _donext()              /// ( -- ) terminate a FOR-NEXT loop
 {
-    IU i = R_GET(R);        ///> loop counter
+    IU i = RS(R);           ///> loop counter
     if (i) {                ///> check if loop counter > 0
-        R_SET(R, i-1);      ///>> decrement loop counter
+        RS(R) = (S16)(i-1); ///>> decrement loop counter
         IP = GET(IP);       ///>> branch back to FOR
     }
     else {                  ///> or, 
@@ -250,7 +248,7 @@ void _bran()                /// ( -- ) branch to address following
 ///@{
 void _store()               /// (n a -- ) store into memory location from top of stack
 {
-    SET(top, S_GET(S--));
+    SET(top, SS(S--));
     POP();
     NEXT();
 }
@@ -261,7 +259,7 @@ void _at()                  /// (a -- n) fetch from memory address onto top of s
 }
 void _cstor()               /// (c b -- ) store a byte into memory location
 {
-    BSET(top, S_GET(S--));
+    BSET(top, SS(S--));
     POP();
     NEXT();
 }
@@ -272,7 +270,7 @@ void _cat()                 /// (b -- n) fetch a byte from memory location
 }
 void _pstor()               /// (n a -- ) add n to content at address a
 {
-    SET(top, GET(top)+S_GET(S--));
+    SET(top, GET(top)+SS(S--));
     POP();
     NEXT();
 }
@@ -287,7 +285,7 @@ void _rfrom()               /// (-- w) pop from return stack onto data stack (Ti
 }
 void _rat()                 /// (-- w) copy a number off the return stack and push onto data stack
 {
-    PUSH(R_GET(R));
+    PUSH(RS(R));
     NEXT();
 }
 void _tor()                 /// (w --) pop from data stack and push onto return stack
@@ -312,37 +310,37 @@ void _drop()                /// (w -- ) drop top of stack item
 }
 void _dup()                 /// (w -- w w) duplicate to of stack
 {
-    S_SET(++S, top);
+    SS(++S)=top;
     NEXT();
 }
 void _swap()                /// (w1 w2 -- w2 w1) swap top two items on the data stack
 {
     S16 tmp  = top;
-    top = S_GET(S);
-    S_SET(S, tmp);
+    top = SS(S);
+    SS(S)=tmp;
     NEXT();
 }
 void _over()                /// (w1 w2 -- w1 w2 w1) copy second stack item to top
 {
-    PUSH(S_GET(S));         ///> push w1
+    PUSH(SS(S));         ///> push w1
     NEXT();
 }
 void _rot()                 /// (w1 w2 w3 -- w2 w3 w1) rotate 3rd item to top
 {
-    S16 tmp = S_GET(S-1);
-    S_SET(S-1, S_GET(S));
-    S_SET(S, top);
+    S16 tmp = SS(S-1);
+    SS(S-1)=SS(S);
+    SS(S)  =top;
     top = tmp;
     NEXT();
 }
 void _pick()                /// (... +n -- ...w) copy nth stack item to top
 {
-    top = S_GET(S - (U8)top);
+    top = SS(S - (U8)top);
     NEXT();
 }
 void _qdup()                /// (w -- w w | 0) dup top of stack if it is not zero
 {
-    if (top) S_SET(++S, top);
+    if (top) SS(++S)=top;
     NEXT();
 }
 ///@}
@@ -351,32 +349,32 @@ void _qdup()                /// (w -- w w | 0) dup top of stack if it is not zer
 ///@{
 void _and()                 /// (w w -- w) bitwise AND
 {
-    top &= S_GET(S--);
+    top &= SS(S--);
     NEXT();
 }
 void _or()                  /// (w w -- w) bitwise OR
 {
-    top |= S_GET(S--);
+    top |= SS(S--);
     NEXT();
 }
 void _xor()                 /// (w w -- w) bitwise XOR
 {
-    top ^= S_GET(S--);
+    top ^= SS(S--);
     NEXT();
 }
 void _great()               /// (n1 n2 -- t) true if n1>n2
 {
-    top = BOOL(S_GET(S--) > top);
+    top = BOOL(SS(S--) > top);
     NEXT();
 }
 void _less()                /// (n1 n2 -- t) true if n1<n2
 {
-    top = BOOL(S_GET(S--) < top);
+    top = BOOL(SS(S--) < top);
     NEXT();
 }
 void _equal()               /// (w w -- t) true if top two items are equal
 {
-    top = BOOL(S_GET(S--)==top);
+    top = BOOL(SS(S--)==top);
     NEXT();
 }
 void _invert()             /// (w -- ~w) one's complement
@@ -391,17 +389,17 @@ void _zless()               /// (n -- f) check whether top of stack is negative
 }
 void _uless()               /// (u1 u2 -- t) unsigned compare top two items
 {
-    top = BOOL((U16)(S_GET(S--)) < (U16)top);
+    top = BOOL((U16)(SS(S--)) < (U16)top);
     NEXT();
 }
 void _lshift()              /// (w n -- w) left shift n bits
 {
-    top = S_GET(S--) << top;
+    top = SS(S--) << top;
     NEXT();
 }
 void _rshift()              /// (w n -- w) right shift n bits
 {
-    top = S_GET(S--) >> top;
+    top = SS(S--) >> top;
     NEXT();
 }
 ///@}
@@ -416,7 +414,7 @@ void _abs()                 /// (n -- n) absolute value of n
 }
 void _mod()                 /// (n n -- r) signed divide, returns mod
 {
-    top = (top) ? S_GET(S--) % top : S_GET(S--);
+    top = (top) ? SS(S--) % top : SS(S--);
     NEXT();
 }
 void _negate()             /// (n -- -n) two's complement
@@ -436,43 +434,43 @@ void _onem()               /// (n -- n-1) minus one to top
 }
 void _plus()                /// (w w -- sum) add top two items
 {
-    top += S_GET(S--);
+    top += SS(S--);
     NEXT();
 }
 void _sub()                 /// (n1 n2 -- n1-n2) subtraction
 {
-    top = S_GET(S--) - top;
+    top = SS(S--) - top;
     NEXT();
 }
 void _star()                /// (n n -- n) signed multiply, return single product
 {
-    top *= S_GET(S--);
+    top *= SS(S--);
     NEXT();
 }
 void _slash()               /// (n n - q) signed divide, return quotient
 {
-    top = (top) ? S_GET(S--) / top : (S_GET(S--), 0);
+    top = (top) ? SS(S--) / top : (SS(S--), 0);
     NEXT();
 }
 void _uplus()               /// (w w -- w c) add two numbers, return the sum and carry flag
 {
-    S_SET(S, S_GET(S)+top);
-    top = (U16)S_GET(S) < (U16)top;
+    SS(S) = SS(S)+top;
+    top = (U16)SS(S) < (U16)top;
     NEXT();
 }
 void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double by single
 {
     U32 d = (U32)top;       ///> CC: auto variable uses C stack 
-    U32 m = ((U32)S_GET(S)<<16) + (U16)S_GET(S-1);
+    U32 m = ((U32)SS(S)<<16) + (U16)SS(S-1);
     POP();
-    S_SET(S, (S16)(m % d)); ///> remainder
+    SS(S) = (S16)(m % d);   ///> remainder
     top   = (S16)(m / d);   ///> quotient
     NEXT();
 }
 void _umstar()              /// (u1 u2 -- ud) unsigned multiply return double product
 {
-    U32 u = (U32)S_GET(S) * top;
-    S_SET(S, (U16)(u & 0xffff));
+    U32 u = (U32)SS(S) * top;
+    SS(S) = (U16)(u & 0xffff);
     top = (U16)(u >> 16);
     NEXT();
 }
@@ -484,33 +482,33 @@ void _umstar()              /// (u1 u2 -- ud) unsigned multiply return double pr
 void _msmod()               /// (d n -- r q) signed floored divide of double by single
 {
     S32 d = (S32)top;
-    S32 m = ((S32)S_GET(S)<<16) + S_GET(S-1);
+    S32 m = ((S32)SS(S)<<16) + SS(S-1);
     POP();
-    S_SET(S, (S16)(m % d)); // remainder
+    SS(S) = (S16)(m % d);   // remainder
     top   = (S16)(m / d);   // quotient
     NEXT();
 }
 void _slmod()               /// (n1 n2 -- r q) signed devide, return mod and quotient
 {
     if (top) {
-        S16 tmp = S_GET(S) / top;
-        S_SET(S, S_GET(S) % top);
+        S16 tmp = SS(S) / top;
+        SS(S) = SS(S) % top;
         top = tmp;
     }
     NEXT();
 }
 void _ssmod()               /// (n1 n2 n3 -- r q) n1*n2/n3, return mod and quotion
 {
-    S32 m = (S32)S_GET(S-1) * S_GET(S);
+    S32 m = (S32)SS(S-1) * SS(S);
     S16 d = top;
     POP();
-    S_SET(S, (S16)(m % d));
+    SS(S) = (S16)(m % d);
     top   = (S16)(m / d);
     NEXT();
 }
 void _stasl()               /// (n1 n2 n3 -- q) n1*n2/n3 return quotient
 {
-    S32 m = (S32)S_GET(S-1) * S_GET(S);
+    S32 m = (S32)SS(S-1) * SS(S);
     S16 d = top;
     POP();
     POP();
@@ -519,19 +517,19 @@ void _stasl()               /// (n1 n2 n3 -- q) n1*n2/n3 return quotient
 }
 void _count()               /// (b -- b+1 +n) count byte of a string and add 1 to byte address
 {
-    S_SET(++S, top + 1);
+    SS(++S) = top + 1;
     top = (S16)BGET(top);
     NEXT();
 }
 void _max_()                /// (n1 n2 -- n) return greater of two top stack items
 {
-    if (top < S_GET(S)) POP();
+    if (top < SS(S)) POP();
     else (U8)S--;
     NEXT();
 }
 void _min_()                /// (n1 n2 -- n) return smaller of two top stack items
 {
-    if (top < S_GET(S)) S--;
+    if (top < SS(S)) S--;
     else POP();
     NEXT();
 }
@@ -539,8 +537,8 @@ void _ddrop()               /// (w w --) drop top two items
 void _ddup()                /// (w1 w2 -- w1 w2 w1 w2) duplicate top two items
 void _dstor()               /// (d a -- ) store the double to address a
 {
-    SET(top+CELLSZ, S_GET(S--));
-    SET(top,        S_GET(S--));
+    SET(top+CELLSZ, SS(S--));
+    SET(top,        SS(S--));
     POP();
     NEXT();
 }
@@ -557,28 +555,28 @@ void _dat()                 /// (a -- d) fetch double from address a
 ///@{
 void _mstar()               /// (n1 n2 -- d) signed multiply, return double product
 {
-    S32 d = (S32)S_GET(S) * top;
+    S32 d = (S32)SS(S) * top;
     DTOP(d);
     NEXT();
 }
 void _dnegate()             /// (d -- -d) two's complemente of top double
 {
-    S32 d = ((S32)top<<16) | S_GET(S)&0xffff;
+    S32 d = ((S32)top<<16) | SS(S)&0xffff;
     DTOP(-d);
     NEXT();
 }
 void _dplus()               /// (d1 d2 -- d1+d2) add two double precision numbers
 {
-    S32 d0 = ((S32)top<<16)        | (S_GET(S)&0xffff);
-    S32 d1 = ((S32)S_GET(S-1)<<16) | (S_GET(S-2)&0xffff);
+    S32 d0 = ((S32)top<<16)        | (SS(S)&0xffff);
+    S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
     S -= 2;
     DTOP(d1 + d0);
     NEXT();
 }
 void _dsub()                /// (d1 d2 -- d1-d2) subtract d2 from d1
 {
-    S32 d0 = ((S32)top<<16)        | (S_GET(S)&0xffff);
-    S32 d1 = ((S32)S_GET(S-1)<<16) | (S_GET(S-2)&0xffff);
+    S32 d0 = ((S32)top<<16)        | (SS(S)&0xffff);
+    S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
     S -= 2;
     DTOP(d1 - d0);
     NEXT();
@@ -605,14 +603,14 @@ void _clock()               /// ( -- d) current clock value, a double precision 
 }
 void _pinmode()             /// (pin mode --) pinMode(pin, mode)
 {
-    pinMode(S_GET(S), top ? INPUT : OUTPUT);
+    pinMode(top, SS(S) ? OUTPUT : INPUT);
     POP();
     POP();
     NEXT();
 }
 void _map()                 /// (f1 f2 t1 t2 n -- nx) map(n, f1, f2, t1, t2)
 {
-    U16 tmp = map(top, S_GET(S-3), S_GET(S-2), S_GET(S-1), S_GET(S));
+    U16 tmp = map(top, SS(S-3), SS(S-2), SS(S-1), SS(S));
     S -= 4;
     top = tmp;
     NEXT();
@@ -624,7 +622,7 @@ void _din()                 /// (pin -- n) read from Arduino digital pin
 }
 void _dout()                /// (pin n -- ) write to Arduino digital pin
 {
-    digitalWrite(top, S_GET(S));
+    digitalWrite(top, SS(S));
     POP();
     POP();
     NEXT();
@@ -636,7 +634,7 @@ void _ain()                 /// (pin -- n) read from Arduino analog pin
 }
 void _aout()                /// (pin n -- ) write PWM to Arduino analog pin
 {
-    analogWrite(top, S_GET(S));
+    analogWrite(top, SS(S));
     POP();
     POP();
     NEXT();

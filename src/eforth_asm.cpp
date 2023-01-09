@@ -18,7 +18,6 @@ IU DOTQ, STRQ, ABORTQ;
 IU TOR;
 IU NOP = 0xffff;                    ///< NOP set to ffff to prevent access before initialized
 ///@}
-///
 ///@name Return Stack for Branching Ops
 ///@{
 U8 *aByte;                          ///< heap
@@ -26,25 +25,8 @@ U8 aR;                              ///< return stack index
 IU aPC;                             ///< program counter
 IU aThread;                         ///< pointer to previous word
 ///@}
-///
-///@name Memory Access and Stack Op
-///@{
-#define BSET(d, c)  (*(aByte+(d))=(U8)(c))
-#define BGET(d)     ((U8)*(aByte+(d)))
-#define SET(d, v)   do { U16 a=(d); U16 x=(v); BSET(a, (x)&0xff); BSET((a)+1, (x)>>8); } while (0)
-#define GET(d)      ({ U16 a=(d); (U16)BGET(a) + ((U16)BGET((a)+1)<<8); })
-#define STORE(v)    do { SET(aPC, (v)); aPC+=CELLSZ; } while(0)
-#define R_GET(r)    ((U16)GET(FORTH_ROM_SZ - (r)*CELLSZ))
-#define R_SET(r, v) SET(FORTH_ROM_SZ - (r)*CELLSZ, v)
-#define RPUSH(a)    R_SET(++aR, a)
-#define RPOP()      R_GET(aR ? aR-- : aR)
-#define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
-#define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
-///@}
-///
 ///@name Memory Dumpers
 ///@{
-///
 void _dump(int b, int u) {      /// dump memory between previous word and this
     DEBUG("%s", "\n    :");
     for (int i=b; i<u; i+=sizeof(IU)) {
@@ -57,15 +39,13 @@ void _rdump()                   /// dump return stack
 {
     DEBUG("%cR[", ' ');
     for (int i=1; i<=aR; i++) {
-        DEBUG(" %04x", R_GET(i));
+        DEBUG(" %04x", GET(FORTH_ROM_SZ - i*CELLSZ));
     }
     DEBUG("%c]", ' ');
 }
 ///@}
-///
 ///@name Assembler - String/Byte Movers
 ///@{
-///
 int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     PGM_P p = reinterpret_cast<PGM_P>(seq);
     int i=0;
@@ -94,10 +74,8 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     }                                           \
 }
 ///@}
-///
 ///@name Assembler - Word Creation Headers
 ///@{
-///
 void _header(int lex, FCHAR *seq) {           /// create a word header in dictionary
     if (aThread) {
         if (aPC >= FORTH_ROM_SZ) DEBUG("ROM %s", "max!");
@@ -263,34 +241,6 @@ void _abortq(FCHAR *seq) {
     DEBUG("%s", seq);
     STRCPY(ABORTQ, seq);
 }
-///@}
-///
-///@name Vargs Header (calculate number of parameters by compiler)
-///@{
-#define _CODE(seg, ...)      _code(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
-#define _COLON(seg, ...)     _colon(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
-#define _IMMED(seg, ...)     _immed(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
-#define _LABEL(...)          _label(_NARG(__VA_ARGS__), __VA_ARGS__)
-///@}
-///@name Vargs Branching
-///@{
-#define _BEGIN(...)          _begin(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _AGAIN(...)          _again(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _UNTIL(...)          _until(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _WHILE(...)          _while(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _REPEAT(...)         _repeat(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _IF(...)             _if(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _ELSE(...)           _else(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _THEN(...)           _then(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _FOR(...)            _for(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _NEXT(...)           _nxt(_NARG(__VA_ARGS__), __VA_ARGS__)
-#define _AFT(...)            _aft(_NARG(__VA_ARGS__), __VA_ARGS__)
-///@}
-///@name Vargs IO
-///@{
-#define _DOTQ(seq)           _dotq(F(seq))
-#define _STRQ(seq)           _strq(F(seq))
-#define _ABORTQ(seq)         _abortq(F(seq))
 ///@}
 ///
 /// eForth Assembler
@@ -715,8 +665,8 @@ int ef_assemble(U8 *cdata)
 		_IF(EXIT);
 		_THEN(ERROR);
 	}
-	IU iLITR  = _IMMED("LITERAL", DOLIT, DOLIT, COMMA, COMMA, EXIT);    // create a literal
-	IU iBCMP = _IMMED("[COMPILE]", TICK, COMMA, EXIT);                  // add word address to dictionary
+	IU iLITR = _IMMED("LITERAL", DOLIT, DOLIT, COMMA, COMMA, EXIT);    // create a literal
+	IU iBCMP = _IMMED("[COMPILE]", TICK, COMMA, EXIT);                 // add word address to dictionary
 	IU COMPI = _COLON("COMPILE",  RFROM, DUP, AT, COMMA, CELLP, TOR, EXIT);
 	IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); { // name found?
 		_IF(AT, DOLIT, fIMMED, AND); {            // is immediate?

@@ -73,8 +73,8 @@ typedef const char                FCHAR;
 ///@}
 ///@name Memory Access and Stack Op
 ///@{
-#define BSET(d, c)  (*(aByte+(d))=(U8)(c))
-#define BGET(d)     ((U8)*(aByte+(d)))
+#define BSET(d, c)  (aByte[d]=(U8)(c))
+#define BGET(d)     (aByte[d])
 #define SET(d, v)   do { U16 a=(d); U16 x=(v); BSET(a, (x)&0xff); BSET((a)+1, (x)>>8); } while (0)
 #define GET(d)      ({ U16 a=(d); (U16)BGET(a) + ((U16)BGET((a)+1)<<8); })
 #define STORE(v)    do { SET(aPC, (v)); aPC+=CELLSZ; } while(0)

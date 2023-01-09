@@ -28,8 +28,8 @@ static Stream *io;
 ///
 ///@name Control
 ///@{
-XA  PC;                         ///< PC (program counter, XA is 16-bit)
-XA  IP;                         ///< IP (instruction pointer, XA is 16-bit)
+IU  PC;                         ///< PC (program counter, IU is 16-bit)
+IU  IP;                         ///< IP (instruction pointer, IU is 16-bit)
 U8  R;                          ///< return stack index (0-255)
 U8  S;                          ///< data stack index (0-255)
 S16 top;                        ///< ALU (i.e. cached top of stack value)
@@ -63,7 +63,7 @@ U16  GET(U16 d)        {
 #define S_GET(s)       (cStack[s])
 #define S_SET(s, v)    (cStack[s]=(S16)(v))
 #define RS_TOP         (FORTH_STACK_SZ>>1)
-#define R_GET(r)       ((XA)cStack[RS_TOP - (r)])
+#define R_GET(r)       ((IU)cStack[RS_TOP - (r)])
 #define R_SET(r, v)    (cStack[RS_TOP - (r)]=(S16)(v))
 ///
 /// push a value onto stack top
@@ -82,7 +82,7 @@ void DTOP(S32 d) {
 ///
 /// update program counter (ready to fetch), advance instruction pointer
 ///
-void NEXT()            { PC=GET(IP); IP+=sizeof(XA); }
+void NEXT() { PC=GET(IP); IP+=sizeof(IU); }
 ///
 ///@name Tracing
 ///@{
@@ -113,7 +113,7 @@ void TRACE_WORD()
 {
     if (!tCNT) return;
     if (!PC || BGET(PC)==opEXIT) return;
-    XA pc = PC-1;
+    IU pc = PC-1;
     for (; (BGET(pc) & 0x7f)>0x20; pc--);  // retract pointer to word name (ASCII range: 0x21~0x7f)
 
     for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
@@ -136,7 +136,7 @@ void _init() {
     R = S = PC = IP = top = 0;  ///> setup control variables
     tCNT = tTAB = 0;            ///> setup tracing variables
     
-    XA pc = FORTH_UVAR_ADDR;    ///> setup Forth user variables
+    IU pc = FORTH_UVAR_ADDR;    ///> setup Forth user variables
     SET(pc,   FORTH_TIB_ADDR);
     SET(pc+2, 0x10);
     SET(pc+4, FORTH_DIC_ADDR);
@@ -215,12 +215,12 @@ void __exit()               /// ( -- ) terminate all token lists in colon words
 }
 void _execu()               /// (a -- ) take execution address from data stack and execute the token
 {
-    PC = (XA)top;           ///> fetch program counter
+    PC = (IU)top;           ///> fetch program counter
     POP();
 }
 void _donext()              /// ( -- ) terminate a FOR-NEXT loop
 {
-    XA i = R_GET(R);        ///> loop counter
+    IU i = R_GET(R);        ///> loop counter
     if (i) {                ///> check if loop counter > 0
         R_SET(R, i-1);      ///>> decrement loop counter
         IP = GET(IP);       ///>> branch back to FOR
@@ -644,6 +644,8 @@ void _aout()                /// (pin n -- ) write PWM to Arduino analog pin
 ///@}
 ///
 /// primitive function lookup table
+/// Note: subroutine indirected threading
+/// TODO: computed goto
 ///
 void(*prim[FORTH_PRIMITIVES])() = {
     /* case 0 */ _nop,

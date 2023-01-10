@@ -8,13 +8,6 @@ static U8     *_ram;                     ///< forth memory block dynamic allocat
 static Stream *io;                       ///< console interface
 static task_ptr _task_list  = NULL;      ///< user task linked-list
 ///
-/// version prompt
-///
-void ef_prompt()
-{
-    LOG("\neForth1 v1.0");
-}
-///
 /// display eForth system information
 ///
 void sys_info(U8 *cdata) {
@@ -22,7 +15,8 @@ void sys_info(U8 *cdata) {
     LOG_V(", Primitives=",  FORTH_PRIMITIVES);
     LOG_V(", Addr=",        (U16)sizeof(IU)*8);
     LOG_V("-bit, CELL=",    CELLSZ);
-    LOG("bytes\nMEMMAP:");
+    LOG("-byte\nMemory MAP:");
+
 #if ARDUINO
     U16 h = (U16)&cdata[FORTH_RAM_SZ];
     U16 s = (U16)&h;
@@ -32,7 +26,7 @@ void sys_info(U8 *cdata) {
 #endif // ARDUINO
     LOG_H("\n  ROM  :x0000+", FORTH_ROM_SZ);
     LOG_H("\n  UVAR :x", FORTH_TVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
-    LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ-FORTH_UVAR_SZ);
+    LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ - FORTH_UVAR_SZ);
     LOG_H("\n  STACK:x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
     LOG_H("\n  TIB  :x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
 }
@@ -119,14 +113,19 @@ int main(int ac, char* av[])
 {
     setvbuf(stdout, NULL, _IONBF, 0);       // autoflush (turn STDOUT buffering off)
 
-    int sz = ef_assemble(_rom);
-    ef_dump_rom(_rom, sz+0x20);
+#if ARDUINO
+    ef_assemble(_rom, false);
+#else   // !ARDUINO
+    ef_assemble(_rom, true);
+#endif  // ARDUINO
 
-#if !ROM_DUMP_ONLY
+#if !ASM_ONLY
     sys_info(_rom);
+    _ram = (U8*)malloc(FORTH_RAM_SZ); ///< forth memory block dynamic allocated
+
     vm_init((PGM_P)_rom, _ram, NULL);
     while (vm_step());
-#endif // !ROM_DUMP_ONLY
+#endif // !ASM_ONLY
 
     return 0;
 }

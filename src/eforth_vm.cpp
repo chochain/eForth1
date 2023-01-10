@@ -24,6 +24,8 @@
  */
 #include "eforth_core.h"
 
+namespace EfVM {
+
 static Stream *io;
 ///
 ///@name Control
@@ -148,10 +150,12 @@ void _init() {
     SET(p+4, FORTH_DIC_ADDR);  /// * top of dictionary
     
 #if EXE_TRACE
-    tCNT=1;                     ///> optionally enable tracing
+    tCNT=1;                 ///> optionally enable tracing
 #endif // EXE_TRACE
-
-    ef_prompt();                ///> display prompt
+    ///
+    /// display init prompt
+    ///
+    LOG("\n"); LOG(APP_NAME); LOG(" "); LOG(MAJOR_VERSION);
 }
 void _nop() { NEXT(); }     ///< ( -- ) nop, as macro terminator
 ///
@@ -213,7 +217,7 @@ void _enter()               /// ( -- ) push instruction pointer onto return stac
     IP = ++PC;              ///> skip opcode opENTER, advance to next instruction
     NEXT();
 }
-void __exit()               /// ( -- ) terminate all token lists in colon words
+void _exit()               /// ( -- ) terminate all token lists in colon words
 {
     TRACE_EXIT();
     IP = RPOP();            ///> pop return address
@@ -457,7 +461,7 @@ void _star()                /// (n n -- n) signed multiply, return single produc
 }
 void _slash()               /// (n n - q) signed divide, return quotient
 {
-    top = (top) ? SS(S--) / top : (SS(S--), 0);
+    top = (top) ? SS(S--) / top : (S--, 0);
     NEXT();
 }
 void _uplus()               /// (w w -- w c) add two numbers, return the sum and carry flag
@@ -479,7 +483,7 @@ void _umstar()              /// (u1 u2 -- ud) unsigned multiply return double pr
 {
     U32 u = (U32)SS(S) * top;
     SS(S) = (U16)(u & 0xffff);
-    top = (U16)(u >> 16);
+    top   = (U16)(u >> 16);
     NEXT();
 }
 ///@}
@@ -661,7 +665,7 @@ void(*prim[FORTH_PRIMITIVES])() = {
     /* case 4 */ _docon,
     /* case 5 */ _dolit,
     /* case 6 */ _enter,
-    /* case 7 */ __exit,
+    /* case 7 */ _exit,
     /* case 8 */ _execu,
     /* case 9 */ _donext,
     /* case 10 */ _qbran,
@@ -719,6 +723,8 @@ void(*prim[FORTH_PRIMITIVES])() = {
     /* case 62 */ _dplus,
     /* case 63 */ _dsub,
 };
+
+}; // namespace EfVM
 ///
 /// eForth virtual machine initialization
 ///
@@ -733,12 +739,12 @@ void(*prim[FORTH_PRIMITIVES])() = {
 ///> *  tmp     = 0              (scratch pad)
 ///
 void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
-    io    = (Stream *)io_stream;
-    cRom  = rom;
-    cData = cdata;
-    cStack= (S16*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
+    EfVM::io     = (Stream *)io_stream;
+    EfVM::cRom   = rom;
+    EfVM::cData  = cdata;
+    EfVM::cStack = (S16*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
     
-    _init();                   // resetting user variables
+    EfVM::_init();                   // resetting user variables
 }
 ///
 /// eForth virtual machine (single-step) execution unit
@@ -746,8 +752,8 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
 ///   0 - exit
 ///
 int vm_step() {
-    TRACE_WORD();              // tracing stack and word name
-    prim[BGET(PC)]();          // walk bytecode stream
+    EfVM::TRACE_WORD();                    // tracing stack and word name
+    EfVM::prim[EfVM::BGET(EfVM::PC)]();    // walk bytecode stream
 
-    return (int)PC;
+    return (int)EfVM::PC;
 }

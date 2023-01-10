@@ -20,7 +20,7 @@ IU NOP = 0xffff;                    ///< NOP set to ffff to prevent access befor
 ///@}
 ///@name Return Stack for Branching Ops
 ///@{
-U8 *aByte;                          ///< heap
+U8 *aByte;                          ///< byte array (heap)
 U8 aR;                              ///< return stack index
 IU aPC;                             ///< program counter
 IU aThread;                         ///< pointer to previous word
@@ -342,10 +342,10 @@ int ef_assemble(U8 *cdata)
     IU PSTOR = _CODE("+!",      opPSTOR  );         // 57
     // AIN     (see Arduino section)                // 58, Dr. Ting's opDSTOR 
     // PWM     (see Arduino section)                // 59, Dr. Ting's opDAT
-    IU DNEGA = _CODE("DNEGATE", opDNEGA  );         // 60, Dr. Ting's opCOUNT
-    IU DOVAR = _CODE("doVAR",   opDOVAR  );         // 61
-    IU DPLUS = _CODE("D+",      opDPLUS  );         // 62, Dr. Ting's opMAX
-    IU DSUB  = _CODE("D-",      opDSUB   );         // 63, Dr. Ting's opMIN
+    _CODE("DNEGATE", opDNEGA  );                    // 60, Dr. Ting's opCOUNT
+    _CODE("doVAR",   opDOVAR  );                    // 61
+    _CODE("D+",      opDPLUS  );                    // 62, Dr. Ting's opMAX
+    _CODE("D-",      opDSUB   );                    // 63, Dr. Ting's opMIN
     ///
     ///> Common Colon Words (in word streams)
     ///
@@ -358,11 +358,11 @@ int ef_assemble(U8 *cdata)
     IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
     //IU MSMOD = _COLON("M/MOD", /* not implemented */ EXIT);
-    IU SLMOD = _COLON("/MOD",  DDUP, SLASH, TOR, MOD, RFROM, EXIT);
+    _COLON("/MOD",  DDUP, SLASH, TOR, MOD, RFROM, EXIT);
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
-    IU STASL = _COLON("*/",    SSMOD, SWAP, DROP, EXIT);
-    IU DSTOR = _COLON("2!",    DUP, TOR, CELL, PLUS, STORE, RFROM, STORE, EXIT);
-    IU DAT   = _COLON("2@",    DUP, TOR, AT, RFROM, CELL, PLUS, AT, EXIT);
+    _COLON("*/",    SSMOD, SWAP, DROP, EXIT);
+    _COLON("2!",    DUP, TOR, CELL, PLUS, STORE, RFROM, STORE, EXIT);
+    _COLON("2@",    DUP, TOR, AT, RFROM, CELL, PLUS, AT, EXIT);
     IU WITHI = _COLON("WITHIN",OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
     IU MAX   = _COLON("MAX", DDUP, LESS); {
@@ -379,13 +379,13 @@ int ef_assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DDROP, EXIT);
     }
-    IU MOVE  = _COLON("MOVE", CELL, SLASH); {
+    _COLON("MOVE", CELL, SLASH); {
         _FOR(NOP);
         _AFT(OVER, AT, OVER, STORE, TOR, CELLP, RFROM, CELLP);
         _THEN(NOP);
         _NEXT(DDROP, EXIT);
     }
-    IU FILL = _COLON("FILL", SWAP); {
+    _COLON("FILL", SWAP); {
         _FOR(SWAP);
         _AFT(DDUP, CSTOR, ONEP);
         _THEN(NOP);
@@ -411,9 +411,7 @@ int ef_assemble(U8 *cdata)
         _THEN(EXIT);
     }
     IU EDIGS = _COLON("#>",     DROP, vHLD, AT, PAD, OVER, SUB, EXIT);
-    IU STR   = _COLON("str",    DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
-    IU UPPER = _COLON("wupper", DOLIT, 0x5f5f, AND, EXIT);
-    IU TOUPP = _COLON(">upper", DUP, DOLIT, 0x61, DOLIT, 0x7b, WITHI); { // [a-z] only?
+    IU TOUPP = _COLON(">UPPER", DUP, DOLIT, 0x61, DOLIT, 0x7b, WITHI); { // [a-z] only?
         _IF(DOLIT, 0x5f, AND);
         _THEN(EXIT);
     }
@@ -475,12 +473,15 @@ int ef_assemble(U8 *cdata)
 	IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, PLUS, TOR, SWAP, TOR, EXIT);
 	IU STRQ  = _COLON("S\"|", DOSTR, EXIT);
 	   DOTQ  = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
-	IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);
+	IU DOTR  = _COLON(".R",   TOR,
+			DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // treat as str
+			RFROM, OVER, SUB, SPACS, TYPE, EXIT);
 	IU UDOTR = _COLON("U.R",  TOR, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);
 	IU UDOT  = _COLON("U.",   BDIGS, DIGS, EDIGS, SPACE, TYPE, EXIT);
 	IU DOT   = _COLON(".",    vBASE, AT, DOLIT, 0xa, XOR); {
-		_IF(UDOT, EXIT);                    // base 10
-		_THEN(STR, SPACE, TYPE, EXIT);      // other
+		_IF(UDOT, EXIT);             // base 10
+		_THEN(DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,       // treat as str
+			SPACE, TYPE, EXIT);      // show string
 	}
 	IU QUEST = _COLON("?", AT, DOT, EXIT);
 	///
@@ -531,13 +532,15 @@ int ef_assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DDROP, DOLIT, 0, EXIT);
 	}
-	IU FIND = _COLON("find", SWAP, DUP, CAT, vTEMP, STORE,      // keep length in temp
+	IU FIND = _COLON("FIND", SWAP, DUP, CAT, vTEMP, STORE,      // keep length in temp
                      DUP, AT, TOR, CELLP, SWAP); {              // fetch 1st cell
 		_BEGIN(AT, DUP); {                                      // 0000 = end of dic
 #if CASE_SENSITIVE
 			_IF(DUP, AT, DOLIT, 0xff3f, AND, RAT, XOR); {                  // compare 2-byte
 #else
-			_IF(DUP, AT, DOLIT, 0xff3f, AND, UPPER, RAT, UPPER, XOR); {    // compare 2-byte
+			_IF(DUP, AT, DOLIT, 0xff3f, AND,
+					DOLIT, 0x5f5f, AND, RAT,
+					DOLIT, 0x5f5f, AND, XOR); {    				// compare 2-byte (uppercased)
 #endif // CASE_SENSITIVE
 				_IF(CELLP, DOLIT, 0xffff);                      // miss, try next word
 				_ELSE(CELLP, vTEMP, AT, ONEM, DUP); {           // -1, since 1st byte has been compared
@@ -625,19 +628,18 @@ int ef_assemble(U8 *cdata)
 		_ELSE(ERROR);
 		_THEN(NOP);
 	}
-	IU iLBRAC = _IMMED("[", DOLIT, INTER, vTEVL, STORE, EXIT);
-	IU DOTOK  = _COLON(".OK", CR, DOLIT, INTER, vTEVL, AT, EQUAL); {  // are we in interpreter mode?
-		_IF(DEPTH, DOLIT, 3, MIN); {
-			_FOR(RAT, PICK, DOT);
-			_NEXT(NOP);
-			_DOTQ(" ok>");
-		}
-		_THEN(EXIT);
-	}
+	IU iLBRAC= _IMMED("[", DOLIT, INTER, vTEVL, STORE, EXIT);
 	IU EVAL  = _COLON("EVAL", NOP); {
 		_BEGIN(TOKEN, DUP, CAT);  // fetch token length
 		_WHILE(vTEVL, ATEXE);
-		_REPEAT(DROP, DOTOK, EXIT);
+		_REPEAT(DROP, CR, DOLIT, INTER, vTEVL, AT, EQUAL); {
+			_IF(DEPTH, DOLIT, 4, MIN); {            // dump stack and ok prompt
+				_FOR(RAT, PICK, DOT);
+				_NEXT(NOP);
+				_DOTQ(" ok> ");
+			}
+			_THEN(EXIT);
+		}
 	}
  	IU QUIT  = _COLON("QUIT", DOLIT, FORTH_TIB_ADDR, vTTIB, STORE, iLBRAC); {  // clear TIB, interpreter mode
 		_BEGIN(QUERY, EVAL);      // main query-eval loop
@@ -646,18 +648,15 @@ int ef_assemble(U8 *cdata)
 	///
 	///> Forth Compiler - utility functions
 	///
-	IU ONLY  = _COLON("COMPILE-ONLY", DOLIT, fCOMPO, vLAST, AT, PSTOR, EXIT);  // enable COMPILE-ONLY flag
-	IU IMMED = _COLON("IMMEDIATE",    DOLIT, fIMMED, vLAST, AT, PSTOR, EXIT);  // enable IMMEDIATE flag
 	IU COMMA = _COLON(",",       HERE, DUP, CELLP, vCP, STORE, STORE, EXIT);   // store a byte
 	IU CCMMA = _COLON("C,",      HERE, DUP, ONEP,  vCP, STORE, CSTOR, EXIT);   // store a word
-	IU ALLOT = _COLON("ALLOT",   vCP, PSTOR, EXIT);
 	IU UNIQU = _COLON("?UNIQUE", DUP, NAMEQ, QDUP); {
 		_IF(COUNT, DOLIT, 0x1f, AND, SPACE, TYPE); {
 			_DOTQ(" reDef");
 		}
 		_THEN(DROP, EXIT);
 	}
-	IU SNAME = _COLON("$,n", DUP, AT); {     // add new name field which is already build by PACK$
+	IU SNAME = _COLON("$,n", DUP, AT); {          // add new name field which is already build by PACK$
 		_IF(UNIQU, DUP, NAMET, vCP, STORE, DUP, vLAST, STORE, CELLM, vCNTX, AT, SWAP, STORE, EXIT);
 		_THEN(ERROR);
 	}
@@ -666,7 +665,6 @@ int ef_assemble(U8 *cdata)
 		_THEN(ERROR);
 	}
 	IU iLITR = _IMMED("LITERAL", DOLIT, DOLIT, COMMA, COMMA, EXIT);    // create a literal
-	IU iBCMP = _IMMED("[COMPILE]", TICK, COMMA, EXIT);                 // add word address to dictionary
 	IU COMPI = _COLON("COMPILE",  RFROM, DUP, AT, COMMA, CELLP, TOR, EXIT);
 	IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); { // name found?
 		_IF(AT, DOLIT, fIMMED, AND); {            // is immediate?
@@ -678,82 +676,89 @@ int ef_assemble(U8 *cdata)
 		_IF(iLITR, EXIT);                         // add as literal
 		_THEN(ERROR);
 	}
+	_COLON("COMPILE-ONLY", DOLIT, fCOMPO, vLAST, AT, PSTOR, EXIT);  // enable COMPILE-ONLY flag
+	_COLON("IMMEDIATE",    DOLIT, fIMMED, vLAST, AT, PSTOR, EXIT);  // enable IMMEDIATE flag
+	_COLON("ALLOT",        vCP, PSTOR, EXIT);
+	_IMMED("[COMPILE]",    TICK, COMMA, EXIT);                      // add word address to dictionary
 	///
 	///> Forth Compiler - define new word
 	///
-	IU OVERT = _COLON("OVERT", vLAST, AT, vCNTX, STORE, EXIT);            // update LAST and CONTEXT variables
-	IU RBRAC = _COLON("]", DOLIT, SCOMP, vTEVL, STORE, EXIT);             // switch into compiler-mode
-	IU COLON = _COLON(":", TOKEN, SNAME, RBRAC, DOLIT, opENTER, CCMMA, EXIT);
-	IU iSEMI = _IMMED(";", DOLIT, EXIT, COMMA, iLBRAC, OVERT, EXIT);
-	IU FORGT = _COLON("FORGET", TOKEN, NAMEQ, QDUP); {
+	IU RBRAC = _COLON("]", DOLIT, SCOMP, vTEVL, STORE, EXIT);       // switch into compiler-mode
+	_COLON(":", TOKEN,
+			SNAME,
+			RBRAC, DOLIT, opENTER, CCMMA, EXIT);
+	_IMMED(";", DOLIT, EXIT, COMMA, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
+	_COLON("FORGET", TOKEN, NAMEQ, QDUP); {
 		_IF(CELLM, DUP, vCP, STORE, AT, DUP, vCNTX, STORE, vLAST, STORE, DROP, EXIT);
 		_THEN(ERROR);
 	}
 	///
 	///> Forth Compiler - variable, constant, and comments
 	///
-	IU CODE   = _COLON("CODE",    TOKEN, SNAME, OVERT, EXIT);
-	IU CREAT  = _COLON("CREATE",  CODE,  DOLIT, opDOVAR, CCMMA, EXIT);
-	IU VARIA  = _COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
-	IU CONST  = _COLON("CONSTANT",CODE,  DOLIT, opDOCON, CCMMA, COMMA, EXIT);
-	IU iDOTPR = _IMMED(".(",      DOLIT, 0x29, PARSE, TYPE, EXIT);              // print til hit ) i.e. 0x29
-	IU iBKSLA = _IMMED("\\",      DOLIT, 0xa,  WORD,  DROP,  EXIT);             // skip til end of line
-	IU iPAREN = _IMMED("(",       DOLIT, 0x29, PARSE, DDROP, EXIT);             // skip til )
+	IU CODE  = _COLON("CODE", TOKEN,
+			SNAME,
+			vLAST, AT, vCNTX, STORE, EXIT);
+	IU CREAT = _COLON("CREATE", CODE,  DOLIT, opDOVAR, CCMMA, EXIT);
+	_COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
+	_COLON("CONSTANT",CODE,  DOLIT, opDOCON, CCMMA, COMMA, EXIT);
+	_IMMED(".(",      DOLIT, 0x29, PARSE, TYPE, EXIT);              // print til hit ) i.e. 0x29
+	_IMMED("\\",      DOLIT, 0xa,  WORD,  DROP,  EXIT);             // skip til end of line
+	_IMMED("(",       DOLIT, 0x29, PARSE, DDROP, EXIT);             // skip til )
 	///
 	///> Forth Compiler - branching instructions
 	///
     ///> * BEGIN...AGAIN, BEGIN... f UNTIL, BEGIN...(once)...f WHILE...(loop)...REPEAT
     ///
 	IU iAHEAD = _IMMED("AHEAD",   COMPI, BRAN,  HERE, DOLIT, 0, COMMA, EXIT);
-	IU iBEGIN = _IMMED("BEGIN",   HERE, EXIT);
 	IU iAGAIN = _IMMED("AGAIN",   COMPI, BRAN,  COMMA, EXIT);
-	IU iUNTIL = _IMMED("UNTIL",   COMPI, QBRAN, COMMA, EXIT);
+	_IMMED("BEGIN",   HERE, EXIT);
+	_IMMED("UNTIL",   COMPI, QBRAN, COMMA, EXIT);
     ///
     ///> * f IF...THEN, f IF...ELSE...THEN
     ///
 	IU iIF    = _IMMED("IF",      COMPI, QBRAN, HERE, DOLIT, 0, COMMA, EXIT);
 	IU iTHEN  = _IMMED("THEN",    HERE, SWAP, STORE, EXIT);
-	IU iELSE  = _IMMED("ELSE",    iAHEAD, SWAP, iTHEN, EXIT);
-	IU iWHILE = _IMMED("WHILE",   iIF, SWAP, EXIT);
-	IU iWHEN  = _IMMED("WHEN",    iIF, OVER, EXIT);
-	IU iREPEA = _IMMED("REPEAT",  iAGAIN, iTHEN, EXIT);
+	_IMMED("ELSE",    iAHEAD, SWAP, iTHEN, EXIT);
+	_IMMED("WHILE",   iIF, SWAP, EXIT);
+	_IMMED("WHEN",    iIF, OVER, EXIT);
+	_IMMED("REPEAT",  iAGAIN, iTHEN, EXIT);
     ///
     ///> * n FOR...NEXT, n FOR...(first)... f AFT...(2nd,...)...THEN...(every)...NEXT
     ///
-	IU iFOR   = _IMMED("FOR",     COMPI, TOR, HERE, EXIT);
-	IU iAFT   = _IMMED("AFT",     DROP, iAHEAD, HERE, SWAP, EXIT);
-	IU iNEXT  = _IMMED("NEXT",    COMPI, DONXT, COMMA, EXIT);
+	_IMMED("FOR",     COMPI, TOR, HERE, EXIT);
+	_IMMED("AFT",     DROP, iAHEAD, HERE, SWAP, EXIT);
+	_IMMED("NEXT",    COMPI, DONXT, COMMA, EXIT);
 	///
 	///> Forth Compiler - String specification
 	///
 	IU STRCQ  = _COLON("S,\"",    DOLIT, 0x22, WORD,     // find quote in TIB (0x22 is " in ASCII)
                        COUNT, PLUS, vCP, STORE, EXIT);   // advance dic pointer
-	IU iABRTQ = _IMMED("ABORT\"", DOLIT, ABORTQ, HERE, STORE, STRCQ, EXIT);
-	IU iSTRQ  = _IMMED("S\"",     DOLIT, STRQ, HERE, STORE, STRCQ, EXIT);
-	IU iDOTQ  = _IMMED(".\"",     DOLIT, DOTQ, HERE, STORE, STRCQ, EXIT);
+	_IMMED("ABORT\"", DOLIT, ABORTQ, HERE, STORE, STRCQ, EXIT);
+	_IMMED("S\"",     DOLIT, STRQ, HERE, STORE, STRCQ, EXIT);
+	_IMMED(".\"",     DOLIT, DOTQ, HERE, STORE, STRCQ, EXIT);
 	///
 	///> Debugging Tools
 	///
-	IU DMP   = _COLON("dm+", OVER, DOLIT, 5, UDOTR); {   // dump one row
-		_FOR(DOLIT, 0x3a, EMIT);
-		_AFT(DUP, AT, DOLIT, 5, UDOTR, CELLP);
-		_THEN(NOP);
-		_NEXT(EXIT);
-	}
-	IU DUMP  = _COLON("DUMP", vBASE, AT, TOR, HEX_, DOLIT, 0x1f, PLUS, DOLIT, 0x10, SLASH); {
-		_FOR(NOP);
-		_AFT(CR, DOLIT, 8, DDUP, DMP, TOR, SPACE, SPACE, CELLS, TYPE, RFROM);
-		_THEN(NOP);
-		_NEXT(DROP, RFROM, vBASE, STORE, EXIT);         // restore BASE
-	}
-	IU TNAME = _COLON(">NAME", NOP); {
+	_COLON(">NAME", NOP); {
 		_BEGIN(ONEM, DUP, CAT, DOLIT, 0x7f, AND, DOLIT, 0x20, LESS);
 		_UNTIL(EXIT);
 	}
-	IU DOTID = _COLON(".ID",   COUNT, DOLIT, 0x1f, AND, TYPE, SPACE, EXIT);
-	IU WORDS = _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTEMP, STORE); {
+	_COLON("DUMP", vBASE, AT, TOR, HEX_, DOLIT, 0x1f, PLUS, DOLIT, 0x10, SLASH); {
+		_FOR(NOP);
+		_AFT(CR, DOLIT, 8, DDUP, OVER, DOLIT, 5, UDOTR); {
+			_FOR(DOLIT, 0x3a, EMIT);                    // dump one row
+			_AFT(DUP, AT, DOLIT, 5, UDOTR, CELLP);
+			_THEN(NOP);
+			_NEXT(TOR, SPACE, SPACE, CELLS, TYPE, RFROM);
+		}
+		_THEN(NOP);
+		_NEXT(DROP, RFROM, vBASE, STORE, EXIT);         // restore BASE
+	}
+	_COLON("WORDS", CR, vCNTX, DOLIT, 0, vTEMP, STORE); {
 		_BEGIN(AT, QDUP);
-		_WHILE(DUP, SPACE, DOTID, CELLM, vTEMP, AT, DOLIT, 0xa, LESS); {
+		_WHILE(DUP, SPACE,
+			COUNT, DOLIT, 0x1f, AND, TYPE, SPACE,       // .ID
+			CELLM, vTEMP, AT, DOLIT, 0xa, LESS); {
 			_IF(DOLIT, 1, vTEMP, PSTOR);
 			_ELSE(CR, DOLIT, 0, vTEMP, STORE);
 			_THEN(NOP);
@@ -763,14 +768,14 @@ int ef_assemble(U8 *cdata)
     ///
     ///> Arduino specific opcodes
     ///
-    IU DELAY = _CODE("DELAY",   opDELAY  );
-    IU CLOCK = _CODE("CLOCK",   opCLOCK  );
-	IU PIN   = _CODE("PINMODE", opPIN    );
-	IU MAP   = _CODE("MAP",     opMAP    );
-    IU DIN   = _CODE("IN",      opIN     );
-    IU DOUT  = _CODE("OUT",     opOUT    );
-    IU AIN   = _CODE("AIN",     opAIN    );
-	IU AOUT  = _CODE("PWM",     opPWM    );
+    _CODE("DELAY",   opDELAY);
+    _CODE("CLOCK",   opCLOCK);
+	_CODE("PINMODE", opPIN  );
+	_CODE("MAP",     opMAP  );
+    _CODE("IN",      opIN   );
+    _CODE("OUT",     opOUT  );
+    _CODE("AIN",     opAIN  );
+	_CODE("PWM",     opPWM  );
     ///
     ///> Cold Start address (End of dictionary)
     ///

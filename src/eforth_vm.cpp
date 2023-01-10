@@ -72,13 +72,7 @@ void PUSH(S16 v)       { SS(++S) = top; top = v; }
 void RPUSH(S16 v)      { RS(++R) = v; }
 #define POP()          (top=SS(S ? S-- : S))
 #define RPOP()         (RS(R ? R-- : R))
-///
-/// store a double on data stack top
-///
-void DTOP(S32 d) {
-    SS(S) = d&0xffff;
-    top   = d>>16;
-}
+#define DTOP(d)        { SS(S) = (d)&0xffff; top = (d)>>16; }
 ///
 /// update program counter (ready to fetch), advance instruction pointer
 ///
@@ -374,42 +368,52 @@ void _xor()                 /// (w w -- w) bitwise XOR
     top ^= SS(S--);
     NEXT();
 }
-void _great()               /// (n1 n2 -- t) true if n1>n2
+void _gt()                  /// (n1 n2 -- t) true if n1>n2
 {
     top = BOOL(SS(S--) > top);
     NEXT();
 }
-void _less()                /// (n1 n2 -- t) true if n1<n2
+void _lt()                  /// (n1 n2 -- t) true if n1<n2
 {
     top = BOOL(SS(S--) < top);
     NEXT();
 }
-void _equal()               /// (w w -- t) true if top two items are equal
+void _ge()
+{
+    top = BOOL(SS(S--) >= top);
+    NEXT();
+}
+void _eq()                  /// (w w -- t) true if top two items are equal
 {
     top = BOOL(SS(S--)==top);
     NEXT();
 }
-void _invert()             /// (w -- ~w) one's complement
+void _inv()                 /// (w -- ~w) one's complement
 {
     top = -top - 1;
     NEXT();
 }
-void _zless()               /// (n -- f) check whether top of stack is negative
+void _zgt()                 /// (n -- f) check whether top of stack is positive
+{
+    top = BOOL(top > 0);
+    NEXT();
+}
+void _zlt()                 /// (n -- f) check whether top of stack is negative
 {
     top = BOOL(top < 0);
     NEXT();
 }
-void _uless()               /// (u1 u2 -- t) unsigned compare top two items
+void _zeq()                 /// (n -- f) check whether top equals to zero
 {
-    top = BOOL((U16)(SS(S--)) < (U16)top);
+    top = BOOL(top == 0);
     NEXT();
 }
-void _lshift()              /// (w n -- w) left shift n bits
+void _lsh()                 /// (w n -- w) left shift n bits
 {
     top = SS(S--) << top;
     NEXT();
 }
-void _rshift()              /// (w n -- w) right shift n bits
+void _rsh()                 /// (w n -- w) right shift n bits
 {
     top = SS(S--) >> top;
     NEXT();
@@ -418,18 +422,12 @@ void _rshift()              /// (w n -- w) right shift n bits
 ///
 ///@name Arithmetic Ops
 ///@{
-void _abs()                 /// (n -- n) absolute value of n
-{
-    U16 m = top>>15;
-    top = (top + m) ^ m;    ///> no branching
-    NEXT();
-}
 void _mod()                 /// (n n -- r) signed divide, returns mod
 {
     top = (top) ? SS(S--) % top : SS(S--);
     NEXT();
 }
-void _negate()             /// (n -- -n) two's complement
+void _neg()                 /// (n -- -n) two's complement
 {
     top = 0 - top;
     NEXT();
@@ -444,7 +442,7 @@ void _onem()               /// (n -- n-1) minus one to top
     top--;
     NEXT();
 }
-void _plus()                /// (w w -- sum) add top two items
+void _add()                /// (w w -- sum) add top two items
 {
     top += SS(S--);
     NEXT();
@@ -454,20 +452,19 @@ void _sub()                 /// (n1 n2 -- n1-n2) subtraction
     top = SS(S--) - top;
     NEXT();
 }
-void _star()                /// (n n -- n) signed multiply, return single product
+void _mul()                 /// (n n -- n) signed multiply, return single product
 {
     top *= SS(S--);
     NEXT();
 }
-void _slash()               /// (n n - q) signed divide, return quotient
+void _div()                 /// (n n - q) signed divide, return quotient
 {
     top = (top) ? SS(S--) / top : (S--, 0);
     NEXT();
 }
-void _uplus()               /// (w w -- w c) add two numbers, return the sum and carry flag
+void _uless()               /// (u1 u2 -- t) unsigned compare top two items
 {
-    SS(S) = SS(S)+top;
-    top = (U16)SS(S) < (U16)top;
+    top = BOOL((U16)(SS(S--)) < (U16)top);
     NEXT();
 }
 void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double by single
@@ -571,13 +568,13 @@ void _mstar()               /// (n1 n2 -- d) signed multiply, return double prod
     DTOP(d);
     NEXT();
 }
-void _dnegate()             /// (d -- -d) two's complemente of top double
+void _dneg()                /// (d -- -d) two's complemente of top double
 {
     S32 d = ((S32)top<<16) | (SS(S) & 0xffff);
     DTOP(-d);
     NEXT();
 }
-void _dplus()               /// (d1 d2 -- d1+d2) add two double precision numbers
+void _dadd()                /// (d1 d2 -- d1+d2) add two double precision numbers
 {
     S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
     S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
@@ -664,64 +661,64 @@ void(*prim[FORTH_PRIMITIVES])() = {
     /* case 3 */ _txsto,
     /* case 4 */ _docon,
     /* case 5 */ _dolit,
-    /* case 6 */ _enter,
-    /* case 7 */ _exit,
-    /* case 8 */ _execu,
-    /* case 9 */ _donext,
-    /* case 10 */ _qbran,
-    /* case 11 */ _bran,
-    /* case 12 */ _store,
-    /* case 13 */ _at,
-    /* case 14 */ _cstor,
-    /* case 15 */ _cat,
-    /* case 16  opRPAT  */ _onep,
-    /* case 17  opRPSTO */ _onem,
+    /* case 6 */ _dovar,
+    /* case 7 */ _enter,
+    /* case 8 */ _exit,
+    /* case 9 */ _execu,
+    /* case 10 */ _donext,
+    /* case 11 */ _qbran,
+    /* case 12 */ _bran,
+    /* case 13 */ _store,
+    /* case 14 */ _pstor,
+    /* case 15 */ _at,
+    /* case 16 */ _cstor,
+    /* case 17 */ _cat,
     /* case 18 */ _rfrom,
     /* case 19 */ _rat,
     /* case 20 */ _tor,
-    /* case 21 opSPAT  */ _delay,
-    /* case 22 opSPSTO */ _clock,
-    /* case 23 */ _drop,
-    /* case 24 */ _dup,
-    /* case 25 */ _swap,
-    /* case 26 */ _over,
-    /* case 27 */ _zless,
-    /* case 28 */ _and,
-    /* case 29 */ _or,
-    /* case 30 */ _xor,
-    /* case 31 */ _uplus,
-    /* case 32 */ _depth,
-    /* case 33 */ _qdup,
-    /* case 34 */ _rot,
-    /* case 35 */ _lshift,
-    /* case 36 */ _rshift,
-    /* case 37 */ _plus,
-    /* case 38 */ _invert,
-    /* case 39 */ _negate,
-    /* case 40 opDNEGA */ _great,
-    /* case 41 */ _sub,
-    /* case 42 */ _abs,
-    /* case 43 */ _equal,
-    /* case 44 */ _uless,
-    /* case 45 */ _less,
-    /* case 46 */ _ummod,
-    /* case 47 opMSMOD */ _pinmode,
-    /* case 48 opSLMOD */ _map,
-    /* case 49 */ _mod,
-    /* case 50 */ _slash,
+    /* case 21 */ _drop,
+    /* case 22 */ _dup,
+    /* case 23 */ _swap,
+    /* case 24 */ _over,
+    /* case 25 */ _rot,
+    /* case 26 */ _pick,
+    /* case 27 */ _and,
+    /* case 28 */ _or,
+    /* case 29 */ _xor,
+    /* case 30 */ _inv,
+    /* case 31 */ _lsh,
+    /* case 32 */ _rsh,
+    /* case 33 */ _add,
+    /* case 34 */ _sub,
+    /* case 35 */ _mul,
+    /* case 36 */ _div,
+    /* case 37 */ _mod,
+    /* case 38 */ _neg,
+    /* case 39 */ _gt,
+    /* case 40 */ _eq,
+    /* case 41 */ _lt,
+    /* case 42 */ _zgt,
+    /* case 43 */ _zeq,
+    /* case 44 */ _zlt,
+    /* case 45 */ _onep,
+    /* case 46 */ _onem,
+    /* case 47 */ _qdup,
+    /* case 48 */ _depth,
+    /* case 49 */ _uless,
+    /* case 50 */ _ummod,
     /* case 51 */ _umstar,
-    /* case 52 */ _star,
-    /* case 53 */ _mstar,
-    /* case 54 opSSMOD */ _din,
-    /* case 55 opSTASL */ _dout,
-    /* case 56 */ _pick,
-    /* case 57 */ _pstor,
-    /* case 58 opDSTOR */ _ain,
-    /* case 59 opDAT   */ _aout,
-    /* case 60 */ _dnegate,
-    /* case 61 */ _dovar,
-    /* case 62 */ _dplus,
-    /* case 63 */ _dsub,
+    /* case 52 */ _mstar,
+    /* case 53 */ _dneg,
+    /* case 54 */ _dadd,
+    /* case 55 */ _dsub,
+    /* case 56 */ _delay,
+    /* case 57 */ _clock,
+    /* case 58 */ _pinmode,
+    /* case 59 */ _map,
+    /* case 60 */ _din,
+    /* case 61 */ _dout,
+    /* case 62 */ _ain,
+    /* case 63 */ _aout
 };
 
 }; // namespace EfVM

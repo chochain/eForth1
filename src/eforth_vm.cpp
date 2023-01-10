@@ -752,7 +752,192 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
 ///
 int vm_step() {
     TRACE_WORD();              // tracing stack and word name
-    prim[BGET(PC)]();          // walk bytecode stream
+//    prim[BGET(PC)]();          // walk bytecode stream
+//    return (int)PC;
+
+    static void* vt[] = {
+    &&L_opNOP,        // 0
+    &&L_opBYE,
+    &&L_opQRX,
+    &&L_opTXSTO,
+    &&L_opDOCON,
+    &&L_opDOLIT,
+    &&L_opDOVAR,
+    &&L_opENTER,
+    &&L_opEXIT,
+    &&L_opEXECU,
+    &&L_opDONEXT,     // 10
+    &&L_opQBRAN,
+    &&L_opBRAN,
+    &&L_opSTORE,
+    &&L_opPSTOR,
+    &&L_opAT,
+    &&L_opCSTOR,
+    &&L_opCAT,
+    &&L_opRFROM,
+    &&L_opRAT,
+    &&L_opTOR,
+    &&L_opDROP,       // 20
+    &&L_opDUP,
+    &&L_opSWAP,
+    &&L_opOVER,
+    &&L_opROT,
+    &&L_opPICK,
+    &&L_opAND,
+    &&L_opOR,
+    &&L_opXOR,
+    &&L_opINV,        // 30
+    &&L_opLSH,
+    &&L_opRSH,
+    &&L_opADD,
+    &&L_opSUB,
+    &&L_opMUL,
+    &&L_opDIV,
+    &&L_opMOD,
+    &&L_opNEG,
+    &&L_opGT,
+    &&L_opEQ,         // 40
+    &&L_opLT,
+    &&L_opZGT,
+    &&L_opZEQ,
+    &&L_opZLT,
+    &&L_opONEP,
+    &&L_opONEM,
+    &&L_opQDUP,
+    &&L_opDEPTH,
+    &&L_opULESS,
+    &&L_opUMMOD,      // 50
+    &&L_opUMSTAR,
+    &&L_opMSTAR,
+    &&L_opDNEG,
+    &&L_opDADD,
+    &&L_opDSUB,
+    &&L_opDELAY,
+    &&L_opCLK,
+    &&L_opPIN,
+    &&L_opMAP,
+    &&L_opIN,         // 60
+    &&L_opOUT,
+    &&L_opAIN,
+    &&L_opPWM
+    };
+
+#define _OP(op, fn)   L_##op: { fn(); goto vm_step_exit; }
+#define _OX(op, code) L_##op: { code; goto vm_step_next; }
+    
+    U8 op = BGET(PC);
+    goto *vt[op];
+    
+    _OX(opNOP,   {});
+    _OP(opBYE,   _init);
+    _OX(opQRX,
+        PUSH(ef_getchar());     ///> yield to user task until console input available
+        if (top) PUSH(TRUE));
+    _OX(opTXSTO, _txsto());
+    _OX(opDOCON,
+        ++PC;                   ///> skip opDOCON opcode
+        PUSH(GET(PC)));         ///> push cell value onto stack
+    _OX(opDOLIT,
+        PUSH(GET(IP));          ///> push onto data stack
+        IP += CELLSZ);          ///> skip to next instruction
+    _OX(opDOVAR, ++PC; PUSH(PC));
+    _OX(opENTER,
+        RPUSH(IP);              ///> keep return address
+        IP = ++PC);             ///> skip opcode opENTER, advance to next instruction
+    _OX(opEXIT,  IP = RPOP());  ///> pop return address
+    _OP(opEXECU, _execu);
+    _OP(opDONEXT,_donext);
+    _OX(opQBRAN,
+        if (top) IP += CELLSZ;  ///> next instruction, or
+        else     IP = GET(IP);  ///> fetch branching target address
+        POP());
+    _OX(opBRAN,  IP = GET(IP)); ///> fetch branching target address
+    _OX(opSTORE,
+        SET(top, SS(S--));
+        POP());
+    _OX(opPSTOR,
+        SET(top, GET(top)+SS(S--));
+        POP());
+    _OX(opAT,    top = (S16)GET(top));
+    _OX(opCSTOR,
+        BSET(top, SS(S--));
+        POP());
+    _OX(opCAT,   top = (S16)BGET(top));
+    _OX(opRFROM, PUSH(RPOP()));
+    _OX(opRAT,   PUSH(RS(R)));
+    _OX(opTOR,
+        RPUSH(top);
+        POP());
+    _OX(opDROP,  POP());
+    _OX(opDUP,   SS(++S)=top);
+    _OX(opSWAP,
+        S16 tmp = top;
+        top = SS(S);
+        SS(S)=tmp);
+    _OX(opOVER,  PUSH(SS(S)));         ///> push w1
+    _OX(opROT,
+        S16 tmp = SS(S-1);
+        SS(S-1) = SS(S);
+        SS(S)   = top;
+        top     = tmp);
+    _OX(opPICK,  top = SS(S - (U8)top));
+    _OX(opAND,   top &= SS(S--));
+    _OX(opOR,    top |= SS(S--));
+    _OX(opXOR,   top ^= SS(S--));
+    _OX(opINV,   top = -top - 1);
+    _OX(opLSH,   top = SS(S--) << top);
+    _OX(opRSH,   top = SS(S--) >> top);
+    _OX(opADD,   top += SS(S--));
+    _OX(opSUB,   top = SS(S--) - top);
+    _OX(opMUL,   top *= SS(S--));
+    _OX(opDIV,   top = (top) ? SS(S--) / top : (S--, 0));
+    _OX(opMOD,   top = (top) ? SS(S--) % top : SS(S--));
+    _OX(opNEG,   top = 0 - top);
+    _OX(opGT,    top = BOOL(SS(S--) > top));
+    _OX(opEQ,    top = BOOL(SS(S--)==top));
+    _OX(opLT,    top = BOOL(SS(S--) < top));
+    _OX(opZGT,   top = BOOL(top > 0));
+    _OX(opZEQ,   top = BOOL(top == 0));
+    _OX(opZLT,   top = BOOL(top < 0));
+    _OX(opONEP,  top++);
+    _OX(opONEM,  top--);
+    _OX(opQDUP,  if (top) SS(++S) = top);
+    _OX(opDEPTH, PUSH(S));
+    _OX(opULESS, top = BOOL((U16)(SS(S--)) < (U16)top));
+    _OP(opUMMOD, _ummod);
+    _OP(opUMSTAR,_umstar);
+    _OP(opMSTAR, _mstar);
+    _OP(opDNEG,  _dneg);
+    _OP(opDADD,  _dadd);
+    _OP(opDSUB,  _dsub);
+    _OP(opDELAY, _delay);
+    _OX(opCLK,
+        U32 t = millis();
+        PUSH(t & 0xffff);       ///> stored double on stack top
+        PUSH(t >> 16));
+    _OX(opPIN,
+        pinMode(top, SS(S) ? OUTPUT : INPUT);
+        POP();
+        POP());
+    _OX(opMAP,
+        U16 tmp = map(top, SS(S-3), SS(S-2), SS(S-1), SS(S));
+        S -= 4;
+        top = tmp);
+    _OX(opIN,    PUSH(digitalRead(POP())));
+    _OX(opOUT,
+        digitalWrite(top, SS(S));
+        POP();
+        POP());
+    _OX(opAIN,   PUSH(analogRead(POP())));
+    _OX(opPWM,
+        analogWrite(top, SS(S));
+        POP();
+        POP());
+
+vm_step_next:
+    PC = GET(IP);
+    IP += sizeof(IU);
+vm_step_exit:
 
     return (int)PC;
 }

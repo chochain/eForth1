@@ -133,11 +133,19 @@ void TRACE_WORD()
 void _init() {
     R = S = PC = IP = top = 0;  ///> setup control variables
     tCNT = tTAB = 0;            ///> setup tracing variables
-    
-    IU pc = FORTH_UVAR_ADDR;    ///> setup Forth user variables
-    SET(pc,   FORTH_TIB_ADDR);
-    SET(pc+2, 0x10);
-    SET(pc+4, FORTH_DIC_ADDR);
+    /// FORTH_UVAR_ADDR;
+    ///   'TIB console input buffer pointer
+    ///   BASE current radix for numeric ops
+    ///   CP,  top of dictionary, same as HERE
+    ///   CONTEXT name field of last word
+    ///   LAST, same as CONTEXT
+    ///   'EVAL eval mode (interpreter or compiler)
+    ///   'ABORT exception rescue handler (QUIT)
+    ///   tmp storage (alternative to return stack)
+    IU p = FORTH_UVAR_ADDR;    ///> setup Forth user variables
+    SET(p,   FORTH_TIB_ADDR);  /// * set 'TIB pointer
+    SET(p+2, 0x10);            /// * set BASE to 10
+    SET(p+4, FORTH_DIC_ADDR);  /// * top of dictionary
     
 #if EXE_TRACE
     tCNT=1;                     ///> optionally enable tracing
@@ -561,13 +569,13 @@ void _mstar()               /// (n1 n2 -- d) signed multiply, return double prod
 }
 void _dnegate()             /// (d -- -d) two's complemente of top double
 {
-    S32 d = ((S32)top<<16) | SS(S)&0xffff;
+    S32 d = ((S32)top<<16) | (SS(S) & 0xffff);
     DTOP(-d);
     NEXT();
 }
 void _dplus()               /// (d1 d2 -- d1+d2) add two double precision numbers
 {
-    S32 d0 = ((S32)top<<16)        | (SS(S)&0xffff);
+    S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
     S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
     S -= 2;
     DTOP(d1 + d0);
@@ -575,7 +583,7 @@ void _dplus()               /// (d1 d2 -- d1+d2) add two double precision number
 }
 void _dsub()                /// (d1 d2 -- d1-d2) subtract d2 from d1
 {
-    S32 d0 = ((S32)top<<16)        | (SS(S)&0xffff);
+    S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
     S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
     S -= 2;
     DTOP(d1 - d0);
@@ -699,17 +707,17 @@ void(*prim[FORTH_PRIMITIVES])() = {
     /* case 50 */ _slash,
     /* case 51 */ _umstar,
     /* case 52 */ _star,
-	/* case 53 */ _mstar,
-	/* case 54 opSSMOD */ _din,
-	/* case 55 opSTASL */ _dout,
-	/* case 56 */ _pick,
-	/* case 57 */ _pstor,
-	/* case 58 opDSTOR */ _ain,
-	/* case 59 opDAT   */ _aout,
-	/* case 60 */ _dnegate,
-	/* case 61 */ _dovar,
-	/* case 62 */ _dplus,
-	/* case 63 */ _dsub,
+    /* case 53 */ _mstar,
+    /* case 54 opSSMOD */ _din,
+    /* case 55 opSTASL */ _dout,
+    /* case 56 */ _pick,
+    /* case 57 */ _pstor,
+    /* case 58 opDSTOR */ _ain,
+    /* case 59 opDAT   */ _aout,
+    /* case 60 */ _dnegate,
+    /* case 61 */ _dovar,
+    /* case 62 */ _dplus,
+    /* case 63 */ _dsub,
 };
 ///
 /// eForth virtual machine initialization
@@ -727,7 +735,7 @@ void(*prim[FORTH_PRIMITIVES])() = {
 void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     io    = (Stream *)io_stream;
     cRom  = rom;
-	cData = cdata;
+    cData = cdata;
     cStack= (S16*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
     
     _init();                   // resetting user variables
@@ -743,4 +751,3 @@ int vm_step() {
 
     return (int)PC;
 }
-

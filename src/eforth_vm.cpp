@@ -735,13 +735,15 @@ void(*prim[FORTH_PRIMITIVES])() = {
 ///> *  ABORT   = QUIT           (pointer to error handler, QUIT is the main loop)
 ///> *  tmp     = 0              (scratch pad)
 ///
+using namespace EfVM;
+
 void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
-    EfVM::io     = (Stream *)io_stream;
-    EfVM::cRom   = rom;
-    EfVM::cData  = cdata;
-    EfVM::cStack = (S16*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
+    io     = (Stream *)io_stream;
+    cRom   = rom;
+    cData  = cdata;
+    cStack = (S16*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
     
-    EfVM::_init();                   // resetting user variables
+    _init();                   // resetting user variables
 }
 ///
 /// eForth virtual machine (single-step) execution unit
@@ -749,8 +751,8 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
 ///   0 - exit
 ///
 int vm_step() {
-    EfVM::TRACE_WORD();                    // tracing stack and word name
-    EfVM::prim[EfVM::BGET(EfVM::PC)]();    // walk bytecode stream
+    TRACE_WORD();              // tracing stack and word name
+    prim[BGET(PC)]();          // walk bytecode stream
 
-    return (int)EfVM::PC;
+    return (int)PC;
 }

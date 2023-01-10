@@ -113,11 +113,7 @@ int main(int ac, char* av[])
 {
     setvbuf(stdout, NULL, _IONBF, 0);       // autoflush (turn STDOUT buffering off)
 
-#if ARDUINO
-    ef_assemble(_rom, false);
-#else   // !ARDUINO
-    ef_assemble(_rom, true);
-#endif  // ARDUINO
+    ef_assemble(_rom);
 
 #if !ASM_ONLY
     sys_info(_rom);

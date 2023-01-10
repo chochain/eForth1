@@ -208,8 +208,7 @@ void ef_yield();
 ///@name eForth Assembler Functions
 ///@{
 void ef_assemble(
-    U8 *cdata,               ///< pointer to Arduino memory block where assembled data will be populated
-	int dump_rom             ///< dump rom in C array format
+    U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
     );
 ///@}
 #endif // __EFORTH_SRC_EFORTH_CORE_H

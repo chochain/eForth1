@@ -792,11 +792,17 @@ int assemble(U8 *cdata)
 
     return here;
 }
+}; // namespace EfAsm
+///
+/// eForth Assembler
+///
+using namespace EfAsm;
 ///
 /// create C array dump for ROM
 ///
-void dump_rom(U8* cdata, int len)
+void _dump_rom(U8* cdata, int len)
 {
+#if !ASM_ONLY
     printf("//\n// cut and paste the following segment into Arduino C code\n//");
     printf("\nconst U32 forth_rom[] PROGMEM = {\n");
     for (int p=0; p<len+0x20; p+=0x20) {
@@ -812,17 +818,12 @@ void dump_rom(U8* cdata, int len)
         printf("\n");
     }
     printf("};\n");
+#endif // !ASM_ONLY
 }
 
-}; // namespace EfAsm
-///
-/// eForth Assembler
-///
-using namespace EfAsm;
-    
-void ef_assemble(U8 *cdata, int dump) {
+void ef_assemble(U8 *cdata) {
     int sz = assemble(cdata);
 
-    if (dump) dump_rom(cdata, sz+0x20);
+    _dump_rom(cdata, sz+0x20);
 }
 

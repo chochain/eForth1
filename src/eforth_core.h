@@ -60,11 +60,11 @@ typedef U16       IU;                 ///< instruction/address unit (16-bit)
 ///@{
 #define FORTH_BOOT_ADDR  0x0000
 #define FORTH_RAM_ADDR   FORTH_ROM_SZ
-#define FORTH_TVAR_ADDR  (FORTH_RAM_ADDR+0x0)
-#define FORTH_UVAR_ADDR  (FORTH_TVAR_ADDR+0x10)
-#define FORTH_DIC_ADDR   (FORTH_UVAR_ADDR+0x10)
-#define FORTH_STACK_ADDR (FORTH_RAM_ADDR+FORTH_DIC_SZ)
-#define FORTH_STACK_TOP  (FORTH_STACK_ADDR+FORTH_STACK_SZ)
+#define FORTH_TVAR_ADDR  (FORTH_RAM_ADDR   + 0x0)
+#define FORTH_UVAR_ADDR  (FORTH_TVAR_ADDR  + 0x10)
+#define FORTH_DIC_ADDR   (FORTH_UVAR_ADDR  + 0x10)
+#define FORTH_STACK_ADDR (FORTH_RAM_ADDR   + FORTH_DIC_SZ)
+#define FORTH_STACK_TOP  (FORTH_STACK_ADDR + FORTH_STACK_SZ)
 #define FORTH_TIB_ADDR   (FORTH_STACK_TOP)
 ///@}
 ///
@@ -80,69 +80,69 @@ typedef U16       IU;                 ///< instruction/address unit (16-bit)
 ///
 enum {
     opNOP = 0,    // 0
-    opBYE,        // 1
-    opQRX,        // 2
-    opTXSTO,      // 3
-    opDOCON,      // 4
-    opDOLIT,      // 5
-    opENTER,      // 6
-    opEXIT,       // 7
-    opEXECU,      // 8
-    opDONEXT,     // 9
-    opQBRAN,      // 10
-    opBRAN,       // 11
-    opSTORE,      // 12
-    opAT,         // 13
-    opCSTOR,      // 14
-    opCAT,        // 15
-    opONEP,       // 16 Dr. Ting's opRPAT
-    opONEM,       // 17 Dr. Ting's opRPSTO
-    opRFROM,      // 18
-    opRAT,        // 19
-    opTOR,        // 20
-    opDELAY,      // 21 Dr. Ting's opSPAT
-    opCLOCK,      // 22 Dr. Ting's opSPSTO
-    opDROP,       // 23
-    opDUP,        // 24
-    opSWAP,       // 25
-    opOVER,       // 26
-    opZLESS,      // 27
-    opAND,        // 28
-    opOR,         // 29
-    opXOR,        // 30
-    opUPLUS,      // 31
-    opDEPTH,      // 32 Dr. Ting's opNEXT (not needed)
-    opQDUP,       // 33
-    opROT,        // 34
-    opLSHIFT,     // 35 Dr. Ting's opDDROP
-    opRSHIFT,     // 36 Dr. Ting's opDDUP
-    opPLUS,       // 37
-    opINVERT,     // 38
-    opNEGAT,      // 39
-    opGREAT,      // 40 Dr. Ting's opDNEGA
-    opSUB,        // 41
-    opABS,        // 42
-    opEQUAL,      // 43
-    opULESS,      // 44
-    opLESS,       // 45
-    opUMMOD,      // 46
-    opPIN,        // 47 Dr. Ting's opMSMOD
-    opMAP,        // 48 Dr. Ting's opSLMOD
-    opMOD,        // 49
-    opSLASH,      // 50
-    opUMSTAR,     // 51
-    opSTAR,       // 52
-    opMSTAR,      // 53
-    opIN,         // 54 Dr. Ting's opSSMOD
-    opOUT,        // 55 Dr. Ting's opSTASL
-    opPICK,       // 56
-    opPSTOR,      // 57
-    opAIN,        // 58 Dr. Ting's opDSTOR
-    opPWM,        // 59 Dr. Ting's opDAT
-    opDNEGA,      // 60 Dr. Ting's opCOUNT
-    opDOVAR,      // 61
-    opDPLUS,      // 62 Dr. Ting's opMAX
-    opDSUB        // 63 Dr. Ting's opMIN
+    opBYE,
+    opQRX,
+    opTXSTO,
+    opDOCON,
+    opDOLIT,
+    opDOVAR,
+    opENTER,
+    opEXIT,
+    opEXECU,
+    opDONEXT,     // 10
+    opQBRAN,
+    opBRAN,
+    opSTORE,
+    opPSTOR,
+    opAT,
+    opCSTOR,
+    opCAT,
+    opRFROM,
+    opRAT,
+    opTOR,
+    opDROP,       // 20
+    opDUP,
+    opSWAP,
+    opOVER,
+    opROT,
+    opPICK,
+    opAND,
+    opOR,
+    opXOR,
+    opINV,        // 30
+    opLSH,
+    opRSH,
+    opADD,
+    opSUB,
+    opMUL,
+    opDIV,
+    opMOD,
+    opNEG,
+    opGT,
+    opEQ,         // 40
+    opLT,
+    opZGT,
+    opZEQ,
+    opZLT,
+    opONEP,
+    opONEM,
+    opQDUP,
+    opDEPTH,
+    opULESS,
+    opUMMOD,      // 50
+    opUMSTAR,
+    opMSTAR,
+    opDNEG,
+    opDADD,
+    opDSUB,
+    opDELAY,
+    opCLK,
+    opPIN,
+    opMAP,
+    opIN,         // 60
+    opOUT,
+    opAIN,
+    opPWM
 };
 ///
 /// protothread task declaration

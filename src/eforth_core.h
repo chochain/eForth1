@@ -12,8 +12,10 @@
 #include "user_interface.h"
 #endif // ESP8266
 
+#define APP_NAME        "eForth1"
+#define MAJOR_VERSION   "v1"
 #define CASE_SENSITIVE  0             /**< define case sensitivity */
-#define ROM_DUMP_ONLY   0             /**< create ROM only (i.e. no debugging) */
+#define ASM_ONLY        0             /**< create ROM only (i.e. no debugging) */
 ///
 ///@name Debug Tracing Flags
 ///@{
@@ -182,7 +184,7 @@ typedef const char          *PGM_P;
 #define LOG(s)              printf("%s", s)
 #define LOG_C(c)            ef_putchar(c)
 #define LOG_V(s, n)         printf("%s%d", s, n)
-#define LOG_H(s, n)         printf("%s%x", s, n&0xffff)
+#define LOG_H(s, n)         printf("%s%x", s, (n)&0xffff)
 #endif // ARDUINO
 ///@}
 ///
@@ -198,7 +200,6 @@ int  vm_step();
 ///
 ///@name eForth IO Functions
 ///@{
-void ef_prompt();
 U8   ef_getchar();
 void ef_putchar(char c);
 void ef_yield();
@@ -206,12 +207,9 @@ void ef_yield();
 ///
 ///@name eForth Assembler Functions
 ///@{
-int  ef_assemble(
-    U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
-    );
-void ef_dump_rom(
-    U8 *cdata,              ///< pointer to assembled memory block (into C syntax)
-    int len                 ///< number of byte to be dump
+void ef_assemble(
+    U8 *cdata,               ///< pointer to Arduino memory block where assembled data will be populated
+	int dump_rom             ///< dump rom in C array format
     );
 ///@}
 #endif // __EFORTH_SRC_EFORTH_CORE_H

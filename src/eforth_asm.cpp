@@ -273,7 +273,7 @@ int assemble(U8 *cdata)
     IU vTABRT= _CODE("'ABORT",  opDOCON, VL(ua,6), VH(ua,6));   ///> * ABORT exception rescue handler (QUIT)
     IU vTEMP = _CODE("tmp",     opDOCON, VL(ua,7), VH(ua,7));   ///> * tmp storage (alternative to return stack)
     ///
-    ///> common constants and variable spec
+    ///> common constants and variable spec.
     ///
     IU BLANK = _CODE("BL",      opDOCON, 0x20,      0);         ///> * BL blank
     IU CELL  = _CODE("CELL",    opDOCON, CELLSZ,    0);         ///> * CELL cell size

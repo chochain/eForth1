@@ -52,7 +52,7 @@ void ef_yield()
     static U8 n = 0;
     if (++n < 10) return;                 // give more cycles to VM
     n = 0;
-    task_ptr tp=_task_list;
+    task_ptr tp = _task_list;
     while (tp) {
         PT_SCHEDULE(tp->task());           // steal cycles for hardware tasks
         tp = tp->next;
@@ -84,7 +84,7 @@ extern U32 forth_rom[];                    // from eforth_rom.c
 void ef_setup(Stream &io_stream=Serial)
 {
     io   = &io_stream;
-    _ram = (U8*)malloc(FORTH_RAM_SZ);   // dynamically allocated
+    _ram = (U8*)malloc(FORTH_RAM_SZ);     // dynamically allocated
     
     sys_info(_ram);
     vm_init((PGM_P)forth_rom, _ram, (void*)&io_stream);
@@ -117,9 +117,9 @@ int main(int ac, char* av[])
 
 #if !ASM_ONLY
     sys_info(_rom);
-    _ram = (U8*)malloc(FORTH_RAM_SZ); ///< forth memory block dynamic allocated
+    _ram = (U8*)malloc(FORTH_RAM_SZ);       ///< forth memory block dynamic allocated
 
-    vm_init((PGM_P)_rom, _ram, NULL);
+    vm_init((char*)_rom, _ram, NULL);
     while (vm_step());
 #endif // !ASM_ONLY
 

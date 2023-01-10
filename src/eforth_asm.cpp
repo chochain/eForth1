@@ -10,6 +10,8 @@
 
 #define fIMMED  0x80                /**< immediate flag    */
 #define fCOMPO  0x40                /**< compile only flag */
+
+namespace EfAsm {
 ///
 ///@name Compiled Address for Branching
 ///@{
@@ -20,10 +22,10 @@ IU NOP = 0xffff;                    ///< NOP set to ffff to prevent access befor
 ///@}
 ///@name Return Stack for Branching Ops
 ///@{
-U8 *aByte;                          ///< byte array (heap)
-U8 aR;                              ///< return stack index
-IU aPC;                             ///< program counter
-IU aThread;                         ///< pointer to previous word
+U8 *aByte;                          ///< assember byte array (heap)
+U8 aR;                              ///< assember return stack index
+IU aPC;                             ///< assembler program counter
+IU aLink;                           ///< link to previous word
 ///@}
 ///@name Memory Dumpers
 ///@{
@@ -77,12 +79,12 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
 ///@name Assembler - Word Creation Headers
 ///@{
 void _header(int lex, FCHAR *seq) {           /// create a word header in dictionary
-    if (aThread) {
+    if (aLink) {
         if (aPC >= FORTH_ROM_SZ) DEBUG("ROM %s", "max!");
-        _dump(aThread-sizeof(IU), aPC);       /// * dump data from previous word to current word
+        _dump(aLink - sizeof(IU), aPC);       /// * dump data from previous word to current word
     }
-    STORE(aThread);                           /// * point to previous word
-    aThread = aPC;                            /// * keep pointer to this word
+    STORE(aLink);                             /// * point to previous word
+    aLink = aPC;                              /// * keep pointer to this word
 
     BSET(aPC++, lex);                         /// * length of word (with optional fIMMED or fCOMPO flags)
     int len = lex & 0x1f;                     /// * Forth allows word max length 31
@@ -94,7 +96,7 @@ void _header(int lex, FCHAR *seq) {           /// create a word header in dictio
     DEBUG("%s", seq);
 }
 ///
-/// create opcode stream
+/// create an opcode stream for built-in word
 ///
 int _code(FCHAR *seg, int len, ...) {
     _header(_strlen(seg), seg);
@@ -107,7 +109,7 @@ int _code(FCHAR *seg, int len, ...) {
         DEBUG(" %02x", b);
     }
     va_end(argList);
-    return addr;
+    return addr;                              /// address to be kept in local var
 }
 ///
 /// create a colon word
@@ -179,7 +181,7 @@ void _again(int len, ...) {        /// BEGIN--**AGAIN**
     CELLCPY(len);
 }
 void _for(int len, ...) {          /// **FOR**-(first)-AFT-(2nd,...)-THEN-(every)-NEXT
-    SHOWOP("FOR");                 
+    SHOWOP("FOR");
     STORE(TOR);                    /// * put loop counter on return stack
     RPUSH(aPC);                    /// * keep 1st loop repeat address A0
     CELLCPY(len);
@@ -199,7 +201,7 @@ void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(ever
 void _nxt(int len, ...) {          /// FOR-(first)-AFT-(2nd,...)-THEN-(every)--**NEXT**
     SHOWOP("NEXT");
     STORE(DONXT);                  /// * check loop counter (on return stack)
-    STORE(RPOP());                 /// * add A0 (FOR-NEXT) or 
+    STORE(RPOP());                 /// * add A0 (FOR-NEXT) or
     CELLCPY(len);                  /// * A1 to repeat loop (conditional branch by DONXT)
 }
 void _if(int len, ...) {           /// **IF**-THEN, **IF**-ELSE-THEN
@@ -245,10 +247,10 @@ void _abortq(FCHAR *seq) {
 ///
 /// eForth Assembler
 ///
-int ef_assemble(U8 *cdata)
+int assemble(U8 *cdata)
 {
     aByte = cdata;
-    aR    = aThread = 0;
+    aR    = aLink = 0;
     ///
     ///> Kernel constants
     ///
@@ -260,7 +262,7 @@ int ef_assemble(U8 *cdata)
     IU vSPAN = _CODE("SPAN",    opDOCON, VL(ta,1), VH(ta,1));   ///> * SPAN number of character accepted
     IU vIN   = _CODE(">IN",     opDOCON, VL(ta,2), VH(ta,2));   ///> * >IN  interpreter pointer to next char
     IU vNTIB = _CODE("#TIB",    opDOCON, VL(ta,3), VH(ta,3));   ///> * #TIB number of character received in TIB
-    
+
     IU ua    = FORTH_UVAR_ADDR;
     IU vTTIB = _CODE("'TIB",    opDOCON, VL(ua,0), VH(ua,0));   ///> * 'TIB console input buffer pointer
     IU vBASE = _CODE("BASE",    opDOCON, VL(ua,1), VH(ua,1));   ///> * BASE current radix for numeric ops
@@ -340,7 +342,7 @@ int ef_assemble(U8 *cdata)
     // OUT     (see Arduino section)                // 55, Dr. Ting's opSTASL "*/"
     IU PICK  = _CODE("PICK",    opPICK   );         // 56
     IU PSTOR = _CODE("+!",      opPSTOR  );         // 57
-    // AIN     (see Arduino section)                // 58, Dr. Ting's opDSTOR 
+    // AIN     (see Arduino section)                // 58, Dr. Ting's opDSTOR
     // PWM     (see Arduino section)                // 59, Dr. Ting's opDAT
     _CODE("DNEGATE", opDNEGA  );                    // 60, Dr. Ting's opCOUNT
     _CODE("doVAR",   opDOVAR  );                    // 61
@@ -358,8 +360,8 @@ int ef_assemble(U8 *cdata)
     IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
     //IU MSMOD = _COLON("M/MOD", /* not implemented */ EXIT);
-    _COLON("/MOD",  DDUP, SLASH, TOR, MOD, RFROM, EXIT);
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
+    _COLON("/MOD",  DDUP, SLASH, TOR, MOD, RFROM, EXIT);
     _COLON("*/",    SSMOD, SWAP, DROP, EXIT);
     _COLON("2!",    DUP, TOR, CELL, PLUS, STORE, RFROM, STORE, EXIT);
     _COLON("2@",    DUP, TOR, AT, RFROM, CELL, PLUS, AT, EXIT);
@@ -426,7 +428,7 @@ int ef_assemble(U8 *cdata)
               TOR, SWAP, RAT, SUB, SWAP, RAT, PLUS, QDUP);
         _IF(ONEM); {
             // a FOR..WHILE..NEXT..ELSE..THEN construct =~ for {..break..}
-            _FOR(DUP, TOR, CAT, vBASE, AT, DIGTQ);                    
+            _FOR(DUP, TOR, CAT, vBASE, AT, DIGTQ);
             _WHILE(SWAP, vBASE, AT, STAR, PLUS, RFROM, ONEP);   // if digit, xBASE, else break to ELSE
             _NEXT(DROP, RAT); {                                 // whether negative number
                 _IF(NEGAT);
@@ -491,7 +493,7 @@ int ef_assemble(U8 *cdata)
 		_IF(ONEM, vTEMP, CAT, BLANK, EQUAL); {                     // check <SPC>
 			_IF(NOP); {
                 // a FOR..WHILE..NEXT..THEN construct =~ for {..break..}
-				_FOR(BLANK, OVER, CAT, SUB, ZLESS, INVER);    // 
+				_FOR(BLANK, OVER, CAT, SUB, ZLESS, INVER);    //
                 _WHILE(ONEP);                                 // break to THEN if is char, or next char
                 _NEXT(RFROM, DROP, DOLIT, 0, DUP, EXIT);      // no break, (R>, DROP to rm loop counter)
                 _THEN(RFROM);                                 // populate A0, i.e. break comes here, rm counter
@@ -502,7 +504,7 @@ int ef_assemble(U8 *cdata)
                 _IF(ZLESS);
                 _THEN(NOP);
             }
-            _WHILE(ONEP);                                     // if (char <= space) break to ELSE 
+            _WHILE(ONEP);                                     // if (char <= space) break to ELSE
             _NEXT(DUP, TOR);                                  // no break, if counter < limit loop back to FOR
             _ELSE(RFROM, DROP, DUP, ONEP, TOR);               // R>, DROP to rm loop counter
             _THEN(OVER, SUB, RFROM, RFROM, SUB, EXIT);        // put token length on stack
@@ -568,7 +570,7 @@ int ef_assemble(U8 *cdata)
 		}
 		_THEN(DROP, SWAP, DROP, DUP, EXIT);
 	}
-	IU ACCEP = _COLON("ACCEPT", OVER, PLUS, OVER); {            // accquire token from console 
+	IU ACCEP = _COLON("ACCEPT", OVER, PLUS, OVER); {            // accquire token from console
 		_BEGIN(DDUP, XOR);                                      // loop through input stream
 		_WHILE(KEY, DUP, BLANK, SUB, DOLIT, 0x5f, ULESS); {
 			_IF(TAP);                                           // store new char into TIB
@@ -797,7 +799,7 @@ int ef_assemble(U8 *cdata)
 ///
 /// create C array dump for ROM
 ///
-void ef_dump_rom(U8* cdata, int len)
+void dump_rom(U8* cdata, int len)
 {
     printf("//\n// cut and paste the following segment into Arduino C code\n//");
 	printf("\nconst U32 forth_rom[] PROGMEM = {\n");
@@ -814,5 +816,16 @@ void ef_dump_rom(U8* cdata, int len)
         printf("\n");
     }
     printf("};\n");
+}
+
+
+}; // namespace EfAsm
+///
+/// eForth Assembler
+///
+void ef_assemble(U8 *cdata, int dump_rom) {
+	int sz = EfAsm::assemble(cdata);
+
+	if (dump_rom) EfAsm::dump_rom(cdata, sz+0x20);
 }
 

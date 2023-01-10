@@ -6,6 +6,8 @@
  */
 #ifndef __EFORTH_SRC_EFORTH_ASM_H
 #define __EFORTH_SRC_EFORTH_ASM_H
+
+namespace EfAsm {
 //
 // tracing/logging macros
 //
@@ -84,4 +86,6 @@ typedef const char                FCHAR;
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
 ///@}
 ///
+
+};  // namespace EfAsm
 #endif // __EFORTH_SRC_EFORTH_ASM_H

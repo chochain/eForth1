@@ -814,14 +814,15 @@ void dump_rom(U8* cdata, int len)
     printf("};\n");
 }
 
-
 }; // namespace EfAsm
 ///
 /// eForth Assembler
 ///
-void ef_assemble(U8 *cdata, int dump_rom) {
-    int sz = EfAsm::assemble(cdata);
+using namespace EfAsm;
+    
+void ef_assemble(U8 *cdata, int dump) {
+    int sz = assemble(cdata);
 
-    if (dump_rom) EfAsm::dump_rom(cdata, sz+0x20);
+    if (dump) dump_rom(cdata, sz+0x20);
 }
 

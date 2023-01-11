@@ -72,9 +72,9 @@ U16  GET(U16 d)        {
 ///
 void PUSH(DU v)        { SS(++S) = top; top = v; }
 void RPUSH(DU v)       { RS(++R) = v; }
-#define POP()          (top=SS(S ? S-- : S))
+#define POP()          (top = SS(S ? S-- : S))
 #define RPOP()         (R ? RS(R--) : RS(R))
-#define DTOP(d)        { SS(S) = (d)&0xffff; top = (d)>>16; }
+#define DTOP(d)        { SS(S) = (d) & 0xffff; top = (d)>>16; }
 ///
 /// update program counter (ready to fetch), advance instruction pointer
 ///
@@ -188,8 +188,8 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
     U32 d = (U32)top;       ///> CC: auto variable uses C stack 
     U32 m = ((U32)SS(S)<<16) + (U16)SS(S-1);
     POP();
-    SS(S) = (DU)(m % d);   ///> remainder
-    top   = (DU)(m / d);   ///> quotient
+    SS(S) = (DU)(m % d);    ///> remainder
+    top   = (DU)(m / d);    ///> quotient
     NEXT();
 }
 void _delay()               /// (n -- ) delay n milli-second
@@ -231,59 +231,58 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
 /// @return
 ///   0 - exit
 /// Note:
-///   vm_outer      - computed label (25% faster)
+///   vm_outer - computed label jumps (25% faster than subroutine calls)
 ///
-#define OP(name) &&L_##name    /** redefined for label address */
+#define OP(name)    &&L_##name /** redefined for label address */
+#define _X(n, code) L_##n: { code; goto vm_next; }
+#define _Y(n, fn)   L_##n: { fn(); continue; }
+
 int vm_outer() {
     static void* vt[] = {      ///< computed label lookup table
-    &&L_NOP,                   ///< opcode 0
-    OPCODES
+        &&L_NOP,               ///< opcode 0
+        OPCODES                ///< convert opcodes to address of labels
     };
-
-#define _OX(n, code) L_##n: { code; goto vm_step_next; }
-#define _OY(n, fn)   L_##n: { fn(); continue; }
-    
     do {
         TRACE_WORD();                   /// * tracing stack and word name
 
         U8 op = BGET(PC);               ///> fetch next opcode
         goto *vt[op];                   ///> jump to computed label
         ///
-        /// traditionally, this is the part done in Assembly
+        /// the following part is in assembly for most of Forth implementations
         ///
-        _OX(NOP,   {});
-        _OY(BYE,   _init);
+        _X(NOP,   {});
+        _Y(BYE,   _init);
         /// 
         /// @name Console IO
         /// @{
-        _OX(QRX,
+        _X(QRX,
             PUSH(ef_getchar());         ///> yield to user task until console input available
             if (top) PUSH(TRUE));
-        _OY(TXSTO, _txsto);
+        _Y(TXSTO, _txsto);
         /// @}
         /// @name Built-in ops
         /// @{
-        _OX(DOCON,
+        _X(DOCON,
             ++PC;                       ///> skip opDOCON opcode
             PUSH(GET(PC)));             ///> push cell value onto stack
-        _OX(DOLIT,
+        _X(DOLIT,
             TRACE(" ", GET(IP));        ///> fetch literal from data
             PUSH(GET(IP));              ///> push onto data stack
             IP += CELLSZ);              ///> skip to next instruction
-        _OX(DOVAR, ++PC; PUSH(PC));
+        _X(DOVAR, ++PC; PUSH(PC));
         /// @}
         /// @name Branching ops
         /// @{
-        _OX(ENTER,
+        _X(ENTER,
             ef_yield();
             TRACE_COLON();
             RPUSH(IP);                  ///> keep return address
             IP = ++PC);                 ///> skip opcode opENTER, advance to next instruction
-        _OX(EXIT,
+        _X(EXIT,
             TRACE_EXIT();
             IP = RPOP());               ///> pop return address
-        _OY(EXECU, _execu);
-        _OX(DONEXT,
+        _Y(EXECU, _execu);
+        _X(DONEXT,
             if (RS(R) > 0) {            ///> check if loop counter > 0
                 RS(R)--;                ///>> decrement loop counter
                 IP = GET(IP);           ///>> branch back to FOR
@@ -293,123 +292,122 @@ int vm_outer() {
                 RPOP();                 ///>> pop off return stack
                 ef_yield();             ///> give system task some cycles
             });
-        _OX(QBRAN,
+        _X(QBRAN,
             if (top) IP += CELLSZ;      ///> next instruction, or
             else     IP = GET(IP);      ///> fetch branching target address
             POP());
-        _OX(BRAN,  IP = GET(IP));     ///> fetch branching target address
+        _X(BRAN,  IP = GET(IP));     ///> fetch branching target address
         /// @}
         /// @name Memory Storage ops
         /// @{
-        _OX(STORE,
+        _X(STORE,
             SET(top, SS(S--));
             POP());
-        _OX(PSTOR,
+        _X(PSTOR,
             SET(top, GET(top)+SS(S--));
             POP());
-        _OX(AT,    top = (DU)GET(top));
-        _OX(CSTOR,
+        _X(AT,    top = (DU)GET(top));
+        _X(CSTOR,
             BSET(top, SS(S--));
             POP());
-        _OX(CAT,   top = (DU)BGET(top));
-        _OX(RFROM, PUSH(RPOP()));
-        _OX(RAT,   PUSH(RS(R)));
-        _OX(TOR,
+        _X(CAT,   top = (DU)BGET(top));
+        _X(RFROM, PUSH(RPOP()));
+        _X(RAT,   PUSH(RS(R)));
+        _X(TOR,
             RPUSH(top);
             POP());
         /// @{
         /// @name Stack ops
         /// @}
-        _OX(DROP,  POP());
-        _OX(DUP,   SS(++S)=top);
-        _OX(SWAP,
+        _X(DROP,  POP());
+        _X(DUP,   SS(++S)=top);
+        _X(SWAP,
             DU tmp = top;
             top    = SS(S);
             SS(S)  = tmp);
-        _OX(OVER,  PUSH(SS(S)));      ///> push w1
-        _OX(ROT,
+        _X(OVER,  PUSH(SS(S)));      ///> push w1
+        _X(ROT,
             DU tmp = SS(S-1);
             SS(S-1)= SS(S);
             SS(S)  = top;
             top    = tmp);
-        _OX(PICK,  top = SS(S - (U8)top));
+        _X(PICK,  top = SS(S - (U8)top));
         /// @}
         /// @name ALU ops
         /// @{
-        _OX(AND,   top &= SS(S--));
-        _OX(OR,    top |= SS(S--));
-        _OX(XOR,   top ^= SS(S--));
-        _OX(INV,   top = -top - 1);
-        _OX(LSH,   top = SS(S--) << top);
-        _OX(RSH,   top = SS(S--) >> top);
-        _OX(ADD,   top += SS(S--));
-        _OX(SUB,   top = SS(S--) - top);
-        _OX(MUL,   top *= SS(S--));
-        _OX(DIV,   top = (top) ? SS(S--) / top : (S--, 0));
-        _OX(MOD,   top = (top) ? SS(S--) % top : SS(S--));
-        _OX(NEG,   top = 0 - top);
+        _X(AND,   top &= SS(S--));
+        _X(OR,    top |= SS(S--));
+        _X(XOR,   top ^= SS(S--));
+        _X(INV,   top = -top - 1);
+        _X(LSH,   top = SS(S--) << top);
+        _X(RSH,   top = SS(S--) >> top);
+        _X(ADD,   top += SS(S--));
+        _X(SUB,   top = SS(S--) - top);
+        _X(MUL,   top *= SS(S--));
+        _X(DIV,   top = (top) ? SS(S--) / top : (S--, 0));
+        _X(MOD,   top = (top) ? SS(S--) % top : SS(S--));
+        _X(NEG,   top = 0 - top);
         /// @}
         /// @name Logic ops
         /// @{
-        _OX(GT,    top = BOOL(SS(S--) > top));
-        _OX(EQ,    top = BOOL(SS(S--)==top));
-        _OX(LT,    top = BOOL(SS(S--) < top));
-        _OX(ZGT,   top = BOOL(top > 0));
-        _OX(ZEQ,   top = BOOL(top == 0));
-        _OX(ZLT,   top = BOOL(top < 0));
+        _X(GT,    top = BOOL(SS(S--) > top));
+        _X(EQ,    top = BOOL(SS(S--)==top));
+        _X(LT,    top = BOOL(SS(S--) < top));
+        _X(ZGT,   top = BOOL(top > 0));
+        _X(ZEQ,   top = BOOL(top == 0));
+        _X(ZLT,   top = BOOL(top < 0));
         /// @}
         /// @name Misc. ops
         /// @{
-        _OX(ONEP,  top++);
-        _OX(ONEM,  top--);
-        _OX(QDUP,  if (top) SS(++S) = top);
-        _OX(DEPTH, PUSH(S));
-        _OX(ULESS, top = BOOL((U16)(SS(S--)) < (U16)top));
-        _OY(UMMOD, _ummod);
-        _OX(UMSTAR,               /// (u1 u2 -- ud) unsigned multiply return double product
+        _X(ONEP,  top++);
+        _X(ONEM,  top--);
+        _X(QDUP,  if (top) SS(++S) = top);
+        _X(DEPTH, PUSH(S));
+        _X(ULESS, top = BOOL((U16)(SS(S--)) < (U16)top));
+        _Y(UMMOD, _ummod);
+        _X(UMSTAR,               /// (u1 u2 -- ud) unsigned multiply return double product
             U32 u = (U32)SS(S) * top;
-            SS(S) = (U16)(u & 0xffff);
-            top   = (U16)(u >> 16));
-        _OX(MSTAR,                /// (n1 n2 -- d) signed multiply, return double product
+            DTOP(u));
+        _X(MSTAR,                /// (n1 n2 -- d) signed multiply, return double product
             S32 d = (S32)SS(S) * top;
             DTOP(d));
         /// @}
         /// @name Double precision ops
         /// @{
-        _OX(DNEG,                 /// (d -- -d) two's complemente of top double
+        _X(DNEG,                 /// (d -- -d) two's complemente of top double
             S32 d = ((S32)top<<16) | (SS(S) & 0xffff);
             DTOP(-d));
-        _OX(DADD,                 /// (d1 d2 -- d1+d2) add two double precision numbers
+        _X(DADD,                 /// (d1 d2 -- d1+d2) add two double precision numbers
             S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
             S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
             S -= 2; DTOP(d1 + d0));
-        _OX(DSUB,                 /// (d1 d2 -- d1-d2) subtract d2 from d1
+        _X(DSUB,                 /// (d1 d2 -- d1-d2) subtract d2 from d1
             S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
             S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
             S -= 2; DTOP(d1 - d0));
         /// @}
         /// @name Arduino specific ops
         /// @{
-        _OY(DELAY, _delay);
-        _OX(CLK,                  /// fetch system clock in double precision
+        _Y(DELAY, _delay);
+        _X(CLK,                  /// fetch system clock in double precision
             S += 2; DTOP(millis()));
-        _OX(PIN,
+        _X(PIN,
             pinMode(top, SS(S) ? OUTPUT : INPUT);
             POP(); POP());
-        _OX(MAP,
+        _X(MAP,
             U16 tmp = map(top, SS(S-3), SS(S-2), SS(S-1), SS(S));
             S -= 4;
             top = tmp);
-        _OX(IN,  PUSH(digitalRead(POP())));
-        _OX(OUT,
+        _X(IN,  PUSH(digitalRead(POP())));
+        _X(OUT,
             digitalWrite(top, SS(S));
             POP(); POP());
-        _OX(AIN, PUSH(analogRead(POP())));
-        _OX(PWM,
+        _X(AIN, PUSH(analogRead(POP())));
+        _X(PWM,
             analogWrite(top, SS(S));
             POP(); POP());
 
-    vm_step_next:
+    vm_next:
         PC = GET(IP);               ///> fetch next program counter (branch)
         IP += sizeof(IU);           ///> advance to next instruction
     } while (PC);

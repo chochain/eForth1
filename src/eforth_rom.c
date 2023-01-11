@@ -4,10 +4,6 @@
 /// @attention 8K max ROM before changing FORTH_ROM_SZ in eforth_core.h 
 ///
 #include "eforth_core.h"
-
-//
-// cut and paste the following segment into Arduino C code
-//
 const U32 forth_rom[] PROGMEM = {
 0x000fb907,0x48030000,0x0004444c,0x04000620,0x4e415053,0x0f200204,0x493e0300,0x2004044e, // 0000 ___..._HLD_. _._SPAN__ _._>IN__ 
 0x23040019,0x04424954,0x00222006,0x49542704,0x20100442,0x4204002c,0x04455341,0x00362012, // 0020 _._#TIB__ "._'TIB__ ,._BASE__ 6.

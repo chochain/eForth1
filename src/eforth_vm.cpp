@@ -80,6 +80,7 @@ void NEXT() { PC=GET(IP); IP+=sizeof(IU); }
 ///
 ///@name Tracing
 ///@{
+#if EXE_TRACE
 int tCNT;           ///< tracing depth counters
 int tTAB;           ///< tracing indentation counter
 ///@}
@@ -111,15 +112,21 @@ void TRACE_WORD()
     for (; (BGET(pc) & 0x7f)>0x20; pc--);  // retract pointer to word name (ASCII range: 0x21~0x7f)
 
     for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
-        if (s==s0) { LOG_H(" ", SS(s+1)); } else { LOG_H("_", SS(s+1)); }
+        LOG_H(s==s0 ? " " : "_", SS(s+1));
     }
-    if (S==0) { LOG_H(" ", top); } else { LOG_H("_", top); }
+    LOG_H(S==0 ? " " : "_", top);
     LOG("_");
     int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
     for (int i=0; i<len; i++, pc++) {
         LOG_C((char)BGET(pc));
     }
 }
+#else  // !EXE_TRACE
+#define TRACE(s, v)
+#define TRACE_COLON()
+#define TRACE_EXIT()
+#define TRACE_WORD()
+#endif // EXE_TRACE
 ///@}
 //
 // Forth Virtual Machine primitive functions
@@ -128,7 +135,10 @@ void TRACE_WORD()
 ///
 void _init() {
     R = S = PC = IP = top = 0;  ///> setup control variables
-    tCNT = tTAB = 0;            ///> setup tracing variables
+#if EXE_TRACE
+    tCNT = 1; tTAB = 0;         ///> setup tracing variables
+#endif  // EXE_TRACE
+    
     /// FORTH_UVAR_ADDR;
     ///   'TIB console input buffer pointer
     ///   BASE current radix for numeric ops
@@ -140,18 +150,14 @@ void _init() {
     ///   tmp storage (alternative to return stack)
     IU p = FORTH_UVAR_ADDR;    ///> setup Forth user variables
     SET(p,   FORTH_TIB_ADDR);  /// * set 'TIB pointer
-    SET(p+2, 0x10);            /// * set BASE to 10
+    SET(p+2, 10);              /// * set BASE to 10
     SET(p+4, FORTH_DIC_ADDR);  /// * top of dictionary
-    
-#if EXE_TRACE
-    tCNT=1;                 ///> optionally enable tracing
-#endif // EXE_TRACE
     ///
     /// display init prompt
     ///
     LOG("\n"); LOG(APP_NAME); LOG(" "); LOG(MAJOR_VERSION);
 }
-void _nop() { NEXT(); }     ///< ( -- ) nop, as macro terminator
+void _nop() { NEXT(); }        ///< ( -- ) nop, as macro terminator
 ///
 ///@name Console IO
 ///@{
@@ -206,12 +212,13 @@ void _dolit()               /// ( -- w) push next token as an integer literal
 ///@{
 void _enter()               /// ( -- ) push instruction pointer onto return stack and pop, aka DOLIST by Dr. Ting
 {
+    ef_yield();             ///> yield to system task
     TRACE_COLON();
     RPUSH(IP);              ///> keep return address
     IP = ++PC;              ///> skip opcode opENTER, advance to next instruction
     NEXT();
 }
-void _exit()               /// ( -- ) terminate all token lists in colon words
+void _exit()                /// ( -- ) terminate all token lists in colon words
 {
     TRACE_EXIT();
     IP = RPOP();            ///> pop return address
@@ -530,20 +537,6 @@ void _count()               /// (b -- b+1 +n) count byte of a string and add 1 t
     top = (S16)BGET(top);
     NEXT();
 }
-void _max_()                /// (n1 n2 -- n) return greater of two top stack items
-{
-    if (top < SS(S)) POP();
-    else (U8)S--;
-    NEXT();
-}
-void _min_()                /// (n1 n2 -- n) return smaller of two top stack items
-{
-    if (top < SS(S)) S--;
-    else POP();
-    NEXT();
-}
-void _ddrop()               /// (w w --) drop top two items
-void _ddup()                /// (w1 w2 -- w1 w2 w1 w2) duplicate top two items
 void _dstor()               /// (d a -- ) store the double to address a
 {
     SET(top+CELLSZ, SS(S--));
@@ -652,7 +645,6 @@ void _aout()                /// (pin n -- ) write PWM to Arduino analog pin
 ///
 /// primitive function lookup table
 /// Note: subroutine indirected threading
-/// TODO: computed goto
 ///
 void(*prim[FORTH_PRIMITIVES])() = {
     /* case 0 */ _nop,
@@ -743,19 +735,26 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     cData  = cdata;
     cStack = (S16*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
     
-    _init();                   // resetting user variables
+    _init();                   /// * resetting user variables
 }
 ///
-/// eForth virtual machine (single-step) execution unit
+/// eForth virtual machine outer interpreter (single-step) execution unit
 /// @return
 ///   0 - exit
+/// Note:
+///   vm_outer_orig - subroutine indirect threaded
+///   vm_outer      - computed label (25% faster)
 ///
-int vm_step() {
-    TRACE_WORD();              // tracing stack and word name
-//    prim[BGET(PC)]();          // walk bytecode stream
-//    return (int)PC;
+int vm_outer_orig() {
+    do {
+        TRACE_WORD();          /// * tracing stack and word name
+        prim[BGET(PC)]();      /// * walk bytecode stream
+    } while (PC);
+    return (int)PC;
+}
 
-    static void* vt[] = {
+int vm_outer() {
+    static void* vt[] = {      ///< computed label lookup table
     &&L_opNOP,        // 0
     &&L_opBYE,
     &&L_opQRX,
@@ -822,122 +821,137 @@ int vm_step() {
     &&L_opPWM
     };
 
-#define _OP(op, fn)   L_##op: { fn(); goto vm_step_exit; }
+#define _OP(op, fn)   L_##op: { fn(); continue; }
 #define _OX(op, code) L_##op: { code; goto vm_step_next; }
     
-    U8 op = BGET(PC);
-    goto *vt[op];
-    
-    _OX(opNOP,   {});
-    _OP(opBYE,   _init);
-    _OX(opQRX,
-        PUSH(ef_getchar());     ///> yield to user task until console input available
-        if (top) PUSH(TRUE));
-    _OX(opTXSTO, _txsto());
-    _OX(opDOCON,
-        ++PC;                   ///> skip opDOCON opcode
-        PUSH(GET(PC)));         ///> push cell value onto stack
-    _OX(opDOLIT,
-        PUSH(GET(IP));          ///> push onto data stack
-        IP += CELLSZ);          ///> skip to next instruction
-    _OX(opDOVAR, ++PC; PUSH(PC));
-    _OX(opENTER,
-        RPUSH(IP);              ///> keep return address
-        IP = ++PC);             ///> skip opcode opENTER, advance to next instruction
-    _OX(opEXIT,  IP = RPOP());  ///> pop return address
-    _OP(opEXECU, _execu);
-    _OP(opDONEXT,_donext);
-    _OX(opQBRAN,
-        if (top) IP += CELLSZ;  ///> next instruction, or
-        else     IP = GET(IP);  ///> fetch branching target address
-        POP());
-    _OX(opBRAN,  IP = GET(IP)); ///> fetch branching target address
-    _OX(opSTORE,
-        SET(top, SS(S--));
-        POP());
-    _OX(opPSTOR,
-        SET(top, GET(top)+SS(S--));
-        POP());
-    _OX(opAT,    top = (S16)GET(top));
-    _OX(opCSTOR,
-        BSET(top, SS(S--));
-        POP());
-    _OX(opCAT,   top = (S16)BGET(top));
-    _OX(opRFROM, PUSH(RPOP()));
-    _OX(opRAT,   PUSH(RS(R)));
-    _OX(opTOR,
-        RPUSH(top);
-        POP());
-    _OX(opDROP,  POP());
-    _OX(opDUP,   SS(++S)=top);
-    _OX(opSWAP,
-        S16 tmp = top;
-        top = SS(S);
-        SS(S)=tmp);
-    _OX(opOVER,  PUSH(SS(S)));         ///> push w1
-    _OX(opROT,
-        S16 tmp = SS(S-1);
-        SS(S-1) = SS(S);
-        SS(S)   = top;
-        top     = tmp);
-    _OX(opPICK,  top = SS(S - (U8)top));
-    _OX(opAND,   top &= SS(S--));
-    _OX(opOR,    top |= SS(S--));
-    _OX(opXOR,   top ^= SS(S--));
-    _OX(opINV,   top = -top - 1);
-    _OX(opLSH,   top = SS(S--) << top);
-    _OX(opRSH,   top = SS(S--) >> top);
-    _OX(opADD,   top += SS(S--));
-    _OX(opSUB,   top = SS(S--) - top);
-    _OX(opMUL,   top *= SS(S--));
-    _OX(opDIV,   top = (top) ? SS(S--) / top : (S--, 0));
-    _OX(opMOD,   top = (top) ? SS(S--) % top : SS(S--));
-    _OX(opNEG,   top = 0 - top);
-    _OX(opGT,    top = BOOL(SS(S--) > top));
-    _OX(opEQ,    top = BOOL(SS(S--)==top));
-    _OX(opLT,    top = BOOL(SS(S--) < top));
-    _OX(opZGT,   top = BOOL(top > 0));
-    _OX(opZEQ,   top = BOOL(top == 0));
-    _OX(opZLT,   top = BOOL(top < 0));
-    _OX(opONEP,  top++);
-    _OX(opONEM,  top--);
-    _OX(opQDUP,  if (top) SS(++S) = top);
-    _OX(opDEPTH, PUSH(S));
-    _OX(opULESS, top = BOOL((U16)(SS(S--)) < (U16)top));
-    _OP(opUMMOD, _ummod);
-    _OP(opUMSTAR,_umstar);
-    _OP(opMSTAR, _mstar);
-    _OP(opDNEG,  _dneg);
-    _OP(opDADD,  _dadd);
-    _OP(opDSUB,  _dsub);
-    _OP(opDELAY, _delay);
-    _OX(opCLK,
-        U32 t = millis();
-        PUSH(t & 0xffff);       ///> stored double on stack top
-        PUSH(t >> 16));
-    _OX(opPIN,
-        pinMode(top, SS(S) ? OUTPUT : INPUT);
-        POP();
-        POP());
-    _OX(opMAP,
-        U16 tmp = map(top, SS(S-3), SS(S-2), SS(S-1), SS(S));
-        S -= 4;
-        top = tmp);
-    _OX(opIN,    PUSH(digitalRead(POP())));
-    _OX(opOUT,
-        digitalWrite(top, SS(S));
-        POP();
-        POP());
-    _OX(opAIN,   PUSH(analogRead(POP())));
-    _OX(opPWM,
-        analogWrite(top, SS(S));
-        POP();
-        POP());
+    do {
+        TRACE_WORD();                   /// * tracing stack and word name
 
-vm_step_next:
-    PC = GET(IP);
-    IP += sizeof(IU);
-vm_step_exit:
+        U8 op = BGET(PC);               ///> fetch next opcode
+        goto *vt[op];                   ///> jump to computed label
+        ///
+        /// traditionally, this is the part done in Assembly
+        ///
+        _OX(opNOP,   {});
+        _OP(opBYE,   _init);
+        _OX(opQRX,
+            PUSH(ef_getchar());         ///> yield to user task until console input available
+            if (top) PUSH(TRUE));
+        _OP(opTXSTO, _txsto);
+
+        _OX(opDOCON,
+            ++PC;                       ///> skip opDOCON opcode
+            PUSH(GET(PC)));             ///> push cell value onto stack
+        _OX(opDOLIT,
+            TRACE(" ", GET(IP));        ///> fetch literal from data
+            PUSH(GET(IP));              ///> push onto data stack
+            IP += CELLSZ);              ///> skip to next instruction
+        _OX(opDOVAR, ++PC; PUSH(PC));
+
+        _OX(opENTER,
+            TRACE_COLON();
+            RPUSH(IP);                  ///> keep return address
+            IP = ++PC);                 ///> skip opcode opENTER, advance to next instruction
+        _OX(opEXIT,
+            TRACE_EXIT();
+            IP = RPOP());               ///> pop return address
+        _OP(opEXECU, _execu);
+        _OP(opDONEXT,_donext);
+        _OX(opQBRAN,
+            if (top) IP += CELLSZ;      ///> next instruction, or
+            else     IP = GET(IP);      ///> fetch branching target address
+            POP());
+        _OX(opBRAN,  IP = GET(IP));     ///> fetch branching target address
+
+        _OX(opSTORE,
+            SET(top, SS(S--));
+            POP());
+        _OX(opPSTOR,
+            SET(top, GET(top)+SS(S--));
+            POP());
+        _OX(opAT,    top = (S16)GET(top));
+        _OX(opCSTOR,
+            BSET(top, SS(S--));
+            POP());
+        _OX(opCAT,   top = (S16)BGET(top));
+        _OX(opRFROM, PUSH(RPOP()));
+        _OX(opRAT,   PUSH(RS(R)));
+        _OX(opTOR,
+            RPUSH(top);
+            POP());
+        /// Stack ops
+        _OX(opDROP,  POP());
+        _OX(opDUP,   SS(++S)=top);
+        _OX(opSWAP,
+            S16 tmp = top;
+            top     = SS(S);
+            SS(S)   = tmp);
+        _OX(opOVER,  PUSH(SS(S)));      ///> push w1
+        _OX(opROT,
+            S16 tmp = SS(S-1);
+            SS(S-1) = SS(S);
+            SS(S)   = top;
+            top     = tmp);
+        _OX(opPICK,  top = SS(S - (U8)top));
+        /// ALU ops
+        _OX(opAND,   top &= SS(S--));
+        _OX(opOR,    top |= SS(S--));
+        _OX(opXOR,   top ^= SS(S--));
+        _OX(opINV,   top = -top - 1);
+        _OX(opLSH,   top = SS(S--) << top);
+        _OX(opRSH,   top = SS(S--) >> top);
+        _OX(opADD,   top += SS(S--));
+        _OX(opSUB,   top = SS(S--) - top);
+        _OX(opMUL,   top *= SS(S--));
+        _OX(opDIV,   top = (top) ? SS(S--) / top : (S--, 0));
+        _OX(opMOD,   top = (top) ? SS(S--) % top : SS(S--));
+        _OX(opNEG,   top = 0 - top);
+        /// logic ops
+        _OX(opGT,    top = BOOL(SS(S--) > top));
+        _OX(opEQ,    top = BOOL(SS(S--)==top));
+        _OX(opLT,    top = BOOL(SS(S--) < top));
+        _OX(opZGT,   top = BOOL(top > 0));
+        _OX(opZEQ,   top = BOOL(top == 0));
+        _OX(opZLT,   top = BOOL(top < 0));
+        /// misc
+        _OX(opONEP,  top++);
+        _OX(opONEM,  top--);
+        _OX(opQDUP,  if (top) SS(++S) = top);
+        _OX(opDEPTH, PUSH(S));
+        _OX(opULESS, top = BOOL((U16)(SS(S--)) < (U16)top));
+        _OP(opUMMOD, _ummod);
+        _OP(opUMSTAR,_umstar);
+        _OP(opMSTAR, _mstar);
+        /// double precision
+        _OP(opDNEG,  _dneg);
+        _OP(opDADD,  _dadd);
+        _OP(opDSUB,  _dsub);
+        /// Arduino specific
+        _OP(opDELAY, _delay);
+        _OX(opCLK,
+            U32 t = millis();
+            PUSH(t & 0xffff);       ///> stored double on stack top
+            PUSH(t >> 16));
+        _OX(opPIN,
+            pinMode(top, SS(S) ? OUTPUT : INPUT);
+            POP(); POP());
+        _OX(opMAP,
+            U16 tmp = map(top, SS(S-3), SS(S-2), SS(S-1), SS(S));
+            S -= 4;
+            top = tmp);
+        _OX(opIN,  PUSH(digitalRead(POP())));
+        _OX(opOUT,
+            digitalWrite(top, SS(S));
+            POP(); POP());
+        _OX(opAIN, PUSH(analogRead(POP())));
+        _OX(opPWM,
+            analogWrite(top, SS(S));
+            POP(); POP());
+
+    vm_step_next:
+        PC = GET(IP);               ///> fetch next program counter (branch)
+        IP += sizeof(IU);           ///> advance to next instruction
+    } while (PC);
 
     return (int)PC;
 }

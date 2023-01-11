@@ -1,6 +1,8 @@
 /**
- * @file eforth_vm.cpp
+ * @file
  * @brief eForth Virtual Machine module
+ * Note: indirect threading model - computed label jumping
+ *       replaced EfVMSub module - vtable subroutine calling
  *
  * ####eForth Memory map
  *
@@ -157,16 +159,7 @@ void _init() {
     ///
     LOG("\n"); LOG(APP_NAME); LOG(" "); LOG(MAJOR_VERSION);
 }
-void _nop() { NEXT(); }        ///< ( -- ) nop, as macro terminator
-///
-///@name Console IO
-///@{
-void _qrx() {               ///  ( -- c t|f) read a char from terminal input device
-    PUSH(ef_getchar());     ///> yield to user task until console input available
-    if (top) PUSH(TRUE);
-    NEXT();
-}
-
+    
 void _txsto()               /// (c -- ) send a char to console
 {
 #if !EXE_TRACE
@@ -185,294 +178,10 @@ void _txsto()               /// (c -- ) send a char to console
     NEXT();
 }
 ///@}
-///
-///@name Variables/Constant/Literal Ops
-///@{
-void _dovar()               /// ( -- a) return address of a variable
-{
-    ++PC;                   ///> skip opDOVAR opcode
-    PUSH(PC);               ///> push variable address onto stack
-    NEXT();
-}
-void _docon()               /// ( -- n) push next token onto data stack as constant
-{
-    ++PC;                   ///> skip opDOCON opcode
-    PUSH(GET(PC));          ///> push cell value onto stack
-    NEXT();
-}
-void _dolit()               /// ( -- w) push next token as an integer literal
-{
-    TRACE(" ", GET(IP));    ///> fetch literal from data
-    PUSH(GET(IP));          ///> push onto data stack
-    IP += CELLSZ;           ///> skip to next instruction
-    NEXT();
-}
-///@}
-///@name Call/Branching Ops
-///@{
-void _enter()               /// ( -- ) push instruction pointer onto return stack and pop, aka DOLIST by Dr. Ting
-{
-    ef_yield();             ///> yield to system task
-    TRACE_COLON();
-    RPUSH(IP);              ///> keep return address
-    IP = ++PC;              ///> skip opcode opENTER, advance to next instruction
-    NEXT();
-}
-void _exit()                /// ( -- ) terminate all token lists in colon words
-{
-    TRACE_EXIT();
-    IP = RPOP();            ///> pop return address
-    NEXT();
-}
 void _execu()               /// (a -- ) take execution address from data stack and execute the token
 {
     PC = (IU)top;           ///> fetch program counter
     POP();
-}
-void _donext()              /// ( -- ) terminate a FOR-NEXT loop
-{
-    IU i = RS(R);           ///> loop counter
-    if (i) {                ///> check if loop counter > 0
-        RS(R) = (S16)(i-1); ///>> decrement loop counter
-        IP = GET(IP);       ///>> branch back to FOR
-    }
-    else {                  ///> or, 
-        IP += CELLSZ;       ///>> skip to next instruction
-        RPOP();             ///>> pop off return stack
-    }
-    ef_yield();             ///> steal some cycles. Note: 17ms/cycle on Arduino UNO
-    NEXT();
-}
-void _qbran()               /// (f -- ) test top as a flag on data stack
-{
-    if (top) IP += CELLSZ;  ///> next instruction, or
-    else     IP = GET(IP);  ///> fetch branching target address
-    POP();
-    NEXT();
-}
-void _bran()                /// ( -- ) branch to address following
-{
-    IP = GET(IP);           ///> fetch branching target address
-    NEXT();
-}
-///@}
-///
-///@name Storage Ops
-///@{
-void _store()               /// (n a -- ) store into memory location from top of stack
-{
-    SET(top, SS(S--));
-    POP();
-    NEXT();
-}
-void _at()                  /// (a -- n) fetch from memory address onto top of stack
-{
-    top = (S16)GET(top);
-    NEXT();
-}
-void _cstor()               /// (c b -- ) store a byte into memory location
-{
-    BSET(top, SS(S--));
-    POP();
-    NEXT();
-}
-void _cat()                 /// (b -- n) fetch a byte from memory location
-{
-    top = (S16)BGET(top);
-    NEXT();
-}
-void _pstor()               /// (n a -- ) add n to content at address a
-{
-    SET(top, GET(top)+SS(S--));
-    POP();
-    NEXT();
-}
-///@}
-///
-///@name Return Stack Ops
-///@{
-void _rfrom()               /// (-- w) pop from return stack onto data stack (Ting comments different ???)
-{
-    PUSH(RPOP());
-    NEXT();
-}
-void _rat()                 /// (-- w) copy a number off the return stack and push onto data stack
-{
-    PUSH(RS(R));
-    NEXT();
-}
-void _tor()                 /// (w --) pop from data stack and push onto return stack
-{
-    RPUSH(top);
-    POP();
-    NEXT();
-}
-///@}
-///
-///@name Data Stack Ops
-///@{
-void _depth()               /// (-- w) fetch current stack depth
-{
-    PUSH(S);
-    NEXT();
-}
-void _drop()                /// (w -- ) drop top of stack item
-{
-    POP();
-    NEXT();
-}
-void _dup()                 /// (w -- w w) duplicate to of stack
-{
-    SS(++S)=top;
-    NEXT();
-}
-void _swap()                /// (w1 w2 -- w2 w1) swap top two items on the data stack
-{
-    S16 tmp  = top;
-    top = SS(S);
-    SS(S)=tmp;
-    NEXT();
-}
-void _over()                /// (w1 w2 -- w1 w2 w1) copy second stack item to top
-{
-    PUSH(SS(S));         ///> push w1
-    NEXT();
-}
-void _rot()                 /// (w1 w2 w3 -- w2 w3 w1) rotate 3rd item to top
-{
-    S16 tmp = SS(S-1);
-    SS(S-1)=SS(S);
-    SS(S)  =top;
-    top = tmp;
-    NEXT();
-}
-void _pick()                /// (... +n -- ...w) copy nth stack item to top
-{
-    top = SS(S - (U8)top);
-    NEXT();
-}
-void _qdup()                /// (w -- w w | 0) dup top of stack if it is not zero
-{
-    if (top) SS(++S)=top;
-    NEXT();
-}
-///@}
-///
-///@name Logic Ops
-///@{
-void _and()                 /// (w w -- w) bitwise AND
-{
-    top &= SS(S--);
-    NEXT();
-}
-void _or()                  /// (w w -- w) bitwise OR
-{
-    top |= SS(S--);
-    NEXT();
-}
-void _xor()                 /// (w w -- w) bitwise XOR
-{
-    top ^= SS(S--);
-    NEXT();
-}
-void _gt()                  /// (n1 n2 -- t) true if n1>n2
-{
-    top = BOOL(SS(S--) > top);
-    NEXT();
-}
-void _lt()                  /// (n1 n2 -- t) true if n1<n2
-{
-    top = BOOL(SS(S--) < top);
-    NEXT();
-}
-void _ge()
-{
-    top = BOOL(SS(S--) >= top);
-    NEXT();
-}
-void _eq()                  /// (w w -- t) true if top two items are equal
-{
-    top = BOOL(SS(S--)==top);
-    NEXT();
-}
-void _inv()                 /// (w -- ~w) one's complement
-{
-    top = -top - 1;
-    NEXT();
-}
-void _zgt()                 /// (n -- f) check whether top of stack is positive
-{
-    top = BOOL(top > 0);
-    NEXT();
-}
-void _zlt()                 /// (n -- f) check whether top of stack is negative
-{
-    top = BOOL(top < 0);
-    NEXT();
-}
-void _zeq()                 /// (n -- f) check whether top equals to zero
-{
-    top = BOOL(top == 0);
-    NEXT();
-}
-void _lsh()                 /// (w n -- w) left shift n bits
-{
-    top = SS(S--) << top;
-    NEXT();
-}
-void _rsh()                 /// (w n -- w) right shift n bits
-{
-    top = SS(S--) >> top;
-    NEXT();
-}
-///@}
-///
-///@name Arithmetic Ops
-///@{
-void _mod()                 /// (n n -- r) signed divide, returns mod
-{
-    top = (top) ? SS(S--) % top : SS(S--);
-    NEXT();
-}
-void _neg()                 /// (n -- -n) two's complement
-{
-    top = 0 - top;
-    NEXT();
-}
-void _onep()                /// (n -- n+1) add one to top
-{
-    top++;
-    NEXT();
-}
-void _onem()               /// (n -- n-1) minus one to top
-{
-    top--;
-    NEXT();
-}
-void _add()                /// (w w -- sum) add top two items
-{
-    top += SS(S--);
-    NEXT();
-}
-void _sub()                 /// (n1 n2 -- n1-n2) subtraction
-{
-    top = SS(S--) - top;
-    NEXT();
-}
-void _mul()                 /// (n n -- n) signed multiply, return single product
-{
-    top *= SS(S--);
-    NEXT();
-}
-void _div()                 /// (n n - q) signed divide, return quotient
-{
-    top = (top) ? SS(S--) / top : (S--, 0);
-    NEXT();
-}
-void _uless()               /// (u1 u2 -- t) unsigned compare top two items
-{
-    top = BOOL((U16)(SS(S--)) < (U16)top);
-    NEXT();
 }
 void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double by single
 {
@@ -483,110 +192,6 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
     top   = (S16)(m / d);   ///> quotient
     NEXT();
 }
-void _umstar()              /// (u1 u2 -- ud) unsigned multiply return double product
-{
-    U32 u = (U32)SS(S) * top;
-    SS(S) = (U16)(u & 0xffff);
-    top   = (U16)(u >> 16);
-    NEXT();
-}
-///@}
-///
-///@name HighLevel Ops
-///@{
-/* deprecated (use high-level FORTH)
-void _msmod()               /// (d n -- r q) signed floored divide of double by single
-{
-    S32 d = (S32)top;
-    S32 m = ((S32)SS(S)<<16) + SS(S-1);
-    POP();
-    SS(S) = (S16)(m % d);   // remainder
-    top   = (S16)(m / d);   // quotient
-    NEXT();
-}
-void _slmod()               /// (n1 n2 -- r q) signed devide, return mod and quotient
-{
-    if (top) {
-        S16 tmp = SS(S) / top;
-        SS(S) = SS(S) % top;
-        top = tmp;
-    }
-    NEXT();
-}
-void _ssmod()               /// (n1 n2 n3 -- r q) n1*n2/n3, return mod and quotion
-{
-    S32 m = (S32)SS(S-1) * SS(S);
-    S16 d = top;
-    POP();
-    SS(S) = (S16)(m % d);
-    top   = (S16)(m / d);
-    NEXT();
-}
-void _stasl()               /// (n1 n2 n3 -- q) n1*n2/n3 return quotient
-{
-    S32 m = (S32)SS(S-1) * SS(S);
-    S16 d = top;
-    POP();
-    POP();
-    top = (S16)(m / d);
-    NEXT();
-}
-void _count()               /// (b -- b+1 +n) count byte of a string and add 1 to byte address
-{
-    SS(++S) = top + 1;
-    top = (S16)BGET(top);
-    NEXT();
-}
-void _dstor()               /// (d a -- ) store the double to address a
-{
-    SET(top+CELLSZ, SS(S--));
-    SET(top,        SS(S--));
-    POP();
-    NEXT();
-}
-void _dat()                 /// (a -- d) fetch double from address a
-{
-    PUSH(GET(top));
-    top = GET(top + CELLSZ);
-    NEXT();
-}
-*/
-///@}
-///
-///@name Double Precision Ops
-///@{
-void _mstar()               /// (n1 n2 -- d) signed multiply, return double product
-{
-    S32 d = (S32)SS(S) * top;
-    DTOP(d);
-    NEXT();
-}
-void _dneg()                /// (d -- -d) two's complemente of top double
-{
-    S32 d = ((S32)top<<16) | (SS(S) & 0xffff);
-    DTOP(-d);
-    NEXT();
-}
-void _dadd()                /// (d1 d2 -- d1+d2) add two double precision numbers
-{
-    S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
-    S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
-    S -= 2;
-    DTOP(d1 + d0);
-    NEXT();
-}
-void _dsub()                /// (d1 d2 -- d1-d2) subtract d2 from d1
-{
-    S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
-    S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
-    S -= 2;
-    DTOP(d1 - d0);
-    NEXT();
-}
-///@}
-///
-///@name Arduino Specific
-///@{
 void _delay()               /// (n -- ) delay n milli-second
 {
     U32 t  = millis() + top;///> calculate break time
@@ -596,123 +201,7 @@ void _delay()               /// (n -- ) delay n milli-second
     }
     NEXT();
 }
-void _clock()               /// ( -- d) current clock value, a double precision number
-{
-    U32 t = millis();
-    PUSH(t & 0xffff);       ///> stored double on stack top
-    PUSH(t >> 16);
-    NEXT();
-}
-void _pinmode()             /// (pin mode --) pinMode(pin, mode)
-{
-    pinMode(top, SS(S) ? OUTPUT : INPUT);
-    POP();
-    POP();
-    NEXT();
-}
-void _map()                 /// (f1 f2 t1 t2 n -- nx) map(n, f1, f2, t1, t2)
-{
-    U16 tmp = map(top, SS(S-3), SS(S-2), SS(S-1), SS(S));
-    S -= 4;
-    top = tmp;
-    NEXT();
-}
-void _din()                 /// (pin -- n) read from Arduino digital pin
-{
-    PUSH(digitalRead(POP()));
-    NEXT();
-}
-void _dout()                /// (pin n -- ) write to Arduino digital pin
-{
-    digitalWrite(top, SS(S));
-    POP();
-    POP();
-    NEXT();
-}
-void _ain()                 /// (pin -- n) read from Arduino analog pin
-{
-    PUSH(analogRead(POP()));
-    NEXT();
-}
-void _aout()                /// (pin n -- ) write PWM to Arduino analog pin
-{
-    analogWrite(top, SS(S));
-    POP();
-    POP();
-    NEXT();
-}
 ///@}
-///
-/// primitive function lookup table
-/// Note: subroutine indirected threading
-///
-void(*prim[FORTH_PRIMITIVES])() = {
-    /* case 0 */ _nop,
-    /* case 1 */ _init,
-    /* case 2 */ _qrx,
-    /* case 3 */ _txsto,
-    /* case 4 */ _docon,
-    /* case 5 */ _dolit,
-    /* case 6 */ _dovar,
-    /* case 7 */ _enter,
-    /* case 8 */ _exit,
-    /* case 9 */ _execu,
-    /* case 10 */ _donext,
-    /* case 11 */ _qbran,
-    /* case 12 */ _bran,
-    /* case 13 */ _store,
-    /* case 14 */ _pstor,
-    /* case 15 */ _at,
-    /* case 16 */ _cstor,
-    /* case 17 */ _cat,
-    /* case 18 */ _rfrom,
-    /* case 19 */ _rat,
-    /* case 20 */ _tor,
-    /* case 21 */ _drop,
-    /* case 22 */ _dup,
-    /* case 23 */ _swap,
-    /* case 24 */ _over,
-    /* case 25 */ _rot,
-    /* case 26 */ _pick,
-    /* case 27 */ _and,
-    /* case 28 */ _or,
-    /* case 29 */ _xor,
-    /* case 30 */ _inv,
-    /* case 31 */ _lsh,
-    /* case 32 */ _rsh,
-    /* case 33 */ _add,
-    /* case 34 */ _sub,
-    /* case 35 */ _mul,
-    /* case 36 */ _div,
-    /* case 37 */ _mod,
-    /* case 38 */ _neg,
-    /* case 39 */ _gt,
-    /* case 40 */ _eq,
-    /* case 41 */ _lt,
-    /* case 42 */ _zgt,
-    /* case 43 */ _zeq,
-    /* case 44 */ _zlt,
-    /* case 45 */ _onep,
-    /* case 46 */ _onem,
-    /* case 47 */ _qdup,
-    /* case 48 */ _depth,
-    /* case 49 */ _uless,
-    /* case 50 */ _ummod,
-    /* case 51 */ _umstar,
-    /* case 52 */ _mstar,
-    /* case 53 */ _dneg,
-    /* case 54 */ _dadd,
-    /* case 55 */ _dsub,
-    /* case 56 */ _delay,
-    /* case 57 */ _clock,
-    /* case 58 */ _pinmode,
-    /* case 59 */ _map,
-    /* case 60 */ _din,
-    /* case 61 */ _dout,
-    /* case 62 */ _ain,
-    /* case 63 */ _aout
-};
-
 }; // namespace EfVM
 ///
 /// eForth virtual machine initialization
@@ -742,17 +231,8 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
 /// @return
 ///   0 - exit
 /// Note:
-///   vm_outer_orig - subroutine indirect threaded
 ///   vm_outer      - computed label (25% faster)
 ///
-int vm_outer_orig() {
-    do {
-        TRACE_WORD();          /// * tracing stack and word name
-        prim[BGET(PC)]();      /// * walk bytecode stream
-    } while (PC);
-    return (int)PC;
-}
-
 int vm_outer() {
     static void* vt[] = {      ///< computed label lookup table
     &&L_opNOP,        // 0
@@ -834,11 +314,16 @@ int vm_outer() {
         ///
         _OX(opNOP,   {});
         _OP(opBYE,   _init);
+        /// 
+        /// @name Console IO
+        /// @{
         _OX(opQRX,
             PUSH(ef_getchar());         ///> yield to user task until console input available
             if (top) PUSH(TRUE));
         _OP(opTXSTO, _txsto);
-
+        /// @}
+        /// @name Built-in ops
+        /// @{
         _OX(opDOCON,
             ++PC;                       ///> skip opDOCON opcode
             PUSH(GET(PC)));             ///> push cell value onto stack
@@ -847,8 +332,11 @@ int vm_outer() {
             PUSH(GET(IP));              ///> push onto data stack
             IP += CELLSZ);              ///> skip to next instruction
         _OX(opDOVAR, ++PC; PUSH(PC));
-
+        /// @}
+        /// @name Branching ops
+        /// @{
         _OX(opENTER,
+        	ef_yield();
             TRACE_COLON();
             RPUSH(IP);                  ///> keep return address
             IP = ++PC);                 ///> skip opcode opENTER, advance to next instruction
@@ -856,13 +344,24 @@ int vm_outer() {
             TRACE_EXIT();
             IP = RPOP());               ///> pop return address
         _OP(opEXECU, _execu);
-        _OP(opDONEXT,_donext);
+        _OX(opDONEXT,
+        	if (RS(R) > 0) {        	///> check if loop counter > 0
+        		RS(R)--;            	///>> decrement loop counter
+        		IP = GET(IP);       	///>> branch back to FOR
+        	}
+        	else {                  	///> or,
+        		IP += CELLSZ;       	///>> skip to next instruction
+        		RPOP();             	///>> pop off return stack
+            	ef_yield();             ///> give system task some cycles
+        	});
         _OX(opQBRAN,
             if (top) IP += CELLSZ;      ///> next instruction, or
             else     IP = GET(IP);      ///> fetch branching target address
             POP());
         _OX(opBRAN,  IP = GET(IP));     ///> fetch branching target address
-
+        /// @}
+        /// @name Memory Storage ops
+        /// @{
         _OX(opSTORE,
             SET(top, SS(S--));
             POP());
@@ -879,7 +378,9 @@ int vm_outer() {
         _OX(opTOR,
             RPUSH(top);
             POP());
-        /// Stack ops
+        /// @{
+        /// @name Stack ops
+        /// @}
         _OX(opDROP,  POP());
         _OX(opDUP,   SS(++S)=top);
         _OX(opSWAP,
@@ -893,7 +394,9 @@ int vm_outer() {
             SS(S)   = top;
             top     = tmp);
         _OX(opPICK,  top = SS(S - (U8)top));
-        /// ALU ops
+        /// @}
+        /// @name ALU ops
+        /// @{
         _OX(opAND,   top &= SS(S--));
         _OX(opOR,    top |= SS(S--));
         _OX(opXOR,   top ^= SS(S--));
@@ -906,32 +409,51 @@ int vm_outer() {
         _OX(opDIV,   top = (top) ? SS(S--) / top : (S--, 0));
         _OX(opMOD,   top = (top) ? SS(S--) % top : SS(S--));
         _OX(opNEG,   top = 0 - top);
-        /// logic ops
+        /// @}
+        /// @name Logic ops
+        /// @{
         _OX(opGT,    top = BOOL(SS(S--) > top));
         _OX(opEQ,    top = BOOL(SS(S--)==top));
         _OX(opLT,    top = BOOL(SS(S--) < top));
         _OX(opZGT,   top = BOOL(top > 0));
         _OX(opZEQ,   top = BOOL(top == 0));
         _OX(opZLT,   top = BOOL(top < 0));
-        /// misc
+        /// @}
+        /// @name Misc. ops
+        /// @{
         _OX(opONEP,  top++);
         _OX(opONEM,  top--);
         _OX(opQDUP,  if (top) SS(++S) = top);
         _OX(opDEPTH, PUSH(S));
         _OX(opULESS, top = BOOL((U16)(SS(S--)) < (U16)top));
         _OP(opUMMOD, _ummod);
-        _OP(opUMSTAR,_umstar);
-        _OP(opMSTAR, _mstar);
-        /// double precision
-        _OP(opDNEG,  _dneg);
-        _OP(opDADD,  _dadd);
-        _OP(opDSUB,  _dsub);
-        /// Arduino specific
+        _OX(opUMSTAR,               /// (u1 u2 -- ud) unsigned multiply return double product
+            U32 u = (U32)SS(S) * top;
+            SS(S) = (U16)(u & 0xffff);
+            top   = (U16)(u >> 16));
+        _OX(opMSTAR,                /// (n1 n2 -- d) signed multiply, return double product
+            S32 d = (S32)SS(S) * top;
+            DTOP(d));
+        /// @}
+        /// @name Double precision ops
+        /// @{
+        _OX(opDNEG,                 /// (d -- -d) two's complemente of top double
+            S32 d = ((S32)top<<16) | (SS(S) & 0xffff);
+            DTOP(-d));
+        _OX(opDADD,                 /// (d1 d2 -- d1+d2) add two double precision numbers
+            S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
+            S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
+            S -= 2; DTOP(d1 + d0));
+        _OX(opDSUB,                 /// (d1 d2 -- d1-d2) subtract d2 from d1
+            S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
+            S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
+            S -= 2; DTOP(d1 - d0));
+        /// @}
+        /// @name Arduino specific ops
+        /// @{
         _OP(opDELAY, _delay);
-        _OX(opCLK,
-            U32 t = millis();
-            PUSH(t & 0xffff);       ///> stored double on stack top
-            PUSH(t >> 16));
+        _OX(opCLK,                  /// fetch system clock in double precision
+            S += 2; DTOP(millis()));
         _OX(opPIN,
             pinMode(top, SS(S) ? OUTPUT : INPUT);
             POP(); POP());

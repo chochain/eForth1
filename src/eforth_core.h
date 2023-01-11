@@ -34,6 +34,7 @@ typedef int16_t   S16;                ///< 16-bit signed integer
 typedef int8_t    S8;                 ///< 8-bit signed integer
 
 typedef U16       IU;                 ///< instruction/address unit (16-bit)
+typedef S16       DU;                 ///< data/cell unit
 ///@}
 ///
 ///@name Capacity and Sizing
@@ -78,71 +79,75 @@ typedef U16       IU;                 ///< instruction/address unit (16-bit)
 ///
 /// Forth VM Opcodes (for Bytecode Assembler)
 ///
+#define OP(name)  op##name
+#define OPCODES \
+    OP(BYE),    \
+    OP(QRX),    \
+    OP(TXSTO),  \
+    OP(DOCON),  \
+    OP(DOLIT),  \
+    OP(DOVAR),  \
+    OP(ENTER),  \
+    OP(EXIT),   \
+    OP(EXECU),  \
+    OP(DONEXT), \
+    OP(QBRAN),  \
+    OP(BRAN),   \
+    OP(STORE),  \
+    OP(PSTOR),  \
+    OP(AT),     \
+    OP(CSTOR),  \
+    OP(CAT),    \
+    OP(RFROM),  \
+    OP(RAT),    \
+    OP(TOR),    \
+    OP(DROP),   \
+    OP(DUP),    \
+    OP(SWAP),   \
+    OP(OVER),   \
+    OP(ROT),    \
+    OP(PICK),   \
+    OP(AND),    \
+    OP(OR),     \
+    OP(XOR),    \
+    OP(INV),    \
+    OP(LSH),    \
+    OP(RSH),    \
+    OP(ADD),    \
+    OP(SUB),    \
+    OP(MUL),    \
+    OP(DIV),    \
+    OP(MOD),    \
+    OP(NEG),    \
+    OP(GT),     \
+    OP(EQ),     \
+    OP(LT),     \
+    OP(ZGT),    \
+    OP(ZEQ),    \
+    OP(ZLT),    \
+    OP(ONEP),   \
+    OP(ONEM),   \
+    OP(QDUP),   \
+    OP(DEPTH),  \
+    OP(ULESS),  \
+    OP(UMMOD),  \
+    OP(UMSTAR), \
+    OP(MSTAR),  \
+    OP(DNEG),   \
+    OP(DADD),   \
+    OP(DSUB),   \
+    OP(DELAY),  \
+    OP(CLK),    \
+    OP(PIN),    \
+    OP(MAP),    \
+    OP(IN),     \
+    OP(OUT),    \
+    OP(AIN),    \
+    OP(PWM)
+
 enum {
-    opNOP = 0,    // 0
-    opBYE,
-    opQRX,
-    opTXSTO,
-    opDOCON,
-    opDOLIT,
-    opDOVAR,
-    opENTER,
-    opEXIT,
-    opEXECU,
-    opDONEXT,     // 10
-    opQBRAN,
-    opBRAN,
-    opSTORE,
-    opPSTOR,
-    opAT,
-    opCSTOR,
-    opCAT,
-    opRFROM,
-    opRAT,
-    opTOR,
-    opDROP,       // 20
-    opDUP,
-    opSWAP,
-    opOVER,
-    opROT,
-    opPICK,
-    opAND,
-    opOR,
-    opXOR,
-    opINV,        // 30
-    opLSH,
-    opRSH,
-    opADD,
-    opSUB,
-    opMUL,
-    opDIV,
-    opMOD,
-    opNEG,
-    opGT,
-    opEQ,         // 40
-    opLT,
-    opZGT,
-    opZEQ,
-    opZLT,
-    opONEP,
-    opONEM,
-    opQDUP,
-    opDEPTH,
-    opULESS,
-    opUMMOD,      // 50
-    opUMSTAR,
-    opMSTAR,
-    opDNEG,
-    opDADD,
-    opDSUB,
-    opDELAY,
-    opCLK,
-    opPIN,
-    opMAP,
-    opIN,         // 60
-    opOUT,
-    opAIN,
-    opPWM
+    opNOP = 0,                 ///< opcodes start at 0
+    OPCODES
 };
 ///
 /// protothread task declaration
@@ -163,7 +168,7 @@ typedef struct ef_task {
 #include <time.h>
 #define LOG(s)              io->print(F(s))
 #define LOG_C(c)            ef_putchar(c)
-#define LOG_V(s, n)         { io->print(F(s)); io->print((S16)n); }
+#define LOG_V(s, n)         { io->print(F(s)); io->print((DU)n); }
 #define LOG_H(s, n)         { io->print(F(s)); io->print(n, HEX); }
 
 #else

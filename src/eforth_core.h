@@ -143,13 +143,6 @@ typedef S16       DU;                 ///< data/cell unit
     OP(OUT),    \
     OP(AIN),    \
     OP(PWM)
-///
-/// protothread task declaration
-///
-typedef struct ef_task {
-    char (*task)();            ///< user defined task (in protothreads)
-    struct ef_task *next;      ///< linked-list
-} *task_ptr;
 //
 // eForth function prototypes
 //
@@ -158,7 +151,6 @@ typedef struct ef_task {
 #if ARDUINO
 #include <Arduino.h>
 #include <avr/pgmspace.h>
-#include <pt.h>
 #include <time.h>
 #define LOG(s)              io->print(F(s))
 #define LOG_C(c)            ef_putchar(c)
@@ -179,7 +171,6 @@ typedef const char          *PGM_P;
 #define analogWrite(p,v)
 #define map(a,b,c,d,e)      (0)
 #define millis()            (0x12345678)
-#define PT_SCHEDULE(t)      (t)
 #define LOG(s)              printf("%s", s)
 #define LOG_C(c)            ef_putchar(c)
 #define LOG_V(s, n)         printf("%s%d", s, n)

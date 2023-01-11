@@ -94,7 +94,7 @@ void ef_setup(Stream &io_stream=Serial)
 ///
 void ef_run()
 {
-    vm_step();
+    vm_outer();
     ef_yield();
 }
 
@@ -120,7 +120,7 @@ int main(int ac, char* av[])
     _ram = (U8*)malloc(FORTH_RAM_SZ);       ///< forth memory block dynamic allocated
 
     vm_init((char*)_rom, _ram, NULL);
-    while (vm_step());
+    vm_outer();
 #endif // !ASM_ONLY
 
     return 0;

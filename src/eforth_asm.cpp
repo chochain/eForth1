@@ -10,6 +10,15 @@
 
 #define fIMMED  0x80                /**< immediate flag    */
 #define fCOMPO  0x40                /**< compile only flag */
+///
+/// define opcode enums
+/// Note: in sync with VM's vtable
+///
+#define OP(name)  op##name
+enum {
+    opNOP = 0,                      ///< opcodes start at 0
+    OPCODES
+};
 
 namespace EfAsm {
 ///

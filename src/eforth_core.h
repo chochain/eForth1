@@ -79,7 +79,6 @@ typedef S16       DU;                 ///< data/cell unit
 ///
 /// Forth VM Opcodes (for Bytecode Assembler)
 ///
-#define OP(name)  op##name
 #define OPCODES \
     OP(BYE),    \
     OP(QRX),    \
@@ -144,11 +143,6 @@ typedef S16       DU;                 ///< data/cell unit
     OP(OUT),    \
     OP(AIN),    \
     OP(PWM)
-
-enum {
-    opNOP = 0,                 ///< opcodes start at 0
-    OPCODES
-};
 ///
 /// protothread task declaration
 ///

@@ -44,7 +44,6 @@ void _dump(int b, int u) {      /// dump memory between previous word and this
         if ((i+1)<u) DEBUG(" %04x", GET(i));
         else         DEBUG(" %02x", BGET(i));
     }
-    DEBUG("%c", '\n');
 }
 void _rdump()                   /// dump return stack
 {
@@ -101,7 +100,7 @@ void _header(int lex, FCHAR *seq) {           /// create a word header in dictio
     for (int i=0; i < len; i++) {             /// * memcpy word string
         BSET(aPC++, pgm_read_byte(p++));
     }
-    DEBUG("%04x: ", aPC);
+    DEBUG("\n%04x: ", aPC);
     DEBUG("%s", seq);
 }
 ///
@@ -278,7 +277,7 @@ int assemble(U8 *cdata)
     IU vCP   = _CODE("CP",      opDOCON, VL(ua,2), VH(ua,2));   ///> * CP,  top of dictionary, same as HERE
     IU vCNTX = _CODE("CONTEXT", opDOCON, VL(ua,3), VH(ua,3));   ///> * CONTEXT name field of last word
     IU vLAST = _CODE("LAST",    opDOCON, VL(ua,4), VH(ua,4));   ///> * LAST, same as CONTEXT
-    IU vTEVL = _CODE("'EVAL",   opDOCON, VL(ua,5), VH(ua,5));   ///> * 'EVAL eval mode (interpreter or compiler)
+    IU vMODE = _CODE("'MODE",   opDOCON, VL(ua,5), VH(ua,5));   ///> * 'MODE (interpreter or compiler)
     IU vTABRT= _CODE("'ABORT",  opDOCON, VL(ua,6), VH(ua,6));   ///> * ABORT exception rescue handler (QUIT)
     IU vTEMP = _CODE("tmp",     opDOCON, VL(ua,7), VH(ua,7));   ///> * tmp storage (alternative to return stack)
     ///
@@ -632,14 +631,14 @@ int assemble(U8 *cdata)
         _ELSE(ERROR);
         _THEN(NOP);
     }
-    IU iLBRAC= _IMMED("[", DOLIT, INTER, vTEVL, STORE, EXIT);
+    IU iLBRAC= _IMMED("[", DOLIT, INTER, vMODE, STORE, EXIT);
     IU EVAL  = _COLON("EVAL", NOP); {
         _BEGIN(TOKEN, DUP, CAT);                     // fetch token length
-        _WHILE(vTEVL, AT, QDUP); {                   // execute if word exist
+        _WHILE(vMODE, AT, QDUP); {                   // execute if word exist
             _IF(EXECU);
             _THEN(NOP);
         }
-        _REPEAT(DROP, CR, DOLIT, INTER, vTEVL, AT, EQ); {
+        _REPEAT(DROP, CR, DOLIT, INTER, vMODE, AT, EQ); {
             _IF(DEPTH, DOLIT, 4, MIN); {             // dump stack and ok prompt
                 _FOR(RAT, PICK, DOT);
                 _NEXT(NOP);
@@ -648,7 +647,7 @@ int assemble(U8 *cdata)
             _THEN(EXIT);
         }
     }
-     IU QUIT  = _COLON("QUIT", DOLIT, FORTH_TIB_ADDR, vTTIB, STORE, iLBRAC); {  // clear TIB, interpreter mode
+     IU QUIT = _COLON("QUIT", DOLIT, FORTH_TIB_ADDR, vTTIB, STORE, iLBRAC); {  // clear TIB, interpreter mode
         _BEGIN(QUERY, EVAL);      // main query-eval loop
         _AGAIN(NOP);
     }
@@ -690,7 +689,7 @@ int assemble(U8 *cdata)
     ///
     ///> Forth Compiler - define new word
     ///
-    IU RBRAC = _COLON("]", DOLIT, SCOMP, vTEVL, STORE, EXIT);       // switch into compiler-mode
+    IU RBRAC = _COLON("]", DOLIT, SCOMP, vMODE, STORE, EXIT);       // switch into compiler-mode
     _COLON(":", TOKEN,
             SNAME,
             RBRAC, DOLIT, opENTER, CCMMA, EXIT);
@@ -790,7 +789,7 @@ int assemble(U8 *cdata)
     IU  COLD  = _COLON("COLD",
             DOLIT, last,  vCNTX, STORE,     // reset vectors
             DOLIT, last,  vLAST, STORE,
-            DOLIT, INTER, vTEVL, STORE,
+            DOLIT, INTER, vMODE, STORE,
             DOLIT, QUIT,  vTABRT,STORE,
             CR, QUIT);                      // enter the main query loop (QUIT)
     int here  = aPC;                        // current pointer
@@ -811,7 +810,6 @@ using namespace EfAsm;
 ///
 void _dump_rom(U8* cdata, int len)
 {
-#if !ASM_ONLY
     printf("//\n// cut and paste the following segment into Arduino C code\n//");
     printf("\nconst U32 forth_rom[] PROGMEM = {\n");
     for (int p=0; p<len+0x20; p+=0x20) {
@@ -827,12 +825,13 @@ void _dump_rom(U8* cdata, int len)
         printf("\n");
     }
     printf("};\n");
-#endif // !ASM_ONLY
 }
 
-void ef_assemble(U8 *cdata) {
+int ef_assemble(U8 *cdata) {
     int sz = assemble(cdata);
 
     _dump_rom(cdata, sz+0x20);
+
+    return sz;
 }
 

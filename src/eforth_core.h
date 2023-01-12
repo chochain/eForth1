@@ -41,19 +41,19 @@ typedef S16       DU;                 ///< data/cell unit
 ///@attention reassemble ROM needed if FORTH_TIB_SZ or FORTH_PAD_SZ changed
 ///@{
 #define CELLSZ           2                     /**< 16-bit cell size                    */
-#define FORTH_PRIMITIVES 64                    /**< number of primitive words           */
 #define FORTH_ROM_SZ     0x2000                /**< size of ROM (for pre-defined words) */
 #define FORTH_DIC_SZ     0x400                 /**< size of dictionary space            */
 #define FORTH_UVAR_SZ    0x20                  /**< size of Forth user variables        */
-#define FORTH_STACK_SZ   0x60*CELLSZ           /**< size of data/return stack           */
-#define FORTH_PAD_SZ     0x20                  /**< size of output pad (in DIC space )  */
+#define FORTH_STACK_SZ   0x100                 /**< size of data/return stack           */
 #define FORTH_TIB_SZ     0x80                  /**< size of terminal input buffer       */
-#define FORTH_RAM_SZ     (FORTH_DIC_SZ + FORTH_STACK_SZ)  /**< size of total RAM needed */
+#define FORTH_RAM_SZ     ( \                  
+        FORTH_DIC_SZ + FORTH_STACK_SZ + FORTH_TIB_SZ) /**< size of total RAM needed     */
+#define FORTH_PAD_SZ     0x20                  /**< size of output pad (in DIC space )  */
 ///@}
 ///
 ///> note:
 ///>    Forth only needs a few bytes for Arduino auto (on heap), but
-///>    Serial TX/RX buffers uses 0x40 * 2 = 128 bytes
+///>    Serial default TX/RX buffers uses 0x40 * 2 = 128 bytes
 ///>
 ///> logic and stack op macros (processor dependent)
 ///>
@@ -197,7 +197,7 @@ void ef_yield();
 ///
 ///@name eForth Assembler Functions
 ///@{
-void ef_assemble(
+int ef_assemble(
     U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
     );
 ///@}

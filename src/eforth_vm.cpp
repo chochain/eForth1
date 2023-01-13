@@ -150,14 +150,14 @@ void _init() {
     ///   'EVAL eval mode (interpreter or compiler)
     ///   'ABORT exception rescue handler (QUIT)
     ///   tmp storage (alternative to return stack)
-    IU p = FORTH_UVAR_ADDR;    ///> setup Forth user variables
-    SET(p,   FORTH_TIB_ADDR);  /// * set 'TIB pointer
-    SET(p+2, 10);              /// * set BASE to 10
-    SET(p+4, FORTH_DIC_ADDR);  /// * top of dictionary
+    IU p = FORTH_UVAR_ADDR;         ///> setup Forth user variables
+    SET(p,   FORTH_TIB_ADDR);       /// * set 'TIB pointer
+    SET(p+2, 10);                   /// * set BASE to 10
+    SET(p+4, FORTH_DIC_ADDR);       /// * top of dictionary
     ///
     /// display init prompt
     ///
-    LOG("\n"); LOG(APP_NAME); LOG(" "); LOG(MAJOR_VERSION);
+    LOG("\n\n"); LOG(APP_NAME); LOG(" "); LOG(MAJOR_VERSION);
 }
     
 void _txsto()               /// (c -- ) send a char to console

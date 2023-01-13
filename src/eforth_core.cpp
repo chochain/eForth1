@@ -25,8 +25,8 @@ void sys_info(U8 *cdata, int sz) {
     LOG_H(" <--auto=x", s);
 #endif // ARDUINO
     LOG_H("\n  ROM  :x0000+", FORTH_ROM_SZ);
-    LOG_H("\n  UVAR :x", FORTH_TVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
-    LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ - FORTH_UVAR_SZ);
+    LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ);
+    LOG_H("\n  UVAR :x", FORTH_UVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
     LOG_H("\n  STACK:x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
     LOG_H("\n  TIB  :x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
 }
@@ -62,6 +62,7 @@ void ef_putchar(char c)
 }
 
 extern U32 forth_rom[];                    // from eforth_rom.c
+extern U32 forth_rom_sz;
 ///
 /// setup (called by Arduino setup)
 ///
@@ -70,7 +71,7 @@ void ef_setup(Stream &io_stream=Serial)
     io   = &io_stream;
     _ram = (U8*)malloc(FORTH_RAM_SZ);     // dynamically allocated
     
-    sys_info(_ram);
+    sys_info(_ram, forth_rom_sz);
     vm_init((PGM_P)forth_rom, _ram, (void*)&io_stream);
 }
 ///

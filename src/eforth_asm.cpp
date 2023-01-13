@@ -8,8 +8,9 @@
 #include "eforth_core.h"
 #include "eforth_asm.h"
 
-#define fIMMED  0x80                /**< immediate flag    */
-#define fCOMPO  0x40                /**< compile only flag */
+#define fCMPL          0x40         /**< compile only flag */
+#define fIMMD          0x80         /**< immediate flag    */
+#define DUMP_ROW_WIDTH 0x40
 ///
 /// define opcode enums
 /// Note: in sync with VM's vtable
@@ -134,7 +135,7 @@ int _colon(FCHAR *seg, int len, ...) {
 /// create a immediate word
 ///
 int _immed(FCHAR *seg, int len, ...) {
-    _header(fIMMED | _strlen(seg), seg);
+    _header(fIMMD | _strlen(seg), seg);
     DEBUG(" %s", "i06");
     int addr = aPC;
     BSET(aPC++, opENTER);
@@ -290,16 +291,16 @@ int assemble(U8 *cdata)
     IU BYE   = _CODE("BYE",     opBYE    );
     IU QRX   = _CODE("?RX",     opQRX    );
     IU TXSTO = _CODE("TX!",     opTXSTO  );
-    IU DOCON = _CODE("doCON",   opDOCON  );
-    IU DOLIT = _CODE("doLIT",   opDOLIT  );
-    IU DOVAR = _CODE("doVAR",   opDOVAR  );
-    IU DOLST = _CODE("doLIST",  opENTER  );
+    IU DOCON = _CODE("DOCON",   opDOCON  );
+    IU DOLIT = _CODE("DOLIT",   opDOLIT  );
+    IU DOVAR = _CODE("DOVAR",   opDOVAR  );
+    IU DOLST = _CODE("DOLIST",  opENTER  );
     IU ENTER = _CODE("ENTER",   opENTER  );  //alias doLIST
     IU EXIT  = _CODE("EXIT",    opEXIT   );
     IU EXECU = _CODE("EXECUTE", opEXECU  );
-       DONXT = _CODE("doNEXT",  opDONEXT );
-       QBRAN = _CODE("?branch", opQBRAN  );
-       BRAN  = _CODE("branch",  opBRAN   );
+       DONXT = _CODE("DONEXT",  opDONEXT );
+       QBRAN = _CODE("QBRANCH", opQBRAN  );
+       BRAN  = _CODE("BRANCH",  opBRAN   );
     IU STORE = _CODE("!",       opSTORE  );
     IU PSTOR = _CODE("+!",      opPSTOR  );
     IU AT    = _CODE("@",       opAT     );
@@ -472,7 +473,7 @@ int assemble(U8 *cdata)
     }
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);
     // IU CR    = _COLON("CR",   DOLIT, 10, DOLIT, 13, EMIT, EMIT, EXIT);   // LFCR
-    IU DOSTR = _COLON("doSTR",RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
+    IU DOSTR = _COLON("DOSTR",RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
     IU STRQ  = _COLON("S\"|", DOSTR, EXIT);
        DOTQ  = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
     IU DOTR  = _COLON(".R",   TOR,
@@ -620,7 +621,7 @@ int assemble(U8 *cdata)
     }
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, DOLIT, 0x1b, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
-        _IF(CAT, DOLIT, fCOMPO, AND); {              // if it is compile only word
+        _IF(CAT, DOLIT, fCMPL, AND); {               // if it is compile only word
             _ABORTQ(" compile only");
             _LABEL(EXECU, EXIT);
         }
@@ -646,7 +647,7 @@ int assemble(U8 *cdata)
         }
     }
      IU QUIT = _COLON("QUIT", DOLIT, FORTH_TIB_ADDR, vTTIB, STORE, iLBRAC); {  // clear TIB, interpreter mode
-        _BEGIN(QUERY, EVAL);      // main query-eval loop
+        _BEGIN(QUERY, EVAL);                      // main query-eval loop
         _AGAIN(NOP);
     }
     ///
@@ -668,10 +669,10 @@ int assemble(U8 *cdata)
         _IF(EXIT);
         _THEN(ERROR);
     }
-    IU iLITR = _IMMED("LITERAL", DOLIT, DOLIT, COMMA, COMMA, EXIT);    // create a literal
+    IU iLITR = _IMMED("LITERAL", DOLIT, DOLIT, COMMA, COMMA, EXIT);  // create a literal
     IU COMPI = _COLON("COMPILE",  RFROM, DUP, AT, COMMA, CELLP, TOR, EXIT);
     IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); { // name found?
-        _IF(AT, DOLIT, fIMMED, AND); {            // is immediate?
+        _IF(AT, DOLIT, fIMMD, AND); {             // is immediate?
             _IF(EXECU);                           // execute
             _ELSE(COMMA);                         // or, add to dictionary
             _THEN(EXIT);
@@ -680,8 +681,8 @@ int assemble(U8 *cdata)
         _IF(iLITR, EXIT);                         // add as literal
         _THEN(ERROR);
     }
-    _COLON("COMPILE-ONLY", DOLIT, fCOMPO, vLAST, AT, PSTOR, EXIT);  // enable COMPILE-ONLY flag
-    _COLON("IMMEDIATE",    DOLIT, fIMMED, vLAST, AT, PSTOR, EXIT);  // enable IMMEDIATE flag
+    _COLON("COMPILE-ONLY", DOLIT, fCMPL, vLAST, AT, PSTOR, EXIT);   // enable COMPILE-ONLY flag
+    _COLON("IMMEDIATE",    DOLIT, fIMMD, vLAST, AT, PSTOR, EXIT);   // enable IMMEDIATE flag
     _COLON("ALLOT",        vCP, PSTOR, EXIT);
     _IMMED("[COMPILE]",    TICK, COMMA, EXIT);                      // add word address to dictionary
     ///
@@ -696,6 +697,9 @@ int assemble(U8 *cdata)
         _IF(CELLM, DUP, vCP, STORE, AT, DUP, vCNTX, STORE, vLAST, STORE, DROP, EXIT);
         _THEN(ERROR);
     }
+    _IMMED(".(",      DOLIT, 0x29, PARSE, TYPE, EXIT);              // print til hit ) i.e. 0x29
+    _IMMED("\\",      DOLIT, 0xa,  WORD,  DROP,  EXIT);             // skip til end of line
+    _IMMED("(",       DOLIT, 0x29, PARSE, DDROP, EXIT);             // skip til )
     ///
     ///> Forth Compiler - variable, constant, and comments
     ///
@@ -705,9 +709,6 @@ int assemble(U8 *cdata)
     IU CREAT = _COLON("CREATE", CODE,  DOLIT, opDOVAR, CCMMA, EXIT);
     _COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
     _COLON("CONSTANT",CODE,  DOLIT, opDOCON, CCMMA, COMMA, EXIT);
-    _IMMED(".(",      DOLIT, 0x29, PARSE, TYPE, EXIT);              // print til hit ) i.e. 0x29
-    _IMMED("\\",      DOLIT, 0xa,  WORD,  DROP,  EXIT);             // skip til end of line
-    _IMMED("(",       DOLIT, 0x29, PARSE, DDROP, EXIT);             // skip til )
     ///
     ///> Forth Compiler - branching instructions
     ///
@@ -760,11 +761,11 @@ int assemble(U8 *cdata)
     }
     _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTEMP, STORE); {
         _BEGIN(AT, QDUP);
-        _WHILE(DUP, SPACE,
-            COUNT, DOLIT, 0x1f, AND, TYPE, SPACE,       // .ID
-            CELLM, vTEMP, AT, DOLIT, 0xa, LT); {
-            _IF(DOLIT, 1, vTEMP, PSTOR);
-            _ELSE(CR, DOLIT, 0, vTEMP, STORE);
+        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,            // .ID
+        	DUP, DOLIT, 2, ADD, vTEMP, PSTOR,
+        	TYPE, SPACE, SPACE, CELLM,
+            vTEMP, AT, DOLIT, DUMP_ROW_WIDTH, GT); {    // check row width
+            _IF(CR, DOLIT, 0, vTEMP, STORE);
             _THEN(NOP);
         }
         _REPEAT(EXIT);

@@ -265,26 +265,24 @@ int assemble(U8 *cdata)
     aPC = FORTH_BOOT_ADDR;
     IU BOOT  = _LABEL(opENTER, 0);      // reserved for boot vectors
 
-    IU ta    = FORTH_TVAR_ADDR;
-    IU vHLD  = _CODE("HLD",     opDOCON, VL(ta,0), VH(ta,0));   ///> * HLD  char pointer to output buffer
-    IU vSPAN = _CODE("SPAN",    opDOCON, VL(ta,1), VH(ta,1));   ///> * SPAN number of character accepted
-    IU vIN   = _CODE(">IN",     opDOCON, VL(ta,2), VH(ta,2));   ///> * >IN  interpreter pointer to next char
-    IU vNTIB = _CODE("#TIB",    opDOCON, VL(ta,3), VH(ta,3));   ///> * #TIB number of character received in TIB
-
     IU ua    = FORTH_UVAR_ADDR;
-    IU vTTIB = _CODE("'TIB",    opDOCON, VL(ua,0), VH(ua,0));   ///> * 'TIB console input buffer pointer
-    IU vBASE = _CODE("BASE",    opDOCON, VL(ua,1), VH(ua,1));   ///> * BASE current radix for numeric ops
-    IU vCP   = _CODE("CP",      opDOCON, VL(ua,2), VH(ua,2));   ///> * CP,  top of dictionary, same as HERE
-    IU vCNTX = _CODE("CONTEXT", opDOCON, VL(ua,3), VH(ua,3));   ///> * CONTEXT name field of last word
-    IU vLAST = _CODE("LAST",    opDOCON, VL(ua,4), VH(ua,4));   ///> * LAST, same as CONTEXT
-    IU vMODE = _CODE("'MODE",   opDOCON, VL(ua,5), VH(ua,5));   ///> * 'MODE (interpreter or compiler)
-    IU vTABRT= _CODE("'ABORT",  opDOCON, VL(ua,6), VH(ua,6));   ///> * ABORT exception rescue handler (QUIT)
-    IU vTEMP = _CODE("tmp",     opDOCON, VL(ua,7), VH(ua,7));   ///> * tmp storage (alternative to return stack)
+    IU vTTIB = _CODE("'TIB",    opDOCON, V32(ua,0));   ///> * 'TIB console input buffer pointer
+    IU vBASE = _CODE("BASE",    opDOCON, V32(ua,1));   ///> * BASE current radix for numeric ops
+    IU vCP   = _CODE("CP",      opDOCON, V32(ua,2));   ///> * CP,  top of dictionary, same as HERE
+    IU vCNTX = _CODE("CONTEXT", opDOCON, V32(ua,3));   ///> * CONTEXT name field of last word
+    IU vLAST = _CODE("LAST",    opDOCON, V32(ua,4));   ///> * LAST, same as CONTEXT
+    IU vMODE = _CODE("'MODE",   opDOCON, V32(ua,5));   ///> * 'MODE (interpreter or compiler)
+    IU vTABRT= _CODE("'ABORT",  opDOCON, V32(ua,6));   ///> * ABORT exception rescue handler (QUIT)
+    IU vHLD  = _CODE("HLD",     opDOCON, V32(ua,7));   ///> * HLD  char pointer to output buffer
+    IU vSPAN = _CODE("SPAN",    opDOCON, V32(ua,8));   ///> * SPAN number of character accepted
+    IU vIN   = _CODE(">IN",     opDOCON, V32(ua,9));   ///> * >IN  interpreter pointer to next char
+    IU vNTIB = _CODE("#TIB",    opDOCON, V32(ua,10));  ///> * #TIB number of character received in TIB
+    IU vTEMP = _CODE("tmp",     opDOCON, V32(ua,11));  ///> * tmp storage (alternative to return stack)
     ///
     ///> common constants and variable spec.
     ///
-    IU BLANK = _CODE("BL",      opDOCON, 0x20,      0);         ///> * BL blank
-    IU CELL  = _CODE("CELL",    opDOCON, CELLSZ,    0);         ///> * CELL cell size
+    IU BLANK = _CODE("BL",      opDOCON, 0x20,   0);   ///> * BL blank
+    IU CELL  = _CODE("CELL",    opDOCON, CELLSZ, 0);   ///> * CELL cell size
     ///
     ///> Kernel dictionary (primitive words)
     ///
@@ -811,6 +809,7 @@ using namespace EfAsm;
 void _dump_rom(U8* cdata, int len)
 {
     printf("//\n// cut and paste the following segment into Arduino C code\n//");
+    printf("\nconst U32 forth_rom_sz PROGMEM = 0x%x;", len);
     printf("\nconst U32 forth_rom[] PROGMEM = {\n");
     for (int p=0; p<len+0x20; p+=0x20) {
         U32 *x = (U32*)&cdata[p];
@@ -830,7 +829,7 @@ void _dump_rom(U8* cdata, int len)
 int ef_assemble(U8 *cdata) {
     int sz = assemble(cdata);
 
-    _dump_rom(cdata, sz+0x20);
+    _dump_rom(cdata, sz);
 
     return sz;
 }

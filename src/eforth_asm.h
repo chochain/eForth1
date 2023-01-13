@@ -84,6 +84,7 @@ typedef const char                FCHAR;
 #define RPOP()      ((U16)GET(FORTH_ROM_SZ - (aR ? aR-- : aR)*CELLSZ))
 #define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
+#define V32(a, i)   VL(a,i),VH(a,i)
 ///@}
 ///
 

@@ -1,14 +1,14 @@
 # eForth1 - eForth for Arduino
 
-Wrote in his ceForth_33 document, Dr. Chen-Hanson Ting, the creator of eForth, and inspiration of Forth community noted:
+Wrote in his ceForth_33 document, Dr. Chen-Hanson Ting, the creator of eForth, and one of the inspiring figures of Forth community noted:
 > *In 2011, I was attracted to Arduino Uno Kit and ported eForth to it as 328eForth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino IDE...I extended Forth dictionary in the RAM memory. It worked. However, you had only 1.5KB of RAM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.*
 
-Before Dr. Ting conceded his fight with cancer in May, 2022, I've spent the last 11 months working with him expanding the concept of "Forth without Forth" - a new eForth model - he called. Traditionally, Forth is built with a set of core words in low-level assembly language and establish the rest of words with high-level Forth scripts which get boot-strapped on start-up time. With the proliferation of modern languages, built Forth without using Forth, he reasoned that Forth built entirely in high-level languages can not only greatly simplify the virtual machine, taking advantage of modern languages and operating system, but also encourage portability and optimization. In a few months, we completed new batch of eForths in Javascript, Java, C++, ported them to Windows, ESP32, which Dr. Ting presented to [Sillicon Valley Forth Interest Group](https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s). Later, we focused on SystemVerilog with Don & Demitri's CORE-I FPGA project of [AI & Robotics Group](https://www.facebook.com/groups/1304548976637542) until his eventual departure.
+Before Dr. Ting conceded his fight with cancer in May, 2022, I've spent the last 11 months working with him expanding the concept of "Forth without Forth" - a new eForth model - he called. Traditionally, Forth is built with a set of core words in low-level assembly language and establish the rest of words with high-level Forth scripts which get boot-strapped on start-up time. With the proliferation of modern languages, build Forth without using Forth, he reasoned that Forth built entirely in high-level languages can not only greatly simplify the virtual machine, taking advantage of modern languages and operating system, but also encourage portability and optimization. In a few months, we completed new batch of eForths in Javascript, Java, C++, ported them to Windows, ESP32, which Dr. Ting presented his video on November, 2021 to [Sillicon Valley Forth Interest Group](https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s). Later, we focused on SystemVerilog's edition with Don & Demitri's CORE-I FPGA project of [AI & Robotics Group](https://www.facebook.com/groups/1304548976637542) til his eventual departure.
 
 In Dr. Ting's own word:
 > *In all these years, I have thought that the eForth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.*
 
-So, I've decided to pick up Dr. Ting's eForth Model and do something fun with it. Here we go!
+To enjoy the beauty of working on something small and simple, I've decided to pick up Dr. Ting's eForth Model and have fun with it. So, here we go!
 
 ### What is eForth1?
 

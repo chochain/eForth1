@@ -1,9 +1,9 @@
 /**
- * @file eforth_core.h
+ * @file
  * @brief eForth prototype and interface
  */
-#ifndef __EFORTH_SRC_EFORTH_CORE_H
-#define __EFORTH_SRC_EFORTH_CORE_H
+#ifndef __EFORTH_CORE_H
+#define __EFORTH_CORE_H
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -142,7 +142,11 @@ typedef S16       DU;                 ///< data/cell unit
     OP(IN),     \
     OP(OUT),    \
     OP(AIN),    \
-    OP(PWM)
+    OP(PWM),    \
+	OP(TMR),    \
+	OP(TMRE),   \
+	OP(PCI),    \
+	OP(PCIE)
 //
 // eForth function prototypes
 //
@@ -156,6 +160,8 @@ typedef S16       DU;                 ///< data/cell unit
 #define LOG_C(c)            ef_putchar(c)
 #define LOG_V(s, n)         { io->print(F(s)); io->print((DU)n); }
 #define LOG_H(s, n)         { io->print(F(s)); io->print(n, HEX); }
+#define CLI()               cli()
+#define SEI()               sei()
 
 #else
 
@@ -175,6 +181,10 @@ typedef const char          *PGM_P;
 #define LOG_C(c)            ef_putchar(c)
 #define LOG_V(s, n)         printf("%s%d", s, n)
 #define LOG_H(s, n)         printf("%s%x", s, (n)&0xffff)
+#define LOW                 (0)
+#define HIGH                (1)
+#define CLI()
+#define SEI()
 #endif // ARDUINO
 ///@}
 ///
@@ -201,4 +211,4 @@ int ef_assemble(
     U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
     );
 ///@}
-#endif // __EFORTH_SRC_EFORTH_CORE_H
+#endif // __EFORTH_CORE_H

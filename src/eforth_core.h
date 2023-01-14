@@ -40,16 +40,15 @@ typedef S16       DU;                 ///< data/cell unit
 ///@name Capacity and Sizing
 ///@attention reassemble ROM needed if FORTH_TIB_SZ or FORTH_PAD_SZ changed
 ///@{
-#define CELLSZ           2                     /**< 16-bit cell size                    */
-#define FORTH_ROM_SZ     0x2000                /**< size of ROM (for pre-defined words) */
-#define FORTH_DIC_SZ     0x400                 /**< size of dictionary space            */
-#define FORTH_UVAR_SZ    0x20                  /**< size of Forth user variables        */
-#define FORTH_STACK_SZ   0xe0                  /**< size of data/return stack           */
-#define FORTH_TIB_SZ     0x80                  /**< size of terminal input buffer       */
-#define FORTH_RAM_SZ     ( \                  
-        FORTH_DIC_SZ + FORTH_UVAR_SZ + \
-		FORTH_STACK_SZ + FORTH_TIB_SZ)         /**< total RAM needed                    */
-#define FORTH_PAD_SZ     0x20                  /**< size of output pad (in DIC space )  */
+#define CELLSZ           2            /**< 16-bit cell size                    */
+#define FORTH_ROM_SZ     0x2000       /**< size of ROM (for pre-defined words) */
+#define FORTH_DIC_SZ     0x400        /**< size of dictionary space            */
+#define FORTH_UVAR_SZ    0x20         /**< size of Forth user variables        */
+#define FORTH_STACK_SZ   0xe0         /**< size of data/return stack           */
+#define FORTH_TIB_SZ     0x80         /**< size of terminal input buffer       */
+#define FORTH_PAD_SZ     0x20         /**< size of output pad (in DIC space )  */
+#define FORTH_RAM_SZ     ( \
+        FORTH_DIC_SZ + FORTH_UVAR_SZ + FORTH_STACK_SZ + FORTH_TIB_SZ) /**< total RAM */
 ///@}
 ///
 ///> note:
@@ -143,16 +142,17 @@ typedef S16       DU;                 ///< data/cell unit
     OP(OUT),    \
     OP(AIN),    \
     OP(PWM),    \
-	OP(TMR),    \
-	OP(TMRE),   \
-	OP(PCI),    \
-	OP(PCIE)
+    OP(TMR),    \
+    OP(PCI),    \
+    OP(TMRE),   \
+    OP(PCIE)
 //
 // eForth function prototypes
 //
 ///@name Arduino Support Macros
 ///@{
 #if ARDUINO
+
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 #include <time.h>
@@ -163,7 +163,7 @@ typedef S16       DU;                 ///< data/cell unit
 #define CLI()               cli()
 #define SEI()               sei()
 
-#else
+#else  // !ARDUINO
 
 #include <stdlib.h>
 typedef const char          *PGM_P;
@@ -185,6 +185,7 @@ typedef const char          *PGM_P;
 #define HIGH                (1)
 #define CLI()
 #define SEI()
+
 #endif // ARDUINO
 ///@}
 ///
@@ -197,12 +198,20 @@ void vm_init(
     );
 int  vm_outer();            ///< Forth outer interpreter
 ///@}
+///@name interrupt handle routines
+///@{
+void intr_reset();          ///< reset interrupts
+U16  intr_hits();           ///< return interrupt hit flags
+void intr_service(void (*cb)(U16));
+void intr_add_timer(U16 prd, U16 xt);
+void intr_add_pci(U16 pin, U16 xt);
+void intr_enable_timer(U16 f);
+void intr_enable_pci(U16 f);
 ///
 ///@name eForth IO Functions
 ///@{
 U8   ef_getchar();
 void ef_putchar(char c);
-void ef_yield();
 ///@}
 ///
 ///@name eForth Assembler Functions

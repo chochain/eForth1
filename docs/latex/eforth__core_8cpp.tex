@@ -1,0 +1,135 @@
+\hypertarget{eforth__core_8cpp}{}\doxysection{src/eforth\+\_\+core.cpp File Reference}
+\label{eforth__core_8cpp}\index{src/eforth\_core.cpp@{src/eforth\_core.cpp}}
+
+
+e\+Forth core controller module  
+
+
+{\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
+Include dependency graph for eforth\+\_\+core.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__core_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__core_8cpp_afc09b15fce90b9e00aa7277e7edd5c4e}{Y\+I\+E\+L\+D\+\_\+\+P\+E\+R\+I\+OD}}~10
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{eforth__core_8cpp_acb5ba193e134c2a17c7a1bda39613b83}{sys\+\_\+info}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata, int sz)
+\item 
+void \mbox{\hyperlink{eforth__core_8cpp_aa084a3e268cc140b2c8602dc52396ce4}{ef\+\_\+yield}} ()
+\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{eforth__core_8cpp_a41032b0ebdc389f0c30d15b6b7e8b025}{ef\+\_\+getchar}} ()
+\item 
+void \mbox{\hyperlink{eforth__core_8cpp_a40485405ab5338788520ef0380b01b70}{ef\+\_\+putchar}} (char \mbox{\hyperlink{ceForth__33_8cpp_a089aacf63ed94ae0e667bb8f6db3e853}{c}})
+\item 
+void \mbox{\hyperlink{eforth__core_8cpp_a3be4743e748619321c1a4f95928e8de1}{ef\+\_\+setup}} (Stream \&io\+\_\+stream=Serial)
+\item 
+void \mbox{\hyperlink{eforth__core_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}{ef\+\_\+run}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{eforth__core_8cpp_a05c7bc09ead4e68622fbbeb7b8d1ecdf}{\+\_\+ram}}
+\begin{DoxyCompactList}\small\item\em forth memory block dynamic allocated \end{DoxyCompactList}\item 
+static Stream $\ast$ \mbox{\hyperlink{eforth__core_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}
+\begin{DoxyCompactList}\small\item\em console interface \end{DoxyCompactList}\item 
+\mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}} \mbox{\hyperlink{eforth__core_8cpp_ab122f4898c37a0db81ea641558424375}{forth\+\_\+rom}} \mbox{[}$\,$\mbox{]}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}} \mbox{\hyperlink{eforth__core_8cpp_a6fe6f33736fc0d8ed68fd74b454e00e7}{forth\+\_\+rom\+\_\+sz}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+e\+Forth core controller module 
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{eforth__core_8cpp_afc09b15fce90b9e00aa7277e7edd5c4e}\label{eforth__core_8cpp_afc09b15fce90b9e00aa7277e7edd5c4e}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!YIELD\_PERIOD@{YIELD\_PERIOD}}
+\index{YIELD\_PERIOD@{YIELD\_PERIOD}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{YIELD\_PERIOD}{YIELD\_PERIOD}}
+{\footnotesize\ttfamily \#define Y\+I\+E\+L\+D\+\_\+\+P\+E\+R\+I\+OD~10}
+
+e\+Forth yield to user tasks 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{eforth__core_8cpp_acb5ba193e134c2a17c7a1bda39613b83}\label{eforth__core_8cpp_acb5ba193e134c2a17c7a1bda39613b83}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!sys\_info@{sys\_info}}
+\index{sys\_info@{sys\_info}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{sys\_info()}{sys\_info()}}
+{\footnotesize\ttfamily void sys\+\_\+info (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{cdata,  }\item[{int}]{sz }\end{DoxyParamCaption})}
+
+display e\+Forth system information \mbox{\Hypertarget{eforth__core_8cpp_aa084a3e268cc140b2c8602dc52396ce4}\label{eforth__core_8cpp_aa084a3e268cc140b2c8602dc52396ce4}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!ef\_yield@{ef\_yield}}
+\index{ef\_yield@{ef\_yield}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{ef\_yield()}{ef\_yield()}}
+{\footnotesize\ttfamily void ef\+\_\+yield (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{eforth__core_8cpp_a41032b0ebdc389f0c30d15b6b7e8b025}\label{eforth__core_8cpp_a41032b0ebdc389f0c30d15b6b7e8b025}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!ef\_getchar@{ef\_getchar}}
+\index{ef\_getchar@{ef\_getchar}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{ef\_getchar()}{ef\_getchar()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} ef\+\_\+getchar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+console input with yield \mbox{\Hypertarget{eforth__core_8cpp_a40485405ab5338788520ef0380b01b70}\label{eforth__core_8cpp_a40485405ab5338788520ef0380b01b70}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!ef\_putchar@{ef\_putchar}}
+\index{ef\_putchar@{ef\_putchar}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{ef\_putchar()}{ef\_putchar()}}
+{\footnotesize\ttfamily void ef\+\_\+putchar (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+output one char to console \mbox{\Hypertarget{eforth__core_8cpp_a3be4743e748619321c1a4f95928e8de1}\label{eforth__core_8cpp_a3be4743e748619321c1a4f95928e8de1}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!ef\_setup@{ef\_setup}}
+\index{ef\_setup@{ef\_setup}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{ef\_setup()}{ef\_setup()}}
+{\footnotesize\ttfamily void ef\+\_\+setup (\begin{DoxyParamCaption}\item[{Stream \&}]{io\+\_\+stream = {\ttfamily Serial} }\end{DoxyParamCaption})}
+
+setup (called by Arduino setup) \mbox{\Hypertarget{eforth__core_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}\label{eforth__core_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!ef\_run@{ef\_run}}
+\index{ef\_run@{ef\_run}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{ef\_run()}{ef\_run()}}
+{\footnotesize\ttfamily void ef\+\_\+run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+single step e\+Forth virtual machine 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{eforth__core_8cpp_a05c7bc09ead4e68622fbbeb7b8d1ecdf}\label{eforth__core_8cpp_a05c7bc09ead4e68622fbbeb7b8d1ecdf}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!\_ram@{\_ram}}
+\index{\_ram@{\_ram}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{\_ram}{\_ram}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$ \+\_\+ram\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+forth memory block dynamic allocated 
+
+\mbox{\Hypertarget{eforth__core_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}\label{eforth__core_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!io@{io}}
+\index{io@{io}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{io}{io}}
+{\footnotesize\ttfamily Stream$\ast$ io\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+console interface 
+
+\mbox{\Hypertarget{eforth__core_8cpp_ab122f4898c37a0db81ea641558424375}\label{eforth__core_8cpp_ab122f4898c37a0db81ea641558424375}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!forth\_rom@{forth\_rom}}
+\index{forth\_rom@{forth\_rom}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{forth\_rom}{forth\_rom}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}} forth\+\_\+rom}
+
+\mbox{\Hypertarget{eforth__core_8cpp_a6fe6f33736fc0d8ed68fd74b454e00e7}\label{eforth__core_8cpp_a6fe6f33736fc0d8ed68fd74b454e00e7}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!forth\_rom\_sz@{forth\_rom\_sz}}
+\index{forth\_rom\_sz@{forth\_rom\_sz}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{forth\_rom\_sz}{forth\_rom\_sz}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}} forth\+\_\+rom\+\_\+sz}
+

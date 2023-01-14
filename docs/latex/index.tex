@@ -1,0 +1,112 @@
+Wrote in his ce\+Forth\+\_\+33 document, Dr. Chen-\/\+Hanson Ting, the creator of e\+Forth, and inspiration of Forth community noted\+: \begin{quote}
+{\itshape In 2011, I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. However, you had only 1.\+5\+KB of R\+AM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
+
+
+Before Dr. Ting conceded his fight with cancer in May, 2022, I\textquotesingle{}ve spent the last 11 months working with him expanding the concept of \char`\"{}\+Forth without Forth\char`\"{} -\/ a new e\+Forth model -\/ he called. Traditionally, Forth is built with a set of core words in low-\/level assembly language and establish the rest of words with high-\/level Forth scripts which get boot-\/strapped on start-\/up time. With the proliferation of modern languages, built Forth without using Forth, he reasoned that Forth built entirely in high-\/level languages can not only greatly simplify the virtual machine, taking advantage of modern languages and operating system, but also encourage portability and optimization. In a few months, we completed new batch of e\+Forths in Javascript, Java, C++, ported them to Windows, E\+S\+P32, which Dr. Ting presented to \href{https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s}{\texttt{ Sillicon Valley Forth Interest Group}}. Later, we focused on System\+Verilog with Don \& Demitri\textquotesingle{}s C\+O\+R\+E-\/I F\+P\+GA project of \href{https://www.facebook.com/groups/1304548976637542}{\texttt{ AI \& Robotics Group}} until his eventual departure.
+
+In Dr. Ting\textquotesingle{}s own word\+: \begin{quote}
+{\itshape In all these years, I have thought that the e\+Forth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.} \end{quote}
+
+
+So, I\textquotesingle{}ve decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model and do something fun with it. Here we go!
+
+\doxysubsection*{What is e\+Forth1?}
+
+
+\begin{DoxyItemize}
+\item An e\+Forth for Arduino U\+NO implemented in C.
+\item A .ino file that can be openned in Arduino I\+DE and load/run directly onto Arduino U\+NO.
+\item Can be embeded with other Arduino applications.
+\item Has 16-\/bit cells and stacks. Double means 32-\/bit.
+\item Can read/write Arduino pins.
+\item Supports Arduino Interrupts.
+\item Can save/load app to/from E\+E\+P\+R\+OM.
+\item Can autorun from saved E\+E\+P\+R\+OM.
+\end{DoxyItemize}
+
+\doxysubsection*{How to install e\+Forth1?}
+
+
+\begin{DoxyItemize}
+\item From Arduino I\+DE\textquotesingle{}s Library Manager \begin{quote}
+~\newline
+ $>$ Make sure you\textquotesingle{}ve hooked up one of Arduino Nano/\+Uno, or a development board that hosts A\+Tmega328
+
+$>$ from Arduino I\+DE $>$ Tools $>$ Manage Libraries, enter F\+O\+R\+TH in search box
+
+$>$ find e\+Forth1 in the short list, select the latest version, and click the Install button
+
+$>$ from Files $>$ Examples, find e\+Forth1 in Examples from Custom Libraries at very buttom section
+
+$>$ load one of the nano\+Forth examples, such as 0\+\_\+hello
+
+$>$ open Serial Monitor, set baud rate to 115200, and line ending to \textquotesingle{}Both NL \& CR\textquotesingle{}
+
+$>$ hit compile and upload. You should see the \textquotesingle{}ok\textquotesingle{} prompt
+
+$>$ in Serial Monitor input bar atop, type W\+O\+R\+DS and hit $<$return$>$. See what e\+Forth1 says.~\newline
+~\newline
+ \end{quote}
+
+\item or, from Git\+Hub directly, if you prefer managing source codes manually \begin{quote}
+~\newline
+ $>$ git clone \href{https://github.com/chochain/eForth1}{\texttt{ https\+://github.\+com/chochain/e\+Forth1}} onto your local Sketch directory
+
+$>$ copy examples/0\+\_\+hello/0\+\_\+heloo.\+ino from sub-\/directory, then rename it as \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}}~\newline
+
+
+$>$ open \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}} with Arduino I\+DE, and setup your Nano/\+Uno (or A\+Tmega328) development board
+
+$>$ in nano\+F\+O\+R\+T\+H.\+ino, change the \#include $<$\mbox{\hyperlink{eforth1_8h}{eforth1.\+h}}$>$ to \#include \char`\"{}./src/eforth1.\+h\char`\"{}
+
+$>$ open Serial Monitor, set baud rate to 115200, and line ending to \textquotesingle{}Both NL \& CR\textquotesingle{}
+
+$>$ compile and upload, you should see the \textquotesingle{}ok\textquotesingle{} prompt
+
+$>$ in Serial Monitor input bar atop, type W\+O\+R\+DS and hit $<$return$>$. See what e\+Forth1 says.~\newline
+~\newline
+ \end{quote}
+
+\item Hopefully, thing goes well and you get something like this if e\+Forth1 is uploaded successfully \begin{quote}
+~\newline
+ \tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{1}{|X[-1]}|}
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ screen shot  }\\\cline{1-1}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ screen shot  }\\\cline{1-1}
+\endhead
+ \\\cline{1-1}
+\end{longtabu}
+\end{quote}
+~\newline
+
+\end{DoxyItemize}
+
+\doxysubsection*{To Learn More About Forth?}
+
+If your programming language exposure has been with C, Java, or even Python so far, F\+O\+R\+TH is quite {\bfseries{different}}. Quote Nick\+: {\itshape \char`\"{}\+It\textquotesingle{}s no functional or object oriented, it doesn\textquotesingle{}t have type-\/checking, and it basically has zero syntax\char`\"{}}. No syntax? So, anyway, before you dive right into the deep-\/end, here\textquotesingle{}s a good online materials.
+\begin{DoxyItemize}
+\item Interactive tutorial for F\+O\+R\+TH primer. It teaches you how F\+O\+R\+TH fundamentally works such as the numbers, the stack, and the dictionary. \begin{quote}
+\href{https://skilldrick.github.io/easyforth/\#introduction}{\texttt{ Easy Forth Tutorial by Nick Morgan}} \end{quote}
+
+\end{DoxyItemize}
+
+To understand the philosophy of F\+O\+R\+TH, excellent online e-\/books are here free for you.
+\begin{DoxyItemize}
+\item Timeless classic for the history, paths, and thoughts behind F\+O\+R\+TH language. \begin{quote}
+\href{http://home.iae.nl/users/mhx/sf.html}{\texttt{ Starting Forth by Leo Brodie}}~\newline
+ \href{http://thinking-forth.sourceforge.net}{\texttt{ Thinking Forth by Leo Brodie}} \end{quote}
+
+\end{DoxyItemize}
+
+\doxysubsection*{References to Dr. Ting\textquotesingle{}s Original}
+
+
+\begin{DoxyItemize}
+\item \href{https://chochain.github.io/eForth1/docs/ceForth_33.doc}{\texttt{ ce\+Forth\+\_\+33.\+doc -\/ original documentation}}
+\item \href{https://chochain.github.io/eForth1/docs/ceForth_33.cpp}{\texttt{ ce\+Forth\+\_\+33.\+cpp -\/ source assembler + VM}} 
+\end{DoxyItemize}

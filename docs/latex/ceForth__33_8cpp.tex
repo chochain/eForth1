@@ -1,0 +1,1510 @@
+\hypertarget{ceForth__33_8cpp}{}\doxysection{orig/ce\+Forth\+\_\+33.cpp File Reference}
+\label{ceForth__33_8cpp}\index{orig/ceForth\_33.cpp@{orig/ceForth\_33.cpp}}
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+Include dependency graph for ce\+Forth\+\_\+33.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=347pt]{ceForth__33_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ceForth__33_8cpp_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}}~0
+\item 
+\#define \mbox{\hyperlink{ceForth__33_8cpp_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}}~-\/1
+\item 
+\#define \mbox{\hyperlink{ceForth__33_8cpp_a5e225b86d7b20056ee34b49f436fe6ca}{L\+O\+G\+I\+C\+AL}}~? \mbox{\hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}}
+\item 
+\#define \mbox{\hyperlink{ceForth__33_8cpp_ab19a349161e8a8d35be3c8982a3b637f}{L\+O\+W\+ER}}(x,  y)~((\mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}})(x)$<$(\mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}})(y))
+\item 
+\#define \mbox{\hyperlink{ceForth__33_8cpp_a6a13234722161c83fd6467afed65b209}{pop}}~\mbox{\hyperlink{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}{top}} = \mbox{\hyperlink{ceForth__33_8cpp_a6886f22b50e2695edf665fbceed78727}{stack}}\mbox{[}(char) \mbox{\hyperlink{ceForth__33_8cpp_a7ac2f8d2602804fb7f92942f5aa4c93c}{S}}-\/-\/\mbox{]}
+\item 
+\#define \mbox{\hyperlink{ceForth__33_8cpp_a056d4c270858eeab11723b447e440114}{push}}~\mbox{\hyperlink{ceForth__33_8cpp_a6886f22b50e2695edf665fbceed78727}{stack}}\mbox{[}(char) ++\mbox{\hyperlink{ceForth__33_8cpp_a7ac2f8d2602804fb7f92942f5aa4c93c}{S}}\mbox{]} = \mbox{\hyperlink{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}{top}}; \mbox{\hyperlink{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}{top}} =
+\item 
+\#define \mbox{\hyperlink{ceForth__33_8cpp_aabf86d677b1fd984333617d53c077ceb}{popR}}~\mbox{\hyperlink{ceForth__33_8cpp_a247b43370fc8250ddc0e50f3b9a5309c}{rack}}\mbox{[}(unsigned char)\mbox{\hyperlink{ceForth__33_8cpp_a99b994edd82192c4fe92f1699f3c1085}{R}}-\/-\/\mbox{]}
+\item 
+\#define \mbox{\hyperlink{ceForth__33_8cpp_a51c493777aa0097f44a636311f68a1a8}{pushR}}~\mbox{\hyperlink{ceForth__33_8cpp_a247b43370fc8250ddc0e50f3b9a5309c}{rack}}\mbox{[}(unsigned char)++\mbox{\hyperlink{ceForth__33_8cpp_a99b994edd82192c4fe92f1699f3c1085}{R}}\mbox{]}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}}
+\item 
+typedef unsigned int \mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}}
+\item 
+typedef long \mbox{\hyperlink{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}{S64}}
+\item 
+typedef unsigned long int \mbox{\hyperlink{ceForth__33_8cpp_ac5ba485b10f1f4605b2ab45562499938}{U64}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a1714a62bc94fed15d8a3394ba0fc02ed}{bye}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a94a41916e07cb2db0dc5855114746722}{qrx}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_abd7b468fbeb7ef8112734b2547be83e3}{txsto}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a5922084f81d438be481450dc6aee9a10}{next}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a64e08c1cae17289c9b0c86629e175304}{dovar}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a52efaf2aac64e5708855659f273cd98b}{docon}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a50bcb45930b5bd66fb6de8de1d403b85}{dolit}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a3a81a8daa58cc581e8899435876e0d88}{dolist}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a3afb80611887eb960bd407ecc58a5eec}{exitt}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aaf9fa39071be1abfd1dee7a2ae5d0156}{execu}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a55074396e7ccd5e77ba1bd57d95d384e}{donext}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a833a53558ffc3efebaeb1b537a47e64f}{qbran}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a5da7a9f4f10b9acaee1794f9a082c1e4}{bran}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aaefaac2ed4c54f2008d8d236392c7261}{store}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_af7434f89ce8b677399efa8e116d3fe64}{at}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a68b9bbcfdffd53d696bf6b937aae7154}{cstor}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a24f20449533faff5e8d13ea77bed8b09}{cat}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a26c9ad71dfcae6f870de37211af213cd}{rfrom}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ac4dd33757e6b24b7985ff6b02e37217b}{rat}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ab38f75150d3cd2185807fbb2fa604fe6}{tor}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a70b6ce664b7b4fdb33e25ad9d81873d6}{drop}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_af648d451823165ef5095601e9b3e6d90}{dup}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a685f72aa18e0581ba0306eb0fd68eaf3}{swap}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a249abd397761801fa4433ed8378a11e6}{over}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aacce2fb678ce71eecbc7ba15b0863ace}{zless}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a35194ad19b9e14f0aabe73467d26fd14}{andd}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aba909c466bf74c97c9ffa4f0327706db}{orr}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ac58ea86fdf74caf21a510d961238cede}{xorr}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a071c4a4cbad3c5d7b8f87430fee05945}{uplus}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a1875423eef6e42ca9288ab70f03ab418}{nop}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ad1f5461e0d6f81a7684ba6137357904c}{qdup}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a05b9270f0b70b432f5626df19643387a}{rot}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_acff3a7287c39d026016b24beef665294}{ddrop}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_af119cfbfb45c427b899d5c04150eb06e}{ddup}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ad690de7196efd6869939226a6bbfa0a0}{plus}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ae4594404aa37b38186397c8a1966c76f}{inver}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a0e27ed0b80050fd010c07123aba961d4}{negat}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a526b80bfdd8f2e77eb9174552fc17b91}{dnega}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a04ef91a8e5ccaaf4481df650c58dd7fa}{subb}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_adb023b34a734a90cecda01f83946110d}{abss}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a97f511d1cb0aef1fd1dc0ce9fe494373}{great}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aa2674bb81cdbe2dc60df980943e93385}{less}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_acdc3029b0aa24a0dc412dc3ee33cc6f6}{equal}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a327844276ebbb70619abe416d6df20e3}{uless}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ad4e337600a2d3eedb4385a251a01a8d1}{ummod}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a5ddce25f82d6b3996767c7d6c8d86eba}{msmod}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a5fd4b2fe99b7026a1502e151418c59f6}{slmod}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a9dc407fd848c6a50cc31bb1655fb695e}{mod}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a898633d6b84e622308e87943abd1d40a}{slash}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a4209bdff320b7cfd95713d6fe7a3b633}{umsta}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a9aa9ba55cd598294b778fefb6ee97a05}{star}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a37ae2ff7f01fbc4334a82f4edfe4effd}{mstar}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a841799983e43397a0ee07d804dc1d3b3}{ssmod}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a1f41995bd1b95e13b77ed858a1e4720e}{stasl}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aba8cb6f7d6b69213629b3851d431ec59}{pick}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a777ce6cf7c321e61aa2ef9715715bfab}{pstor}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aa00f03bb195d286f6307841db11190ab}{dstor}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_af51f2980480f31f8105eb5e6648d045a}{dat}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_afc781a827a96bfd1303dcadc86a29a17}{count}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a7fe048ba4a35d44857f9547a570e2f63}{max}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a1105c0eb181a5a7bb43ef8fb15199eff}{min}} (void)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_afe85a806eecd03f715c6627e5dd58b2a}{H\+E\+A\+D\+ER}} (int lex, const char seq\mbox{[}$\,$\mbox{]})
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a3fbaf8124e2191c95d4b4769bf2c1e87}{C\+O\+DE}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ab9bd4c9996e00517129238adfa25ac87}{C\+O\+L\+ON}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a3f3d4317f4195d9fce64daf394202b62}{L\+A\+B\+EL}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a3035488a19d91ba8264028c41620b4e6}{B\+E\+G\+IN}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a5cd0d56ea94d15c477b31b40430c86a3}{A\+G\+A\+IN}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a0826fbc5ee36eb463f66b5166f450dcc}{U\+N\+T\+IL}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ab870c5e44c047d1aea72df04d03809bf}{W\+H\+I\+LE}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a77b53e489b4f8a066816764be0c9bcf1}{R\+E\+P\+E\+AT}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a55b3eeb01ae6d27fd91eeb4b7a911345}{IF}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aadc6a560e649df5d62ee9c1ad5e74382}{E\+L\+SE}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a1748b1f1b934e802643472a265da91bd}{T\+H\+EN}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ad6d60b765f761c067676d00debfb1cfe}{F\+OR}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a80e7154ebc8e6d353f03f1f37719e875}{N\+E\+XT}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aa139c953ec4d6caed9b3b18105667b4d}{A\+FT}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_a5672e8a92b6108bcc1738ef4888d0001}{D\+O\+TQ}} (const char seq\mbox{[}$\,$\mbox{]})
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_ab2b250b23d21277edce86b9831c11696}{S\+T\+RQ}} (const char seq\mbox{[}$\,$\mbox{]})
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aaf2bcc749d1fe214abdb38c0ea1f823b}{A\+B\+O\+RQ}} (const char seq\mbox{[}$\,$\mbox{]})
+\item 
+void \mbox{\hyperlink{ceForth__33_8cpp_aa2b6f85c7a5b00b228928e088e61722f}{Check\+Sum}} ()
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_adacbe0175a79dff748855d8c9839f82b}{main}} (int ac, char $\ast$av\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_a247b43370fc8250ddc0e50f3b9a5309c}{rack}} \mbox{[}256\mbox{]} = \{ 0 \}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_a6886f22b50e2695edf665fbceed78727}{stack}} \mbox{[}256\mbox{]} = \{ 0 \}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}{S64}} \mbox{\hyperlink{ceForth__33_8cpp_a72f295763ab9bd9c359ade025fd9da60}{d}}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}{S64}} \mbox{\hyperlink{ceForth__33_8cpp_aabb134684a7fdbfa06894e7f3d8af081}{n}}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}{S64}} \mbox{\hyperlink{ceForth__33_8cpp_af6e04eb886029282727ceb570abc2b2a}{m}}
+\item 
+unsigned char \mbox{\hyperlink{ceForth__33_8cpp_a99b994edd82192c4fe92f1699f3c1085}{R}} = 0
+\item 
+unsigned char \mbox{\hyperlink{ceForth__33_8cpp_a7ac2f8d2602804fb7f92942f5aa4c93c}{S}} = 0
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}{top}} = 0
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_a55aaf950cb07a81573dedf243e9c2f91}{P}}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_aa6ade2a9a9e343b51e51f006af9445c2}{IP}}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_a953c29b79fff2e9251b042755b9a92fb}{WP}}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_ae8723daf3aeab3263d01d4f2d9ba934a}{thread}}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}}
+\item 
+unsigned char \mbox{\hyperlink{ceForth__33_8cpp_a8afa5d8e00114d4a14df49f432971bc7}{bytecode}}
+\item 
+unsigned char \mbox{\hyperlink{ceForth__33_8cpp_a089aacf63ed94ae0e667bb8f6db3e853}{c}}
+\item 
+\mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} \mbox{\hyperlink{ceForth__33_8cpp_ab3da089773eaf6657751408006f45735}{data}} \mbox{[}16000\mbox{]} = \{\}
+\item 
+unsigned char $\ast$ \mbox{\hyperlink{ceForth__33_8cpp_a842bcf8ffffea520c505692f98e6f550}{c\+Data}} = (unsigned char$\ast$)\mbox{\hyperlink{ceForth__33_8cpp_ab3da089773eaf6657751408006f45735}{data}}
+\item 
+void($\ast$ \mbox{\hyperlink{ceForth__33_8cpp_a77dc11e019cf52e41218b16e776accb5}{primitives}} \mbox{[}64\mbox{]})(void)
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a8ed282eadf61cd22578e8ac0f2638b37}{I\+M\+E\+DD}} = 0x80
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_aaec950ab8b81e96f07d64ac78b592853}{C\+O\+M\+PO}} = 0x40
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a9ae2f15113adc7c0af8f0a44722a32ee}{B\+R\+AN}} = 0
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a1639668c309c47b1370e3eecba61da1f}{Q\+B\+R\+AN}} = 0
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a9001e7b4e39425693be234234e8dd237}{D\+O\+N\+XT}} = 0
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_af39268b5a5bc040e61b28e8366161c0e}{D\+O\+T\+QP}} = 0
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ad3c1ae2e82111f59048237123ab6824e}{S\+T\+R\+QP}} = 0
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_acd86ff0efd8e897e8f4c5eb51d4b3e86}{T\+OR}} = 0
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a2d63f2bff6df6e98b0d5046fcf06ac5d}{A\+B\+O\+R\+QP}} = 0
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a7db54342ea1e4c4083e88bf633e715a5}{as\+\_\+nop}} = 0
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a4b18d2e1a248afdc09ba4de97ae96fac}{as\+\_\+bye}} = 1
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a5673426bd2b99a3e1fc1d76ba6a75056}{as\+\_\+qrx}} = 2
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ae6c90fdac591401f506246dd8873d243}{as\+\_\+txsto}} = 3
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ad3f87118ab0446680ac51fe6d798f76b}{as\+\_\+docon}} = 4
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a120f62c74c044bcb6bb6de70a5d30a7e}{as\+\_\+dolit}} = 5
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a11a92b94348f04eb27684466a9b387c3}{as\+\_\+dolist}} = 6
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_adcc1d53ffa956957cd00af42b4cac7b1}{as\+\_\+exit}} = 7
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ad649f3683939fdb1d3edbb312dfddbdf}{as\+\_\+execu}} = 8
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a38c92a4e79ff291ec4be280ea61eb576}{as\+\_\+donext}} = 9
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ace06d442da23652ac336fcc6b40be96b}{as\+\_\+qbran}} = 10
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a74b715eb52821025d7c7595e5d26043c}{as\+\_\+bran}} = 11
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ae0f2a0dbd0837e6d426b6ffbd9210882}{as\+\_\+store}} = 12
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a0ca53955c1a156f51ef970d5ac3aaa3d}{as\+\_\+at}} = 13
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a1bd9f173f044b59fdebf6f3019fb5160}{as\+\_\+cstor}} = 14
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_af212d0f3f41a21d6b26c5b0ee9ebae4f}{as\+\_\+cat}} = 15
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_aed2a2eebd9b7e574e32f8df24ff5146d}{as\+\_\+rpat}} = 16
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ab9b5c826f1fa310d61f3ea9dbc43d9ed}{as\+\_\+rpsto}} = 17
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ab1a51b58cb27f0b61a9fdd3a70266edc}{as\+\_\+rfrom}} = 18
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_abfd11d6577c8a549d3d14fa14bfb8cde}{as\+\_\+rat}} = 19
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ad1af6d882353d7521a5a1fa6e87f4cdc}{as\+\_\+tor}} = 20
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a184d5c5ccadf26e29b0c238d8785f8b3}{as\+\_\+spat}} = 21
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_afc9eeaff9722167ec664e3cc2e34cd4a}{as\+\_\+spsto}} = 22
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a0d787043033a9262e01b97828e7c8c50}{as\+\_\+drop}} = 23
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a6bd77aff24669196d2896320ac692339}{as\+\_\+dup}} = 24
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a97fef54ff2d2ac587968a4ff87446d75}{as\+\_\+swap}} = 25
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a4d58ecd2f9703e8fee70e9de67f52a6a}{as\+\_\+over}} = 26
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a43a8507bc34d03e80b01aec126faf425}{as\+\_\+zless}} = 27
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a089efe6fff46f63507112cde9032d565}{as\+\_\+andd}} = 28
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a52e3685ead4f53e78040f8ca11e6d0e6}{as\+\_\+orr}} = 29
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a6f4441799ba4c7b0fdd069c9368da193}{as\+\_\+xorr}} = 30
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a0d81e9e749693bdd8c3767938f7cf8fb}{as\+\_\+uplus}} = 31
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a62aa332ea1f4c8d6de337685881fc9e1}{as\+\_\+next}} = 32
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ab387c9fd50284aaed085d4bed412e7ee}{as\+\_\+qdup}} = 33
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ae2add76694b10bde933ab52b9897ac6f}{as\+\_\+rot}} = 34
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_aaad49665c91f5558be30dfaa407c2fd1}{as\+\_\+ddrop}} = 35
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a2570896f8e090a59e44771d73ac8c5bb}{as\+\_\+ddup}} = 36
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a2433c11ca4cfeee43b869fa2ec307b2d}{as\+\_\+plus}} = 37
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a9c64c3c2f051df2b2a13b0a77b9b5df9}{as\+\_\+inver}} = 38
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ac515ef248abf188fc80ffdef0a47e82b}{as\+\_\+negat}} = 39
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ade3facf9a74a2823dae45737e3c44b2e}{as\+\_\+dnega}} = 40
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a464503257b513e6180027c57575d6e28}{as\+\_\+subb}} = 41
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a8461cbebf17056e16422f22b7b0d40d0}{as\+\_\+abss}} = 42
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a8c172fcbc34b4dd6e078a32e10fc843a}{as\+\_\+equal}} = 43
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_acf11554d5d10def7e8fe8f76590f1c46}{as\+\_\+uless}} = 44
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_aa105abcf8f1118aebe5e57f74663fb51}{as\+\_\+less}} = 45
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a5c5965905478c950833b085f1ea32805}{as\+\_\+ummod}} = 46
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a14ccb8d3d39be0ab9429889b60af89d4}{as\+\_\+msmod}} = 47
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a71ca5d857561fd26f78fb068a7d7b46f}{as\+\_\+slmod}} = 48
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a85d38bf1059b4d498806462f4b9fc258}{as\+\_\+mod}} = 49
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_afed5cd5d18d29efbd0ff4e62e17d9e5a}{as\+\_\+slash}} = 50
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_add6dfd134efc260e3ec27380ab8abcfc}{as\+\_\+umsta}} = 51
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a1c9a2e47c0f17a1a5202980b83d34dd2}{as\+\_\+star}} = 52
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a313b652f95ade4795dfa5a1a64cadc46}{as\+\_\+mstar}} = 53
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_abd18dfa7ee8860a180a024e80061e187}{as\+\_\+ssmod}} = 54
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a40f0a4a3ed018724ff159e0d8e620794}{as\+\_\+stasl}} = 55
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_aa7d575fde52cf1158d53a9b9fcde7abc}{as\+\_\+pick}} = 56
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_aa82d9f398da254fdf4a6c888e2ffa61f}{as\+\_\+pstor}} = 57
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a803f76ead17b4d067083017c6e2eb80c}{as\+\_\+dstor}} = 58
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_a6dd759938416d099d08e3259cea97ef3}{as\+\_\+dat}} = 59
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_aa5d2abdf10e41e1af4e8a6cb93f25ac5}{as\+\_\+count}} = 60
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ad4592e8f7ad871b7de47873d0b4defa9}{as\+\_\+dovar}} = 61
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_ab46903778e207700391bfe162a4c6cbf}{as\+\_\+max}} = 62
+\item 
+int \mbox{\hyperlink{ceForth__33_8cpp_abe37ed00a1e959415ad004e943faab9f}{as\+\_\+min}} = 63
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ceForth__33_8cpp_aa93f0eb578d23995850d61f7d61c55c1}\label{ceForth__33_8cpp_aa93f0eb578d23995850d61f7d61c55c1}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!FALSE@{FALSE}}
+\index{FALSE@{FALSE}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{FALSE}{FALSE}}
+{\footnotesize\ttfamily \#define F\+A\+L\+SE~0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa8cecfc5c5c054d2875c03e77b7be15d}\label{ceForth__33_8cpp_aa8cecfc5c5c054d2875c03e77b7be15d}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!TRUE@{TRUE}}
+\index{TRUE@{TRUE}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{TRUE}{TRUE}}
+{\footnotesize\ttfamily \#define T\+R\+UE~-\/1}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5e225b86d7b20056ee34b49f436fe6ca}\label{ceForth__33_8cpp_a5e225b86d7b20056ee34b49f436fe6ca}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!LOGICAL@{LOGICAL}}
+\index{LOGICAL@{LOGICAL}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{LOGICAL}{LOGICAL}}
+{\footnotesize\ttfamily \#define L\+O\+G\+I\+C\+AL~? \mbox{\hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab19a349161e8a8d35be3c8982a3b637f}\label{ceForth__33_8cpp_ab19a349161e8a8d35be3c8982a3b637f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!LOWER@{LOWER}}
+\index{LOWER@{LOWER}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{LOWER}{LOWER}}
+{\footnotesize\ttfamily \#define L\+O\+W\+ER(\begin{DoxyParamCaption}\item[{}]{x,  }\item[{}]{y }\end{DoxyParamCaption})~((\mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}})(x)$<$(\mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}})(y))}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a6a13234722161c83fd6467afed65b209}\label{ceForth__33_8cpp_a6a13234722161c83fd6467afed65b209}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!pop@{pop}}
+\index{pop@{pop}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{pop}{pop}}
+{\footnotesize\ttfamily \#define pop~\mbox{\hyperlink{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}{top}} = \mbox{\hyperlink{ceForth__33_8cpp_a6886f22b50e2695edf665fbceed78727}{stack}}\mbox{[}(char) \mbox{\hyperlink{ceForth__33_8cpp_a7ac2f8d2602804fb7f92942f5aa4c93c}{S}}-\/-\/\mbox{]}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a056d4c270858eeab11723b447e440114}\label{ceForth__33_8cpp_a056d4c270858eeab11723b447e440114}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!push@{push}}
+\index{push@{push}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{push}{push}}
+{\footnotesize\ttfamily \#define push~\mbox{\hyperlink{ceForth__33_8cpp_a6886f22b50e2695edf665fbceed78727}{stack}}\mbox{[}(char) ++\mbox{\hyperlink{ceForth__33_8cpp_a7ac2f8d2602804fb7f92942f5aa4c93c}{S}}\mbox{]} = \mbox{\hyperlink{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}{top}}; \mbox{\hyperlink{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}{top}} =}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aabf86d677b1fd984333617d53c077ceb}\label{ceForth__33_8cpp_aabf86d677b1fd984333617d53c077ceb}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!popR@{popR}}
+\index{popR@{popR}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{popR}{popR}}
+{\footnotesize\ttfamily \#define popR~\mbox{\hyperlink{ceForth__33_8cpp_a247b43370fc8250ddc0e50f3b9a5309c}{rack}}\mbox{[}(unsigned char)\mbox{\hyperlink{ceForth__33_8cpp_a99b994edd82192c4fe92f1699f3c1085}{R}}-\/-\/\mbox{]}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a51c493777aa0097f44a636311f68a1a8}\label{ceForth__33_8cpp_a51c493777aa0097f44a636311f68a1a8}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!pushR@{pushR}}
+\index{pushR@{pushR}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{pushR}{pushR}}
+{\footnotesize\ttfamily \#define pushR~\mbox{\hyperlink{ceForth__33_8cpp_a247b43370fc8250ddc0e50f3b9a5309c}{rack}}\mbox{[}(unsigned char)++\mbox{\hyperlink{ceForth__33_8cpp_a99b994edd82192c4fe92f1699f3c1085}{R}}\mbox{]}}
+
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}\label{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!S32@{S32}}
+\index{S32@{S32}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{S32}{S32}}
+{\footnotesize\ttfamily typedef int \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}\label{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!U32@{U32}}
+\index{U32@{U32}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{U32}{U32}}
+{\footnotesize\ttfamily typedef unsigned int \mbox{\hyperlink{ceForth__33_8cpp_ac3df7cf3c8cb172a588adec881447d68}{U32}}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}\label{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!S64@{S64}}
+\index{S64@{S64}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{S64}{S64}}
+{\footnotesize\ttfamily typedef long \mbox{\hyperlink{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}{S64}}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ac5ba485b10f1f4605b2ab45562499938}\label{ceForth__33_8cpp_ac5ba485b10f1f4605b2ab45562499938}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!U64@{U64}}
+\index{U64@{U64}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{U64}{U64}}
+{\footnotesize\ttfamily typedef unsigned long int \mbox{\hyperlink{ceForth__33_8cpp_ac5ba485b10f1f4605b2ab45562499938}{U64}}}
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ceForth__33_8cpp_a1714a62bc94fed15d8a3394ba0fc02ed}\label{ceForth__33_8cpp_a1714a62bc94fed15d8a3394ba0fc02ed}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!bye@{bye}}
+\index{bye@{bye}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{bye()}{bye()}}
+{\footnotesize\ttfamily void bye (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a94a41916e07cb2db0dc5855114746722}\label{ceForth__33_8cpp_a94a41916e07cb2db0dc5855114746722}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!qrx@{qrx}}
+\index{qrx@{qrx}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{qrx()}{qrx()}}
+{\footnotesize\ttfamily void qrx (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_abd7b468fbeb7ef8112734b2547be83e3}\label{ceForth__33_8cpp_abd7b468fbeb7ef8112734b2547be83e3}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!txsto@{txsto}}
+\index{txsto@{txsto}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{txsto()}{txsto()}}
+{\footnotesize\ttfamily void txsto (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5922084f81d438be481450dc6aee9a10}\label{ceForth__33_8cpp_a5922084f81d438be481450dc6aee9a10}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!next@{next}}
+\index{next@{next}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{next()}{next()}}
+{\footnotesize\ttfamily void next (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a64e08c1cae17289c9b0c86629e175304}\label{ceForth__33_8cpp_a64e08c1cae17289c9b0c86629e175304}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!dovar@{dovar}}
+\index{dovar@{dovar}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{dovar()}{dovar()}}
+{\footnotesize\ttfamily void dovar (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a52efaf2aac64e5708855659f273cd98b}\label{ceForth__33_8cpp_a52efaf2aac64e5708855659f273cd98b}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!docon@{docon}}
+\index{docon@{docon}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{docon()}{docon()}}
+{\footnotesize\ttfamily void docon (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a50bcb45930b5bd66fb6de8de1d403b85}\label{ceForth__33_8cpp_a50bcb45930b5bd66fb6de8de1d403b85}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!dolit@{dolit}}
+\index{dolit@{dolit}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{dolit()}{dolit()}}
+{\footnotesize\ttfamily void dolit (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a3a81a8daa58cc581e8899435876e0d88}\label{ceForth__33_8cpp_a3a81a8daa58cc581e8899435876e0d88}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!dolist@{dolist}}
+\index{dolist@{dolist}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{dolist()}{dolist()}}
+{\footnotesize\ttfamily void dolist (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a3afb80611887eb960bd407ecc58a5eec}\label{ceForth__33_8cpp_a3afb80611887eb960bd407ecc58a5eec}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!exitt@{exitt}}
+\index{exitt@{exitt}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{exitt()}{exitt()}}
+{\footnotesize\ttfamily void exitt (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aaf9fa39071be1abfd1dee7a2ae5d0156}\label{ceForth__33_8cpp_aaf9fa39071be1abfd1dee7a2ae5d0156}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!execu@{execu}}
+\index{execu@{execu}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{execu()}{execu()}}
+{\footnotesize\ttfamily void execu (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a55074396e7ccd5e77ba1bd57d95d384e}\label{ceForth__33_8cpp_a55074396e7ccd5e77ba1bd57d95d384e}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!donext@{donext}}
+\index{donext@{donext}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{donext()}{donext()}}
+{\footnotesize\ttfamily void donext (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a833a53558ffc3efebaeb1b537a47e64f}\label{ceForth__33_8cpp_a833a53558ffc3efebaeb1b537a47e64f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!qbran@{qbran}}
+\index{qbran@{qbran}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{qbran()}{qbran()}}
+{\footnotesize\ttfamily void qbran (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5da7a9f4f10b9acaee1794f9a082c1e4}\label{ceForth__33_8cpp_a5da7a9f4f10b9acaee1794f9a082c1e4}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!bran@{bran}}
+\index{bran@{bran}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{bran()}{bran()}}
+{\footnotesize\ttfamily void bran (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aaefaac2ed4c54f2008d8d236392c7261}\label{ceForth__33_8cpp_aaefaac2ed4c54f2008d8d236392c7261}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!store@{store}}
+\index{store@{store}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{store()}{store()}}
+{\footnotesize\ttfamily void store (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_af7434f89ce8b677399efa8e116d3fe64}\label{ceForth__33_8cpp_af7434f89ce8b677399efa8e116d3fe64}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!at@{at}}
+\index{at@{at}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{at()}{at()}}
+{\footnotesize\ttfamily void at (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a68b9bbcfdffd53d696bf6b937aae7154}\label{ceForth__33_8cpp_a68b9bbcfdffd53d696bf6b937aae7154}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!cstor@{cstor}}
+\index{cstor@{cstor}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{cstor()}{cstor()}}
+{\footnotesize\ttfamily void cstor (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a24f20449533faff5e8d13ea77bed8b09}\label{ceForth__33_8cpp_a24f20449533faff5e8d13ea77bed8b09}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!cat@{cat}}
+\index{cat@{cat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{cat()}{cat()}}
+{\footnotesize\ttfamily void cat (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a26c9ad71dfcae6f870de37211af213cd}\label{ceForth__33_8cpp_a26c9ad71dfcae6f870de37211af213cd}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!rfrom@{rfrom}}
+\index{rfrom@{rfrom}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{rfrom()}{rfrom()}}
+{\footnotesize\ttfamily void rfrom (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ac4dd33757e6b24b7985ff6b02e37217b}\label{ceForth__33_8cpp_ac4dd33757e6b24b7985ff6b02e37217b}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!rat@{rat}}
+\index{rat@{rat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{rat()}{rat()}}
+{\footnotesize\ttfamily void rat (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab38f75150d3cd2185807fbb2fa604fe6}\label{ceForth__33_8cpp_ab38f75150d3cd2185807fbb2fa604fe6}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!tor@{tor}}
+\index{tor@{tor}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{tor()}{tor()}}
+{\footnotesize\ttfamily void tor (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a70b6ce664b7b4fdb33e25ad9d81873d6}\label{ceForth__33_8cpp_a70b6ce664b7b4fdb33e25ad9d81873d6}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!drop@{drop}}
+\index{drop@{drop}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{drop()}{drop()}}
+{\footnotesize\ttfamily void drop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_af648d451823165ef5095601e9b3e6d90}\label{ceForth__33_8cpp_af648d451823165ef5095601e9b3e6d90}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!dup@{dup}}
+\index{dup@{dup}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{dup()}{dup()}}
+{\footnotesize\ttfamily void dup (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a685f72aa18e0581ba0306eb0fd68eaf3}\label{ceForth__33_8cpp_a685f72aa18e0581ba0306eb0fd68eaf3}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!swap@{swap}}
+\index{swap@{swap}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{swap()}{swap()}}
+{\footnotesize\ttfamily void swap (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a249abd397761801fa4433ed8378a11e6}\label{ceForth__33_8cpp_a249abd397761801fa4433ed8378a11e6}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!over@{over}}
+\index{over@{over}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{over()}{over()}}
+{\footnotesize\ttfamily void over (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aacce2fb678ce71eecbc7ba15b0863ace}\label{ceForth__33_8cpp_aacce2fb678ce71eecbc7ba15b0863ace}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!zless@{zless}}
+\index{zless@{zless}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{zless()}{zless()}}
+{\footnotesize\ttfamily void zless (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a35194ad19b9e14f0aabe73467d26fd14}\label{ceForth__33_8cpp_a35194ad19b9e14f0aabe73467d26fd14}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!andd@{andd}}
+\index{andd@{andd}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{andd()}{andd()}}
+{\footnotesize\ttfamily void andd (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aba909c466bf74c97c9ffa4f0327706db}\label{ceForth__33_8cpp_aba909c466bf74c97c9ffa4f0327706db}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!orr@{orr}}
+\index{orr@{orr}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{orr()}{orr()}}
+{\footnotesize\ttfamily void orr (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ac58ea86fdf74caf21a510d961238cede}\label{ceForth__33_8cpp_ac58ea86fdf74caf21a510d961238cede}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!xorr@{xorr}}
+\index{xorr@{xorr}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{xorr()}{xorr()}}
+{\footnotesize\ttfamily void xorr (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a071c4a4cbad3c5d7b8f87430fee05945}\label{ceForth__33_8cpp_a071c4a4cbad3c5d7b8f87430fee05945}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!uplus@{uplus}}
+\index{uplus@{uplus}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{uplus()}{uplus()}}
+{\footnotesize\ttfamily void uplus (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a1875423eef6e42ca9288ab70f03ab418}\label{ceForth__33_8cpp_a1875423eef6e42ca9288ab70f03ab418}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!nop@{nop}}
+\index{nop@{nop}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{nop()}{nop()}}
+{\footnotesize\ttfamily void nop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad1f5461e0d6f81a7684ba6137357904c}\label{ceForth__33_8cpp_ad1f5461e0d6f81a7684ba6137357904c}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!qdup@{qdup}}
+\index{qdup@{qdup}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{qdup()}{qdup()}}
+{\footnotesize\ttfamily void qdup (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a05b9270f0b70b432f5626df19643387a}\label{ceForth__33_8cpp_a05b9270f0b70b432f5626df19643387a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!rot@{rot}}
+\index{rot@{rot}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{rot()}{rot()}}
+{\footnotesize\ttfamily void rot (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_acff3a7287c39d026016b24beef665294}\label{ceForth__33_8cpp_acff3a7287c39d026016b24beef665294}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!ddrop@{ddrop}}
+\index{ddrop@{ddrop}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{ddrop()}{ddrop()}}
+{\footnotesize\ttfamily void ddrop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_af119cfbfb45c427b899d5c04150eb06e}\label{ceForth__33_8cpp_af119cfbfb45c427b899d5c04150eb06e}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!ddup@{ddup}}
+\index{ddup@{ddup}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{ddup()}{ddup()}}
+{\footnotesize\ttfamily void ddup (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad690de7196efd6869939226a6bbfa0a0}\label{ceForth__33_8cpp_ad690de7196efd6869939226a6bbfa0a0}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!plus@{plus}}
+\index{plus@{plus}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{plus()}{plus()}}
+{\footnotesize\ttfamily void plus (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ae4594404aa37b38186397c8a1966c76f}\label{ceForth__33_8cpp_ae4594404aa37b38186397c8a1966c76f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!inver@{inver}}
+\index{inver@{inver}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{inver()}{inver()}}
+{\footnotesize\ttfamily void inver (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a0e27ed0b80050fd010c07123aba961d4}\label{ceForth__33_8cpp_a0e27ed0b80050fd010c07123aba961d4}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!negat@{negat}}
+\index{negat@{negat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{negat()}{negat()}}
+{\footnotesize\ttfamily void negat (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a526b80bfdd8f2e77eb9174552fc17b91}\label{ceForth__33_8cpp_a526b80bfdd8f2e77eb9174552fc17b91}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!dnega@{dnega}}
+\index{dnega@{dnega}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{dnega()}{dnega()}}
+{\footnotesize\ttfamily void dnega (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a04ef91a8e5ccaaf4481df650c58dd7fa}\label{ceForth__33_8cpp_a04ef91a8e5ccaaf4481df650c58dd7fa}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!subb@{subb}}
+\index{subb@{subb}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{subb()}{subb()}}
+{\footnotesize\ttfamily void subb (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_adb023b34a734a90cecda01f83946110d}\label{ceForth__33_8cpp_adb023b34a734a90cecda01f83946110d}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!abss@{abss}}
+\index{abss@{abss}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{abss()}{abss()}}
+{\footnotesize\ttfamily void abss (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a97f511d1cb0aef1fd1dc0ce9fe494373}\label{ceForth__33_8cpp_a97f511d1cb0aef1fd1dc0ce9fe494373}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!great@{great}}
+\index{great@{great}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{great()}{great()}}
+{\footnotesize\ttfamily void great (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa2674bb81cdbe2dc60df980943e93385}\label{ceForth__33_8cpp_aa2674bb81cdbe2dc60df980943e93385}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!less@{less}}
+\index{less@{less}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{less()}{less()}}
+{\footnotesize\ttfamily void less (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_acdc3029b0aa24a0dc412dc3ee33cc6f6}\label{ceForth__33_8cpp_acdc3029b0aa24a0dc412dc3ee33cc6f6}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!equal@{equal}}
+\index{equal@{equal}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{equal()}{equal()}}
+{\footnotesize\ttfamily void equal (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a327844276ebbb70619abe416d6df20e3}\label{ceForth__33_8cpp_a327844276ebbb70619abe416d6df20e3}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!uless@{uless}}
+\index{uless@{uless}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{uless()}{uless()}}
+{\footnotesize\ttfamily void uless (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad4e337600a2d3eedb4385a251a01a8d1}\label{ceForth__33_8cpp_ad4e337600a2d3eedb4385a251a01a8d1}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!ummod@{ummod}}
+\index{ummod@{ummod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{ummod()}{ummod()}}
+{\footnotesize\ttfamily void ummod (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5ddce25f82d6b3996767c7d6c8d86eba}\label{ceForth__33_8cpp_a5ddce25f82d6b3996767c7d6c8d86eba}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!msmod@{msmod}}
+\index{msmod@{msmod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{msmod()}{msmod()}}
+{\footnotesize\ttfamily void msmod (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5fd4b2fe99b7026a1502e151418c59f6}\label{ceForth__33_8cpp_a5fd4b2fe99b7026a1502e151418c59f6}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!slmod@{slmod}}
+\index{slmod@{slmod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{slmod()}{slmod()}}
+{\footnotesize\ttfamily void slmod (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a9dc407fd848c6a50cc31bb1655fb695e}\label{ceForth__33_8cpp_a9dc407fd848c6a50cc31bb1655fb695e}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!mod@{mod}}
+\index{mod@{mod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{mod()}{mod()}}
+{\footnotesize\ttfamily void mod (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a898633d6b84e622308e87943abd1d40a}\label{ceForth__33_8cpp_a898633d6b84e622308e87943abd1d40a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!slash@{slash}}
+\index{slash@{slash}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{slash()}{slash()}}
+{\footnotesize\ttfamily void slash (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a4209bdff320b7cfd95713d6fe7a3b633}\label{ceForth__33_8cpp_a4209bdff320b7cfd95713d6fe7a3b633}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!umsta@{umsta}}
+\index{umsta@{umsta}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{umsta()}{umsta()}}
+{\footnotesize\ttfamily void umsta (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a9aa9ba55cd598294b778fefb6ee97a05}\label{ceForth__33_8cpp_a9aa9ba55cd598294b778fefb6ee97a05}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!star@{star}}
+\index{star@{star}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{star()}{star()}}
+{\footnotesize\ttfamily void star (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a37ae2ff7f01fbc4334a82f4edfe4effd}\label{ceForth__33_8cpp_a37ae2ff7f01fbc4334a82f4edfe4effd}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!mstar@{mstar}}
+\index{mstar@{mstar}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{mstar()}{mstar()}}
+{\footnotesize\ttfamily void mstar (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a841799983e43397a0ee07d804dc1d3b3}\label{ceForth__33_8cpp_a841799983e43397a0ee07d804dc1d3b3}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!ssmod@{ssmod}}
+\index{ssmod@{ssmod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{ssmod()}{ssmod()}}
+{\footnotesize\ttfamily void ssmod (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a1f41995bd1b95e13b77ed858a1e4720e}\label{ceForth__33_8cpp_a1f41995bd1b95e13b77ed858a1e4720e}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!stasl@{stasl}}
+\index{stasl@{stasl}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{stasl()}{stasl()}}
+{\footnotesize\ttfamily void stasl (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aba8cb6f7d6b69213629b3851d431ec59}\label{ceForth__33_8cpp_aba8cb6f7d6b69213629b3851d431ec59}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!pick@{pick}}
+\index{pick@{pick}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{pick()}{pick()}}
+{\footnotesize\ttfamily void pick (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a777ce6cf7c321e61aa2ef9715715bfab}\label{ceForth__33_8cpp_a777ce6cf7c321e61aa2ef9715715bfab}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!pstor@{pstor}}
+\index{pstor@{pstor}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{pstor()}{pstor()}}
+{\footnotesize\ttfamily void pstor (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa00f03bb195d286f6307841db11190ab}\label{ceForth__33_8cpp_aa00f03bb195d286f6307841db11190ab}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!dstor@{dstor}}
+\index{dstor@{dstor}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{dstor()}{dstor()}}
+{\footnotesize\ttfamily void dstor (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_af51f2980480f31f8105eb5e6648d045a}\label{ceForth__33_8cpp_af51f2980480f31f8105eb5e6648d045a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!dat@{dat}}
+\index{dat@{dat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{dat()}{dat()}}
+{\footnotesize\ttfamily void dat (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_afc781a827a96bfd1303dcadc86a29a17}\label{ceForth__33_8cpp_afc781a827a96bfd1303dcadc86a29a17}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!count@{count}}
+\index{count@{count}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{count()}{count()}}
+{\footnotesize\ttfamily void count (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a7fe048ba4a35d44857f9547a570e2f63}\label{ceForth__33_8cpp_a7fe048ba4a35d44857f9547a570e2f63}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!max@{max}}
+\index{max@{max}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{max()}{max()}}
+{\footnotesize\ttfamily void max (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a1105c0eb181a5a7bb43ef8fb15199eff}\label{ceForth__33_8cpp_a1105c0eb181a5a7bb43ef8fb15199eff}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!min@{min}}
+\index{min@{min}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{min()}{min()}}
+{\footnotesize\ttfamily void min (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_afe85a806eecd03f715c6627e5dd58b2a}\label{ceForth__33_8cpp_afe85a806eecd03f715c6627e5dd58b2a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!HEADER@{HEADER}}
+\index{HEADER@{HEADER}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{HEADER()}{HEADER()}}
+{\footnotesize\ttfamily void H\+E\+A\+D\+ER (\begin{DoxyParamCaption}\item[{int}]{lex,  }\item[{const char}]{seq\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a3fbaf8124e2191c95d4b4769bf2c1e87}\label{ceForth__33_8cpp_a3fbaf8124e2191c95d4b4769bf2c1e87}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!CODE@{CODE}}
+\index{CODE@{CODE}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{CODE()}{CODE()}}
+{\footnotesize\ttfamily int C\+O\+DE (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab9bd4c9996e00517129238adfa25ac87}\label{ceForth__33_8cpp_ab9bd4c9996e00517129238adfa25ac87}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!COLON@{COLON}}
+\index{COLON@{COLON}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{COLON()}{COLON()}}
+{\footnotesize\ttfamily int C\+O\+L\+ON (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a3f3d4317f4195d9fce64daf394202b62}\label{ceForth__33_8cpp_a3f3d4317f4195d9fce64daf394202b62}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!LABEL@{LABEL}}
+\index{LABEL@{LABEL}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{LABEL()}{LABEL()}}
+{\footnotesize\ttfamily int L\+A\+B\+EL (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a3035488a19d91ba8264028c41620b4e6}\label{ceForth__33_8cpp_a3035488a19d91ba8264028c41620b4e6}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!BEGIN@{BEGIN}}
+\index{BEGIN@{BEGIN}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{BEGIN()}{BEGIN()}}
+{\footnotesize\ttfamily void B\+E\+G\+IN (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5cd0d56ea94d15c477b31b40430c86a3}\label{ceForth__33_8cpp_a5cd0d56ea94d15c477b31b40430c86a3}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!AGAIN@{AGAIN}}
+\index{AGAIN@{AGAIN}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{AGAIN()}{AGAIN()}}
+{\footnotesize\ttfamily void A\+G\+A\+IN (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a0826fbc5ee36eb463f66b5166f450dcc}\label{ceForth__33_8cpp_a0826fbc5ee36eb463f66b5166f450dcc}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!UNTIL@{UNTIL}}
+\index{UNTIL@{UNTIL}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{UNTIL()}{UNTIL()}}
+{\footnotesize\ttfamily void U\+N\+T\+IL (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab870c5e44c047d1aea72df04d03809bf}\label{ceForth__33_8cpp_ab870c5e44c047d1aea72df04d03809bf}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!WHILE@{WHILE}}
+\index{WHILE@{WHILE}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{WHILE()}{WHILE()}}
+{\footnotesize\ttfamily void W\+H\+I\+LE (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a77b53e489b4f8a066816764be0c9bcf1}\label{ceForth__33_8cpp_a77b53e489b4f8a066816764be0c9bcf1}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!REPEAT@{REPEAT}}
+\index{REPEAT@{REPEAT}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{REPEAT()}{REPEAT()}}
+{\footnotesize\ttfamily void R\+E\+P\+E\+AT (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a55b3eeb01ae6d27fd91eeb4b7a911345}\label{ceForth__33_8cpp_a55b3eeb01ae6d27fd91eeb4b7a911345}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!IF@{IF}}
+\index{IF@{IF}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{IF()}{IF()}}
+{\footnotesize\ttfamily void IF (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aadc6a560e649df5d62ee9c1ad5e74382}\label{ceForth__33_8cpp_aadc6a560e649df5d62ee9c1ad5e74382}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!ELSE@{ELSE}}
+\index{ELSE@{ELSE}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{ELSE()}{ELSE()}}
+{\footnotesize\ttfamily void E\+L\+SE (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a1748b1f1b934e802643472a265da91bd}\label{ceForth__33_8cpp_a1748b1f1b934e802643472a265da91bd}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!THEN@{THEN}}
+\index{THEN@{THEN}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{THEN()}{THEN()}}
+{\footnotesize\ttfamily void T\+H\+EN (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad6d60b765f761c067676d00debfb1cfe}\label{ceForth__33_8cpp_ad6d60b765f761c067676d00debfb1cfe}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!FOR@{FOR}}
+\index{FOR@{FOR}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{FOR()}{FOR()}}
+{\footnotesize\ttfamily void F\+OR (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a80e7154ebc8e6d353f03f1f37719e875}\label{ceForth__33_8cpp_a80e7154ebc8e6d353f03f1f37719e875}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!NEXT@{NEXT}}
+\index{NEXT@{NEXT}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{NEXT()}{NEXT()}}
+{\footnotesize\ttfamily void N\+E\+XT (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa139c953ec4d6caed9b3b18105667b4d}\label{ceForth__33_8cpp_aa139c953ec4d6caed9b3b18105667b4d}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!AFT@{AFT}}
+\index{AFT@{AFT}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{AFT()}{AFT()}}
+{\footnotesize\ttfamily void A\+FT (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5672e8a92b6108bcc1738ef4888d0001}\label{ceForth__33_8cpp_a5672e8a92b6108bcc1738ef4888d0001}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!DOTQ@{DOTQ}}
+\index{DOTQ@{DOTQ}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{DOTQ()}{DOTQ()}}
+{\footnotesize\ttfamily void D\+O\+TQ (\begin{DoxyParamCaption}\item[{const char}]{seq\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab2b250b23d21277edce86b9831c11696}\label{ceForth__33_8cpp_ab2b250b23d21277edce86b9831c11696}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!STRQ@{STRQ}}
+\index{STRQ@{STRQ}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{STRQ()}{STRQ()}}
+{\footnotesize\ttfamily void S\+T\+RQ (\begin{DoxyParamCaption}\item[{const char}]{seq\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aaf2bcc749d1fe214abdb38c0ea1f823b}\label{ceForth__33_8cpp_aaf2bcc749d1fe214abdb38c0ea1f823b}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!ABORQ@{ABORQ}}
+\index{ABORQ@{ABORQ}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{ABORQ()}{ABORQ()}}
+{\footnotesize\ttfamily void A\+B\+O\+RQ (\begin{DoxyParamCaption}\item[{const char}]{seq\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa2b6f85c7a5b00b228928e088e61722f}\label{ceForth__33_8cpp_aa2b6f85c7a5b00b228928e088e61722f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!CheckSum@{CheckSum}}
+\index{CheckSum@{CheckSum}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{CheckSum()}{CheckSum()}}
+{\footnotesize\ttfamily void Check\+Sum (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_adacbe0175a79dff748855d8c9839f82b}\label{ceForth__33_8cpp_adacbe0175a79dff748855d8c9839f82b}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!main@{main}}
+\index{main@{main}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{ac,  }\item[{char $\ast$}]{av\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ceForth__33_8cpp_a247b43370fc8250ddc0e50f3b9a5309c}\label{ceForth__33_8cpp_a247b43370fc8250ddc0e50f3b9a5309c}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!rack@{rack}}
+\index{rack@{rack}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{rack}{rack}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} rack\mbox{[}256\mbox{]} = \{ 0 \}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a6886f22b50e2695edf665fbceed78727}\label{ceForth__33_8cpp_a6886f22b50e2695edf665fbceed78727}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!stack@{stack}}
+\index{stack@{stack}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{stack}{stack}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} stack\mbox{[}256\mbox{]} = \{ 0 \}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a72f295763ab9bd9c359ade025fd9da60}\label{ceForth__33_8cpp_a72f295763ab9bd9c359ade025fd9da60}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!d@{d}}
+\index{d@{d}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{d}{d}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}{S64}} d}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aabb134684a7fdbfa06894e7f3d8af081}\label{ceForth__33_8cpp_aabb134684a7fdbfa06894e7f3d8af081}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!n@{n}}
+\index{n@{n}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{n}{n}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}{S64}} n}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_af6e04eb886029282727ceb570abc2b2a}\label{ceForth__33_8cpp_af6e04eb886029282727ceb570abc2b2a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!m@{m}}
+\index{m@{m}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{m}{m}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_ab07aa263555f75bcd7f0fb14e6707dec}{S64}} m}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a99b994edd82192c4fe92f1699f3c1085}\label{ceForth__33_8cpp_a99b994edd82192c4fe92f1699f3c1085}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!R@{R}}
+\index{R@{R}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{R}{R}}
+{\footnotesize\ttfamily unsigned char R = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a7ac2f8d2602804fb7f92942f5aa4c93c}\label{ceForth__33_8cpp_a7ac2f8d2602804fb7f92942f5aa4c93c}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!S@{S}}
+\index{S@{S}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{S}{S}}
+{\footnotesize\ttfamily unsigned char S = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}\label{ceForth__33_8cpp_a3c635b8dd4367b5f81473f28ed52bf8c}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!top@{top}}
+\index{top@{top}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{top}{top}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} top = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a55aaf950cb07a81573dedf243e9c2f91}\label{ceForth__33_8cpp_a55aaf950cb07a81573dedf243e9c2f91}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!P@{P}}
+\index{P@{P}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{P}{P}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} P}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa6ade2a9a9e343b51e51f006af9445c2}\label{ceForth__33_8cpp_aa6ade2a9a9e343b51e51f006af9445c2}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!IP@{IP}}
+\index{IP@{IP}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{IP}{IP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} IP}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a953c29b79fff2e9251b042755b9a92fb}\label{ceForth__33_8cpp_a953c29b79fff2e9251b042755b9a92fb}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!WP@{WP}}
+\index{WP@{WP}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{WP}{WP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} WP}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ae8723daf3aeab3263d01d4f2d9ba934a}\label{ceForth__33_8cpp_ae8723daf3aeab3263d01d4f2d9ba934a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!thread@{thread}}
+\index{thread@{thread}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{thread}{thread}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} thread}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}\label{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!len@{len}}
+\index{len@{len}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{len}{len}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} len}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a8afa5d8e00114d4a14df49f432971bc7}\label{ceForth__33_8cpp_a8afa5d8e00114d4a14df49f432971bc7}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!bytecode@{bytecode}}
+\index{bytecode@{bytecode}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{bytecode}{bytecode}}
+{\footnotesize\ttfamily unsigned char bytecode}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a089aacf63ed94ae0e667bb8f6db3e853}\label{ceForth__33_8cpp_a089aacf63ed94ae0e667bb8f6db3e853}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!c@{c}}
+\index{c@{c}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{c}{c}}
+{\footnotesize\ttfamily unsigned char c}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab3da089773eaf6657751408006f45735}\label{ceForth__33_8cpp_ab3da089773eaf6657751408006f45735}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!data@{data}}
+\index{data@{data}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{data}{data}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ceForth__33_8cpp_a69e88b8f6f11408e7ebab25ff434d218}{S32}} data\mbox{[}16000\mbox{]} = \{\}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a842bcf8ffffea520c505692f98e6f550}\label{ceForth__33_8cpp_a842bcf8ffffea520c505692f98e6f550}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!cData@{cData}}
+\index{cData@{cData}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{cData}{cData}}
+{\footnotesize\ttfamily unsigned char$\ast$ c\+Data = (unsigned char$\ast$)\mbox{\hyperlink{ceForth__33_8cpp_ab3da089773eaf6657751408006f45735}{data}}}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a77dc11e019cf52e41218b16e776accb5}\label{ceForth__33_8cpp_a77dc11e019cf52e41218b16e776accb5}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!primitives@{primitives}}
+\index{primitives@{primitives}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{primitives}{primitives}}
+{\footnotesize\ttfamily void($\ast$ primitives\mbox{[}64\mbox{]})(void)}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a8ed282eadf61cd22578e8ac0f2638b37}\label{ceForth__33_8cpp_a8ed282eadf61cd22578e8ac0f2638b37}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!IMEDD@{IMEDD}}
+\index{IMEDD@{IMEDD}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{IMEDD}{IMEDD}}
+{\footnotesize\ttfamily int I\+M\+E\+DD = 0x80}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aaec950ab8b81e96f07d64ac78b592853}\label{ceForth__33_8cpp_aaec950ab8b81e96f07d64ac78b592853}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!COMPO@{COMPO}}
+\index{COMPO@{COMPO}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{COMPO}{COMPO}}
+{\footnotesize\ttfamily int C\+O\+M\+PO = 0x40}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a9ae2f15113adc7c0af8f0a44722a32ee}\label{ceForth__33_8cpp_a9ae2f15113adc7c0af8f0a44722a32ee}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!BRAN@{BRAN}}
+\index{BRAN@{BRAN}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{BRAN}{BRAN}}
+{\footnotesize\ttfamily int B\+R\+AN = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a1639668c309c47b1370e3eecba61da1f}\label{ceForth__33_8cpp_a1639668c309c47b1370e3eecba61da1f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!QBRAN@{QBRAN}}
+\index{QBRAN@{QBRAN}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{QBRAN}{QBRAN}}
+{\footnotesize\ttfamily int Q\+B\+R\+AN = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a9001e7b4e39425693be234234e8dd237}\label{ceForth__33_8cpp_a9001e7b4e39425693be234234e8dd237}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!DONXT@{DONXT}}
+\index{DONXT@{DONXT}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{DONXT}{DONXT}}
+{\footnotesize\ttfamily int D\+O\+N\+XT = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_af39268b5a5bc040e61b28e8366161c0e}\label{ceForth__33_8cpp_af39268b5a5bc040e61b28e8366161c0e}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!DOTQP@{DOTQP}}
+\index{DOTQP@{DOTQP}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{DOTQP}{DOTQP}}
+{\footnotesize\ttfamily int D\+O\+T\+QP = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad3c1ae2e82111f59048237123ab6824e}\label{ceForth__33_8cpp_ad3c1ae2e82111f59048237123ab6824e}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!STRQP@{STRQP}}
+\index{STRQP@{STRQP}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{STRQP}{STRQP}}
+{\footnotesize\ttfamily int S\+T\+R\+QP = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_acd86ff0efd8e897e8f4c5eb51d4b3e86}\label{ceForth__33_8cpp_acd86ff0efd8e897e8f4c5eb51d4b3e86}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!TOR@{TOR}}
+\index{TOR@{TOR}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{TOR}{TOR}}
+{\footnotesize\ttfamily int T\+OR = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a2d63f2bff6df6e98b0d5046fcf06ac5d}\label{ceForth__33_8cpp_a2d63f2bff6df6e98b0d5046fcf06ac5d}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!ABORQP@{ABORQP}}
+\index{ABORQP@{ABORQP}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{ABORQP}{ABORQP}}
+{\footnotesize\ttfamily int A\+B\+O\+R\+QP = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a7db54342ea1e4c4083e88bf633e715a5}\label{ceForth__33_8cpp_a7db54342ea1e4c4083e88bf633e715a5}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_nop@{as\_nop}}
+\index{as\_nop@{as\_nop}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_nop}{as\_nop}}
+{\footnotesize\ttfamily int as\+\_\+nop = 0}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a4b18d2e1a248afdc09ba4de97ae96fac}\label{ceForth__33_8cpp_a4b18d2e1a248afdc09ba4de97ae96fac}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_bye@{as\_bye}}
+\index{as\_bye@{as\_bye}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_bye}{as\_bye}}
+{\footnotesize\ttfamily int as\+\_\+bye = 1}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5673426bd2b99a3e1fc1d76ba6a75056}\label{ceForth__33_8cpp_a5673426bd2b99a3e1fc1d76ba6a75056}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_qrx@{as\_qrx}}
+\index{as\_qrx@{as\_qrx}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_qrx}{as\_qrx}}
+{\footnotesize\ttfamily int as\+\_\+qrx = 2}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ae6c90fdac591401f506246dd8873d243}\label{ceForth__33_8cpp_ae6c90fdac591401f506246dd8873d243}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_txsto@{as\_txsto}}
+\index{as\_txsto@{as\_txsto}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_txsto}{as\_txsto}}
+{\footnotesize\ttfamily int as\+\_\+txsto = 3}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad3f87118ab0446680ac51fe6d798f76b}\label{ceForth__33_8cpp_ad3f87118ab0446680ac51fe6d798f76b}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_docon@{as\_docon}}
+\index{as\_docon@{as\_docon}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_docon}{as\_docon}}
+{\footnotesize\ttfamily int as\+\_\+docon = 4}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a120f62c74c044bcb6bb6de70a5d30a7e}\label{ceForth__33_8cpp_a120f62c74c044bcb6bb6de70a5d30a7e}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_dolit@{as\_dolit}}
+\index{as\_dolit@{as\_dolit}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_dolit}{as\_dolit}}
+{\footnotesize\ttfamily int as\+\_\+dolit = 5}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a11a92b94348f04eb27684466a9b387c3}\label{ceForth__33_8cpp_a11a92b94348f04eb27684466a9b387c3}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_dolist@{as\_dolist}}
+\index{as\_dolist@{as\_dolist}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_dolist}{as\_dolist}}
+{\footnotesize\ttfamily int as\+\_\+dolist = 6}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_adcc1d53ffa956957cd00af42b4cac7b1}\label{ceForth__33_8cpp_adcc1d53ffa956957cd00af42b4cac7b1}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_exit@{as\_exit}}
+\index{as\_exit@{as\_exit}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_exit}{as\_exit}}
+{\footnotesize\ttfamily int as\+\_\+exit = 7}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad649f3683939fdb1d3edbb312dfddbdf}\label{ceForth__33_8cpp_ad649f3683939fdb1d3edbb312dfddbdf}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_execu@{as\_execu}}
+\index{as\_execu@{as\_execu}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_execu}{as\_execu}}
+{\footnotesize\ttfamily int as\+\_\+execu = 8}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a38c92a4e79ff291ec4be280ea61eb576}\label{ceForth__33_8cpp_a38c92a4e79ff291ec4be280ea61eb576}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_donext@{as\_donext}}
+\index{as\_donext@{as\_donext}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_donext}{as\_donext}}
+{\footnotesize\ttfamily int as\+\_\+donext = 9}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ace06d442da23652ac336fcc6b40be96b}\label{ceForth__33_8cpp_ace06d442da23652ac336fcc6b40be96b}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_qbran@{as\_qbran}}
+\index{as\_qbran@{as\_qbran}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_qbran}{as\_qbran}}
+{\footnotesize\ttfamily int as\+\_\+qbran = 10}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a74b715eb52821025d7c7595e5d26043c}\label{ceForth__33_8cpp_a74b715eb52821025d7c7595e5d26043c}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_bran@{as\_bran}}
+\index{as\_bran@{as\_bran}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_bran}{as\_bran}}
+{\footnotesize\ttfamily int as\+\_\+bran = 11}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ae0f2a0dbd0837e6d426b6ffbd9210882}\label{ceForth__33_8cpp_ae0f2a0dbd0837e6d426b6ffbd9210882}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_store@{as\_store}}
+\index{as\_store@{as\_store}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_store}{as\_store}}
+{\footnotesize\ttfamily int as\+\_\+store = 12}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a0ca53955c1a156f51ef970d5ac3aaa3d}\label{ceForth__33_8cpp_a0ca53955c1a156f51ef970d5ac3aaa3d}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_at@{as\_at}}
+\index{as\_at@{as\_at}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_at}{as\_at}}
+{\footnotesize\ttfamily int as\+\_\+at = 13}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a1bd9f173f044b59fdebf6f3019fb5160}\label{ceForth__33_8cpp_a1bd9f173f044b59fdebf6f3019fb5160}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_cstor@{as\_cstor}}
+\index{as\_cstor@{as\_cstor}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_cstor}{as\_cstor}}
+{\footnotesize\ttfamily int as\+\_\+cstor = 14}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_af212d0f3f41a21d6b26c5b0ee9ebae4f}\label{ceForth__33_8cpp_af212d0f3f41a21d6b26c5b0ee9ebae4f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_cat@{as\_cat}}
+\index{as\_cat@{as\_cat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_cat}{as\_cat}}
+{\footnotesize\ttfamily int as\+\_\+cat = 15}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aed2a2eebd9b7e574e32f8df24ff5146d}\label{ceForth__33_8cpp_aed2a2eebd9b7e574e32f8df24ff5146d}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_rpat@{as\_rpat}}
+\index{as\_rpat@{as\_rpat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_rpat}{as\_rpat}}
+{\footnotesize\ttfamily int as\+\_\+rpat = 16}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab9b5c826f1fa310d61f3ea9dbc43d9ed}\label{ceForth__33_8cpp_ab9b5c826f1fa310d61f3ea9dbc43d9ed}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_rpsto@{as\_rpsto}}
+\index{as\_rpsto@{as\_rpsto}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_rpsto}{as\_rpsto}}
+{\footnotesize\ttfamily int as\+\_\+rpsto = 17}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab1a51b58cb27f0b61a9fdd3a70266edc}\label{ceForth__33_8cpp_ab1a51b58cb27f0b61a9fdd3a70266edc}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_rfrom@{as\_rfrom}}
+\index{as\_rfrom@{as\_rfrom}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_rfrom}{as\_rfrom}}
+{\footnotesize\ttfamily int as\+\_\+rfrom = 18}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_abfd11d6577c8a549d3d14fa14bfb8cde}\label{ceForth__33_8cpp_abfd11d6577c8a549d3d14fa14bfb8cde}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_rat@{as\_rat}}
+\index{as\_rat@{as\_rat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_rat}{as\_rat}}
+{\footnotesize\ttfamily int as\+\_\+rat = 19}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad1af6d882353d7521a5a1fa6e87f4cdc}\label{ceForth__33_8cpp_ad1af6d882353d7521a5a1fa6e87f4cdc}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_tor@{as\_tor}}
+\index{as\_tor@{as\_tor}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_tor}{as\_tor}}
+{\footnotesize\ttfamily int as\+\_\+tor = 20}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a184d5c5ccadf26e29b0c238d8785f8b3}\label{ceForth__33_8cpp_a184d5c5ccadf26e29b0c238d8785f8b3}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_spat@{as\_spat}}
+\index{as\_spat@{as\_spat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_spat}{as\_spat}}
+{\footnotesize\ttfamily int as\+\_\+spat = 21}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_afc9eeaff9722167ec664e3cc2e34cd4a}\label{ceForth__33_8cpp_afc9eeaff9722167ec664e3cc2e34cd4a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_spsto@{as\_spsto}}
+\index{as\_spsto@{as\_spsto}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_spsto}{as\_spsto}}
+{\footnotesize\ttfamily int as\+\_\+spsto = 22}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a0d787043033a9262e01b97828e7c8c50}\label{ceForth__33_8cpp_a0d787043033a9262e01b97828e7c8c50}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_drop@{as\_drop}}
+\index{as\_drop@{as\_drop}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_drop}{as\_drop}}
+{\footnotesize\ttfamily int as\+\_\+drop = 23}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a6bd77aff24669196d2896320ac692339}\label{ceForth__33_8cpp_a6bd77aff24669196d2896320ac692339}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_dup@{as\_dup}}
+\index{as\_dup@{as\_dup}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_dup}{as\_dup}}
+{\footnotesize\ttfamily int as\+\_\+dup = 24}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a97fef54ff2d2ac587968a4ff87446d75}\label{ceForth__33_8cpp_a97fef54ff2d2ac587968a4ff87446d75}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_swap@{as\_swap}}
+\index{as\_swap@{as\_swap}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_swap}{as\_swap}}
+{\footnotesize\ttfamily int as\+\_\+swap = 25}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a4d58ecd2f9703e8fee70e9de67f52a6a}\label{ceForth__33_8cpp_a4d58ecd2f9703e8fee70e9de67f52a6a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_over@{as\_over}}
+\index{as\_over@{as\_over}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_over}{as\_over}}
+{\footnotesize\ttfamily int as\+\_\+over = 26}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a43a8507bc34d03e80b01aec126faf425}\label{ceForth__33_8cpp_a43a8507bc34d03e80b01aec126faf425}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_zless@{as\_zless}}
+\index{as\_zless@{as\_zless}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_zless}{as\_zless}}
+{\footnotesize\ttfamily int as\+\_\+zless = 27}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a089efe6fff46f63507112cde9032d565}\label{ceForth__33_8cpp_a089efe6fff46f63507112cde9032d565}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_andd@{as\_andd}}
+\index{as\_andd@{as\_andd}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_andd}{as\_andd}}
+{\footnotesize\ttfamily int as\+\_\+andd = 28}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a52e3685ead4f53e78040f8ca11e6d0e6}\label{ceForth__33_8cpp_a52e3685ead4f53e78040f8ca11e6d0e6}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_orr@{as\_orr}}
+\index{as\_orr@{as\_orr}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_orr}{as\_orr}}
+{\footnotesize\ttfamily int as\+\_\+orr = 29}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a6f4441799ba4c7b0fdd069c9368da193}\label{ceForth__33_8cpp_a6f4441799ba4c7b0fdd069c9368da193}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_xorr@{as\_xorr}}
+\index{as\_xorr@{as\_xorr}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_xorr}{as\_xorr}}
+{\footnotesize\ttfamily int as\+\_\+xorr = 30}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a0d81e9e749693bdd8c3767938f7cf8fb}\label{ceForth__33_8cpp_a0d81e9e749693bdd8c3767938f7cf8fb}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_uplus@{as\_uplus}}
+\index{as\_uplus@{as\_uplus}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_uplus}{as\_uplus}}
+{\footnotesize\ttfamily int as\+\_\+uplus = 31}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a62aa332ea1f4c8d6de337685881fc9e1}\label{ceForth__33_8cpp_a62aa332ea1f4c8d6de337685881fc9e1}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_next@{as\_next}}
+\index{as\_next@{as\_next}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_next}{as\_next}}
+{\footnotesize\ttfamily int as\+\_\+next = 32}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab387c9fd50284aaed085d4bed412e7ee}\label{ceForth__33_8cpp_ab387c9fd50284aaed085d4bed412e7ee}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_qdup@{as\_qdup}}
+\index{as\_qdup@{as\_qdup}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_qdup}{as\_qdup}}
+{\footnotesize\ttfamily int as\+\_\+qdup = 33}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ae2add76694b10bde933ab52b9897ac6f}\label{ceForth__33_8cpp_ae2add76694b10bde933ab52b9897ac6f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_rot@{as\_rot}}
+\index{as\_rot@{as\_rot}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_rot}{as\_rot}}
+{\footnotesize\ttfamily int as\+\_\+rot = 34}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aaad49665c91f5558be30dfaa407c2fd1}\label{ceForth__33_8cpp_aaad49665c91f5558be30dfaa407c2fd1}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_ddrop@{as\_ddrop}}
+\index{as\_ddrop@{as\_ddrop}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_ddrop}{as\_ddrop}}
+{\footnotesize\ttfamily int as\+\_\+ddrop = 35}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a2570896f8e090a59e44771d73ac8c5bb}\label{ceForth__33_8cpp_a2570896f8e090a59e44771d73ac8c5bb}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_ddup@{as\_ddup}}
+\index{as\_ddup@{as\_ddup}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_ddup}{as\_ddup}}
+{\footnotesize\ttfamily int as\+\_\+ddup = 36}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a2433c11ca4cfeee43b869fa2ec307b2d}\label{ceForth__33_8cpp_a2433c11ca4cfeee43b869fa2ec307b2d}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_plus@{as\_plus}}
+\index{as\_plus@{as\_plus}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_plus}{as\_plus}}
+{\footnotesize\ttfamily int as\+\_\+plus = 37}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a9c64c3c2f051df2b2a13b0a77b9b5df9}\label{ceForth__33_8cpp_a9c64c3c2f051df2b2a13b0a77b9b5df9}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_inver@{as\_inver}}
+\index{as\_inver@{as\_inver}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_inver}{as\_inver}}
+{\footnotesize\ttfamily int as\+\_\+inver = 38}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ac515ef248abf188fc80ffdef0a47e82b}\label{ceForth__33_8cpp_ac515ef248abf188fc80ffdef0a47e82b}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_negat@{as\_negat}}
+\index{as\_negat@{as\_negat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_negat}{as\_negat}}
+{\footnotesize\ttfamily int as\+\_\+negat = 39}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ade3facf9a74a2823dae45737e3c44b2e}\label{ceForth__33_8cpp_ade3facf9a74a2823dae45737e3c44b2e}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_dnega@{as\_dnega}}
+\index{as\_dnega@{as\_dnega}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_dnega}{as\_dnega}}
+{\footnotesize\ttfamily int as\+\_\+dnega = 40}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a464503257b513e6180027c57575d6e28}\label{ceForth__33_8cpp_a464503257b513e6180027c57575d6e28}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_subb@{as\_subb}}
+\index{as\_subb@{as\_subb}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_subb}{as\_subb}}
+{\footnotesize\ttfamily int as\+\_\+subb = 41}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a8461cbebf17056e16422f22b7b0d40d0}\label{ceForth__33_8cpp_a8461cbebf17056e16422f22b7b0d40d0}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_abss@{as\_abss}}
+\index{as\_abss@{as\_abss}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_abss}{as\_abss}}
+{\footnotesize\ttfamily int as\+\_\+abss = 42}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a8c172fcbc34b4dd6e078a32e10fc843a}\label{ceForth__33_8cpp_a8c172fcbc34b4dd6e078a32e10fc843a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_equal@{as\_equal}}
+\index{as\_equal@{as\_equal}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_equal}{as\_equal}}
+{\footnotesize\ttfamily int as\+\_\+equal = 43}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_acf11554d5d10def7e8fe8f76590f1c46}\label{ceForth__33_8cpp_acf11554d5d10def7e8fe8f76590f1c46}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_uless@{as\_uless}}
+\index{as\_uless@{as\_uless}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_uless}{as\_uless}}
+{\footnotesize\ttfamily int as\+\_\+uless = 44}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa105abcf8f1118aebe5e57f74663fb51}\label{ceForth__33_8cpp_aa105abcf8f1118aebe5e57f74663fb51}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_less@{as\_less}}
+\index{as\_less@{as\_less}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_less}{as\_less}}
+{\footnotesize\ttfamily int as\+\_\+less = 45}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a5c5965905478c950833b085f1ea32805}\label{ceForth__33_8cpp_a5c5965905478c950833b085f1ea32805}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_ummod@{as\_ummod}}
+\index{as\_ummod@{as\_ummod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_ummod}{as\_ummod}}
+{\footnotesize\ttfamily int as\+\_\+ummod = 46}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a14ccb8d3d39be0ab9429889b60af89d4}\label{ceForth__33_8cpp_a14ccb8d3d39be0ab9429889b60af89d4}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_msmod@{as\_msmod}}
+\index{as\_msmod@{as\_msmod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_msmod}{as\_msmod}}
+{\footnotesize\ttfamily int as\+\_\+msmod = 47}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a71ca5d857561fd26f78fb068a7d7b46f}\label{ceForth__33_8cpp_a71ca5d857561fd26f78fb068a7d7b46f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_slmod@{as\_slmod}}
+\index{as\_slmod@{as\_slmod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_slmod}{as\_slmod}}
+{\footnotesize\ttfamily int as\+\_\+slmod = 48}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a85d38bf1059b4d498806462f4b9fc258}\label{ceForth__33_8cpp_a85d38bf1059b4d498806462f4b9fc258}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_mod@{as\_mod}}
+\index{as\_mod@{as\_mod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_mod}{as\_mod}}
+{\footnotesize\ttfamily int as\+\_\+mod = 49}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_afed5cd5d18d29efbd0ff4e62e17d9e5a}\label{ceForth__33_8cpp_afed5cd5d18d29efbd0ff4e62e17d9e5a}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_slash@{as\_slash}}
+\index{as\_slash@{as\_slash}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_slash}{as\_slash}}
+{\footnotesize\ttfamily int as\+\_\+slash = 50}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_add6dfd134efc260e3ec27380ab8abcfc}\label{ceForth__33_8cpp_add6dfd134efc260e3ec27380ab8abcfc}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_umsta@{as\_umsta}}
+\index{as\_umsta@{as\_umsta}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_umsta}{as\_umsta}}
+{\footnotesize\ttfamily int as\+\_\+umsta = 51}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a1c9a2e47c0f17a1a5202980b83d34dd2}\label{ceForth__33_8cpp_a1c9a2e47c0f17a1a5202980b83d34dd2}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_star@{as\_star}}
+\index{as\_star@{as\_star}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_star}{as\_star}}
+{\footnotesize\ttfamily int as\+\_\+star = 52}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a313b652f95ade4795dfa5a1a64cadc46}\label{ceForth__33_8cpp_a313b652f95ade4795dfa5a1a64cadc46}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_mstar@{as\_mstar}}
+\index{as\_mstar@{as\_mstar}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_mstar}{as\_mstar}}
+{\footnotesize\ttfamily int as\+\_\+mstar = 53}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_abd18dfa7ee8860a180a024e80061e187}\label{ceForth__33_8cpp_abd18dfa7ee8860a180a024e80061e187}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_ssmod@{as\_ssmod}}
+\index{as\_ssmod@{as\_ssmod}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_ssmod}{as\_ssmod}}
+{\footnotesize\ttfamily int as\+\_\+ssmod = 54}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a40f0a4a3ed018724ff159e0d8e620794}\label{ceForth__33_8cpp_a40f0a4a3ed018724ff159e0d8e620794}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_stasl@{as\_stasl}}
+\index{as\_stasl@{as\_stasl}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_stasl}{as\_stasl}}
+{\footnotesize\ttfamily int as\+\_\+stasl = 55}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa7d575fde52cf1158d53a9b9fcde7abc}\label{ceForth__33_8cpp_aa7d575fde52cf1158d53a9b9fcde7abc}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_pick@{as\_pick}}
+\index{as\_pick@{as\_pick}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_pick}{as\_pick}}
+{\footnotesize\ttfamily int as\+\_\+pick = 56}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa82d9f398da254fdf4a6c888e2ffa61f}\label{ceForth__33_8cpp_aa82d9f398da254fdf4a6c888e2ffa61f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_pstor@{as\_pstor}}
+\index{as\_pstor@{as\_pstor}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_pstor}{as\_pstor}}
+{\footnotesize\ttfamily int as\+\_\+pstor = 57}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a803f76ead17b4d067083017c6e2eb80c}\label{ceForth__33_8cpp_a803f76ead17b4d067083017c6e2eb80c}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_dstor@{as\_dstor}}
+\index{as\_dstor@{as\_dstor}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_dstor}{as\_dstor}}
+{\footnotesize\ttfamily int as\+\_\+dstor = 58}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_a6dd759938416d099d08e3259cea97ef3}\label{ceForth__33_8cpp_a6dd759938416d099d08e3259cea97ef3}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_dat@{as\_dat}}
+\index{as\_dat@{as\_dat}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_dat}{as\_dat}}
+{\footnotesize\ttfamily int as\+\_\+dat = 59}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_aa5d2abdf10e41e1af4e8a6cb93f25ac5}\label{ceForth__33_8cpp_aa5d2abdf10e41e1af4e8a6cb93f25ac5}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_count@{as\_count}}
+\index{as\_count@{as\_count}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_count}{as\_count}}
+{\footnotesize\ttfamily int as\+\_\+count = 60}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ad4592e8f7ad871b7de47873d0b4defa9}\label{ceForth__33_8cpp_ad4592e8f7ad871b7de47873d0b4defa9}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_dovar@{as\_dovar}}
+\index{as\_dovar@{as\_dovar}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_dovar}{as\_dovar}}
+{\footnotesize\ttfamily int as\+\_\+dovar = 61}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_ab46903778e207700391bfe162a4c6cbf}\label{ceForth__33_8cpp_ab46903778e207700391bfe162a4c6cbf}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_max@{as\_max}}
+\index{as\_max@{as\_max}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_max}{as\_max}}
+{\footnotesize\ttfamily int as\+\_\+max = 62}
+
+\mbox{\Hypertarget{ceForth__33_8cpp_abe37ed00a1e959415ad004e943faab9f}\label{ceForth__33_8cpp_abe37ed00a1e959415ad004e943faab9f}} 
+\index{ceForth\_33.cpp@{ceForth\_33.cpp}!as\_min@{as\_min}}
+\index{as\_min@{as\_min}!ceForth\_33.cpp@{ceForth\_33.cpp}}
+\doxysubsubsection{\texorpdfstring{as\_min}{as\_min}}
+{\footnotesize\ttfamily int as\+\_\+min = 63}
+

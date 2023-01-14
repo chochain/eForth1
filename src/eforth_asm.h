@@ -4,8 +4,8 @@
  *
  * Usage of VA_ARGS veriable argument for assembler parameter counting
  */
-#ifndef __EFORTH_SRC_EFORTH_ASM_H
-#define __EFORTH_SRC_EFORTH_ASM_H
+#ifndef __EFORTH_ASM_H
+#define __EFORTH_ASM_H
 
 namespace EfAsm {
 //
@@ -89,4 +89,4 @@ typedef const char                FCHAR;
 ///
 
 };  // namespace EfAsm
-#endif // __EFORTH_SRC_EFORTH_ASM_H
+#endif // __EFORTH_ASM_H

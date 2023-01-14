@@ -619,7 +619,7 @@ int assemble(U8 *cdata)
         _IF(DOSTR, COUNT, TYPE, ABORT);
         _THEN(DOSTR, DROP, EXIT);
     }
-    IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, DOLIT, 0x1b, EMIT, CR, ABORT);
+    IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
         _IF(CAT, DOLIT, fCMPL, AND); {               // if it is compile only word
             _ABORTQ(" compile only");
@@ -781,6 +781,10 @@ int assemble(U8 *cdata)
     _CODE("OUT",     opOUT  );
     _CODE("AIN",     opAIN  );
     _CODE("PWM",     opPWM  );
+    _CODE("TIMER",   opTMR  );
+    _CODE("PCI",     opPCI  );
+    _CODE("ENABLE_TIMER", opTMRE);
+    _CODE("ENABLE_PCI",   opPCIE);
     ///
     ///> Cold Start address (End of dictionary)
     ///

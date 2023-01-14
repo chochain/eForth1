@@ -1,5 +1,5 @@
-#ifndef __EFORTH_EFORTH1_H
-#define __EFORTH_EFORTH1_H
+#ifndef __EFORTH1_H
+#define __EFORTH1_H
 
 #if ARDUINO
 #include <Arduino.h>
@@ -9,5 +9,5 @@ void ef_setup(Stream &io_stream=Serial);
 void ef_run();
 #endif // ARDUINO
 
-#endif // __EFORTH_EFORTH1_H
+#endif // __EFORTH1_H
 

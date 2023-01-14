@@ -9,10 +9,10 @@
  * @code
  *     0x0000-0x1fff ROM (8K Flash memory)
  *     0x2000-0x27ff RAM (2K dynamic memory)
- *         0x2000-0x201f User Variables
- *         0x2020-0x23ff User Dictionary
- *         0x2400-0x24bf Return/Data Stack
- *         0x24c0-0x253f TIB (Terminal Input Buffer)
+ *         0x2000-0x23ff User Dictionary
+ *         0x2400-0x241f User Variables
+ *         0x2420-0x24ff Return/Data Stack
+ *         0x2500-0x257f TIB (Terminal Input Buffer)
  * @endcode
  *
  * ####Data and Return Stack
@@ -32,21 +32,21 @@ static Stream *io;
 ///
 ///@name Control
 ///@{
-IU  PC;                         ///< PC (program counter, IU is 16-bit)
-IU  IP;                         ///< IP (instruction pointer, IU is 16-bit)
-U8  R;                          ///< return stack index (0-255)
-U8  S;                          ///< data stack index (0-255)
-DU  top;                        ///< ALU (i.e. cached top of stack value)
+IU  PC;                           ///< PC (program counter, IU is 16-bit)
+IU  IP;                           ///< IP (instruction pointer, IU is 16-bit)
+U8  R;                            ///< return stack index (0-255)
+U8  S;                            ///< data stack index (0-255)
+DU  top;                          ///< ALU (i.e. cached top of stack value)
 ///@}
 ///
 ///@name Storage
 ///@{
-PGM_P cRom;                     ///< ROM, Forth word stored in Arduino Flash Memory
-U8    *cData;                   ///< RAM, memory block for user define dictionary
-DU    *cStack;                  ///< pointer to stack/rack memory block
+PGM_P cRom;                       ///< ROM, Forth word stored in Arduino Flash Memory
+U8    *cData;                     ///< RAM, memory block for user define dictionary
+DU    *cStack;                    ///< pointer to stack/rack memory block
 ///@}
-#define RAM_FLAG       0xe000   /**< RAM ranger      (0x2000~0xffff) */
-#define OFF_MASK       0x07ff   /**< RAM offset mask (0x0000~0x07ff) */
+#define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0xffff) */
+#define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
 #define BOOL(f)        ((f) ? TRUE : FALSE)
 ///
 /// byte (8-bit) fetch from either RAM or ROM depends on filtered range
@@ -130,12 +130,37 @@ void TRACE_WORD()
 #define TRACE_WORD()
 #endif // EXE_TRACE
 ///@}
+///
+/// display eForth system information
+///
+void sys_info(U8 *cdata, int sz) {
+	LOG_H("\nROM_SZ=x",   sz);
+    LOG_H("\, RAM_SZ=x",  FORTH_RAM_SZ);
+    LOG_V(", Addr=",      (U16)sizeof(IU)*8);
+    LOG_V("-bit, CELL=",  CELLSZ);
+    LOG("-byte\nMemory MAP:");
+#if ARDUINO
+    U16 h = (U16)&cdata[FORTH_RAM_SZ];
+    U16 s = (U16)&s;
+    LOG_H(" heap=x", h);
+    LOG_V("--> ", s - h);
+    LOG_H(" <--auto=x", s);
+#endif // ARDUINO
+    LOG_H("\n  ROM  :x0000+", FORTH_ROM_SZ);
+    LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ);
+    LOG_H("\n  UVAR :x", FORTH_UVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
+    LOG_H("\n  STACK:x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
+    LOG_H("\n  TIB  :x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
+}
 //
 // Forth Virtual Machine primitive functions
 //
+/// 
 /// virtual machine initializer
 ///
 void _init() {
+    intr_reset();                 /// * reset interrupt handlers
+
     R = S = PC = IP = top = 0;  ///> setup control variables
 #if EXE_TRACE
     tCNT = 1; tTAB = 0;         ///> setup tracing variables
@@ -192,12 +217,30 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
     top   = (DU)(m / d);    ///> quotient
     NEXT();
 }
+///
+///> serve interrupt routines
+///
+#define YIELD_PERIOD    10
+void _nest(U16 xt) {}
+void _yield()
+{
+	static U8 n = 0;
+	if (++n < 10) return;   /// * give more cycles to VM
+	n = 0;
+	U16 hx = intr_hits();
+	if (!hx) return;
+
+	U8 S0 = S, R0 = R;      /// * keep stack pointers
+	intr_service(_nest);
+	S = S0;
+	R = R0;
+}
 void _delay()               /// (n -- ) delay n milli-second
 {
     U32 t  = millis() + top;///> calculate break time
     POP();
     while (millis()<t) {    ///> loop until break time reached
-        ef_yield();         ///> or, run hardware tasks while waiting
+        _yield();           ///> or, run hardware tasks while waiting
     }
     NEXT();
 }
@@ -274,7 +317,7 @@ int vm_outer() {
         /// @name Branching ops
         /// @{
         _X(ENTER,
-            ef_yield();
+            _yield();
             TRACE_COLON();
             RPUSH(IP);                  ///> keep return address
             IP = ++PC);                 ///> skip opcode opENTER, advance to next instruction
@@ -290,13 +333,13 @@ int vm_outer() {
             else {                      ///> or,
                 IP += CELLSZ;           ///>> skip to next instruction
                 RPOP();                 ///>> pop off return stack
-                ef_yield();             ///> give system task some cycles
+                _yield();               ///> give system task some cycles
             });
         _X(QBRAN,
             if (top) IP += CELLSZ;      ///> next instruction, or
             else     IP = GET(IP);      ///> fetch branching target address
             POP());
-        _X(BRAN,  IP = GET(IP));     ///> fetch branching target address
+        _X(BRAN,  IP = GET(IP));        ///> fetch branching target address
         /// @}
         /// @name Memory Storage ops
         /// @{
@@ -406,6 +449,10 @@ int vm_outer() {
         _X(PWM,
             analogWrite(top, SS(S));
             POP(); POP());
+        _X(TMR, IU xt = POP(); intr_add_timer(POP(), xt));
+        _X(PCI, IU xt = POP(); intr_add_pci(POP(), xt));
+        _X(TMRE, intr_enable_timer(POP()));
+        _X(PCIE, intr_enable_pci(POP()));
 
     vm_next:
         PC = GET(IP);               ///> fetch next program counter (branch)

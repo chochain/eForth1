@@ -188,16 +188,6 @@ typedef const char          *PGM_P;
 
 #endif // ARDUINO
 ///@}
-///
-///@name eForth Virtual Machin Functions
-///@{
-void vm_init(
-    PGM_P rom,              ///< pointer to Arduino flash memory block (ROM)
-    U8 *cdata,              ///< pointer to Arduino RAM block (RAM)
-    void *io_stream         ///< pointer to Stream object of Arduino
-    );
-int  vm_outer();            ///< Forth outer interpreter
-///@}
 ///@name interrupt handle routines
 ///@{
 void intr_reset();          ///< reset interrupts
@@ -207,7 +197,17 @@ void intr_add_timer(U16 prd, U16 xt);
 void intr_add_pci(U16 pin, U16 xt);
 void intr_enable_timer(U16 f);
 void intr_enable_pci(U16 f);
+///@}
 ///
+///@name eForth Virtual Machine Functions
+///@{
+void vm_init(
+    PGM_P rom,              ///< pointer to Arduino flash memory block (ROM)
+    U8 *cdata,              ///< pointer to Arduino RAM block (RAM)
+    void *io_stream         ///< pointer to Stream object of Arduino
+    );
+int  vm_outer();            ///< Forth outer interpreter
+///@}
 ///@name eForth IO Functions
 ///@{
 U8   ef_getchar();
@@ -220,4 +220,5 @@ int ef_assemble(
     U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
     );
 ///@}
+
 #endif // __EFORTH_CORE_H

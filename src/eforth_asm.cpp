@@ -781,10 +781,10 @@ int assemble(U8 *cdata)
     _CODE("OUT",     opOUT  );
     _CODE("AIN",     opAIN  );
     _CODE("PWM",     opPWM  );
-    _CODE("TIMER",   opTMR  );
+    _CODE("TMR",     opTMR  );
     _CODE("PCI",     opPCI  );
-    _CODE("ENABLE_TIMER", opTMRE);
-    _CODE("ENABLE_PCI",   opPCIE);
+    _CODE("TMRE",    opTMRE);
+    _CODE("PCIE",    opPCIE);
     ///
     ///> Cold Start address (End of dictionary)
     ///

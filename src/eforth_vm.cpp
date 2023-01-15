@@ -36,6 +36,7 @@ IU  PC;                           ///< PC (program counter, IU is 16-bit)
 IU  IP;                           ///< IP (instruction pointer, IU is 16-bit)
 U8  R;                            ///< return stack index (0-255)
 U8  S;                            ///< data stack index (0-255)
+U8  ISR;
 DU  top;                          ///< ALU (i.e. cached top of stack value)
 ///@}
 ///
@@ -135,7 +136,7 @@ void TRACE_WORD()
 ///
 void sys_info(U8 *cdata, int sz) {
 	LOG_H("\nROM_SZ=x",   sz);
-    LOG_H("\, RAM_SZ=x",  FORTH_RAM_SZ);
+    LOG_H(", RAM_SZ=x",   FORTH_RAM_SZ);
     LOG_V(", Addr=",      (U16)sizeof(IU)*8);
     LOG_V("-bit, CELL=",  CELLSZ);
     LOG("-byte\nMemory MAP:");
@@ -159,11 +160,11 @@ void sys_info(U8 *cdata, int sz) {
 /// virtual machine initializer
 ///
 void _init() {
-    intr_reset();                 /// * reset interrupt handlers
+    intr_reset();                     /// * reset interrupt handlers
 
-    R = S = PC = IP = top = 0;  ///> setup control variables
+    ISR = R = S = PC = IP = top = 0;  ///> setup control variables
 #if EXE_TRACE
-    tCNT = 1; tTAB = 0;         ///> setup tracing variables
+    tCNT = 1; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
     
     /// FORTH_UVAR_ADDR;
@@ -221,26 +222,36 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
 ///> serve interrupt routines
 ///
 #define YIELD_PERIOD    10
-void _nest(U16 xt) {}
+void _nest(U16 xt) {
+	RPUSH(0);                   ///> ISR exit token
+	IP = xt;                    ///> point to service function
+	NEXT();
+	vm_outer();
+}
 void _yield()
 {
 	static U8 n = 0;
-	if (++n < 10) return;   /// * give more cycles to VM
+	if (++n < 10) return;       /// * give more cycles to VM
 	n = 0;
 	U16 hx = intr_hits();
 	if (!hx) return;
 
-	U8 S0 = S, R0 = R;      /// * keep stack pointers
+	U8  S0  = S,  R0  = R;      /// * save context
+	U16 PC0 = PC, IP0 = IP;
+
+	ISR = 1;
 	intr_service(_nest);
-	S = S0;
-	R = R0;
+	ISR = 0;
+
+	S  = S0;  R  = R0;          /// * restore context
+	PC = PC0; IP = IP0;
 }
-void _delay()               /// (n -- ) delay n milli-second
+void _delay()                   /// (n -- ) delay n milli-second
 {
-    U32 t  = millis() + top;///> calculate break time
+    U32 t  = millis() + top;    ///> calculate break time
     POP();
-    while (millis()<t) {    ///> loop until break time reached
-        _yield();           ///> or, run hardware tasks while waiting
+    while (millis()<t) {        ///> loop until break time reached
+        _yield();               ///> or, run hardware tasks while waiting
     }
     NEXT();
 }
@@ -281,9 +292,9 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
 #define _Y(n, fn)   L_##n: { fn(); continue; }
 
 int vm_outer() {
-    static void* vt[] = {      ///< computed label lookup table
-        &&L_NOP,               ///< opcode 0
-        OPCODES                ///< convert opcodes to address of labels
+    static void* vt[] = {               ///< computed label lookup table
+        &&L_NOP,                        ///< opcode 0
+        OPCODES                         ///< convert opcodes to address of labels
     };
     do {
         TRACE_WORD();                   /// * tracing stack and word name
@@ -455,8 +466,8 @@ int vm_outer() {
         _X(PCIE, intr_enable_pci(POP()));
 
     vm_next:
-        PC = GET(IP);               ///> fetch next program counter (branch)
-        IP += sizeof(IU);           ///> advance to next instruction
+        PC = (ISR && IP==0) ? 0 : GET(IP);  ///> fetch next program counter (branch)
+        IP += sizeof(IU);                   ///> advance to next instruction
     } while (PC);
 
     return (int)PC;

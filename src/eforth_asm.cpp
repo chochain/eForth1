@@ -32,10 +32,10 @@ IU NOP = 0xffff;                    ///< NOP set to ffff to prevent access befor
 ///@}
 ///@name Return Stack for Branching Ops
 ///@{
-U8 *aByte;                          ///< assember byte array (heap)
-U8 aR;                              ///< assember return stack index
-IU aPC;                             ///< assembler program counter
-IU aLink;                           ///< link to previous word
+U8 *Byte;                           ///< assembler byte array (heap)
+U8 R;                               ///< assembler return stack index
+IU PC;                              ///< assembler program counter
+IU Link;                            ///< link to previous word
 ///@}
 ///@name Memory Dumpers
 ///@{
@@ -49,7 +49,7 @@ void _dump(int b, int u) {      /// dump memory between previous word and this
 void _rdump()                   /// dump return stack
 {
     DEBUG("%cR[", ' ');
-    for (int i=1; i<=aR; i++) {
+    for (int i=1; i<=R; i++) {
         DEBUG(" %04x", GET(FORTH_ROM_SZ - i*CELLSZ));
     }
     DEBUG("%c]", ' ');
@@ -79,27 +79,27 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     STORE(op);                                  \
     int len = _strlen(seq);                     \
     PGM_P p = reinterpret_cast<PGM_P>(seq);     \
-    BSET(aPC++, len);                           \
+    BSET(PC++, len);                            \
     for (int i=0; i < len; i++) {               \
-    BSET(aPC++, pgm_read_byte(p++));            \
+    BSET(PC++, pgm_read_byte(p++));             \
     }                                           \
 }
 ///@}
 ///@name Assembler - Word Creation Headers
 ///@{
 void _header(int lex, FCHAR *seq) {           /// create a word header in dictionary
-    if (aLink) {
-        if (aPC >= FORTH_ROM_SZ) DEBUG("ROM %s", "max!");
-        _dump(aLink - sizeof(IU), aPC);       /// * dump data from previous word to current word
+    if (Link) {
+        if (PC >= FORTH_ROM_SZ) DEBUG("ROM %s", "max!");
+        _dump(Link - sizeof(IU), PC);         /// * dump data from previous word to current word
     }
-    STORE(aLink);                             /// * point to previous word
-    aLink = aPC;                              /// * keep pointer to this word
+    STORE(Link);                              /// * point to previous word
+    Link = PC;                                /// * keep pointer to this word
 
-    BSET(aPC++, lex);                         /// * length of word (with optional fIMMED or fCOMPO flags)
+    BSET(PC++, lex);                          /// * length of word (with optional fIMMED or fCOMPO flags)
     int len = lex & 0x1f;                     /// * Forth allows word max length 31
     PGM_P p = reinterpret_cast<PGM_P>(seq);
     for (int i=0; i < len; i++) {             /// * memcpy word string
-        BSET(aPC++, pgm_read_byte(p++));
+        BSET(PC++, pgm_read_byte(p++));
     }
     DEBUG("\n%04x: ", aPC);
     DEBUG("%s", seq);
@@ -109,12 +109,12 @@ void _header(int lex, FCHAR *seq) {           /// create a word header in dictio
 ///
 int _code(FCHAR *seg, int len, ...) {
     _header(_strlen(seg), seg);
-    int addr = aPC;                           /// * keep address of current word
+    int addr = PC;                            /// * keep address of current word
     va_list argList;
     va_start(argList, len);
     for (; len; len--) {                      /// * copy bytecodes
         U8 b = (U8)va_arg(argList, int);
-        BSET(aPC++, b);
+        BSET(PC++, b);
         DEBUG(" %02x", b);
     }
     va_end(argList);
@@ -126,8 +126,8 @@ int _code(FCHAR *seg, int len, ...) {
 int _colon(FCHAR *seg, int len, ...) {
     _header(_strlen(seg), seg);
     DEBUG(" %s", ":06");
-    int addr = aPC;
-    BSET(aPC++, opENTER);
+    int addr = PC;
+    BSET(PC++, opENTER);
     CELLCPY(len);
     return addr;
 }
@@ -137,8 +137,8 @@ int _colon(FCHAR *seg, int len, ...) {
 int _immed(FCHAR *seg, int len, ...) {
     _header(fIMMD | _strlen(seg), seg);
     DEBUG(" %s", "i06");
-    int addr = aPC;
-    BSET(aPC++, opENTER);
+    int addr = PC;
+    BSET(PC++, opENTER);
     CELLCPY(len);
     return addr;
 }
@@ -147,7 +147,7 @@ int _immed(FCHAR *seg, int len, ...) {
 ///
 int _label(int len, ...) {
     SHOWOP("LABEL");
-    int addr = aPC;
+    int addr = PC;
     // label has no opcode here
     CELLCPY(len);
     return addr;
@@ -158,7 +158,7 @@ int _label(int len, ...) {
 ///@{
 void _begin(int len, ...) {         /// **BEGIN**-(once)-WHILE-(loop)-UNTIL/REPEAT
     SHOWOP("BEGIN");                /// **BEGIN**-AGAIN
-    RPUSH(aPC);                     /// * keep current address for looping
+    RPUSH(PC);                      /// * keep current address for looping
     CELLCPY(len);
 }
 void _while(int len, ...) {         /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPEAT
@@ -166,7 +166,7 @@ void _while(int len, ...) {         /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REP
     STORE(QBRAN);
     STORE(0);                       /// * branching address
     int k = RPOP();
-    RPUSH(aPC - CELLSZ);
+    RPUSH(PC - CELLSZ);
     RPUSH(k);
     CELLCPY(len);
 }
@@ -174,7 +174,7 @@ void _repeat(int len, ...) {        /// BEGIN-(once)-WHILE-(loop)- **REPEAT**
     SHOWOP("REPEAT");
     STORE(BRAN);
     STORE(RPOP());
-    SET(RPOP(), aPC);
+    SET(RPOP(), PC);
     CELLCPY(len);
 }
 void _until(int len, ...) {         /// BEGIN-(once)-WHILE-(loop)--**UNTIL**
@@ -192,7 +192,7 @@ void _again(int len, ...) {        /// BEGIN--**AGAIN**
 void _for(int len, ...) {          /// **FOR**-(first)-AFT-(2nd,...)-THEN-(every)-NEXT
     SHOWOP("FOR");
     STORE(TOR);                    /// * put loop counter on return stack
-    RPUSH(aPC);                    /// * keep 1st loop repeat address A0
+    RPUSH(PC);                     /// * keep 1st loop repeat address A0
     CELLCPY(len);
 }
 void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(every)-NEXT
@@ -200,8 +200,8 @@ void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(ever
     STORE(BRAN);                   /// * unconditional branch
     STORE(0);                      /// * forward jump address (A1)NOP,
     RPOP();                        /// * pop-off A0 (FOR-AFT once only)
-    RPUSH(aPC);                    /// * keep repeat address on return stack
-    RPUSH(aPC - CELLSZ);           /// * keep A1 address on return stack for AFT-THEN
+    RPUSH(PC);                     /// * keep repeat address on return stack
+    RPUSH(PC - CELLSZ);            /// * keep A1 address on return stack for AFT-THEN
     CELLCPY(len);
 }
 //
@@ -216,7 +216,7 @@ void _nxt(int len, ...) {          /// FOR-(first)-AFT-(2nd,...)-THEN-(every)--*
 void _if(int len, ...) {           /// **IF**-THEN, **IF**-ELSE-THEN
     SHOWOP("IF");
     STORE(QBRAN);                  /// * conditional branch
-    RPUSH(aPC);                    /// * keep A0 address on return stack for ELSE or THEN
+    RPUSH(PC);                     /// * keep A0 address on return stack for ELSE or THEN
     STORE(0);                      /// * reserve branching address (A0)
     CELLCPY(len);
 }
@@ -224,13 +224,13 @@ void _else(int len, ...) {         /// IF--**ELSE**-THEN
     SHOWOP("ELSE");
     STORE(BRAN);                   /// * unconditional branch
     STORE(0);                      /// * reserve branching address (A1)
-    SET(RPOP(), aPC);              /// * backfill A0 branching address
-    RPUSH(aPC - CELLSZ);           /// * keep A1 address on return stack for THEN
+    SET(RPOP(), PC);               /// * backfill A0 branching address
+    RPUSH(PC - CELLSZ);            /// * keep A1 address on return stack for THEN
     CELLCPY(len);
 }
 void _then(int len, ...) {         /// IF-ELSE--**THEN**
     SHOWOP("THEN");
-    SET(RPOP(), aPC);              /// * backfill branching address (A0) or (A1)
+    SET(RPOP(), PC);               /// * backfill branching address (A0) or (A1)
     CELLCPY(len);
 }
 ///@}
@@ -258,12 +258,12 @@ void _abortq(FCHAR *seq) {
 ///
 int assemble(U8 *cdata)
 {
-    aByte = cdata;
-    aR    = aLink = 0;
+    Byte = cdata;
+    R    = Link = 0;
     ///
     ///> Kernel constants
     ///
-    aPC = FORTH_BOOT_ADDR;
+    PC = FORTH_BOOT_ADDR;
     IU BOOT  = _LABEL(opENTER, 0);      // reserved for boot vectors
 
     IU ua    = FORTH_UVAR_ADDR;
@@ -788,14 +788,14 @@ int assemble(U8 *cdata)
     ///
     ///> Cold Start address (End of dictionary)
     ///
-    int last  = aPC + CELLSZ;               // name field of last word
+    int last  = PC + CELLSZ;                // name field of last word
     IU  COLD  = _COLON("COLD",
             DOLIT, last,  vCNTX, STORE,     // reset vectors
             DOLIT, last,  vLAST, STORE,
             DOLIT, INTER, vMODE, STORE,
             DOLIT, QUIT,  vTABRT,STORE,
             CR, QUIT);                      // enter the main query loop (QUIT)
-    int here  = aPC;                        // current pointer
+    int here  = PC;                         // current pointer
     ///
     ///> Boot Vector Setup
     ///

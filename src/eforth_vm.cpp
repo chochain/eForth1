@@ -131,28 +131,6 @@ void TRACE_WORD()
 #define TRACE_WORD()
 #endif // EXE_TRACE
 ///@}
-///
-/// display eForth system information
-///
-void sys_info(U8 *cdata, int sz) {
-	LOG_H("\nROM_SZ=x",   sz);
-    LOG_H(", RAM_SZ=x",   FORTH_RAM_SZ);
-    LOG_V(", Addr=",      (U16)sizeof(IU)*8);
-    LOG_V("-bit, CELL=",  CELLSZ);
-    LOG("-byte\nMemory MAP:");
-#if ARDUINO
-    U16 h = (U16)&cdata[FORTH_RAM_SZ];
-    U16 s = (U16)&s;
-    LOG_H(" heap=x", h);
-    LOG_V("--> ", s - h);
-    LOG_H(" <--auto=x", s);
-#endif // ARDUINO
-    LOG_H("\n  ROM  :x0000+", FORTH_ROM_SZ);
-    LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ);
-    LOG_H("\n  UVAR :x", FORTH_UVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
-    LOG_H("\n  STACK:x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
-    LOG_H("\n  TIB  :x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
-}
 //
 // Forth Virtual Machine primitive functions
 //
@@ -176,10 +154,10 @@ void _init() {
     ///   'EVAL eval mode (interpreter or compiler)
     ///   'ABORT exception rescue handler (QUIT)
     ///   tmp storage (alternative to return stack)
-    IU p = FORTH_UVAR_ADDR;         ///> setup Forth user variables
-    SET(p,   FORTH_TIB_ADDR);       /// * set 'TIB pointer
-    SET(p+2, 10);                   /// * set BASE to 10
-    SET(p+4, FORTH_DIC_ADDR);       /// * top of dictionary
+    IU p = FORTH_UVAR_ADDR;           ///> setup Forth user variables
+    SET(p,   FORTH_TIB_ADDR);         /// * set 'TIB pointer
+    SET(p+2, 10);                     /// * set BASE to 10
+    SET(p+4, FORTH_DIC_ADDR);         /// * top of dictionary
     ///
     /// display init prompt
     ///
@@ -222,29 +200,21 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
 ///> serve interrupt routines
 ///
 #define YIELD_PERIOD    10
-void _nest(U16 xt) {
-	RPUSH(0);                   ///> ISR exit token
-	IP = xt;                    ///> point to service function
-	NEXT();
-	vm_outer();
-}
 void _yield()
 {
 	static U8 n = 0;
-	if (++n < 10) return;       /// * give more cycles to VM
+	if (ISR || ++n < 10) return; /// * give more cycles to VM
 	n = 0;
 	U16 hx = intr_hits();
 	if (!hx) return;
 
-	U8  S0  = S,  R0  = R;      /// * save context
-	U16 PC0 = PC, IP0 = IP;
-
+	U16 _IP = IP;
+	U16 _PC = PC;
 	ISR = 1;
-	intr_service(_nest);
+	intr_service(vm_isr);
 	ISR = 0;
-
-	S  = S0;  R  = R0;          /// * restore context
-	PC = PC0; IP = IP0;
+	IP = _IP;
+	PC = _PC;
 }
 void _delay()                   /// (n -- ) delay n milli-second
 {
@@ -278,7 +248,14 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     cData  = cdata;
     cStack = (DU*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
     
-    _init();                   /// * resetting user variables
+    _init();                    /// * resetting user variables
+}
+
+void vm_isr(U16 xt) {
+	LOG_H(" ", xt);
+	RPUSH(0);
+	PC = xt;                    ///> point to service function
+	vm_outer();
 }
 ///
 /// eForth virtual machine outer interpreter (single-step) execution unit
@@ -296,6 +273,7 @@ int vm_outer() {
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
+    _yield();
     do {
         TRACE_WORD();                   /// * tracing stack and word name
 
@@ -310,7 +288,7 @@ int vm_outer() {
         /// @name Console IO
         /// @{
         _X(QRX,
-            PUSH(ef_getchar());         ///> yield to user task until console input available
+            PUSH((DU)ef_getchar());     ///> yield to user task until console input available
             if (top) PUSH(TRUE));
         _Y(TXSTO, _txsto);
         /// @}
@@ -452,18 +430,14 @@ int vm_outer() {
             U16 tmp = map(top, SS(S-3), SS(S-2), SS(S-1), SS(S));
             S -= 4;
             top = tmp);
-        _X(IN,  PUSH(digitalRead(POP())));
-        _X(OUT,
-            digitalWrite(top, SS(S));
-            POP(); POP());
-        _X(AIN, PUSH(analogRead(POP())));
-        _X(PWM,
-            analogWrite(top, SS(S));
-            POP(); POP());
-        _X(TMR, IU xt = POP(); intr_add_timer(POP(), xt));
-        _X(PCI, IU xt = POP(); intr_add_pci(POP(), xt));
-        _X(TMRE, intr_enable_timer(POP()));
-        _X(PCIE, intr_enable_pci(POP()));
+        _X(IN,   top = digitalRead(top));
+        _X(OUT,  digitalWrite(top, SS(S));   POP(); POP());
+        _X(AIN,  top = analogRead(top));
+        _X(PWM,  analogWrite(top, SS(S));    POP(); POP());
+        _X(TMR,  intr_add_timer(top, SS(S)); POP(); POP());
+        _X(PCI,  intr_add_pci(top, SS(S));   POP(); POP());
+        _X(TMRE, intr_enable_timer(top);     POP());
+        _X(PCIE, intr_enable_pci(top);       POP());
 
     vm_next:
         PC = (ISR && IP==0) ? 0 : GET(IP);  ///> fetch next program counter (branch)

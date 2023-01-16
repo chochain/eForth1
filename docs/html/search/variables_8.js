@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['m_537',['m',['../ceForth__33_8cpp.html#af6e04eb886029282727ceb570abc2b2a',1,'ceForth_33.cpp']]]
+  ['p_5fhit_254',['p_hit',['../eforth__core_8cpp.html#ae259ae1b2f3e4ec198f2650a4f9f4686',1,'eforth_core.cpp']]],
+  ['p_5fxt_255',['p_xt',['../eforth__core_8cpp.html#aa67f46dd3e98d55a27e738555d5c38f8',1,'eforth_core.cpp']]],
+  ['pc_256',['PC',['../namespaceEfVM.html#a4444ce01dd126290156b6339aedb281b',1,'EfVM']]],
+  ['progmem_257',['PROGMEM',['../eforth__rom_8c.html#a0babba59a58a58d5de2f517a9cd465b2',1,'eforth_rom.c']]]
 ];

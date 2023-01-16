@@ -1,13 +1,11 @@
 var searchData=
 [
-  ['ef_5fassemble_383',['ef_assemble',['../eforth__asm_8cpp.html#a94e10412bf5e1f89d12efb94e80979c8',1,'ef_assemble(U8 *cdata):&#160;eforth_asm.cpp'],['../eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8',1,'ef_assemble(U8 *cdata):&#160;eforth_asm.cpp']]],
-  ['ef_5fgetchar_384',['ef_getchar',['../eforth__core_8cpp.html#a41032b0ebdc389f0c30d15b6b7e8b025',1,'ef_getchar():&#160;eforth_core.cpp'],['../eforth__core_8h.html#a41032b0ebdc389f0c30d15b6b7e8b025',1,'ef_getchar():&#160;eforth_core.cpp']]],
-  ['ef_5fputchar_385',['ef_putchar',['../eforth__core_8cpp.html#a40485405ab5338788520ef0380b01b70',1,'ef_putchar(char c):&#160;eforth_core.cpp'],['../eforth__core_8h.html#a40485405ab5338788520ef0380b01b70',1,'ef_putchar(char c):&#160;eforth_core.cpp']]],
-  ['ef_5frun_386',['ef_run',['../eforth1_8h.html#a1fb0d84284dc4203d4a4e4dbe8e07b29',1,'ef_run():&#160;eforth_core.cpp'],['../eforth__core_8cpp.html#a1fb0d84284dc4203d4a4e4dbe8e07b29',1,'ef_run():&#160;eforth_core.cpp']]],
-  ['ef_5fsetup_387',['ef_setup',['../eforth1_8h.html#a3be4743e748619321c1a4f95928e8de1',1,'ef_setup(Stream &amp;io_stream=Serial):&#160;eforth_core.cpp'],['../eforth__core_8cpp.html#a3be4743e748619321c1a4f95928e8de1',1,'ef_setup(Stream &amp;io_stream=Serial):&#160;eforth_core.cpp']]],
-  ['ef_5fyield_388',['ef_yield',['../eforth__core_8cpp.html#aa084a3e268cc140b2c8602dc52396ce4',1,'ef_yield():&#160;eforth_core.cpp'],['../eforth__core_8h.html#aa084a3e268cc140b2c8602dc52396ce4',1,'ef_yield():&#160;eforth_core.cpp']]],
-  ['else_389',['ELSE',['../ceForth__33_8cpp.html#aadc6a560e649df5d62ee9c1ad5e74382',1,'ceForth_33.cpp']]],
-  ['equal_390',['equal',['../ceForth__33_8cpp.html#acdc3029b0aa24a0dc412dc3ee33cc6f6',1,'ceForth_33.cpp']]],
-  ['execu_391',['execu',['../ceForth__33_8cpp.html#aaf9fa39071be1abfd1dee7a2ae5d0156',1,'ceForth_33.cpp']]],
-  ['exitt_392',['exitt',['../ceForth__33_8cpp.html#a3afb80611887eb960bd407ecc58a5eec',1,'ceForth_33.cpp']]]
+  ['intr_5fadd_5fpci_221',['intr_add_pci',['../eforth__core_8cpp.html#a896b3ce36b3f0aea63258a3a613d5f56',1,'intr_add_pci(U16 p, U16 xt):&#160;eforth_core.cpp'],['../eforth__core_8h.html#ab0b4b6096f24d31ce113f65adb72125c',1,'intr_add_pci(U16 pin, U16 xt):&#160;eforth_core.cpp']]],
+  ['intr_5fadd_5ftimer_222',['intr_add_timer',['../eforth__core_8cpp.html#ae02901fc00b0a504db693e560852481b',1,'intr_add_timer(U16 hz10, U16 xt):&#160;eforth_core.cpp'],['../eforth__core_8h.html#ae02901fc00b0a504db693e560852481b',1,'intr_add_timer(U16 hz10, U16 xt):&#160;eforth_core.cpp']]],
+  ['intr_5fenable_5fpci_223',['intr_enable_pci',['../eforth__core_8cpp.html#a18a475c1f5e15f4867d6974f8f0c1d43',1,'intr_enable_pci(U16 f):&#160;eforth_core.cpp'],['../eforth__core_8h.html#a18a475c1f5e15f4867d6974f8f0c1d43',1,'intr_enable_pci(U16 f):&#160;eforth_core.cpp']]],
+  ['intr_5fenable_5ftimer_224',['intr_enable_timer',['../eforth__core_8cpp.html#a8d82211db5e512fd289ddd16c3d608ae',1,'intr_enable_timer(U16 f):&#160;eforth_core.cpp'],['../eforth__core_8h.html#a8d82211db5e512fd289ddd16c3d608ae',1,'intr_enable_timer(U16 f):&#160;eforth_core.cpp']]],
+  ['intr_5fhits_225',['intr_hits',['../eforth__core_8cpp.html#a93c9ba339402353230060b417633ccd4',1,'intr_hits():&#160;eforth_core.cpp'],['../eforth__core_8h.html#a93c9ba339402353230060b417633ccd4',1,'intr_hits():&#160;eforth_core.cpp']]],
+  ['intr_5freset_226',['intr_reset',['../eforth__core_8cpp.html#a0132f57c344961e9ff4037dd06b06948',1,'intr_reset():&#160;eforth_core.cpp'],['../eforth__core_8h.html#a0132f57c344961e9ff4037dd06b06948',1,'intr_reset():&#160;eforth_core.cpp']]],
+  ['intr_5fservice_227',['intr_service',['../eforth__core_8cpp.html#ae7417b9670e9fc6ddc511e247b90e058',1,'intr_service(void(*cb)(U16)):&#160;eforth_core.cpp'],['../eforth__core_8h.html#ae7417b9670e9fc6ddc511e247b90e058',1,'intr_service(void(*cb)(U16)):&#160;eforth_core.cpp']]],
+  ['isr_228',['ISR',['../eforth__core_8cpp.html#a5686c229bdef50123688ab6cb1404230',1,'ISR(TIMER2_COMPA_vect):&#160;eforth_core.cpp'],['../eforth__core_8cpp.html#aa64c6dce15e9de9105b4ae9533c9a267',1,'ISR(PCINT0_vect):&#160;eforth_core.cpp'],['../eforth__core_8cpp.html#afe6035149a64d5f448fbda08e9d1b67f',1,'ISR(PCINT1_vect):&#160;eforth_core.cpp'],['../eforth__core_8cpp.html#a9c4665742c6b6eb1f0bb9dde41f7cba3',1,'ISR(PCINT2_vect):&#160;eforth_core.cpp']]]
 ];

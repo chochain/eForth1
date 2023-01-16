@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['qbran_544',['QBRAN',['../ceForth__33_8cpp.html#a1639668c309c47b1370e3eecba61da1f',1,'QBRAN():&#160;ceForth_33.cpp'],['../namespaceEfAsm.html#a7b221cc855cf8ca6334d2c7cb5879542',1,'EfAsm::QBRAN()']]]
+  ['s_260',['S',['../namespaceEfVM.html#a6f0e460d1cc377cdccf02ee56133c55d',1,'EfVM']]],
+  ['strq_261',['STRQ',['../namespaceEfAsm.html#af509e882ed40c423cd8140db6b7ff58b',1,'EfAsm']]]
 ];

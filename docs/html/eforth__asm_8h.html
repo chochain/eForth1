@@ -164,13 +164,13 @@ Macros</h2></td></tr>
 <tr class="memitem:a02ad5dad02c47122ee9dbfec101b5175"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a02ad5dad02c47122ee9dbfec101b5175">_ABORTQ</a>(seq)&#160;&#160;&#160;_abortq(F(seq))</td></tr>
 <tr class="separator:a02ad5dad02c47122ee9dbfec101b5175"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Memory Access and Stack Op</div></td></tr>
-<tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>,  <a class="el" href="ceForth__33_8cpp.html#a089aacf63ed94ae0e667bb8f6db3e853">c</a>)&#160;&#160;&#160;(aByte[<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(<a class="el" href="ceForth__33_8cpp.html#a089aacf63ed94ae0e667bb8f6db3e853">c</a>))</td></tr>
+<tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(d,  c)&#160;&#160;&#160;(aByte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
 <tr class="separator:a77270f01b515a878ec2853760cb20dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77d23ddbb106c14475b4119b06a046a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>)&#160;&#160;&#160;(aByte[<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>])</td></tr>
+<tr class="memitem:a77d23ddbb106c14475b4119b06a046a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(d)&#160;&#160;&#160;(aByte[d])</td></tr>
 <tr class="separator:a77d23ddbb106c14475b4119b06a046a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>,  v)&#160;&#160;&#160;do { <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>); <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> x=(v); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(a, (x)&amp;0xff); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>((a)+1, (x)&gt;&gt;8); } while (0)</td></tr>
+<tr class="memitem:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(d,  v)&#160;&#160;&#160;do { <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(d); <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> x=(v); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(a, (x)&amp;0xff); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>((a)+1, (x)&gt;&gt;8); } while (0)</td></tr>
 <tr class="separator:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c15257f5a5277bb64afcbe594bea146"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>)&#160;&#160;&#160;({ <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>); (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(a) + ((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>((a)+1)&lt;&lt;8); })</td></tr>
+<tr class="memitem:a8c15257f5a5277bb64afcbe594bea146"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(d)&#160;&#160;&#160;({ <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(d); (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(a) + ((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>((a)+1)&lt;&lt;8); })</td></tr>
 <tr class="separator:a8c15257f5a5277bb64afcbe594bea146"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad15c88ea1b3da2e52aac4a4d3810a045"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ad15c88ea1b3da2e52aac4a4d3810a045">STORE</a>(v)&#160;&#160;&#160;do { <a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(aPC, (v)); aPC+=<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>; } while(0)</td></tr>
 <tr class="separator:ad15c88ea1b3da2e52aac4a4d3810a045"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1071,18 +1071,18 @@ Variables</h2></td></tr>
           <td class="memname">#define BSET</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>, </td>
+          <td class="paramname">d, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><a class="el" href="ceForth__33_8cpp.html#a089aacf63ed94ae0e667bb8f6db3e853">c</a>&#160;</td>
+          <td class="paramname">c&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(aByte[<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(<a class="el" href="ceForth__33_8cpp.html#a089aacf63ed94ae0e667bb8f6db3e853">c</a>))</td>
+          <td></td><td>&#160;&#160;&#160;(aByte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1099,8 +1099,8 @@ Variables</h2></td></tr>
           <td class="memname">#define BGET</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a></td><td>)</td>
-          <td>&#160;&#160;&#160;(aByte[<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>])</td>
+          <td class="paramname">d</td><td>)</td>
+          <td>&#160;&#160;&#160;(aByte[d])</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1117,7 +1117,7 @@ Variables</h2></td></tr>
           <td class="memname">#define SET</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>, </td>
+          <td class="paramname">d, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1128,7 +1128,7 @@ Variables</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;do { <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>); <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> x=(v); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(a, (x)&amp;0xff); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>((a)+1, (x)&gt;&gt;8); } while (0)</td>
+          <td></td><td>&#160;&#160;&#160;do { <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(d); <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> x=(v); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(a, (x)&amp;0xff); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>((a)+1, (x)&gt;&gt;8); } while (0)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1145,8 +1145,8 @@ Variables</h2></td></tr>
           <td class="memname">#define GET</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a></td><td>)</td>
-          <td>&#160;&#160;&#160;({ <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(<a class="el" href="ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60">d</a>); (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(a) + ((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>((a)+1)&lt;&lt;8); })</td>
+          <td class="paramname">d</td><td>)</td>
+          <td>&#160;&#160;&#160;({ <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(d); (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(a) + ((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>((a)+1)&lt;&lt;8); })</td>
         </tr>
       </table>
 </div><div class="memdoc">

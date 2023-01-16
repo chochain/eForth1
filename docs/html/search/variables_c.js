@@ -1,5 +1,10 @@
 var searchData=
 [
-  ['r_545',['R',['../ceForth__33_8cpp.html#a99b994edd82192c4fe92f1699f3c1085',1,'R():&#160;ceForth_33.cpp'],['../namespaceEfVM.html#a12f6a5b9f62c170ec8c78e2bffdacffd',1,'EfVM::R()']]],
-  ['rack_546',['rack',['../ceForth__33_8cpp.html#a247b43370fc8250ddc0e50f3b9a5309c',1,'ceForth_33.cpp']]]
+  ['t_5fcnt_262',['t_cnt',['../eforth__core_8cpp.html#a470c571e758956e04c8f0a0743950f94',1,'eforth_core.cpp']]],
+  ['t_5fhit_263',['t_hit',['../eforth__core_8cpp.html#a12bb021d7b3610d123b70ba36833f8b7',1,'eforth_core.cpp']]],
+  ['t_5fidx_264',['t_idx',['../eforth__core_8cpp.html#a6c4909ce7de6ad2085e8aba035345973',1,'eforth_core.cpp']]],
+  ['t_5fmax_265',['t_max',['../eforth__core_8cpp.html#af82b7e8747490fe5fc9691d79c7b6c32',1,'eforth_core.cpp']]],
+  ['t_5fxt_266',['t_xt',['../eforth__core_8cpp.html#adef45e007330e1e83b28d4ba32a15c85',1,'eforth_core.cpp']]],
+  ['top_267',['top',['../namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169',1,'EfVM']]],
+  ['tor_268',['TOR',['../namespaceEfAsm.html#ab44525c5e6436fa71223dfb207741699',1,'EfAsm']]]
 ];

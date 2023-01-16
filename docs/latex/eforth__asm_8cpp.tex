@@ -7,8 +7,7 @@ e\+Forth Assembler module
 
 {\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}eforth\+\_\+asm.\+h\char`\"{}}\newline
-Include dependency graph for eforth\+\_\+asm.\+cpp\+:
-\nopagebreak
+Include dependency graph for eforth\+\_\+asm.\+cpp\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -43,7 +42,7 @@ enum \{ \mbox{\hyperlink{eforth__asm_8cpp_a06fc87d81c62e9abb8790b6e5713c55ba40ca
 \item 
 int \mbox{\hyperlink{namespaceEfAsm_acc07308cd4b29f3582ea2045d3326915}{Ef\+Asm\+::assemble}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata)
 \item 
-void \mbox{\hyperlink{eforth__asm_8cpp_ac7b7418379a5743a1883314bfd9ee874}{\+\_\+dump\+\_\+rom}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata, int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}})
+void \mbox{\hyperlink{eforth__asm_8cpp_ac7b7418379a5743a1883314bfd9ee874}{\+\_\+dump\+\_\+rom}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata, int len)
 \item 
 int \mbox{\hyperlink{eforth__asm_8cpp_a94e10412bf5e1f89d12efb94e80979c8}{ef\+\_\+assemble}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata)
 \end{DoxyCompactItemize}
@@ -60,39 +59,39 @@ void \mbox{\hyperlink{namespaceEfAsm_a5bdea27a67eb879d5dd1b58bed56b9bd}{Ef\+Asm\
 \item 
 void \mbox{\hyperlink{namespaceEfAsm_a27da79e08a45cd4ad90cffc847a04280}{Ef\+Asm\+::\+\_\+header}} (int lex, F\+C\+H\+AR $\ast$seq)
 \item 
-int \mbox{\hyperlink{namespaceEfAsm_a7d79fdd3d59e237e0381d1798e2050bb}{Ef\+Asm\+::\+\_\+code}} (F\+C\+H\+AR $\ast$seg, int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+int \mbox{\hyperlink{namespaceEfAsm_a7d79fdd3d59e237e0381d1798e2050bb}{Ef\+Asm\+::\+\_\+code}} (F\+C\+H\+AR $\ast$seg, int len,...)
 \item 
-int \mbox{\hyperlink{namespaceEfAsm_acce2eabb9a04fa5c08fc95932e2f92ae}{Ef\+Asm\+::\+\_\+colon}} (F\+C\+H\+AR $\ast$seg, int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+int \mbox{\hyperlink{namespaceEfAsm_acce2eabb9a04fa5c08fc95932e2f92ae}{Ef\+Asm\+::\+\_\+colon}} (F\+C\+H\+AR $\ast$seg, int len,...)
 \item 
-int \mbox{\hyperlink{namespaceEfAsm_acb8719a8b6a78152c8676f735dc7c467}{Ef\+Asm\+::\+\_\+immed}} (F\+C\+H\+AR $\ast$seg, int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+int \mbox{\hyperlink{namespaceEfAsm_acb8719a8b6a78152c8676f735dc7c467}{Ef\+Asm\+::\+\_\+immed}} (F\+C\+H\+AR $\ast$seg, int len,...)
 \item 
-int \mbox{\hyperlink{namespaceEfAsm_abb1c9544549fc018a1ed1e8345cc66f3}{Ef\+Asm\+::\+\_\+label}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+int \mbox{\hyperlink{namespaceEfAsm_abb1c9544549fc018a1ed1e8345cc66f3}{Ef\+Asm\+::\+\_\+label}} (int len,...)
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Assembler -\/ Branching Ops}\par
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_ab18b552c595cf956387d2e4427384563}{Ef\+Asm\+::\+\_\+begin}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_ab18b552c595cf956387d2e4427384563}{Ef\+Asm\+::\+\_\+begin}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a5b6bf226f290864b6a596069e4a0cf74}{Ef\+Asm\+::\+\_\+while}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a5b6bf226f290864b6a596069e4a0cf74}{Ef\+Asm\+::\+\_\+while}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a3f42a6bd0929a03c700ace952e186997}{Ef\+Asm\+::\+\_\+repeat}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a3f42a6bd0929a03c700ace952e186997}{Ef\+Asm\+::\+\_\+repeat}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_adcd97bc33014c89d91e19cc4a217b5e8}{Ef\+Asm\+::\+\_\+until}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_adcd97bc33014c89d91e19cc4a217b5e8}{Ef\+Asm\+::\+\_\+until}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_ab7b5835572c00662317647be9a49b2b3}{Ef\+Asm\+::\+\_\+again}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_ab7b5835572c00662317647be9a49b2b3}{Ef\+Asm\+::\+\_\+again}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a771a43815e0f65570de187ee456938e8}{Ef\+Asm\+::\+\_\+for}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a771a43815e0f65570de187ee456938e8}{Ef\+Asm\+::\+\_\+for}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_abf110638d9dc2195b884957885128696}{Ef\+Asm\+::\+\_\+aft}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_abf110638d9dc2195b884957885128696}{Ef\+Asm\+::\+\_\+aft}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a2df77b2810440262c7ade5fc911f8c8a}{Ef\+Asm\+::\+\_\+nxt}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a2df77b2810440262c7ade5fc911f8c8a}{Ef\+Asm\+::\+\_\+nxt}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_ab786d49b7cbf077b6a706a308167b5ce}{Ef\+Asm\+::\+\_\+if}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_ab786d49b7cbf077b6a706a308167b5ce}{Ef\+Asm\+::\+\_\+if}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a8c4966a74388b9427ae2771419d73430}{Ef\+Asm\+::\+\_\+else}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a8c4966a74388b9427ae2771419d73430}{Ef\+Asm\+::\+\_\+else}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a5a0ec1a59cc273ec7db9b5a2af2779ef}{Ef\+Asm\+::\+\_\+then}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a5a0ec1a59cc273ec7db9b5a2af2779ef}{Ef\+Asm\+::\+\_\+then}} (int len,...)
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Assembler -\/ IO Functions}\par
@@ -124,39 +123,39 @@ int \mbox{\hyperlink{namespaceEfAsm_a59af885d0e26e3c82059708948d2df37}{Ef\+Asm\+
 \item 
 void \mbox{\hyperlink{namespaceEfAsm_a27da79e08a45cd4ad90cffc847a04280}{Ef\+Asm\+::\+\_\+header}} (int lex, F\+C\+H\+AR $\ast$seq)
 \item 
-int \mbox{\hyperlink{namespaceEfAsm_a7d79fdd3d59e237e0381d1798e2050bb}{Ef\+Asm\+::\+\_\+code}} (F\+C\+H\+AR $\ast$seg, int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+int \mbox{\hyperlink{namespaceEfAsm_a7d79fdd3d59e237e0381d1798e2050bb}{Ef\+Asm\+::\+\_\+code}} (F\+C\+H\+AR $\ast$seg, int len,...)
 \item 
-int \mbox{\hyperlink{namespaceEfAsm_acce2eabb9a04fa5c08fc95932e2f92ae}{Ef\+Asm\+::\+\_\+colon}} (F\+C\+H\+AR $\ast$seg, int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+int \mbox{\hyperlink{namespaceEfAsm_acce2eabb9a04fa5c08fc95932e2f92ae}{Ef\+Asm\+::\+\_\+colon}} (F\+C\+H\+AR $\ast$seg, int len,...)
 \item 
-int \mbox{\hyperlink{namespaceEfAsm_acb8719a8b6a78152c8676f735dc7c467}{Ef\+Asm\+::\+\_\+immed}} (F\+C\+H\+AR $\ast$seg, int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+int \mbox{\hyperlink{namespaceEfAsm_acb8719a8b6a78152c8676f735dc7c467}{Ef\+Asm\+::\+\_\+immed}} (F\+C\+H\+AR $\ast$seg, int len,...)
 \item 
-int \mbox{\hyperlink{namespaceEfAsm_abb1c9544549fc018a1ed1e8345cc66f3}{Ef\+Asm\+::\+\_\+label}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+int \mbox{\hyperlink{namespaceEfAsm_abb1c9544549fc018a1ed1e8345cc66f3}{Ef\+Asm\+::\+\_\+label}} (int len,...)
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Assembler -\/ Branching Ops}\par
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_ab18b552c595cf956387d2e4427384563}{Ef\+Asm\+::\+\_\+begin}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_ab18b552c595cf956387d2e4427384563}{Ef\+Asm\+::\+\_\+begin}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a5b6bf226f290864b6a596069e4a0cf74}{Ef\+Asm\+::\+\_\+while}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a5b6bf226f290864b6a596069e4a0cf74}{Ef\+Asm\+::\+\_\+while}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a3f42a6bd0929a03c700ace952e186997}{Ef\+Asm\+::\+\_\+repeat}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a3f42a6bd0929a03c700ace952e186997}{Ef\+Asm\+::\+\_\+repeat}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_adcd97bc33014c89d91e19cc4a217b5e8}{Ef\+Asm\+::\+\_\+until}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_adcd97bc33014c89d91e19cc4a217b5e8}{Ef\+Asm\+::\+\_\+until}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_ab7b5835572c00662317647be9a49b2b3}{Ef\+Asm\+::\+\_\+again}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_ab7b5835572c00662317647be9a49b2b3}{Ef\+Asm\+::\+\_\+again}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a771a43815e0f65570de187ee456938e8}{Ef\+Asm\+::\+\_\+for}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a771a43815e0f65570de187ee456938e8}{Ef\+Asm\+::\+\_\+for}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_abf110638d9dc2195b884957885128696}{Ef\+Asm\+::\+\_\+aft}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_abf110638d9dc2195b884957885128696}{Ef\+Asm\+::\+\_\+aft}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a2df77b2810440262c7ade5fc911f8c8a}{Ef\+Asm\+::\+\_\+nxt}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a2df77b2810440262c7ade5fc911f8c8a}{Ef\+Asm\+::\+\_\+nxt}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_ab786d49b7cbf077b6a706a308167b5ce}{Ef\+Asm\+::\+\_\+if}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_ab786d49b7cbf077b6a706a308167b5ce}{Ef\+Asm\+::\+\_\+if}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a8c4966a74388b9427ae2771419d73430}{Ef\+Asm\+::\+\_\+else}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a8c4966a74388b9427ae2771419d73430}{Ef\+Asm\+::\+\_\+else}} (int len,...)
 \item 
-void \mbox{\hyperlink{namespaceEfAsm_a5a0ec1a59cc273ec7db9b5a2af2779ef}{Ef\+Asm\+::\+\_\+then}} (int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}},...)
+void \mbox{\hyperlink{namespaceEfAsm_a5a0ec1a59cc273ec7db9b5a2af2779ef}{Ef\+Asm\+::\+\_\+then}} (int len,...)
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Assembler -\/ IO Functions}\par
@@ -237,7 +236,7 @@ void \mbox{\hyperlink{namespaceEfAsm_a4499c7338bdc153d5f19127e8a3d59a7}{Ef\+Asm\
 \doxysubsection*{Assembler -\/ String/\+Byte Movers}
 \begin{DoxyCompactItemize}
 \item 
-\#define \mbox{\hyperlink{eforth__asm_8cpp_a60ef63ffe304267efee1dd841faf4751}{C\+E\+L\+L\+C\+PY}}(\mbox{\hyperlink{ceForth__33_8cpp_aabb134684a7fdbfa06894e7f3d8af081}{n}})
+\#define \mbox{\hyperlink{eforth__asm_8cpp_a60ef63ffe304267efee1dd841faf4751}{C\+E\+L\+L\+C\+PY}}(n)
 \item 
 \#define \mbox{\hyperlink{eforth__asm_8cpp_ade2cadd41b341787b097cad0c7fa35b9}{S\+T\+R\+C\+PY}}(op,  seq)
 \item 
@@ -280,14 +279,14 @@ define opcode enums Note\+: in sync with VM\textquotesingle{}s vtable \mbox{\Hyp
 \index{eforth\_asm.cpp@{eforth\_asm.cpp}!CELLCPY@{CELLCPY}}
 \index{CELLCPY@{CELLCPY}!eforth\_asm.cpp@{eforth\_asm.cpp}}
 \doxysubsubsection{\texorpdfstring{CELLCPY}{CELLCPY}}
-{\footnotesize\ttfamily \#define C\+E\+L\+L\+C\+PY(\begin{DoxyParamCaption}\item[{}]{\mbox{\hyperlink{ceForth__33_8cpp_aabb134684a7fdbfa06894e7f3d8af081}{n}} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \#define C\+E\+L\+L\+C\+PY(\begin{DoxyParamCaption}\item[{}]{n }\end{DoxyParamCaption})}
 
 {\bfseries Value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{    \{                            \(\backslash\)}
 \DoxyCodeLine{    va\_list argList;                            \(\backslash\)}
-\DoxyCodeLine{    va\_start(argList, \mbox{\hyperlink{ceForth__33_8cpp_aabb134684a7fdbfa06894e7f3d8af081}{n}});                       \(\backslash\)}
-\DoxyCodeLine{    for (; \mbox{\hyperlink{ceForth__33_8cpp_aabb134684a7fdbfa06894e7f3d8af081}{n}}; \mbox{\hyperlink{ceForth__33_8cpp_aabb134684a7fdbfa06894e7f3d8af081}{n}}-\/-\/) \{                            \(\backslash\)}
+\DoxyCodeLine{    va\_start(argList, n);                       \(\backslash\)}
+\DoxyCodeLine{    for (; n; n-\/-\/) \{                            \(\backslash\)}
 \DoxyCodeLine{        IU j = (\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}})va\_arg(argList, \textcolor{keywordtype}{int});        \(\backslash\)}
 \DoxyCodeLine{        if (j==\mbox{\hyperlink{namespaceEfAsm_aa3dd7a4f331c954244daaddf0177f059}{NOP}}) \textcolor{keywordflow}{continue};                   \(\backslash\)}
 \DoxyCodeLine{        STORE(j);                               \(\backslash\)}
@@ -308,10 +307,10 @@ define opcode enums Note\+: in sync with VM\textquotesingle{}s vtable \mbox{\Hyp
 \begin{DoxyCode}{0}
 \DoxyCodeLine{    \{                       \(\backslash\)}
 \DoxyCodeLine{    STORE(op);                                  \(\backslash\)}
-\DoxyCodeLine{    int \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}} = \mbox{\hyperlink{namespaceEfAsm_a59af885d0e26e3c82059708948d2df37}{\_strlen}}(seq);                     \(\backslash\)}
+\DoxyCodeLine{    int len = \mbox{\hyperlink{namespaceEfAsm_a59af885d0e26e3c82059708948d2df37}{\_strlen}}(seq);                     \(\backslash\)}
 \DoxyCodeLine{    PGM\_P p = \textcolor{keyword}{reinterpret\_cast<}PGM\_P\textcolor{keyword}{>}(seq);     \(\backslash\)}
-\DoxyCodeLine{    BSET(\mbox{\hyperlink{namespaceEfAsm_a05b00b24035523f019548b9dfd8cf1f3}{aPC}}++, \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}});                           \(\backslash\)}
-\DoxyCodeLine{    for (\textcolor{keywordtype}{int} i=0; i < \mbox{\hyperlink{ceForth__33_8cpp_a9640f1188a24fa4cddbdc505c1f8eab6}{len}}; i++) \{               \(\backslash\)}
+\DoxyCodeLine{    BSET(\mbox{\hyperlink{namespaceEfAsm_a05b00b24035523f019548b9dfd8cf1f3}{aPC}}++, len);                           \(\backslash\)}
+\DoxyCodeLine{    for (\textcolor{keywordtype}{int} i=0; i < len; i++) \{               \(\backslash\)}
 \DoxyCodeLine{    BSET(\mbox{\hyperlink{namespaceEfAsm_a05b00b24035523f019548b9dfd8cf1f3}{aPC}}++, pgm\_read\_byte(p++));            \(\backslash\)}
 \DoxyCodeLine{    \}                                           \(\backslash\)}
 \DoxyCodeLine{\}}

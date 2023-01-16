@@ -1,24 +1,9 @@
 var searchData=
 [
-  ['d_138',['d',['../ceForth__33_8cpp.html#a72f295763ab9bd9c359ade025fd9da60',1,'ceForth_33.cpp']]],
-  ['dat_139',['dat',['../ceForth__33_8cpp.html#af51f2980480f31f8105eb5e6648d045a',1,'ceForth_33.cpp']]],
-  ['data_140',['data',['../ceForth__33_8cpp.html#ab3da089773eaf6657751408006f45735',1,'ceForth_33.cpp']]],
-  ['ddrop_141',['ddrop',['../ceForth__33_8cpp.html#acff3a7287c39d026016b24beef665294',1,'ceForth_33.cpp']]],
-  ['ddup_142',['ddup',['../ceForth__33_8cpp.html#af119cfbfb45c427b899d5c04150eb06e',1,'ceForth_33.cpp']]],
-  ['debug_143',['DEBUG',['../eforth__asm_8h.html#a3254550e1d6d185f6b3e69b2d6468343',1,'eforth_asm.h']]],
-  ['dnega_144',['dnega',['../ceForth__33_8cpp.html#a526b80bfdd8f2e77eb9174552fc17b91',1,'ceForth_33.cpp']]],
-  ['docon_145',['docon',['../ceForth__33_8cpp.html#a52efaf2aac64e5708855659f273cd98b',1,'ceForth_33.cpp']]],
-  ['dolist_146',['dolist',['../ceForth__33_8cpp.html#a3a81a8daa58cc581e8899435876e0d88',1,'ceForth_33.cpp']]],
-  ['dolit_147',['dolit',['../ceForth__33_8cpp.html#a50bcb45930b5bd66fb6de8de1d403b85',1,'ceForth_33.cpp']]],
-  ['donext_148',['donext',['../ceForth__33_8cpp.html#a55074396e7ccd5e77ba1bd57d95d384e',1,'ceForth_33.cpp']]],
-  ['donxt_149',['DONXT',['../ceForth__33_8cpp.html#a9001e7b4e39425693be234234e8dd237',1,'DONXT():&#160;ceForth_33.cpp'],['../namespaceEfAsm.html#a86b03a1e4d3a8b4c0cdfd8d9fc8f7010',1,'EfAsm::DONXT()']]],
-  ['dotq_150',['DOTQ',['../namespaceEfAsm.html#ac277a20e10af2ca53f817b77cb033722',1,'EfAsm::DOTQ()'],['../ceForth__33_8cpp.html#a5672e8a92b6108bcc1738ef4888d0001',1,'DOTQ():&#160;ceForth_33.cpp']]],
-  ['dotqp_151',['DOTQP',['../ceForth__33_8cpp.html#af39268b5a5bc040e61b28e8366161c0e',1,'ceForth_33.cpp']]],
-  ['dovar_152',['dovar',['../ceForth__33_8cpp.html#a64e08c1cae17289c9b0c86629e175304',1,'ceForth_33.cpp']]],
-  ['drop_153',['drop',['../ceForth__33_8cpp.html#a70b6ce664b7b4fdb33e25ad9d81873d6',1,'ceForth_33.cpp']]],
-  ['dstor_154',['dstor',['../ceForth__33_8cpp.html#aa00f03bb195d286f6307841db11190ab',1,'ceForth_33.cpp']]],
-  ['dtop_155',['DTOP',['../eforth__vm_8cpp.html#a2a0ab46d7e9f1c39675adabb666df35d',1,'eforth_vm.cpp']]],
-  ['du_156',['DU',['../eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a',1,'eforth_core.h']]],
-  ['dump_5frow_5fwidth_157',['DUMP_ROW_WIDTH',['../eforth__asm_8cpp.html#a27fcb44e39b3c4a0d37e34faab596803',1,'eforth_asm.cpp']]],
-  ['dup_158',['dup',['../ceForth__33_8cpp.html#af648d451823165ef5095601e9b3e6d90',1,'ceForth_33.cpp']]]
+  ['debug_58',['DEBUG',['../eforth__asm_8h.html#a3254550e1d6d185f6b3e69b2d6468343',1,'eforth_asm.h']]],
+  ['donxt_59',['DONXT',['../namespaceEfAsm.html#a86b03a1e4d3a8b4c0cdfd8d9fc8f7010',1,'EfAsm']]],
+  ['dotq_60',['DOTQ',['../namespaceEfAsm.html#ac277a20e10af2ca53f817b77cb033722',1,'EfAsm']]],
+  ['dtop_61',['DTOP',['../eforth__vm_8cpp.html#a2a0ab46d7e9f1c39675adabb666df35d',1,'eforth_vm.cpp']]],
+  ['du_62',['DU',['../eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a',1,'eforth_core.h']]],
+  ['dump_5frow_5fwidth_63',['DUMP_ROW_WIDTH',['../eforth__asm_8cpp.html#a27fcb44e39b3c4a0d37e34faab596803',1,'eforth_asm.cpp']]]
 ];

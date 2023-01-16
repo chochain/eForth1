@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['for_393',['FOR',['../ceForth__33_8cpp.html#ad6d60b765f761c067676d00debfb1cfe',1,'ceForth_33.cpp']]]
+  ['next_229',['NEXT',['../namespaceEfVM.html#a00e088a5d3bf8e5b61d5b8c798ebd9dc',1,'EfVM']]]
 ];

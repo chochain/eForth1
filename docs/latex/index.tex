@@ -1,14 +1,14 @@
-Wrote in his ce\+Forth\+\_\+33 document, Dr. Chen-\/\+Hanson Ting, the creator of e\+Forth, and inspiration of Forth community noted\+: \begin{quote}
+In 2011, Dr. Chen-\/\+Hanson Ting created \mbox{[}328e\+Forth\mbox{]}((\href{https://chochain.github.io/eForth1/docs/328eForth.pdf}{\texttt{ https\+://chochain.\+github.\+io/e\+Forth1/docs/328e\+Forth.\+pdf}}) to run Forth on Arduino U\+NO. Wrote in his ce\+Forth\+\_\+33 document, the creator of e\+Forth, and one of the inspiring figures of Forth community noted\+: \begin{quote}
 {\itshape In 2011, I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. However, you had only 1.\+5\+KB of R\+AM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
 
 
-Before Dr. Ting conceded his fight with cancer in May, 2022, I\textquotesingle{}ve spent the last 11 months working with him expanding the concept of \char`\"{}\+Forth without Forth\char`\"{} -\/ a new e\+Forth model -\/ he called. Traditionally, Forth is built with a set of core words in low-\/level assembly language and establish the rest of words with high-\/level Forth scripts which get boot-\/strapped on start-\/up time. With the proliferation of modern languages, built Forth without using Forth, he reasoned that Forth built entirely in high-\/level languages can not only greatly simplify the virtual machine, taking advantage of modern languages and operating system, but also encourage portability and optimization. In a few months, we completed new batch of e\+Forths in Javascript, Java, C++, ported them to Windows, E\+S\+P32, which Dr. Ting presented to \href{https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s}{\texttt{ Sillicon Valley Forth Interest Group}}. Later, we focused on System\+Verilog with Don \& Demitri\textquotesingle{}s C\+O\+R\+E-\/I F\+P\+GA project of \href{https://www.facebook.com/groups/1304548976637542}{\texttt{ AI \& Robotics Group}} until his eventual departure.
+Before Dr. Ting conceded his fight with cancer in May, 2022, I\textquotesingle{}ve spent the last 11 months working with him expanding the concept of \char`\"{}\+Forth without Forth\char`\"{} -\/ a new e\+Forth model -\/ he called. Traditionally, Forth is built with a set of core words in low-\/level assembly language and establish the rest of words with high-\/level Forth scripts which get boot-\/strapped on start-\/up time. With the proliferation of modern languages, build Forth without using Forth, he reasoned that Forth built entirely in high-\/level languages can not only greatly simplify the virtual machine, taking advantage of modern languages and operating system, but also encourage portability and optimization. In a few months, we completed new batch of e\+Forths in Javascript, Java, C++, ported them to Windows, E\+S\+P32, which Dr. Ting presented his video on November, 2021 to \href{https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s}{\texttt{ Sillicon Valley Forth Interest Group}}. Later, we focused on System\+Verilog\textquotesingle{}s edition with Don \& Demitri\textquotesingle{}s C\+O\+R\+E-\/I F\+P\+GA project of \href{https://www.facebook.com/groups/1304548976637542}{\texttt{ AI \& Robotics Group}} til his eventual departure.
 
 In Dr. Ting\textquotesingle{}s own word\+: \begin{quote}
 {\itshape In all these years, I have thought that the e\+Forth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.} \end{quote}
 
 
-So, I\textquotesingle{}ve decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model and do something fun with it. Here we go!
+I enjoy the beauty of working on something small and simple, so decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model and have fun with it. However, to make it useful, I have need to overcome a few things i.\+e. no extra bootloader programmer needed, save app to E\+E\+P\+R\+OM, and support interrupts. So, here we go!
 
 \doxysubsection*{What is e\+Forth1?}
 
@@ -16,12 +16,12 @@ So, I\textquotesingle{}ve decided to pick up Dr. Ting\textquotesingle{}s e\+Fort
 \begin{DoxyItemize}
 \item An e\+Forth for Arduino U\+NO implemented in C.
 \item A .ino file that can be openned in Arduino I\+DE and load/run directly onto Arduino U\+NO.
-\item Can be embeded with other Arduino applications.
-\item Has 16-\/bit cells and stacks. Double means 32-\/bit.
+\item Has 16-\/bit cells and stacks.
 \item Can read/write Arduino pins.
 \item Supports Arduino Interrupts.
 \item Can save/load app to/from E\+E\+P\+R\+OM.
-\item Can autorun from saved E\+E\+P\+R\+OM.
+\item Can be embeded with other Arduino applications.
+\item Become Turnkey system booting from saved E\+E\+P\+R\+OM.
 \end{DoxyItemize}
 
 \doxysubsection*{How to install e\+Forth1?}
@@ -107,6 +107,11 @@ To understand the philosophy of F\+O\+R\+TH, excellent online e-\/books are here
 
 
 \begin{DoxyItemize}
+\item 328e\+Forth in A\+VR assembly \href{https://chochain.github.io/eForth1/docs/328eForth_content.pdf}{\texttt{ table of content}} and \href{https://chochain.github.io/eForth1/docs/328eForth.pdf}{\texttt{ full document}}
+\item \href{https://github.com/DRuffer/328eforth}{\texttt{ 328e\+Forth mod for coin\+Forth by D. Ruffer}}
 \item \href{https://chochain.github.io/eForth1/docs/ceForth_33.doc}{\texttt{ ce\+Forth\+\_\+33.\+doc -\/ original documentation}}
-\item \href{https://chochain.github.io/eForth1/docs/ceForth_33.cpp}{\texttt{ ce\+Forth\+\_\+33.\+cpp -\/ source assembler + VM}} 
+\item \href{https://chochain.github.io/eForth1/docs/ceForth_33.cpp}{\texttt{ ce\+Forth\+\_\+33.\+cpp -\/ in C, source assembler + VM}}
+\item \mbox{[}eforth\+\_\+328.\+ino -\/ for Arduino I\+DE\mbox{]}((\href{https://chochain.github.io/eForth1/docs/eforth_328.ino}{\texttt{ https\+://chochain.\+github.\+io/e\+Forth1/docs/eforth\+\_\+328.\+ino}})
+\item \mbox{[}e\+Forth for S\+T\+M8 -\/ for even smaller apps(\href{https://github.com/TG9541/stm8ef}{\texttt{ https\+://github.\+com/\+T\+G9541/stm8ef}}) and \href{https://github.com/TG9541/stm8ef/wiki/STM8S-Programming\#flashing-the-stm8}{\texttt{ S\+T\+M8 Programming}}
+\item \href{https://github.com/Esp32forth}{\texttt{ E\+S\+P32\+Forth for E\+S\+P32 -\/ for larger/fancier apps}} 
 \end{DoxyItemize}

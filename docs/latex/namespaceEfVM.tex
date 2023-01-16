@@ -3,9 +3,9 @@
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}{B\+G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{ceForth__33_8cpp_a72f295763ab9bd9c359ade025fd9da60}{d}})
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}{B\+G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
 \item 
-\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{namespaceEfVM_a07e74ced8251d26cd20bce5a2c386d7a}{G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{ceForth__33_8cpp_a72f295763ab9bd9c359ade025fd9da60}{d}})
+\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{namespaceEfVM_a07e74ced8251d26cd20bce5a2c386d7a}{G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
 \item 
 void \mbox{\hyperlink{namespaceEfVM_ac4f69cc49b68f10383886820029f6257}{P\+U\+SH}} (\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} v)
 \item 
@@ -21,6 +21,8 @@ void \mbox{\hyperlink{namespaceEfVM_a88be037f3c5ddd06681d8775769b5bec}{\+\_\+exe
 \begin{DoxyCompactList}\small\item\em (a -- ) take execution address from data stack and execute the token \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{namespaceEfVM_a04b479eed7bc0fa0b9c8600f47c04cba}{\+\_\+ummod}} ()
 \begin{DoxyCompactList}\small\item\em (udl udh u -- ur uq) unsigned divide of a double by single \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}{\+\_\+yield}} ()
+\item 
 void \mbox{\hyperlink{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}{\+\_\+delay}} ()
 \begin{DoxyCompactList}\small\item\em (n -- ) delay n milli-\/second \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
@@ -67,7 +69,12 @@ update program counter (ready to fetch), advance instruction pointer \mbox{\Hype
 \doxysubsubsection{\texorpdfstring{\_init()}{\_init()}}
 {\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-virtual machine initializer \begin{quote}
+virtual machine initializer 
+\begin{DoxyItemize}
+\item reset interrupt handlers
+\end{DoxyItemize}
+
+\begin{quote}
 setup control variables \end{quote}
 
 
@@ -126,7 +133,16 @@ remainder \end{quote}
 
 \begin{quote}
 quotient \end{quote}
-\mbox{\Hypertarget{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}\label{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}} 
+\mbox{\Hypertarget{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}\label{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}} 
+\index{EfVM@{EfVM}!\_yield@{\_yield}}
+\index{\_yield@{\_yield}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{\_yield()}{\_yield()}}
+{\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+yield (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyItemize}
+\item give more cycles to VM
+\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}\label{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}} 
 \index{EfVM@{EfVM}!\_delay@{\_delay}}
 \index{\_delay@{\_delay}!EfVM@{EfVM}}
 \doxysubsubsection{\texorpdfstring{\_delay()}{\_delay()}}
@@ -194,6 +210,12 @@ return stack index (0-\/255)
 
 
 data stack index (0-\/255) 
+
+\mbox{\Hypertarget{namespaceEfVM_a0ee21738c58a7bf5a2449cde737c077b}\label{namespaceEfVM_a0ee21738c58a7bf5a2449cde737c077b}} 
+\index{EfVM@{EfVM}!ISR@{ISR}}
+\index{ISR@{ISR}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{ISR}{ISR}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} Ef\+V\+M\+::\+I\+SR}
 
 \mbox{\Hypertarget{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}\label{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}} 
 \index{EfVM@{EfVM}!top@{top}}

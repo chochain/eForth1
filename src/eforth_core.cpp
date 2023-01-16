@@ -16,9 +16,16 @@ volatile U8  p_hit { 0 };         ///< pin change interrupt (PORT-B,C,D)
 volatile U16 t_cnt[8];            ///< timer CTC counters
 
 void intr_reset() {
+    intr_enable_timer(false);
+    intr_enable_pci(false);
     CLI();
     t_idx = t_hit = p_hit = 0;
     SEI();
+
+    const U8 led[] = { 4, 5, 6, 7, 16, 17, 18, 19 };
+    for (int i=0; i<8; i++) {
+        pinMode(led[i], OUTPUT);
+    }
 }
 ///
 ///> fetch interrupt hit flags
@@ -93,7 +100,7 @@ void intr_enable_pci(U16 f) {
 ///
 void intr_enable_timer(U16 f) {
     CLI();
-    pinMode(7, OUTPUT);                    // DEBUG: timer2 interrupt enable/disable
+    pinMode(19, OUTPUT);                   // DEBUG: timer2 interrupt enable/disable
 
     TCCR2A = TCCR2B = TCNT2 = 0;           // reset counter
     if (f) {
@@ -101,11 +108,11 @@ void intr_enable_timer(U16 f) {
         TCCR2B = _BV(CS22)|_BV(CS21);      // prescaler 256 (16000000 / 256) = 62500Hz = 16us
         OCR2A  = 249;                      // 250Hz = 4ms, (250 - 1, must < 256)
         TIMSK2 |= _BV(OCIE2A);             // enable timer2 compare interrupt
-        digitalWrite(7, HIGH);             // DEBUG: timer2 enabled
+        digitalWrite(19, HIGH);            // DEBUG: timer2 enabled
     }
     else {
         TIMSK2 &= _BV(OCIE2A);             // disable timer2 compare interrupt
-        digitalWrite(7, LOW);              // DEBUG: timer disabled
+        digitalWrite(19, LOW);             // DEBUG: timer disabled
     }
     SEI();
 }
@@ -114,13 +121,15 @@ void intr_enable_timer(U16 f) {
 ///
 ISR(TIMER2_COMPA_vect) {
     volatile static int cnt = 0;
+    volatile static int hz  = 0;
     if (++cnt < 25) return;                // 25 * 4ms = 100ms
     cnt = 0;
+    digitalWrite(19, digitalRead(19) ? LOW : HIGH);  // DEBUG: ISR called
     for (U8 i=0, b=1; i < t_idx; i++, b<<=1) {
-        digitalWrite(7, digitalRead(7) ? LOW : HIGH);  // DEBUG: ISR called
         if (++t_cnt[i] < t_max[i]) continue;
         t_hit    |= b;
         t_cnt[i]  = 0;
+        digitalWrite(4+i, digitalRead(4+i) ? LOW : HIGH);
     }
 }
 ISR(PCINT0_vect) { p_hit |= 1; }

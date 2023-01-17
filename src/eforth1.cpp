@@ -44,6 +44,9 @@ void ef_setup(Stream &io_stream=Serial)
     _info(_ram, forth_rom_sz, io);
     vm_init((PGM_P)forth_rom, _ram, io);
 }
+///
+///> VM outer interpreter proxy
+///
 void ef_run()
 {
 	vm_outer();

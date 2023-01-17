@@ -1,8 +1,8 @@
 /**
- * @file eforth_asm.h
- * @brief eForth assember module header
+ * @file
+ * @brief eForth assembler module header
  *
- * Usage of VA_ARGS veriable argument for assembler parameter counting
+ * Usage of VA_ARGS variable argument for assembler parameter counting
  */
 #ifndef __EFORTH_ASM_H
 #define __EFORTH_ASM_H

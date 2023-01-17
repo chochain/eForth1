@@ -1,9 +1,8 @@
 /**
- * @file eforth_asm.cpp
+ * @file
  * @brief eForth Assembler module
  *
  * Forth Macro Assembler
- *
  */
 #include "eforth_core.h"
 #include "eforth_asm.h"
@@ -156,31 +155,31 @@ int _label(int len, ...) {
 ///
 ///@name Assembler - Branching Ops
 ///@{
-void _begin(int len, ...) {         /// **BEGIN**-(once)-WHILE-(loop)-UNTIL/REPEAT
-    SHOWOP("BEGIN");                /// **BEGIN**-AGAIN
-    RPUSH(PC);                      /// * keep current address for looping
+void _begin(int len, ...) {        /// **BEGIN**-(once)-WHILE-(loop)-UNTIL/REPEAT
+    SHOWOP("BEGIN");               /// **BEGIN**-AGAIN
+    RPUSH(PC);                     /// * keep current address for looping
     CELLCPY(len);
 }
-void _while(int len, ...) {         /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPEAT
+void _while(int len, ...) {        /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPEAT
     SHOWOP("WHILE");
     STORE(QBRAN);
-    STORE(0);                       /// * branching address
+    STORE(0);                      /// * branching address
     int k = RPOP();
     RPUSH(PC - CELLSZ);
     RPUSH(k);
     CELLCPY(len);
 }
-void _repeat(int len, ...) {        /// BEGIN-(once)-WHILE-(loop)- **REPEAT**
+void _repeat(int len, ...) {       /// BEGIN-(once)-WHILE-(loop)- **REPEAT**
     SHOWOP("REPEAT");
     STORE(BRAN);
     STORE(RPOP());
     SET(RPOP(), PC);
     CELLCPY(len);
 }
-void _until(int len, ...) {         /// BEGIN-(once)-WHILE-(loop)--**UNTIL**
+void _until(int len, ...) {        /// BEGIN-(once)-WHILE-(loop)--**UNTIL**
     SHOWOP("UNTIL");
-    STORE(QBRAN);                   /// * conditional branch
-    STORE(RPOP());                  /// * loop begin address
+    STORE(QBRAN);                  /// * conditional branch
+    STORE(RPOP());                 /// * loop begin address
     CELLCPY(len);
 }
 void _again(int len, ...) {        /// BEGIN--**AGAIN**

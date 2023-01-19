@@ -157,7 +157,7 @@ typedef S16       DU;                 ///< data/cell unit
 #include <avr/pgmspace.h>
 #include <time.h>
 #define LOG(s)              io->print(F(s))
-#define LOG_C(c)            ef_putchar(c)
+#define LOG_C(c)            { io->print(c); if (c=='\n') io->flush(); }
 #define LOG_V(s, n)         { io->print(F(s)); io->print((DU)n); }
 #define LOG_H(s, n)         { io->print(F(s)); io->print(n, HEX); }
 #define CLI()               cli()
@@ -178,7 +178,7 @@ typedef const char          *PGM_P;
 #define map(a,b,c,d,e)      (0)
 #define millis()            (0x12345678)
 #define LOG(s)              printf("%s", s)
-#define LOG_C(c)            ef_putchar(c)
+#define LOG_C(c)            printf("%c", c)
 #define LOG_V(s, n)         printf("%s%d", s, n)
 #define LOG_H(s, n)         printf("%s%x", s, (n)&0xffff)
 #define LOW                 (0)
@@ -191,10 +191,10 @@ typedef const char          *PGM_P;
 ///@name interrupt handle routines
 ///@{
 void intr_reset();          ///< reset interrupts
-U16  intr_hits();           ///< return interrupt hit flags
-void intr_service(void (*cb)(U16));
-void intr_add_timer(U16 hz10, U16 xt);
-void intr_add_pci(U16 pin, U16 xt);
+U16  intr_hits();
+IU   intr_service();
+void intr_add_timer(U16 hz10, IU xt);
+void intr_add_pci(U16 pin, IU xt);
 void intr_enable_timer(U16 f);
 void intr_enable_pci(U16 f);
 ///@}
@@ -205,13 +205,7 @@ void vm_init(
     U8 *cdata,              ///< pointer to Arduino RAM block (RAM)
     void *io_stream         ///< pointer to Stream object of Arduino
     );
-void vm_isr(U16 xt);        ///< VM interrupt service routine
 int  vm_outer();            ///< Forth outer interpreter
-///@}
-///@name eForth IO Functions
-///@{
-char ef_getchar();
-void ef_putchar(char c);
 ///@}
 ///@name eForth Assembler Functions
 ///@{

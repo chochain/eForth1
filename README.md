@@ -8,7 +8,7 @@ Before Dr. Ting conceded his fight with cancer in May, 2022, I've spent the last
 In Dr. Ting's own word:
 > *In all these years, I have thought that the eForth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.*
 
-I enjoy the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model and have fun with it. However, to make it useful, I have need to overcome a few things i.e. no extra bootloader programmer needed, save app to EEPROM, and support interrupts. So, here we go!
+I enjoy the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model and have fun with it. However, to make it useful, there are a few things that I need to overcome first i.e. make macro assembler C-coder friendly, remove dependency on extra bootloader programmer, add EEPROM save/load, and support interrupts. So, here we go!
 
 ### What is eForth1?
 

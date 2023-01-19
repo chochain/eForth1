@@ -40,15 +40,12 @@ var eforth__core_8h =
     [ "DU", "eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a", null ],
     [ "intr_reset", "eforth__core_8h.html#a0132f57c344961e9ff4037dd06b06948", null ],
     [ "intr_hits", "eforth__core_8h.html#a93c9ba339402353230060b417633ccd4", null ],
-    [ "intr_service", "eforth__core_8h.html#ae7417b9670e9fc6ddc511e247b90e058", null ],
-    [ "intr_add_timer", "eforth__core_8h.html#ae02901fc00b0a504db693e560852481b", null ],
-    [ "intr_add_pci", "eforth__core_8h.html#ab0b4b6096f24d31ce113f65adb72125c", null ],
+    [ "intr_service", "eforth__core_8h.html#a2c97726ffb62839e8c6fe399f6ed83f3", null ],
+    [ "intr_add_timer", "eforth__core_8h.html#a940ef1ceaa397087cc42f0eb63a041a3", null ],
+    [ "intr_add_pci", "eforth__core_8h.html#a5fa8e2bc9434c475082cfc60db195fce", null ],
     [ "intr_enable_timer", "eforth__core_8h.html#a8d82211db5e512fd289ddd16c3d608ae", null ],
     [ "intr_enable_pci", "eforth__core_8h.html#a18a475c1f5e15f4867d6974f8f0c1d43", null ],
     [ "vm_init", "eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002", null ],
-    [ "vm_isr", "eforth__core_8h.html#af37f991d68804c00ec61aec541d1908e", null ],
     [ "vm_outer", "eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5", null ],
-    [ "ef_getchar", "eforth__core_8h.html#ae7350dd92eb09ea9c2102562af1713a1", null ],
-    [ "ef_putchar", "eforth__core_8h.html#a40485405ab5338788520ef0380b01b70", null ],
     [ "ef_assemble", "eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8", null ]
 ];

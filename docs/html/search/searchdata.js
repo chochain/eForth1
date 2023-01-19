@@ -4,10 +4,10 @@ var indexSectionsWithContent =
   1: "e",
   2: "er",
   3: "_abeginprv",
-  4: "_abcdfinpqrst",
+  4: "_abcdfilnpqrst",
   5: "disu",
   6: "o",
-  7: "_abcdefglmoprstvy",
+  7: "_abcdefgilmoprstvy",
   8: "e"
 };
 

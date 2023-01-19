@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['link_112',['Link',['../namespaceEfAsm.html#a5bc71a8752683bc40a6f206bf3585d0f',1,'EfAsm']]],
   ['log_113',['LOG',['../eforth__core_8h.html#a570713ca4a493fc4d2130a405f3b87ea',1,'eforth_core.h']]],
   ['log_5fc_114',['LOG_C',['../eforth__core_8h.html#ad1115aa0a8df497fe7c107d2ac3ab66e',1,'eforth_core.h']]],
   ['log_5fh_115',['LOG_H',['../eforth__core_8h.html#a58eef1717c4dffedd3a63d061ed1b4a5',1,'eforth_core.h']]],

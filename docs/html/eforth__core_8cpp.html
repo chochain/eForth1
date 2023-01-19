@@ -115,11 +115,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a0132f57c344961e9ff4037dd06b06948"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8cpp.html#a0132f57c344961e9ff4037dd06b06948">intr_reset</a> ()</td></tr>
 <tr class="memdesc:a0132f57c344961e9ff4037dd06b06948"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset interrupts  <a href="eforth__core_8cpp.html#a0132f57c344961e9ff4037dd06b06948">More...</a><br /></td></tr>
 <tr class="separator:a0132f57c344961e9ff4037dd06b06948"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93c9ba339402353230060b417633ccd4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8cpp.html#a93c9ba339402353230060b417633ccd4">intr_hits</a> ()</td></tr>
-<tr class="memdesc:a93c9ba339402353230060b417633ccd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">return interrupt hit flags  <a href="eforth__core_8cpp.html#a93c9ba339402353230060b417633ccd4">More...</a><br /></td></tr>
-<tr class="separator:a93c9ba339402353230060b417633ccd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7417b9670e9fc6ddc511e247b90e058"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8cpp.html#ae7417b9670e9fc6ddc511e247b90e058">intr_service</a> (void(*cb)(<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>))</td></tr>
-<tr class="separator:ae7417b9670e9fc6ddc511e247b90e058"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21626f172ce1b4f8877e828ae49944c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8cpp.html#a21626f172ce1b4f8877e828ae49944c2">_intr</a> ()</td></tr>
+<tr class="separator:a21626f172ce1b4f8877e828ae49944c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c97726ffb62839e8c6fe399f6ed83f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8cpp.html#a2c97726ffb62839e8c6fe399f6ed83f3">intr_service</a> ()</td></tr>
+<tr class="separator:a2c97726ffb62839e8c6fe399f6ed83f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae02901fc00b0a504db693e560852481b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8cpp.html#ae02901fc00b0a504db693e560852481b">intr_add_timer</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> hz10, <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> xt)</td></tr>
 <tr class="separator:ae02901fc00b0a504db693e560852481b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a896b3ce36b3f0aea63258a3a613d5f56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8cpp.html#a896b3ce36b3f0aea63258a3a613d5f56">intr_add_pci</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> p, <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> xt)</td></tr>
@@ -183,14 +182,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a93c9ba339402353230060b417633ccd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93c9ba339402353230060b417633ccd4">&#9670;&nbsp;</a></span>intr_hits()</h2>
+<a id="a21626f172ce1b4f8877e828ae49944c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21626f172ce1b4f8877e828ae49944c2">&#9670;&nbsp;</a></span>_intr()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> intr_hits </td>
+          <td class="memname"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> _intr </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -198,24 +197,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>return interrupt hit flags </p>
-<blockquote class="doxtable">
-<p>fetch interrupt hit flags </p>
-</blockquote>
-
 </div>
 </div>
-<a id="ae7417b9670e9fc6ddc511e247b90e058"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7417b9670e9fc6ddc511e247b90e058">&#9670;&nbsp;</a></span>intr_service()</h2>
+<a id="a2c97726ffb62839e8c6fe399f6ed83f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c97726ffb62839e8c6fe399f6ed83f3">&#9670;&nbsp;</a></span>intr_service()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void intr_service </td>
+          <td class="memname"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> intr_service </td>
           <td>(</td>
-          <td class="paramtype">void(*)(<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)&#160;</td>
-          <td class="paramname"><em>cb</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>

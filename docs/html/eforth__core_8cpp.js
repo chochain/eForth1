@@ -1,8 +1,8 @@
 var eforth__core_8cpp =
 [
     [ "intr_reset", "eforth__core_8cpp.html#a0132f57c344961e9ff4037dd06b06948", null ],
-    [ "intr_hits", "eforth__core_8cpp.html#a93c9ba339402353230060b417633ccd4", null ],
-    [ "intr_service", "eforth__core_8cpp.html#ae7417b9670e9fc6ddc511e247b90e058", null ],
+    [ "_intr", "eforth__core_8cpp.html#a21626f172ce1b4f8877e828ae49944c2", null ],
+    [ "intr_service", "eforth__core_8cpp.html#a2c97726ffb62839e8c6fe399f6ed83f3", null ],
     [ "intr_add_timer", "eforth__core_8cpp.html#ae02901fc00b0a504db693e560852481b", null ],
     [ "intr_add_pci", "eforth__core_8cpp.html#a896b3ce36b3f0aea63258a3a613d5f56", null ],
     [ "intr_enable_pci", "eforth__core_8cpp.html#a18a475c1f5e15f4867d6974f8f0c1d43", null ],

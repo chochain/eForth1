@@ -19,8 +19,7 @@ Include dependency graph for eforth\+\_\+core.\+h\+:\nopagebreak
 \includegraphics[width=350pt]{eforth__core_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -108,7 +107,7 @@ logic and stack op macros (processor dependent)
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}{L\+OG}}(s)~\mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}-\/$>$print(F(s))
 \item 
-\#define \mbox{\hyperlink{eforth__core_8h_ad1115aa0a8df497fe7c107d2ac3ab66e}{L\+O\+G\+\_\+C}}(c)~\mbox{\hyperlink{eforth__core_8h_a40485405ab5338788520ef0380b01b70}{ef\+\_\+putchar}}(c)
+\#define \mbox{\hyperlink{eforth__core_8h_ad1115aa0a8df497fe7c107d2ac3ab66e}{L\+O\+G\+\_\+C}}(c)~\{ \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}-\/$>$print(c); if (c==\textquotesingle{}\textbackslash{}n\textquotesingle{}) \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}-\/$>$flush(); \}
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_a8089c2bc0d4770d10e62c7d74031d497}{L\+O\+G\+\_\+V}}(s,  n)~\{ \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}-\/$>$print(F(s)); \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}-\/$>$print((\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})n); \}
 \item 
@@ -147,12 +146,12 @@ typedef \mbox{\hyperlink{eforth__core_8h_a6d241ad21a823c90d4835380787db5d4}{S16}
 void \mbox{\hyperlink{eforth__core_8h_a0132f57c344961e9ff4037dd06b06948}{intr\+\_\+reset}} ()
 \begin{DoxyCompactList}\small\item\em reset interrupts \end{DoxyCompactList}\item 
 \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{eforth__core_8h_a93c9ba339402353230060b417633ccd4}{intr\+\_\+hits}} ()
-\begin{DoxyCompactList}\small\item\em return interrupt hit flags \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{eforth__core_8h_ae7417b9670e9fc6ddc511e247b90e058}{intr\+\_\+service}} (void($\ast$cb)(\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}))
 \item 
-void \mbox{\hyperlink{eforth__core_8h_ae02901fc00b0a504db693e560852481b}{intr\+\_\+add\+\_\+timer}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} hz10, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} xt)
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{eforth__core_8h_a2c97726ffb62839e8c6fe399f6ed83f3}{intr\+\_\+service}} ()
 \item 
-void \mbox{\hyperlink{eforth__core_8h_ab0b4b6096f24d31ce113f65adb72125c}{intr\+\_\+add\+\_\+pci}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} pin, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} xt)
+void \mbox{\hyperlink{eforth__core_8h_a940ef1ceaa397087cc42f0eb63a041a3}{intr\+\_\+add\+\_\+timer}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} hz10, \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} xt)
+\item 
+void \mbox{\hyperlink{eforth__core_8h_a5fa8e2bc9434c475082cfc60db195fce}{intr\+\_\+add\+\_\+pci}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} pin, \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} xt)
 \item 
 void \mbox{\hyperlink{eforth__core_8h_a8d82211db5e512fd289ddd16c3d608ae}{intr\+\_\+enable\+\_\+timer}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} f)
 \item 
@@ -164,18 +163,8 @@ void \mbox{\hyperlink{eforth__core_8h_a18a475c1f5e15f4867d6974f8f0c1d43}{intr\+\
 \item 
 void \mbox{\hyperlink{eforth__core_8h_aa4cce331b74c197758d0b9ada8d58002}{vm\+\_\+init}} (P\+G\+M\+\_\+P rom, \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata, void $\ast$io\+\_\+stream)
 \item 
-void \mbox{\hyperlink{eforth__core_8h_af37f991d68804c00ec61aec541d1908e}{vm\+\_\+isr}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} xt)
-\begin{DoxyCompactList}\small\item\em VM interrupt service routine. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{eforth__core_8h_a1235c887d8bdb522e79d94afa74162c5}{vm\+\_\+outer}} ()
 \begin{DoxyCompactList}\small\item\em Forth outer interpreter. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\end{Indent}
-\begin{Indent}\textbf{ e\+Forth IO Functions}\par
-\begin{DoxyCompactItemize}
-\item 
-char \mbox{\hyperlink{eforth__core_8h_ae7350dd92eb09ea9c2102562af1713a1}{ef\+\_\+getchar}} ()
-\item 
-void \mbox{\hyperlink{eforth__core_8h_a40485405ab5338788520ef0380b01b70}{ef\+\_\+putchar}} (char c)
-\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ e\+Forth Assembler Functions}\par
 \begin{DoxyCompactItemize}
@@ -357,7 +346,7 @@ Forth VM Opcodes (for Bytecode Assembler) \mbox{\Hypertarget{eforth__core_8h_a57
 \index{eforth\_core.h@{eforth\_core.h}!LOG\_C@{LOG\_C}}
 \index{LOG\_C@{LOG\_C}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{LOG\_C}{LOG\_C}}
-{\footnotesize\ttfamily \#define L\+O\+G\+\_\+C(\begin{DoxyParamCaption}\item[{}]{c }\end{DoxyParamCaption})~\mbox{\hyperlink{eforth__core_8h_a40485405ab5338788520ef0380b01b70}{ef\+\_\+putchar}}(c)}
+{\footnotesize\ttfamily \#define L\+O\+G\+\_\+C(\begin{DoxyParamCaption}\item[{}]{c }\end{DoxyParamCaption})~\{ \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}-\/$>$print(c); if (c==\textquotesingle{}\textbackslash{}n\textquotesingle{}) \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}-\/$>$flush(); \}}
 
 \mbox{\Hypertarget{eforth__core_8h_a8089c2bc0d4770d10e62c7d74031d497}\label{eforth__core_8h_a8089c2bc0d4770d10e62c7d74031d497}} 
 \index{eforth\_core.h@{eforth\_core.h}!LOG\_V@{LOG\_V}}
@@ -485,21 +474,15 @@ reset interrupts
 \doxysubsubsection{\texorpdfstring{intr\_hits()}{intr\_hits()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} intr\+\_\+hits (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-
-
-return interrupt hit flags 
-
-\begin{quote}
-fetch interrupt hit flags \end{quote}
-\mbox{\Hypertarget{eforth__core_8h_ae7417b9670e9fc6ddc511e247b90e058}\label{eforth__core_8h_ae7417b9670e9fc6ddc511e247b90e058}} 
+\mbox{\Hypertarget{eforth__core_8h_a2c97726ffb62839e8c6fe399f6ed83f3}\label{eforth__core_8h_a2c97726ffb62839e8c6fe399f6ed83f3}} 
 \index{eforth\_core.h@{eforth\_core.h}!intr\_service@{intr\_service}}
 \index{intr\_service@{intr\_service}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{intr\_service()}{intr\_service()}}
-{\footnotesize\ttfamily void intr\+\_\+service (\begin{DoxyParamCaption}\item[{void($\ast$)(\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}})}]{cb }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} intr\+\_\+service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \begin{quote}
 service interrupt routines \end{quote}
-\mbox{\Hypertarget{eforth__core_8h_ae02901fc00b0a504db693e560852481b}\label{eforth__core_8h_ae02901fc00b0a504db693e560852481b}} 
+\mbox{\Hypertarget{eforth__core_8h_a940ef1ceaa397087cc42f0eb63a041a3}\label{eforth__core_8h_a940ef1ceaa397087cc42f0eb63a041a3}} 
 \index{eforth\_core.h@{eforth\_core.h}!intr\_add\_timer@{intr\_add\_timer}}
 \index{intr\_add\_timer@{intr\_add\_timer}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{intr\_add\_timer()}{intr\_add\_timer()}}
@@ -507,7 +490,7 @@ service interrupt routines \end{quote}
 
 \begin{quote}
 add timer interrupt service routine \end{quote}
-\mbox{\Hypertarget{eforth__core_8h_ab0b4b6096f24d31ce113f65adb72125c}\label{eforth__core_8h_ab0b4b6096f24d31ce113f65adb72125c}} 
+\mbox{\Hypertarget{eforth__core_8h_a5fa8e2bc9434c475082cfc60db195fce}\label{eforth__core_8h_a5fa8e2bc9434c475082cfc60db195fce}} 
 \index{eforth\_core.h@{eforth\_core.h}!intr\_add\_pci@{intr\_add\_pci}}
 \index{intr\_add\_pci@{intr\_add\_pci}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{intr\_add\_pci()}{intr\_add\_pci()}}
@@ -549,18 +532,6 @@ enable/disable pin change interrupt \end{quote}
 {\em io\+\_\+stream} & pointer to Stream object of Arduino \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{eforth__core_8h_af37f991d68804c00ec61aec541d1908e}\label{eforth__core_8h_af37f991d68804c00ec61aec541d1908e}} 
-\index{eforth\_core.h@{eforth\_core.h}!vm\_isr@{vm\_isr}}
-\index{vm\_isr@{vm\_isr}!eforth\_core.h@{eforth\_core.h}}
-\doxysubsubsection{\texorpdfstring{vm\_isr()}{vm\_isr()}}
-{\footnotesize\ttfamily void vm\+\_\+isr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{xt }\end{DoxyParamCaption})}
-
-
-
-VM interrupt service routine. 
-
-\begin{quote}
-point to service function \end{quote}
 \mbox{\Hypertarget{eforth__core_8h_a1235c887d8bdb522e79d94afa74162c5}\label{eforth__core_8h_a1235c887d8bdb522e79d94afa74162c5}} 
 \index{eforth\_core.h@{eforth\_core.h}!vm\_outer@{vm\_outer}}
 \index{vm\_outer@{vm\_outer}!eforth\_core.h@{eforth\_core.h}}
@@ -571,22 +542,6 @@ point to service function \end{quote}
 
 Forth outer interpreter. 
 
-\mbox{\Hypertarget{eforth__core_8h_ae7350dd92eb09ea9c2102562af1713a1}\label{eforth__core_8h_ae7350dd92eb09ea9c2102562af1713a1}} 
-\index{eforth\_core.h@{eforth\_core.h}!ef\_getchar@{ef\_getchar}}
-\index{ef\_getchar@{ef\_getchar}!eforth\_core.h@{eforth\_core.h}}
-\doxysubsubsection{\texorpdfstring{ef\_getchar()}{ef\_getchar()}}
-{\footnotesize\ttfamily char ef\+\_\+getchar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-\begin{quote}
-console input with yield \end{quote}
-\mbox{\Hypertarget{eforth__core_8h_a40485405ab5338788520ef0380b01b70}\label{eforth__core_8h_a40485405ab5338788520ef0380b01b70}} 
-\index{eforth\_core.h@{eforth\_core.h}!ef\_putchar@{ef\_putchar}}
-\index{ef\_putchar@{ef\_putchar}!eforth\_core.h@{eforth\_core.h}}
-\doxysubsubsection{\texorpdfstring{ef\_putchar()}{ef\_putchar()}}
-{\footnotesize\ttfamily void ef\+\_\+putchar (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
-
-\begin{quote}
-output one char to console \end{quote}
 \mbox{\Hypertarget{eforth__core_8h_a94e10412bf5e1f89d12efb94e80979c8}\label{eforth__core_8h_a94e10412bf5e1f89d12efb94e80979c8}} 
 \index{eforth\_core.h@{eforth\_core.h}!ef\_assemble@{ef\_assemble}}
 \index{ef\_assemble@{ef\_assemble}!eforth\_core.h@{eforth\_core.h}}

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['s_260',['S',['../namespaceEfVM.html#a6f0e460d1cc377cdccf02ee56133c55d',1,'EfVM']]],
-  ['strq_261',['STRQ',['../namespaceEfAsm.html#af509e882ed40c423cd8140db6b7ff58b',1,'EfAsm']]]
+  ['r_253',['R',['../namespaceEfAsm.html#a85323f491b7b3ea3883bad0c91d9de17',1,'EfAsm::R()'],['../namespaceEfVM.html#a12f6a5b9f62c170ec8c78e2bffdacffd',1,'EfVM::R()']]]
 ];

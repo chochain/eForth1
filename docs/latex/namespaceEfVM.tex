@@ -15,16 +15,26 @@ void \mbox{\hyperlink{namespaceEfVM_a00e088a5d3bf8e5b61d5b8c798ebd9dc}{N\+E\+XT}
 \item 
 void \mbox{\hyperlink{namespaceEfVM_aaaa9f256ad4e73f2885577923fa23447}{\+\_\+init}} ()
 \item 
-void \mbox{\hyperlink{namespaceEfVM_ad93fbce2cb609c605aa8df2355c8e16b}{\+\_\+txsto}} ()
-\begin{DoxyCompactList}\small\item\em (c -- ) send a char to console \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{namespaceEfVM_a88be037f3c5ddd06681d8775769b5bec}{\+\_\+execu}} ()
-\begin{DoxyCompactList}\small\item\em (a -- ) take execution address from data stack and execute the token \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{namespaceEfVM_a04b479eed7bc0fa0b9c8600f47c04cba}{\+\_\+ummod}} ()
-\begin{DoxyCompactList}\small\item\em (udl udh u -- ur uq) unsigned divide of a double by single \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}{\+\_\+yield}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+yield to interrupt service \end{quote}
+\end{DoxyCompactList}\item 
 void \mbox{\hyperlink{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}{\+\_\+delay}} ()
-\begin{DoxyCompactList}\small\item\em (n -- ) delay n milli-\/second \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em (n -- ) delay n milli-\/second \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceEfVM_a2afadbdf0e72c8707edfebe583a5dfa6}{\+\_\+qrx}} ()
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+( -- c ) fetch a char from console \end{quote}
+\end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceEfVM_ad93fbce2cb609c605aa8df2355c8e16b}{\+\_\+txsto}} ()
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+(c -- ) send a char to console \end{quote}
+\end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceEfVM_a88be037f3c5ddd06681d8775769b5bec}{\+\_\+execu}} ()
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+(a -- ) take execution address from data stack and execute the token \end{quote}
+\end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceEfVM_a04b479eed7bc0fa0b9c8600f47c04cba}{\+\_\+ummod}} ()
+\begin{DoxyCompactList}\small\item\em (udl udh u -- ur uq) unsigned divide of a double by single \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -91,7 +101,61 @@ setup Forth user variables \end{quote}
 \item top of dictionary
 \end{DoxyItemize}
 
-display init prompt\mbox{\Hypertarget{namespaceEfVM_ad93fbce2cb609c605aa8df2355c8e16b}\label{namespaceEfVM_ad93fbce2cb609c605aa8df2355c8e16b}} 
+display init prompt\mbox{\Hypertarget{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}\label{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}} 
+\index{EfVM@{EfVM}!\_yield@{\_yield}}
+\index{\_yield@{\_yield}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{\_yield()}{\_yield()}}
+{\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+yield (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\begin{quote}
+yield to interrupt service \end{quote}
+
+
+
+\begin{DoxyItemize}
+\item check interrupts
+\item service interrupt?
+\item flag return address as I\+R\+ET
+\item skip op\+E\+N\+T\+ER
+\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}\label{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}} 
+\index{EfVM@{EfVM}!\_delay@{\_delay}}
+\index{\_delay@{\_delay}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{\_delay()}{\_delay()}}
+{\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+delay (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+(n -- ) delay n milli-\/second 
+
+\begin{quote}
+calculate break time \end{quote}
+
+
+\begin{quote}
+loop until break time reached \end{quote}
+
+
+\begin{quote}
+or, run hardware tasks while waiting \end{quote}
+\mbox{\Hypertarget{namespaceEfVM_a2afadbdf0e72c8707edfebe583a5dfa6}\label{namespaceEfVM_a2afadbdf0e72c8707edfebe583a5dfa6}} 
+\index{EfVM@{EfVM}!\_qrx@{\_qrx}}
+\index{\_qrx@{\_qrx}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{\_qrx()}{\_qrx()}}
+{\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+qrx (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\begin{quote}
+( -- c ) fetch a char from console \end{quote}
+
+
+\begin{quote}
+console IO functions \end{quote}
+\begin{quote}
+fetch from IO stream \end{quote}
+\mbox{\Hypertarget{namespaceEfVM_ad93fbce2cb609c605aa8df2355c8e16b}\label{namespaceEfVM_ad93fbce2cb609c605aa8df2355c8e16b}} 
 \index{EfVM@{EfVM}!\_txsto@{\_txsto}}
 \index{\_txsto@{\_txsto}!EfVM@{EfVM}}
 \doxysubsubsection{\texorpdfstring{\_txsto()}{\_txsto()}}
@@ -99,7 +163,9 @@ display init prompt\mbox{\Hypertarget{namespaceEfVM_ad93fbce2cb609c605aa8df2355c
 
 
 
-(c -- ) send a char to console 
+\begin{quote}
+(c -- ) send a char to console \end{quote}
+
 
 \mbox{\Hypertarget{namespaceEfVM_a88be037f3c5ddd06681d8775769b5bec}\label{namespaceEfVM_a88be037f3c5ddd06681d8775769b5bec}} 
 \index{EfVM@{EfVM}!\_execu@{\_execu}}
@@ -109,7 +175,9 @@ display init prompt\mbox{\Hypertarget{namespaceEfVM_ad93fbce2cb609c605aa8df2355c
 
 
 
-(a -- ) take execution address from data stack and execute the token 
+\begin{quote}
+(a -- ) take execution address from data stack and execute the token \end{quote}
+
 
 \begin{quote}
 fetch program counter \end{quote}
@@ -133,35 +201,6 @@ remainder \end{quote}
 
 \begin{quote}
 quotient \end{quote}
-\mbox{\Hypertarget{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}\label{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}} 
-\index{EfVM@{EfVM}!\_yield@{\_yield}}
-\index{\_yield@{\_yield}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{\_yield()}{\_yield()}}
-{\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+yield (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-\begin{DoxyItemize}
-\item give more cycles to VM
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}\label{namespaceEfVM_a56321acb1c8cff4151283a2ca202d9f3}} 
-\index{EfVM@{EfVM}!\_delay@{\_delay}}
-\index{\_delay@{\_delay}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{\_delay()}{\_delay()}}
-{\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+delay (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-(n -- ) delay n milli-\/second 
-
-\begin{quote}
-calculate break time \end{quote}
-
-
-\begin{quote}
-loop until break time reached \end{quote}
-
-
-\begin{quote}
-or, run hardware tasks while waiting \end{quote}
 
 
 \doxysubsection{Variable Documentation}
@@ -171,6 +210,16 @@ or, run hardware tasks while waiting \end{quote}
 \doxysubsubsection{\texorpdfstring{io}{io}}
 {\footnotesize\ttfamily Stream$\ast$ Ef\+V\+M\+::io\hspace{0.3cm}{\ttfamily [static]}}
 
+\mbox{\Hypertarget{namespaceEfVM_ad6bf1128d9ffa5007021ecabed123c74}\label{namespaceEfVM_ad6bf1128d9ffa5007021ecabed123c74}} 
+\index{EfVM@{EfVM}!IR@{IR}}
+\index{IR@{IR}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{IR}{IR}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+V\+M\+::\+IR}
+
+
+
+interrupt service routine 
+
 \mbox{\Hypertarget{namespaceEfVM_a4444ce01dd126290156b6339aedb281b}\label{namespaceEfVM_a4444ce01dd126290156b6339aedb281b}} 
 \index{EfVM@{EfVM}!PC@{PC}}
 \index{PC@{PC}!EfVM@{EfVM}}
@@ -179,7 +228,7 @@ or, run hardware tasks while waiting \end{quote}
 
 
 
-PC (program counter, IU is 16-\/bit) 
+program counter, IU is 16-\/bit 
 
 \mbox{\Hypertarget{namespaceEfVM_a34e9492841c1a98e29286c41dcdac10b}\label{namespaceEfVM_a34e9492841c1a98e29286c41dcdac10b}} 
 \index{EfVM@{EfVM}!IP@{IP}}
@@ -189,7 +238,7 @@ PC (program counter, IU is 16-\/bit)
 
 
 
-IP (instruction pointer, IU is 16-\/bit) 
+instruction pointer, IU is 16-\/bit, opcode is 8-\/bit 
 
 \mbox{\Hypertarget{namespaceEfVM_a12f6a5b9f62c170ec8c78e2bffdacffd}\label{namespaceEfVM_a12f6a5b9f62c170ec8c78e2bffdacffd}} 
 \index{EfVM@{EfVM}!R@{R}}
@@ -210,12 +259,6 @@ return stack index (0-\/255)
 
 
 data stack index (0-\/255) 
-
-\mbox{\Hypertarget{namespaceEfVM_a0ee21738c58a7bf5a2449cde737c077b}\label{namespaceEfVM_a0ee21738c58a7bf5a2449cde737c077b}} 
-\index{EfVM@{EfVM}!ISR@{ISR}}
-\index{ISR@{ISR}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{ISR}{ISR}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} Ef\+V\+M\+::\+I\+SR}
 
 \mbox{\Hypertarget{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}\label{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}} 
 \index{EfVM@{EfVM}!top@{top}}

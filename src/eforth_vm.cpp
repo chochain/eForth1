@@ -32,11 +32,11 @@ static Stream *io;
 ///
 ///@name Control
 ///@{
-IU  PC;                           ///< PC (program counter, IU is 16-bit)
-IU  IP;                           ///< IP (instruction pointer, IU is 16-bit)
+IU  IR;                           ///< interrupt service routine
+IU  PC;                           ///< program counter, IU is 16-bit
+IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
 U8  R;                            ///< return stack index (0-255)
 U8  S;                            ///< data stack index (0-255)
-U8  ISR;
 DU  top;                          ///< ALU (i.e. cached top of stack value)
 ///@}
 ///
@@ -46,8 +46,9 @@ PGM_P cRom;                       ///< ROM, Forth word stored in Arduino Flash M
 U8    *cData;                     ///< RAM, memory block for user define dictionary
 DU    *cStack;                    ///< pointer to stack/rack memory block
 ///@}
-#define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0xffff) */
+#define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
 #define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
+#define IRET_FLAG      0x8000     /**< interrupt return flag           */
 #define BOOL(f)        ((f) ? TRUE : FALSE)
 ///
 /// byte (8-bit) fetch from either RAM or ROM depends on filtered range
@@ -68,6 +69,7 @@ U16  GET(U16 d)        {
 #define SS(s)          (cStack[s])
 #define RS(r)          (cStack[RS_TOP - (r)])
 #define RS_TOP         (FORTH_STACK_SZ>>1)
+#define S2D(h, l)      (((S32)(h)<<16) | ((l)&0xffff))
 ///
 /// push a value onto stack top
 ///
@@ -90,45 +92,48 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-void _trc_on()  { tCNT++;               NEXT(); }
-void _trc_off() { tCNT -= tCNT ? 1 : 0; NEXT(); }
+void _trc_on()  { tCNT++;           NEXT(); }
+void _trc_off() { if (tCNT) --tCNT; NEXT(); }
 
-#define TRACE(s, v)   if (tCNT) { LOG_H(s, v); }
-#define TRACE_COLON() if (tCNT) {              \
-    LOG("\n");                                 \
-    for (int i=0; i<tTAB; i++) LOG("  ");      \
-    tTAB++;                                    \
-    LOG(":");                                  \
-}
-#define TRACE_EXIT()  if (tCNT) {              \
-    LOG(" ;");                                 \
-    tTAB--;                                    \
-}
-///
-/// display the 'word' to be executed
-///
-void TRACE_WORD()
+#define opDOLIT 5
+#define opENTER 7
+#define opEXIT  8
+void TRACE()
 {
-    if (!tCNT) return;
-    if (!PC || BGET(PC)==opEXIT) return;
-    IU pc = PC-1;
-    for (; (BGET(pc) & 0x7f)>0x20; pc--);  // retract pointer to word name (ASCII range: 0x21~0x7f)
-
+    if (!tCNT || !PC) return;             // skip if not tracing or end of program
+    U8 op = BGET(PC);
+    /*
+    // dump stack
     for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
         LOG_H(s==s0 ? " " : "_", SS(s+1));
     }
     LOG_H(S==0 ? " " : "_", top);
     LOG("_");
+	/// display PC:IP[opcode]
+    LOG_H("", PC); LOG_H(":", IP-2);      // mem pointer, indirect thread
+    LOG_H("[", op); LOG("]");             // opcode to be executed
+    /// display word name
+    */
+    IU pc = PC-1;                         // reel back one-byte
+    for (; (BGET(pc) & 0x7f)>0x20; pc--); // retract pointer to word name (ASCII range: 0x21~0x7f)
     int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
     for (int i=0; i<len; i++, pc++) {
         LOG_C((char)BGET(pc));
     }
+    /// special opcode handlers for DOLIT, ENTER, EXIT
+    switch (op) {
+    case opDOLIT: LOG_H(" $", GET(IP)); break;
+    case opENTER:
+    	LOG("\n");
+    	for (int i=0; i<tTAB; i++) LOG("  ");
+    	tTAB++;
+    	LOG(":"); break;
+    case opEXIT:  LOG(" ;"); --tTAB; break;
+    }
+    LOG(" ");
 }
-#else  // !EXE_TRACE
-#define TRACE(s, v)
-#define TRACE_COLON()
-#define TRACE_EXIT()
-#define TRACE_WORD()
+#else
+#define TRACE()                       /* skip */
 #endif // EXE_TRACE
 ///@}
 //
@@ -140,7 +145,7 @@ void TRACE_WORD()
 void _init() {
     intr_reset();                     /// * reset interrupt handlers
 
-    ISR = R = S = PC = IP = top = 0;  ///> setup control variables
+    R = S = PC = IP = top = 0;  ///> setup control variables
 #if EXE_TRACE
     tCNT = 1; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
@@ -163,8 +168,46 @@ void _init() {
     ///
     LOG("\n\n"); LOG(APP_NAME); LOG(" "); LOG(MAJOR_VERSION);
 }
+
+///
+///> serve interrupt routines
+///
+#define YIELD_PERIOD    10
+void _yield()                ///> yield to interrupt service
+{
+	if (IR) return;
+
+	IR = intr_service();            /// * check interrupts
+	if (IR) {                       /// * service interrupt?
+		RPUSH(IP | IRET_FLAG);      /// * flag return address as IRET
+		IP = IR + 1;                /// * skip opENTER
+	}
+}
+void _delay()                       /// (n -- ) delay n milli-second
+{
+    U32 t  = millis() + top;        ///> calculate break time
+    POP();
+    while (millis()<t) {            ///> loop until break time reached
+        _yield();                   ///> or, run hardware tasks while waiting
+    }
+    NEXT();
+}
+///
+///> console IO functions
+///
+void _qrx()                  ///> ( -- c ) fetch a char from console
+{
+#if ARDUINO
+	int rst = io->read();           ///> fetch from IO stream
+	if (rst > 0) PUSH((DU)rst);
+	PUSH(BOOL(rst >= 0));
+#else
+	PUSH((DU)getchar());            /// * Note: blocking, i.e. no interrupt support
+	PUSH(TRUE);
+#endif
+}
     
-void _txsto()               /// (c -- ) send a char to console
+void _txsto()                ///> (c -- ) send a char to console
 {
 #if !EXE_TRACE
     LOG_C((char)top);
@@ -179,10 +222,9 @@ void _txsto()               /// (c -- ) send a char to console
     }
 #endif // !EXE_TRACE
     POP();
-    NEXT();
 }
 ///@}
-void _execu()               /// (a -- ) take execution address from data stack and execute the token
+void _execu()               ///> (a -- ) take execution address from data stack and execute the token
 {
     PC = (IU)top;           ///> fetch program counter
     POP();
@@ -194,35 +236,6 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
     POP();
     SS(S) = (DU)(m % d);    ///> remainder
     top   = (DU)(m / d);    ///> quotient
-    NEXT();
-}
-///
-///> serve interrupt routines
-///
-#define YIELD_PERIOD    10
-void _yield()
-{
-	static U8 n = 0;
-	if (ISR || ++n < 10) return; /// * give more cycles to VM
-	n = 0;
-	U16 hx = intr_hits();
-	if (!hx) return;
-
-	U16 _IP = IP;
-	U16 _PC = PC;
-	ISR = 1;
-	intr_service(vm_isr);
-	ISR = 0;
-	IP = _IP;
-	PC = _PC;
-}
-void _delay()                   /// (n -- ) delay n milli-second
-{
-    U32 t  = millis() + top;    ///> calculate break time
-    POP();
-    while (millis()<t) {        ///> loop until break time reached
-        _yield();               ///> or, run hardware tasks while waiting
-    }
     NEXT();
 }
 ///@}
@@ -250,13 +263,6 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     
     _init();                    /// * resetting user variables
 }
-
-void vm_isr(U16 xt) {
-	LOG_H(" ", xt);
-	RPUSH(0);
-	PC = xt;                    ///> point to service function
-	vm_outer();
-}
 ///
 /// eForth virtual machine outer interpreter (single-step) execution unit
 /// @return
@@ -273,9 +279,8 @@ int vm_outer() {
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
-    _yield();
     do {
-        TRACE_WORD();                   /// * tracing stack and word name
+        TRACE();                        /// * tracing stack and word name
 
         U8 op = BGET(PC);               ///> fetch next opcode
         goto *vt[op];                   ///> jump to computed label
@@ -287,10 +292,8 @@ int vm_outer() {
         /// 
         /// @name Console IO
         /// @{
-        _X(QRX,
-            PUSH((DU)ef_getchar());     ///> yield to user task until console input available
-            if (top) PUSH(TRUE));
-        _Y(TXSTO, _txsto);
+        _X(QRX,   _qrx());              ///> fetch char from input console
+        _X(TXSTO, _txsto());            ///> send char to output console
         /// @}
         /// @name Built-in ops
         /// @{
@@ -298,7 +301,6 @@ int vm_outer() {
             ++PC;                       ///> skip opDOCON opcode
             PUSH(GET(PC)));             ///> push cell value onto stack
         _X(DOLIT,
-            TRACE(" ", GET(IP));        ///> fetch literal from data
             PUSH(GET(IP));              ///> push onto data stack
             IP += CELLSZ);              ///> skip to next instruction
         _X(DOVAR, ++PC; PUSH(PC));
@@ -306,13 +308,14 @@ int vm_outer() {
         /// @name Branching ops
         /// @{
         _X(ENTER,
-            _yield();
-            TRACE_COLON();
             RPUSH(IP);                  ///> keep return address
             IP = ++PC);                 ///> skip opcode opENTER, advance to next instruction
         _X(EXIT,
-            TRACE_EXIT();
-            IP = RPOP());               ///> pop return address
+        	IP = RPOP();                ///> pop return address
+			if (IP & IRET_FLAG) {       /// * IRETURN?
+				IR = 0;                 /// * interrupt disabled
+				IP &= ~IRET_FLAG;
+			});
         _Y(EXECU, _execu);
         _X(DONEXT,
             if (RS(R) > 0) {            ///> check if loop counter > 0
@@ -322,7 +325,6 @@ int vm_outer() {
             else {                      ///> or,
                 IP += CELLSZ;           ///>> skip to next instruction
                 RPOP();                 ///>> pop off return stack
-                _yield();               ///> give system task some cycles
             });
         _X(QBRAN,
             if (top) IP += CELLSZ;      ///> next instruction, or
@@ -336,7 +338,7 @@ int vm_outer() {
             SET(top, SS(S--));
             POP());
         _X(PSTOR,
-            SET(top, GET(top)+SS(S--));
+            SET(top, GET(top) + SS(S--));
             POP());
         _X(AT,    top = (DU)GET(top));
         _X(CSTOR,
@@ -407,22 +409,21 @@ int vm_outer() {
         /// @name Double precision ops
         /// @{
         _X(DNEG,                 /// (d -- -d) two's complemente of top double
-            S32 d = ((S32)top<<16) | (SS(S) & 0xffff);
+            S32 d = S2D(top, SS(S));
             DTOP(-d));
         _X(DADD,                 /// (d1 d2 -- d1+d2) add two double precision numbers
-            S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
-            S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
+            S32 d0 = S2D(top, SS(S));
+            S32 d1 = S2D(SS(S-1), SS(S-2));
             S -= 2; DTOP(d1 + d0));
         _X(DSUB,                 /// (d1 d2 -- d1-d2) subtract d2 from d1
-            S32 d0 = ((S32)top<<16)     | (SS(S)&0xffff);
-            S32 d1 = ((S32)SS(S-1)<<16) | (SS(S-2)&0xffff);
+            S32 d0 = S2D(top, SS(S));
+            S32 d1 = S2D(SS(S-1), SS(S-2));
             S -= 2; DTOP(d1 - d0));
         /// @}
         /// @name Arduino specific ops
         /// @{
         _Y(DELAY, _delay);
-        _X(CLK,                  /// fetch system clock in double precision
-            S += 2; DTOP(millis()));
+        _X(CLK,   S += 2; DTOP(millis()));
         _X(PIN,
             pinMode(top, SS(S) ? OUTPUT : INPUT);
             POP(); POP());
@@ -440,8 +441,9 @@ int vm_outer() {
         _X(PCIE, intr_enable_pci(top);       POP());
 
     vm_next:
-        PC = (ISR && IP==0) ? 0 : GET(IP);  ///> fetch next program counter (branch)
-        IP += sizeof(IU);                   ///> advance to next instruction
+	    _yield();
+		PC = GET(IP);                       /// * fetch next program counter (indirect threading)
+		IP += sizeof(IU); 	                /// * advance to next instruction
     } while (PC);
 
     return (int)PC;

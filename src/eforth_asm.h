@@ -1,8 +1,8 @@
 /**
- * @file eforth_asm.h
- * @brief eForth assember module header
+ * @file
+ * @brief eForth assembler module header
  *
- * Usage of VA_ARGS veriable argument for assembler parameter counting
+ * Usage of VA_ARGS variable argument for assembler parameter counting
  */
 #ifndef __EFORTH_ASM_H
 #define __EFORTH_ASM_H
@@ -75,13 +75,13 @@ typedef const char                FCHAR;
 ///@}
 ///@name Memory Access and Stack Op
 ///@{
-#define BSET(d, c)  (aByte[d]=(U8)(c))
-#define BGET(d)     (aByte[d])
+#define BSET(d, c)  (Byte[d]=(U8)(c))
+#define BGET(d)     (Byte[d])
 #define SET(d, v)   do { U16 a=(d); U16 x=(v); BSET(a, (x)&0xff); BSET((a)+1, (x)>>8); } while (0)
 #define GET(d)      ({ U16 a=(d); (U16)BGET(a) + ((U16)BGET((a)+1)<<8); })
-#define STORE(v)    do { SET(aPC, (v)); aPC+=CELLSZ; } while(0)
-#define RPUSH(a)    SET(FORTH_ROM_SZ - (++aR)*CELLSZ, (a))
-#define RPOP()      ((U16)GET(FORTH_ROM_SZ - (aR ? aR-- : aR)*CELLSZ))
+#define STORE(v)    do { SET(PC, (v)); PC+=CELLSZ; } while(0)
+#define RPUSH(a)    SET(FORTH_ROM_SZ - (++R)*CELLSZ, (a))
+#define RPOP()      ((U16)GET(FORTH_ROM_SZ - (R ? R-- : R)*CELLSZ))
 #define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
 #define V32(a, i)   VL(a,i),VH(a,i)

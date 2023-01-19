@@ -91,14 +91,14 @@ $(document).ready(function(){initNavTree('eforth__asm_8h.html',''); initResizabl
 </div><!--header-->
 <div class="contents">
 
-<p>eForth assember module header  
+<p>eForth assembler module header  
 <a href="#details">More...</a></p>
 <div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="eforth__asm_8h__dep__incl.png" border="0" usemap="#src_2eforth__asm_8hdep" alt=""/></div>
 <map name="src_2eforth__asm_8hdep" id="src_2eforth__asm_8hdep">
-<area shape="rect" title="eForth assember module header" alt="" coords="13,5,144,32"/>
+<area shape="rect" title="eForth assembler module header" alt="" coords="13,5,144,32"/>
 <area shape="rect" href="eforth__asm_8cpp.html" title="eForth Assembler module" alt="" coords="5,80,152,107"/>
 </map>
 </div>
@@ -164,19 +164,19 @@ Macros</h2></td></tr>
 <tr class="memitem:a02ad5dad02c47122ee9dbfec101b5175"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a02ad5dad02c47122ee9dbfec101b5175">_ABORTQ</a>(seq)&#160;&#160;&#160;_abortq(F(seq))</td></tr>
 <tr class="separator:a02ad5dad02c47122ee9dbfec101b5175"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Memory Access and Stack Op</div></td></tr>
-<tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(d,  c)&#160;&#160;&#160;(aByte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
+<tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(d,  c)&#160;&#160;&#160;(Byte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
 <tr class="separator:a77270f01b515a878ec2853760cb20dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77d23ddbb106c14475b4119b06a046a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(d)&#160;&#160;&#160;(aByte[d])</td></tr>
+<tr class="memitem:a77d23ddbb106c14475b4119b06a046a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(d)&#160;&#160;&#160;(Byte[d])</td></tr>
 <tr class="separator:a77d23ddbb106c14475b4119b06a046a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(d,  v)&#160;&#160;&#160;do { <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(d); <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> x=(v); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(a, (x)&amp;0xff); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>((a)+1, (x)&gt;&gt;8); } while (0)</td></tr>
 <tr class="separator:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c15257f5a5277bb64afcbe594bea146"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(d)&#160;&#160;&#160;({ <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(d); (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(a) + ((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>((a)+1)&lt;&lt;8); })</td></tr>
 <tr class="separator:a8c15257f5a5277bb64afcbe594bea146"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad15c88ea1b3da2e52aac4a4d3810a045"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ad15c88ea1b3da2e52aac4a4d3810a045">STORE</a>(v)&#160;&#160;&#160;do { <a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(aPC, (v)); aPC+=<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>; } while(0)</td></tr>
+<tr class="memitem:ad15c88ea1b3da2e52aac4a4d3810a045"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ad15c88ea1b3da2e52aac4a4d3810a045">STORE</a>(v)&#160;&#160;&#160;do { <a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(PC, (v)); PC+=<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>; } while(0)</td></tr>
 <tr class="separator:ad15c88ea1b3da2e52aac4a4d3810a045"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82363ba7a7cd1a9826fa73d03805e641"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a82363ba7a7cd1a9826fa73d03805e641">RPUSH</a>(a)&#160;&#160;&#160;<a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(<a class="el" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">FORTH_ROM_SZ</a> - (++aR)*<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>, (a))</td></tr>
+<tr class="memitem:a82363ba7a7cd1a9826fa73d03805e641"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a82363ba7a7cd1a9826fa73d03805e641">RPUSH</a>(a)&#160;&#160;&#160;<a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(<a class="el" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">FORTH_ROM_SZ</a> - (++R)*<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>, (a))</td></tr>
 <tr class="separator:a82363ba7a7cd1a9826fa73d03805e641"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55b5173e6face979deb7372dcbb643df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a55b5173e6face979deb7372dcbb643df">RPOP</a>()&#160;&#160;&#160;((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(<a class="el" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">FORTH_ROM_SZ</a> - (aR ? aR-- : aR)*<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>))</td></tr>
+<tr class="memitem:a55b5173e6face979deb7372dcbb643df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a55b5173e6face979deb7372dcbb643df">RPOP</a>()&#160;&#160;&#160;((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(<a class="el" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">FORTH_ROM_SZ</a> - (R ? R-- : R)*<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>))</td></tr>
 <tr class="separator:a55b5173e6face979deb7372dcbb643df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b1701d44f7b15525bc7b3c0a8f637e1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a3b1701d44f7b15525bc7b3c0a8f637e1">VL</a>(a,  i)&#160;&#160;&#160;(((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)(a)+<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>*(i))&amp;0xff)</td></tr>
 <tr class="separator:a3b1701d44f7b15525bc7b3c0a8f637e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,8 +191,8 @@ Variables</h2></td></tr>
 <tr class="separator:a1866848c561f07858c76dec0c2b76a78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>eForth assember module header </p>
-<p>Usage of VA_ARGS veriable argument for assembler parameter counting </p>
+<div class="textblock"><p>eForth assembler module header </p>
+<p>Usage of VA_ARGS variable argument for assembler parameter counting </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a3254550e1d6d185f6b3e69b2d6468343"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3254550e1d6d185f6b3e69b2d6468343">&#9670;&nbsp;</a></span>DEBUG</h2>
@@ -1082,7 +1082,7 @@ Variables</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(aByte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td>
+          <td></td><td>&#160;&#160;&#160;(Byte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1100,7 +1100,7 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">d</td><td>)</td>
-          <td>&#160;&#160;&#160;(aByte[d])</td>
+          <td>&#160;&#160;&#160;(Byte[d])</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1164,7 +1164,7 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">v</td><td>)</td>
-          <td>&#160;&#160;&#160;do { <a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(aPC, (v)); aPC+=<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>; } while(0)</td>
+          <td>&#160;&#160;&#160;do { <a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(PC, (v)); PC+=<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>; } while(0)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1182,7 +1182,7 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(<a class="el" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">FORTH_ROM_SZ</a> - (++aR)*<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>, (a))</td>
+          <td>&#160;&#160;&#160;<a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(<a class="el" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">FORTH_ROM_SZ</a> - (++R)*<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>, (a))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1199,7 +1199,7 @@ Variables</h2></td></tr>
           <td class="memname">#define RPOP</td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(<a class="el" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">FORTH_ROM_SZ</a> - (aR ? aR-- : aR)*<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>))</td>
+          <td>&#160;&#160;&#160;((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)<a class="el" href="eforth__asm_8h.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(<a class="el" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">FORTH_ROM_SZ</a> - (R ? R-- : R)*<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>))</td>
         </tr>
       </table>
 </div><div class="memdoc">

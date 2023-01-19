@@ -41,8 +41,8 @@ var eforth__asm_8cpp =
     [ "ABORTQ", "eforth__asm_8cpp.html#a33807b48e38e6eb26c58ce5f4d41d451", null ],
     [ "TOR", "eforth__asm_8cpp.html#ab44525c5e6436fa71223dfb207741699", null ],
     [ "NOP", "eforth__asm_8cpp.html#aa3dd7a4f331c954244daaddf0177f059", null ],
-    [ "aByte", "eforth__asm_8cpp.html#a464c30af554f0fb0a10adcb4d19ca6af", null ],
-    [ "aR", "eforth__asm_8cpp.html#a68c2fe8548e9b4880b94b17c814e3695", null ],
-    [ "aPC", "eforth__asm_8cpp.html#a05b00b24035523f019548b9dfd8cf1f3", null ],
-    [ "aLink", "eforth__asm_8cpp.html#aa32617aa27df0804f994a4b9f6a2d0ec", null ]
+    [ "Byte", "eforth__asm_8cpp.html#a1b5e7cec0310945601603be02b8f8834", null ],
+    [ "R", "eforth__asm_8cpp.html#a85323f491b7b3ea3883bad0c91d9de17", null ],
+    [ "PC", "eforth__asm_8cpp.html#a77406fd9edef6925ff2bafc8746085eb", null ],
+    [ "Link", "eforth__asm_8cpp.html#a5bc71a8752683bc40a6f206bf3585d0f", null ]
 ];

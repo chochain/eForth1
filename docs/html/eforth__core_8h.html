@@ -196,7 +196,7 @@ Macros</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Arduino Support Macros</div></td></tr>
 <tr class="memitem:a570713ca4a493fc4d2130a405f3b87ea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a570713ca4a493fc4d2130a405f3b87ea">LOG</a>(s)&#160;&#160;&#160;<a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>-&gt;print(F(s))</td></tr>
 <tr class="separator:a570713ca4a493fc4d2130a405f3b87ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1115aa0a8df497fe7c107d2ac3ab66e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ad1115aa0a8df497fe7c107d2ac3ab66e">LOG_C</a>(c)&#160;&#160;&#160;<a class="el" href="eforth__core_8h.html#a40485405ab5338788520ef0380b01b70">ef_putchar</a>(c)</td></tr>
+<tr class="memitem:ad1115aa0a8df497fe7c107d2ac3ab66e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ad1115aa0a8df497fe7c107d2ac3ab66e">LOG_C</a>(c)&#160;&#160;&#160;{ <a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>-&gt;print(c); if (c=='\n') <a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>-&gt;flush(); }</td></tr>
 <tr class="separator:ad1115aa0a8df497fe7c107d2ac3ab66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8089c2bc0d4770d10e62c7d74031d497"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a8089c2bc0d4770d10e62c7d74031d497">LOG_V</a>(s,  n)&#160;&#160;&#160;{ <a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>-&gt;print(F(s)); <a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>-&gt;print((<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>)n); }</td></tr>
 <tr class="separator:a8089c2bc0d4770d10e62c7d74031d497"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -242,14 +242,13 @@ Functions</h2></td></tr>
 <tr class="memdesc:a0132f57c344961e9ff4037dd06b06948"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset interrupts  <a href="eforth__core_8h.html#a0132f57c344961e9ff4037dd06b06948">More...</a><br /></td></tr>
 <tr class="separator:a0132f57c344961e9ff4037dd06b06948"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93c9ba339402353230060b417633ccd4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a93c9ba339402353230060b417633ccd4">intr_hits</a> ()</td></tr>
-<tr class="memdesc:a93c9ba339402353230060b417633ccd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">return interrupt hit flags  <a href="eforth__core_8h.html#a93c9ba339402353230060b417633ccd4">More...</a><br /></td></tr>
 <tr class="separator:a93c9ba339402353230060b417633ccd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7417b9670e9fc6ddc511e247b90e058"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ae7417b9670e9fc6ddc511e247b90e058">intr_service</a> (void(*cb)(<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>))</td></tr>
-<tr class="separator:ae7417b9670e9fc6ddc511e247b90e058"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae02901fc00b0a504db693e560852481b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ae02901fc00b0a504db693e560852481b">intr_add_timer</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> hz10, <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> xt)</td></tr>
-<tr class="separator:ae02901fc00b0a504db693e560852481b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0b4b6096f24d31ce113f65adb72125c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ab0b4b6096f24d31ce113f65adb72125c">intr_add_pci</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> pin, <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> xt)</td></tr>
-<tr class="separator:ab0b4b6096f24d31ce113f65adb72125c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c97726ffb62839e8c6fe399f6ed83f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a2c97726ffb62839e8c6fe399f6ed83f3">intr_service</a> ()</td></tr>
+<tr class="separator:a2c97726ffb62839e8c6fe399f6ed83f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a940ef1ceaa397087cc42f0eb63a041a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a940ef1ceaa397087cc42f0eb63a041a3">intr_add_timer</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> hz10, <a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt)</td></tr>
+<tr class="separator:a940ef1ceaa397087cc42f0eb63a041a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fa8e2bc9434c475082cfc60db195fce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a5fa8e2bc9434c475082cfc60db195fce">intr_add_pci</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> pin, <a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt)</td></tr>
+<tr class="separator:a5fa8e2bc9434c475082cfc60db195fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d82211db5e512fd289ddd16c3d608ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a8d82211db5e512fd289ddd16c3d608ae">intr_enable_timer</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f)</td></tr>
 <tr class="separator:a8d82211db5e512fd289ddd16c3d608ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18a475c1f5e15f4867d6974f8f0c1d43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a18a475c1f5e15f4867d6974f8f0c1d43">intr_enable_pci</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f)</td></tr>
@@ -257,17 +256,9 @@ Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">eForth Virtual Machine Functions</div></td></tr>
 <tr class="memitem:aa4cce331b74c197758d0b9ada8d58002"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002">vm_init</a> (PGM_P rom, <a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata, void *io_stream)</td></tr>
 <tr class="separator:aa4cce331b74c197758d0b9ada8d58002"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af37f991d68804c00ec61aec541d1908e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#af37f991d68804c00ec61aec541d1908e">vm_isr</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> xt)</td></tr>
-<tr class="memdesc:af37f991d68804c00ec61aec541d1908e"><td class="mdescLeft">&#160;</td><td class="mdescRight">VM interrupt service routine.  <a href="eforth__core_8h.html#af37f991d68804c00ec61aec541d1908e">More...</a><br /></td></tr>
-<tr class="separator:af37f991d68804c00ec61aec541d1908e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1235c887d8bdb522e79d94afa74162c5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5">vm_outer</a> ()</td></tr>
 <tr class="memdesc:a1235c887d8bdb522e79d94afa74162c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forth outer interpreter.  <a href="eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5">More...</a><br /></td></tr>
 <tr class="separator:a1235c887d8bdb522e79d94afa74162c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">eForth IO Functions</div></td></tr>
-<tr class="memitem:ae7350dd92eb09ea9c2102562af1713a1"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ae7350dd92eb09ea9c2102562af1713a1">ef_getchar</a> ()</td></tr>
-<tr class="separator:ae7350dd92eb09ea9c2102562af1713a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40485405ab5338788520ef0380b01b70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a40485405ab5338788520ef0380b01b70">ef_putchar</a> (char c)</td></tr>
-<tr class="separator:a40485405ab5338788520ef0380b01b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">eForth Assembler Functions</div></td></tr>
 <tr class="memitem:a94e10412bf5e1f89d12efb94e80979c8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8">ef_assemble</a> (<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata)</td></tr>
 <tr class="separator:a94e10412bf5e1f89d12efb94e80979c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -661,7 +652,7 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">c</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="eforth__core_8h.html#a40485405ab5338788520ef0380b01b70">ef_putchar</a>(c)</td>
+          <td>&#160;&#160;&#160;{ <a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>-&gt;print(c); if (c=='\n') <a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>-&gt;flush(); }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -922,24 +913,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>return interrupt hit flags </p>
-<blockquote class="doxtable">
-<p>fetch interrupt hit flags </p>
-</blockquote>
-
 </div>
 </div>
-<a id="ae7417b9670e9fc6ddc511e247b90e058"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7417b9670e9fc6ddc511e247b90e058">&#9670;&nbsp;</a></span>intr_service()</h2>
+<a id="a2c97726ffb62839e8c6fe399f6ed83f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c97726ffb62839e8c6fe399f6ed83f3">&#9670;&nbsp;</a></span>intr_service()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void intr_service </td>
+          <td class="memname"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> intr_service </td>
           <td>(</td>
-          <td class="paramtype">void(*)(<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)&#160;</td>
-          <td class="paramname"><em>cb</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -950,8 +935,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae02901fc00b0a504db693e560852481b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae02901fc00b0a504db693e560852481b">&#9670;&nbsp;</a></span>intr_add_timer()</h2>
+<a id="a940ef1ceaa397087cc42f0eb63a041a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a940ef1ceaa397087cc42f0eb63a041a3">&#9670;&nbsp;</a></span>intr_add_timer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -981,8 +966,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab0b4b6096f24d31ce113f65adb72125c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0b4b6096f24d31ce113f65adb72125c">&#9670;&nbsp;</a></span>intr_add_pci()</h2>
+<a id="a5fa8e2bc9434c475082cfc60db195fce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fa8e2bc9434c475082cfc60db195fce">&#9670;&nbsp;</a></span>intr_add_pci()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1099,29 +1084,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af37f991d68804c00ec61aec541d1908e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af37f991d68804c00ec61aec541d1908e">&#9670;&nbsp;</a></span>vm_isr()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void vm_isr </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td>
-          <td class="paramname"><em>xt</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>VM interrupt service routine. </p>
-<blockquote class="doxtable">
-<p>point to service function </p>
-</blockquote>
-
-</div>
-</div>
 <a id="a1235c887d8bdb522e79d94afa74162c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1235c887d8bdb522e79d94afa74162c5">&#9670;&nbsp;</a></span>vm_outer()</h2>
 
@@ -1138,47 +1100,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Forth outer interpreter. </p>
-
-</div>
-</div>
-<a id="ae7350dd92eb09ea9c2102562af1713a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7350dd92eb09ea9c2102562af1713a1">&#9670;&nbsp;</a></span>ef_getchar()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char ef_getchar </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<blockquote class="doxtable">
-<p>console input with yield </p>
-</blockquote>
-
-</div>
-</div>
-<a id="a40485405ab5338788520ef0380b01b70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40485405ab5338788520ef0380b01b70">&#9670;&nbsp;</a></span>ef_putchar()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ef_putchar </td>
-          <td>(</td>
-          <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>c</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<blockquote class="doxtable">
-<p>output one char to console </p>
-</blockquote>
 
 </div>
 </div>

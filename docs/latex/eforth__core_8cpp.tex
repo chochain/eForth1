@@ -18,9 +18,9 @@ Include dependency graph for eforth\+\_\+core.\+cpp\+:\nopagebreak
 \item 
 void \mbox{\hyperlink{eforth__core_8cpp_a0132f57c344961e9ff4037dd06b06948}{intr\+\_\+reset}} ()
 \begin{DoxyCompactList}\small\item\em reset interrupts \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{eforth__core_8cpp_a93c9ba339402353230060b417633ccd4}{intr\+\_\+hits}} ()
-\begin{DoxyCompactList}\small\item\em return interrupt hit flags \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{eforth__core_8cpp_ae7417b9670e9fc6ddc511e247b90e058}{intr\+\_\+service}} (void($\ast$cb)(\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}))
+\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{eforth__core_8cpp_a21626f172ce1b4f8877e828ae49944c2}{\+\_\+intr}} ()
+\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{eforth__core_8cpp_a2c97726ffb62839e8c6fe399f6ed83f3}{intr\+\_\+service}} ()
 \item 
 void \mbox{\hyperlink{eforth__core_8cpp_ae02901fc00b0a504db693e560852481b}{intr\+\_\+add\+\_\+timer}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} hz10, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} xt)
 \item 
@@ -73,23 +73,17 @@ e\+Forth core controller module
 
 reset interrupts 
 
-\mbox{\Hypertarget{eforth__core_8cpp_a93c9ba339402353230060b417633ccd4}\label{eforth__core_8cpp_a93c9ba339402353230060b417633ccd4}} 
-\index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_hits@{intr\_hits}}
-\index{intr\_hits@{intr\_hits}!eforth\_core.cpp@{eforth\_core.cpp}}
-\doxysubsubsection{\texorpdfstring{intr\_hits()}{intr\_hits()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} intr\+\_\+hits (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{eforth__core_8cpp_a21626f172ce1b4f8877e828ae49944c2}\label{eforth__core_8cpp_a21626f172ce1b4f8877e828ae49944c2}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!\_intr@{\_intr}}
+\index{\_intr@{\_intr}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{\_intr()}{\_intr()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \+\_\+intr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-
-
-return interrupt hit flags 
-
-\begin{quote}
-fetch interrupt hit flags \end{quote}
-\mbox{\Hypertarget{eforth__core_8cpp_ae7417b9670e9fc6ddc511e247b90e058}\label{eforth__core_8cpp_ae7417b9670e9fc6ddc511e247b90e058}} 
+\mbox{\Hypertarget{eforth__core_8cpp_a2c97726ffb62839e8c6fe399f6ed83f3}\label{eforth__core_8cpp_a2c97726ffb62839e8c6fe399f6ed83f3}} 
 \index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_service@{intr\_service}}
 \index{intr\_service@{intr\_service}!eforth\_core.cpp@{eforth\_core.cpp}}
 \doxysubsubsection{\texorpdfstring{intr\_service()}{intr\_service()}}
-{\footnotesize\ttfamily void intr\+\_\+service (\begin{DoxyParamCaption}\item[{void($\ast$)(\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}})}]{cb }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} intr\+\_\+service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \begin{quote}
 service interrupt routines \end{quote}

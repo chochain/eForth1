@@ -127,6 +127,9 @@ $(document).ready(function(){initNavTree('globals.html',''); initResizable(); })
 <li>_info()
 : <a class="el" href="eforth1_8cpp.html#ae543ced12a200d5ee866e7bb41186757">eforth1.cpp</a>
 </li>
+<li>_intr()
+: <a class="el" href="eforth__core_8cpp.html#a21626f172ce1b4f8877e828ae49944c2">eforth_core.cpp</a>
+</li>
 <li>_LABEL
 : <a class="el" href="eforth__asm_8h.html#a59c00f3ec4f7443bcea73eb05cbd8642">eforth_asm.h</a>
 </li>
@@ -233,21 +236,13 @@ $(document).ready(function(){initNavTree('globals.html',''); initResizable(); })
 : <a class="el" href="eforth__asm_8cpp.html#a94e10412bf5e1f89d12efb94e80979c8">eforth_asm.cpp</a>
 , <a class="el" href="eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8">eforth_core.h</a>
 </li>
-<li>ef_getchar()
-: <a class="el" href="eforth__core_8h.html#ae7350dd92eb09ea9c2102562af1713a1">eforth_core.h</a>
-, <a class="el" href="eforth1_8cpp.html#ae7350dd92eb09ea9c2102562af1713a1">eforth1.cpp</a>
-</li>
-<li>ef_putchar()
-: <a class="el" href="eforth1_8cpp.html#a40485405ab5338788520ef0380b01b70">eforth1.cpp</a>
-, <a class="el" href="eforth__core_8h.html#a40485405ab5338788520ef0380b01b70">eforth_core.h</a>
-</li>
 <li>ef_run()
 : <a class="el" href="eforth1_8h.html#a1fb0d84284dc4203d4a4e4dbe8e07b29">eforth1.h</a>
 , <a class="el" href="eforth1_8cpp.html#a1fb0d84284dc4203d4a4e4dbe8e07b29">eforth1.cpp</a>
 </li>
 <li>ef_setup()
-: <a class="el" href="eforth1_8cpp.html#a3be4743e748619321c1a4f95928e8de1">eforth1.cpp</a>
-, <a class="el" href="eforth1_8h.html#a3be4743e748619321c1a4f95928e8de1">eforth1.h</a>
+: <a class="el" href="eforth1_8h.html#a3be4743e748619321c1a4f95928e8de1">eforth1.h</a>
+, <a class="el" href="eforth1_8cpp.html#a3be4743e748619321c1a4f95928e8de1">eforth1.cpp</a>
 </li>
 <li>EXE_TRACE
 : <a class="el" href="eforth__core_8h.html#a4e7ebf605b9379a385139d145f5b1fc5">eforth_core.h</a>
@@ -326,10 +321,10 @@ $(document).ready(function(){initNavTree('globals.html',''); initResizable(); })
 <h3><a id="index_i"></a>- i -</h3><ul>
 <li>intr_add_pci()
 : <a class="el" href="eforth__core_8cpp.html#a896b3ce36b3f0aea63258a3a613d5f56">eforth_core.cpp</a>
-, <a class="el" href="eforth__core_8h.html#ab0b4b6096f24d31ce113f65adb72125c">eforth_core.h</a>
+, <a class="el" href="eforth__core_8h.html#a5fa8e2bc9434c475082cfc60db195fce">eforth_core.h</a>
 </li>
 <li>intr_add_timer()
-: <a class="el" href="eforth__core_8h.html#ae02901fc00b0a504db693e560852481b">eforth_core.h</a>
+: <a class="el" href="eforth__core_8h.html#a940ef1ceaa397087cc42f0eb63a041a3">eforth_core.h</a>
 , <a class="el" href="eforth__core_8cpp.html#ae02901fc00b0a504db693e560852481b">eforth_core.cpp</a>
 </li>
 <li>intr_enable_pci()
@@ -341,19 +336,21 @@ $(document).ready(function(){initNavTree('globals.html',''); initResizable(); })
 , <a class="el" href="eforth__core_8cpp.html#a8d82211db5e512fd289ddd16c3d608ae">eforth_core.cpp</a>
 </li>
 <li>intr_hits()
-: <a class="el" href="eforth__core_8cpp.html#a93c9ba339402353230060b417633ccd4">eforth_core.cpp</a>
-, <a class="el" href="eforth__core_8h.html#a93c9ba339402353230060b417633ccd4">eforth_core.h</a>
+: <a class="el" href="eforth__core_8h.html#a93c9ba339402353230060b417633ccd4">eforth_core.h</a>
 </li>
 <li>intr_reset()
 : <a class="el" href="eforth__core_8cpp.html#a0132f57c344961e9ff4037dd06b06948">eforth_core.cpp</a>
 , <a class="el" href="eforth__core_8h.html#a0132f57c344961e9ff4037dd06b06948">eforth_core.h</a>
 </li>
 <li>intr_service()
-: <a class="el" href="eforth__core_8cpp.html#ae7417b9670e9fc6ddc511e247b90e058">eforth_core.cpp</a>
-, <a class="el" href="eforth__core_8h.html#ae7417b9670e9fc6ddc511e247b90e058">eforth_core.h</a>
+: <a class="el" href="eforth__core_8cpp.html#a2c97726ffb62839e8c6fe399f6ed83f3">eforth_core.cpp</a>
+, <a class="el" href="eforth__core_8h.html#a2c97726ffb62839e8c6fe399f6ed83f3">eforth_core.h</a>
 </li>
 <li>io
 : <a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">eforth1.cpp</a>
+</li>
+<li>IRET_FLAG
+: <a class="el" href="eforth__vm_8cpp.html#a9d91438cfe35ddd3db827add653cf917">eforth_vm.cpp</a>
 </li>
 <li>ISR()
 : <a class="el" href="eforth__core_8cpp.html#aa64c6dce15e9de9105b4ae9533c9a267">eforth_core.cpp</a>
@@ -445,6 +442,9 @@ $(document).ready(function(){initNavTree('globals.html',''); initResizable(); })
 <li>S16
 : <a class="el" href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">eforth_core.h</a>
 </li>
+<li>S2D
+: <a class="el" href="eforth__vm_8cpp.html#a35a26ccdccc5949a9553ce8547b3814c">eforth_vm.cpp</a>
+</li>
 <li>S32
 : <a class="el" href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">eforth_core.h</a>
 </li>
@@ -455,8 +455,8 @@ $(document).ready(function(){initNavTree('globals.html',''); initResizable(); })
 : <a class="el" href="eforth__core_8h.html#a52e81e3198871fa5ae5c84580a12c032">eforth_core.h</a>
 </li>
 <li>SET
-: <a class="el" href="eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78">eforth_asm.h</a>
-, <a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">eforth_vm.cpp</a>
+: <a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">eforth_vm.cpp</a>
+, <a class="el" href="eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78">eforth_asm.h</a>
 </li>
 <li>SHOWOP
 : <a class="el" href="eforth__asm_8h.html#a49fac1253499dd76c037d22a8b7bcadf">eforth_asm.h</a>
@@ -490,16 +490,7 @@ $(document).ready(function(){initNavTree('globals.html',''); initResizable(); })
 : <a class="el" href="eforth__core_8cpp.html#adef45e007330e1e83b28d4ba32a15c85">eforth_core.cpp</a>
 </li>
 <li>TRACE
-: <a class="el" href="eforth__vm_8cpp.html#acb4fb099486d7ee0d3e648b28196c2ae">eforth_vm.cpp</a>
-</li>
-<li>TRACE_COLON
-: <a class="el" href="eforth__vm_8cpp.html#ad35692c45586f7b6ce93785227fef055">eforth_vm.cpp</a>
-</li>
-<li>TRACE_EXIT
-: <a class="el" href="eforth__vm_8cpp.html#a24c7bc81107a8d0c9530fb636e2a5771">eforth_vm.cpp</a>
-</li>
-<li>TRACE_WORD
-: <a class="el" href="eforth__vm_8cpp.html#a934eac23fd6c699962bc273ac5d40d4b">eforth_vm.cpp</a>
+: <a class="el" href="eforth__vm_8cpp.html#a7d020b5dd8606c615fa96fbe2647a4b0">eforth_vm.cpp</a>
 </li>
 <li>TRUE
 : <a class="el" href="eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d">eforth_core.h</a>
@@ -533,10 +524,6 @@ $(document).ready(function(){initNavTree('globals.html',''); initResizable(); })
 <li>vm_init()
 : <a class="el" href="eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002">eforth_core.h</a>
 , <a class="el" href="eforth__vm_8cpp.html#aa4cce331b74c197758d0b9ada8d58002">eforth_vm.cpp</a>
-</li>
-<li>vm_isr()
-: <a class="el" href="eforth__core_8h.html#af37f991d68804c00ec61aec541d1908e">eforth_core.h</a>
-, <a class="el" href="eforth__vm_8cpp.html#af37f991d68804c00ec61aec541d1908e">eforth_vm.cpp</a>
 </li>
 <li>vm_outer()
 : <a class="el" href="eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5">eforth_core.h</a>

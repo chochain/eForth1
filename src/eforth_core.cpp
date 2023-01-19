@@ -6,6 +6,9 @@
 ///
 /// interrupt handlers
 ///
+#if !ARDUINO
+U8  tmr_enable = 0;               ///< fake timer enabler
+#endif // !ARDUINO
 U8  t_idx  { 0 };                 ///< timer ISR index
 U16 p_xt[] { 0, 0, 0 };           ///< pin change interrupt vectors
 U16 t_xt[8]; 		              ///< timer interrupt vectors
@@ -27,26 +30,41 @@ void intr_reset() {
         pinMode(led[i], OUTPUT);
     }
 }
-///
-///> fetch interrupt hit flags
-///
-U16 intr_hits() {
-    CLI();
-    U16 hx = (p_hit << 8) | t_hit;  // capture interrupt flags
-    p_hit = t_hit = 0;
-    SEI();
-    return hx;
+U16 _intr() {
+	CLI();
+	volatile U16 hx = (p_hit << 8) | t_hit;        // capture interrupt flags
+	p_hit = t_hit = 0;
+	SEI();
+	return hx;
 }
 ///
 ///> service interrupt routines
 ///
-void intr_service(void (*cb)(U16)) {
-	for (int i=0; t_hit && i<t_idx; i++, t_hit>>=1) {
-		if (t_hit & 1) cb(t_xt[i]);
+IU intr_service() {
+	static U16 hits = 0;
+
+#if !ARDUINO
+	static int n = 0;                              // fake interrupt
+	if (tmr_enable && !hits && ++n >= 1000) {
+		n=0; t_hit = 1;
 	}
-	for (int i=0; p_hit && i<3; i++, p_hit>>=1) {
-		if (p_hit & 1) cb(p_xt[i]);
+#endif // !ARDUINO
+
+	if (!hits) hits = _intr();                     // cache hits
+	if (hits) {                                    // serve fairly
+		U8 hx = hits & 0xff;
+		for (int i=0, t=1; hx && i<t_idx; i++, t<<=1, hx>>=1) {
+			if (hits & t) {
+				digitalWrite(16+i, digitalRead(16+i) ? LOW : HIGH);
+				hits &= ~t; return t_xt[i];
+			}
+		}
+		hx = hits >> 8;
+		for (int i=0, t=0x100; hx && i<3; i++, t<<=1, hx>>=1) {
+			if (hits & t) { hits &= ~t; return p_xt[i]; }
+		}
 	}
+	return 0;
 }
 ///
 ///> add timer interrupt service routine
@@ -120,16 +138,20 @@ void intr_enable_timer(U16 f) {
 ///> Arduino interrupt service routines
 ///
 ISR(TIMER2_COMPA_vect) {
-    volatile static int cnt = 0;
     volatile static int hz  = 0;
+    volatile static int cnt = 0;
     if (++cnt < 25) return;                // 25 * 4ms = 100ms
     cnt = 0;
-    digitalWrite(19, digitalRead(19) ? LOW : HIGH);  // DEBUG: ISR called
+    digitalWrite(19, digitalRead(19) ? LOW : HIGH);         // DEBUG: ISR called
     for (U8 i=0, b=1; i < t_idx; i++, b<<=1) {
+    	if (++hz >= 5) {                                    // blinks at 1Hz
+    		digitalWrite(7, digitalRead(7) ? LOW : HIGH);   // service routine provided
+    		hz = 0;
+    	}
         if (++t_cnt[i] < t_max[i]) continue;
         t_hit    |= b;
         t_cnt[i]  = 0;
-        digitalWrite(4+i, digitalRead(4+i) ? LOW : HIGH);
+        digitalWrite(4+i, digitalRead(4+i) ? LOW : HIGH);   // interrupt hit
     }
 }
 ISR(PCINT0_vect) { p_hit |= 1; }
@@ -140,6 +162,8 @@ ISR(PCINT2_vect) { p_hit |= 4; }
 
 void intr_add_pci(U16 p, U16 xt)   {}           // mocked functions for x86
 void intr_enable_pci(U16 f)        {}
-void intr_enable_timer(U16 f)      {}
+void intr_enable_timer(U16 f)      {
+	tmr_enable = f;
+}
 
 #endif // ARDUINO

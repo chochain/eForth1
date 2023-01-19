@@ -172,11 +172,13 @@ void _init() {
 ///
 ///> serve interrupt routines
 ///
-#define YIELD_PERIOD    10
+#define YIELD_PERIOD    100
 void _yield()                ///> yield to interrupt service
 {
-	if (IR) return;
+	static int n = 0;               /// * trigger control
+	if (IR || ++n < YIELD_PERIOD) return;
 
+	n  = 0;
 	IR = intr_service();            /// * check interrupts
 	if (IR) {                       /// * service interrupt?
 		RPUSH(IP | IRET_FLAG);      /// * flag return address as IRET

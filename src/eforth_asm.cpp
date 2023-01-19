@@ -445,7 +445,7 @@ int assemble(U8 *cdata)
     IU KEY   = _COLON("KEY",   NOP); {
         _BEGIN(QKEY);
         _UNTIL(EXIT);
-}
+    }
     IU EMIT  = _COLON("EMIT",  TXSTO, EXIT);
     IU HATH  = _COLON("^H", TOR, OVER, RFROM, SWAP, OVER, XOR); {
         _IF(DOLIT, 8, EMIT, ONEM, BLANK, EMIT, DOLIT, 8, EMIT);
@@ -614,7 +614,7 @@ int assemble(U8 *cdata)
             _IF(EXECU);                              // @EXECUTE
             _THEN(EXIT);
         }
-        ABORTQ = _COLON("ABORT\"", NOP); {
+       ABORTQ = _COLON("ABORT\"", NOP); {
         _IF(DOSTR, COUNT, TYPE, ABORT);
         _THEN(DOSTR, DROP, EXIT);
     }

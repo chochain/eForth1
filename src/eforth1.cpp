@@ -51,29 +51,8 @@ void ef_run()
 {
 	vm_outer();
 }
-///
-///> console input with yield
-///
-char ef_getchar()
-{
-    while (!io->available()) {
-        intr_service(vm_isr);
-    }
-    return (char)io->read();
-}
-///
-///> output one char to console
-///
-void ef_putchar(char c)
-{
-    io->print(c);
-    if (c=='\n') io->flush();
-}
 
 #else  // !ARDUINO
-
-char ef_getchar()       { return getchar(); }
-void ef_putchar(char c) { printf("%c", c);  }
 
 static U8 _rom[FORTH_ROM_SZ] = {};         // fake rom to simulate run time
 ///

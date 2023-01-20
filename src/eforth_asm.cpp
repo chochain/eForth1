@@ -24,9 +24,9 @@ namespace EfAsm {
 ///
 ///@name Compiled Address for Branching
 ///@{
-IU BRAN, QBRAN, DONXT;
-IU DOTQ, STRQ, ABORTQ;
-IU TOR;
+IU BRAN, QBRAN, DONXT;              ///< addr of branching ops, used by branching ops
+IU DOTQP, STRQP, ABORQP;            ///< addr of output ops, used by _dotq, _strq, _abortq
+IU TOR;                             ///< addres of ">R" op, used by _for
 IU NOP = 0xffff;                    ///< NOP set to ffff to prevent access before initialized
 ///@}
 ///@name Return Stack for Branching Ops
@@ -59,7 +59,7 @@ void _rdump()                   /// dump return stack
 int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     PGM_P p = reinterpret_cast<PGM_P>(seq);
     int i=0;
-    for (; pgm_read_byte(p); i++, p++);
+    for (; pgm_read_byte(p); i++, p++);  /// * length includes terminating zero
     return i;
 }
 #define CELLCPY(n) {                            \
@@ -74,7 +74,7 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     va_end(argList);                            \
     _rdump();                                   \
 }
-#define STRCPY(op, seq) {                       \
+#define MEMCPY(op, seq) {                       \
     STORE(op);                                  \
     int len = _strlen(seq);                     \
     PGM_P p = reinterpret_cast<PGM_P>(seq);     \
@@ -239,17 +239,17 @@ void _then(int len, ...) {         /// IF-ELSE--**THEN**
 void _dotq(FCHAR *seq) {
     SHOWOP("DOTQ");
     DEBUG("%s", seq);
-    STRCPY(DOTQ, seq);
+    MEMCPY(DOTQP, seq);
 }
 void _strq(FCHAR *seq) {
     SHOWOP("STRQ");
     DEBUG("%s", seq);
-    STRCPY(STRQ, seq);
+    MEMCPY(STRQP, seq);
 }
 void _abortq(FCHAR *seq) {
     SHOWOP("ABORTQ");
     DEBUG("%s", seq);
-    STRCPY(ABORTQ, seq);
+    MEMCPY(ABORQP, seq);
 }
 ///@}
 ///
@@ -271,7 +271,7 @@ int assemble(U8 *cdata)
     IU vCP   = _CODE("CP",      opDOCON, V32(ua,2));   ///> * CP,  top of dictionary, same as HERE
     IU vCNTX = _CODE("CONTEXT", opDOCON, V32(ua,3));   ///> * CONTEXT name field of last word
     IU vLAST = _CODE("LAST",    opDOCON, V32(ua,4));   ///> * LAST, same as CONTEXT
-    IU vMODE = _CODE("'MODE",   opDOCON, V32(ua,5));   ///> * 'MODE (interpreter or compiler)
+    IU vMODE = _CODE("'MODE",   opDOCON, V32(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
     IU vTABRT= _CODE("'ABORT",  opDOCON, V32(ua,6));   ///> * ABORT exception rescue handler (QUIT)
     IU vHLD  = _CODE("HLD",     opDOCON, V32(ua,7));   ///> * HLD  char pointer to output buffer
     IU vSPAN = _CODE("SPAN",    opDOCON, V32(ua,8));   ///> * SPAN number of character accepted
@@ -340,9 +340,10 @@ int assemble(U8 *cdata)
     IU UMMOD = _CODE("UM/MOD",  opUMMOD  );
     IU UMSTA = _CODE("UM*",     opUMSTAR );
     IU MSTAR = _CODE("M*",      opMSTAR  );
-    _CODE("DNEGATE", opDNEG   );
-    _CODE("D+",      opDADD   );
-    _CODE("D-",      opDSUB   );
+    IU DNEG  = _CODE("DNEGATE", opDNEG   );
+    IU DADD  = _CODE("D+",      opDADD   );
+    IU DSUB  = _CODE("D-",      opDSUB   );
+
     ///
     ///> Common High-Level Colon Words
     ///
@@ -354,6 +355,13 @@ int assemble(U8 *cdata)
     // Dr. Ting's alternate opcodes
     IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
+    IU D2S   = _COLON("D>S",   SWAP, DROP, EXIT);
+    IU S2D   = _COLON("S>D",   DUP, ZLT); {
+    	_IF(DOLIT, 0xffff);
+    	_ELSE(DOLIT, 0);
+    	_THEN(EXIT);
+    }
+//    IU UMMOD = _COLON("UM/MOD",DDUP, DIV, TOR, MOD, RFROM, EXIT);
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
     _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);
     _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
@@ -472,9 +480,9 @@ int assemble(U8 *cdata)
     }
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);
     // IU CR    = _COLON("CR",   DOLIT, 10, DOLIT, 13, EMIT, EMIT, EXIT);   // LFCR
-    IU DOSTR = _COLON("DOSTR",RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
-    IU STRQ  = _COLON("S\"|", DOSTR, EXIT);
-       DOTQ  = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
+    IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
+    IU STRQP = _COLON("$\"|", DOSTR, EXIT);
+       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
     IU DOTR  = _COLON(".R",   TOR,
             DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // shown as string
             RFROM, OVER, SUB, SPACS, TYPE, EXIT);
@@ -614,14 +622,15 @@ int assemble(U8 *cdata)
             _IF(EXECU);                              // @EXECUTE
             _THEN(EXIT);
         }
-       ABORTQ = _COLON("ABORT\"", NOP); {
+       ABORQP = _COLON("abort\"", NOP); {
         _IF(DOSTR, COUNT, TYPE, ABORT);
         _THEN(DOSTR, DROP, EXIT);
     }
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
-        _IF(CAT, DOLIT, fCMPL, AND); {               // if it is compile only word
+        _IF(CAT, DOLIT, fCMPL, AND); {               // check for compile only word
             _ABORTQ(" compile only");
+            // INTER0 of Dr Ting's
             _LABEL(EXECU, EXIT);
         }
         _THEN(NUMBQ);                                // word name not found, check if it is a number
@@ -636,8 +645,8 @@ int assemble(U8 *cdata)
             _IF(EXECU);
             _THEN(NOP);
         }
-        _REPEAT(DROP, CR, DOLIT, INTER, vMODE, AT, EQ); {
-            _IF(DEPTH, DOLIT, 4, MIN); {             // dump stack and ok prompt
+        _REPEAT(DROP, CR, DOLIT, INTER, vMODE, AT, EQ); { // .OK
+            _IF(DEPTH, DOLIT, 4, MIN); {                  // dump stack and ok prompt
                 _FOR(RAT, PICK, DOT);
                 _NEXT(NOP);
                 _DOTQ(" ok> ");
@@ -735,11 +744,11 @@ int assemble(U8 *cdata)
     ///
     ///> Forth Compiler - String specification
     ///
-    IU STRCQ  = _COLON("S,\"", DOLIT, 0x22, WORD,       // find quote in TIB (0x22 is " in ASCII)
+    IU STRCQ  = _COLON("$,\"", DOLIT, 0x22, WORD,       // find quote in TIB (0x22 is " in ASCII)
                        COUNT, ADD, vCP, STORE, EXIT);   // advance dic pointer
-    _IMMED("ABORT\"", DOLIT, ABORTQ, HERE, STORE, STRCQ, EXIT);
-    _IMMED("S\"",     DOLIT, STRQ,   HERE, STORE, STRCQ, EXIT);
-    _IMMED(".\"",     DOLIT, DOTQ,   HERE, STORE, STRCQ, EXIT);
+    _IMMED("ABORT\"", DOLIT, ABORQP, HERE, STORE, STRCQ, EXIT);
+    _IMMED("$\"",     DOLIT, STRQP,  HERE, STORE, STRCQ, EXIT);
+    _IMMED(".\"",     DOLIT, DOTQP,  HERE, STORE, STRCQ, EXIT);
     ///
     ///> Debugging Tools
     ///
@@ -772,8 +781,11 @@ int assemble(U8 *cdata)
     ///
     ///> Arduino specific opcodes
     ///
-    _CODE("DELAY",   opDELAY);
-    _CODE("CLOCK",   opCLK  );
+    IU CLK = _CODE("CLOCK",   opCLK  );
+    _COLON("DELAY", S2D, CLK, DADD); {
+        _BEGIN(QKEY);
+        _UNTIL(EXIT);
+    }
     _CODE("PINMODE", opPIN  );
     _CODE("MAP",     opMAP  );
     _CODE("IN",      opIN   );

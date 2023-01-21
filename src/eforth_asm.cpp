@@ -4,7 +4,6 @@
  *
  * Forth Macro Assembler
  */
-#include <stdarg.h>
 #include "eforth_core.h"
 #include "eforth_asm.h"
 
@@ -63,6 +62,7 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     for (; pgm_read_byte(p); i++, p++);  /// * length includes terminating zero
     return i;
 }
+
 #define CELLCPY(n) {                            \
     va_list argList;                            \
     va_start(argList, n);                       \
@@ -76,17 +76,18 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     _rdump();                                   \
 }
 
-void MEMCPY(int len, FCHAR *seq) {
-    PGM_P p = reinterpret_cast<PGM_P>(seq);
-    for (int i=0; i < len; i++) {
-        BSET(PC++, pgm_read_byte(p++));
-    }
+#define PGMCPY(len, seq) {                      \
+    PGM_P p = reinterpret_cast<PGM_P>(seq);     \
+    for (int i=0; i < len; i++) {               \
+        BSET(PC++, pgm_read_byte(p++));         \
+    }                                           \
 }
-void STRCPY(U8 op, FCHAR *str) {
-    STORE(op);
-    int len = _strlen(str);
-    BSET(PC++, len);
-    MEMCPY(len, str);
+    
+#define OPSTR(op, seq) {                        \
+    STORE(op);                                  \
+    int len = _strlen(seq);                     \
+    BSET(PC++, len);                            \
+    PGMCPY(len, seq);                           \
 }
 ///@}
 ///@name Assembler - Word Creation Headers
@@ -101,7 +102,7 @@ void _header(int lex, FCHAR *seq) {           /// create a word header in dictio
 
     BSET(PC++, lex);                          /// * length of word (with optional fIMMED or fCOMPO flags)
     int len = lex & 0x1f;                     /// * Forth allows word max length 31
-    MEMCPY(len, seq);                         /// * memcpy word string
+    PGMCPY(len, seq);                         /// * memcpy word string
     DEBUG("\n%04x: ", aPC);
     DEBUG("%s", seq);
 }
@@ -238,20 +239,20 @@ void _then(int len, ...) {         /// IF-ELSE--**THEN**
 ///
 ///@name Assembler - IO Functions
 ///@{
-void _dotq(FCHAR *str) {
+void _dotq(FCHAR *seq) {
     SHOWOP("DOTQ");
-    DEBUG("%s", str);
-    STRCPY(DOTQP, str);
+    DEBUG("%s", seq);
+    OPSTR(DOTQP, seq);
 }
-void _strq(FCHAR *str) {
+void _strq(FCHAR *seq) {
     SHOWOP("STRQ");
-    DEBUG("%s", str);
-    STRCPY(STRQP, str);
+    DEBUG("%s", seq);
+    OPSTR(STRQP, seq);
 }
-void _abortq(FCHAR *str) {
+void _abortq(FCHAR *seq) {
     SHOWOP("ABORTQ");
-    DEBUG("%s", str);
-    STRCPY(ABORQP, str);
+    DEBUG("%s", seq);
+    OPSTR(ABORQP, seq);
 }
 ///@}
 ///
@@ -469,8 +470,8 @@ int assemble(U8 *cdata)
         _NEXT(DROP, EXIT);
     }
     IU TCHAR = _COLON(">CHAR", DOLIT, 0x7f, AND, DUP, DOLIT, 0x7f, BLANK, WITHI); {
-    	_IF(DROP, DOLIT, 0x5f);
-    	_THEN(EXIT);
+        _IF(DROP, DOLIT, 0x5f);
+        _THEN(EXIT);
     }
     IU SPACS = _COLON("SPACES", BLANK, CHARS, EXIT);
     IU TYPE  = _COLON("TYPE", NOP); {

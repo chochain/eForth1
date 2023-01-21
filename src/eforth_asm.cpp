@@ -4,6 +4,7 @@
  *
  * Forth Macro Assembler
  */
+#include <stdarg.h>
 #include "eforth_core.h"
 #include "eforth_asm.h"
 
@@ -74,14 +75,18 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     va_end(argList);                            \
     _rdump();                                   \
 }
-#define MEMCPY(op, seq) {                       \
-    STORE(op);                                  \
-    int len = _strlen(seq);                     \
-    PGM_P p = reinterpret_cast<PGM_P>(seq);     \
-    BSET(PC++, len);                            \
-    for (int i=0; i < len; i++) {               \
-    BSET(PC++, pgm_read_byte(p++));             \
-    }                                           \
+
+void MEMCPY(int len, FCHAR *seq) {
+    PGM_P p = reinterpret_cast<PGM_P>(seq);
+    for (int i=0; i < len; i++) {
+        BSET(PC++, pgm_read_byte(p++));
+    }
+}
+void STRCPY(U8 op, FCHAR *str) {
+    STORE(op);
+    int len = _strlen(str);
+    BSET(PC++, len);
+    MEMCPY(len, str);
 }
 ///@}
 ///@name Assembler - Word Creation Headers
@@ -96,10 +101,7 @@ void _header(int lex, FCHAR *seq) {           /// create a word header in dictio
 
     BSET(PC++, lex);                          /// * length of word (with optional fIMMED or fCOMPO flags)
     int len = lex & 0x1f;                     /// * Forth allows word max length 31
-    PGM_P p = reinterpret_cast<PGM_P>(seq);
-    for (int i=0; i < len; i++) {             /// * memcpy word string
-        BSET(PC++, pgm_read_byte(p++));
-    }
+    MEMCPY(len, seq);                         /// * memcpy word string
     DEBUG("\n%04x: ", aPC);
     DEBUG("%s", seq);
 }
@@ -236,20 +238,20 @@ void _then(int len, ...) {         /// IF-ELSE--**THEN**
 ///
 ///@name Assembler - IO Functions
 ///@{
-void _dotq(FCHAR *seq) {
+void _dotq(FCHAR *str) {
     SHOWOP("DOTQ");
-    DEBUG("%s", seq);
-    MEMCPY(DOTQP, seq);
+    DEBUG("%s", str);
+    STRCPY(DOTQP, str);
 }
-void _strq(FCHAR *seq) {
+void _strq(FCHAR *str) {
     SHOWOP("STRQ");
-    DEBUG("%s", seq);
-    MEMCPY(STRQP, seq);
+    DEBUG("%s", str);
+    STRCPY(STRQP, str);
 }
-void _abortq(FCHAR *seq) {
+void _abortq(FCHAR *str) {
     SHOWOP("ABORTQ");
-    DEBUG("%s", seq);
-    MEMCPY(ABORQP, seq);
+    DEBUG("%s", str);
+    STRCPY(ABORQP, str);
 }
 ///@}
 ///
@@ -343,6 +345,7 @@ int assemble(U8 *cdata)
     IU DNEG  = _CODE("DNEGATE", opDNEG   );
     IU DADD  = _CODE("D+",      opDADD   );
     IU DSUB  = _CODE("D-",      opDSUB   );
+    IU RP    = _CODE("RP",      opRP     );
 
     ///
     ///> Common High-Level Colon Words
@@ -361,7 +364,6 @@ int assemble(U8 *cdata)
     	_ELSE(DOLIT, 0);
     	_THEN(EXIT);
     }
-//    IU UMMOD = _COLON("UM/MOD",DDUP, DIV, TOR, MOD, RFROM, EXIT);
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
     _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);
     _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
@@ -467,6 +469,8 @@ int assemble(U8 *cdata)
         _NEXT(DROP, EXIT);
     }
     IU TCHAR = _COLON(">CHAR", DOLIT, 0x7f, AND, DUP, DOLIT, 0x7f, BLANK, WITHI); {
+    	_IF(DROP, DOLIT, 0x5f);
+    	_THEN(EXIT);
     }
     IU SPACS = _COLON("SPACES", BLANK, CHARS, EXIT);
     IU TYPE  = _COLON("TYPE", NOP); {

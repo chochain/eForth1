@@ -61,7 +61,7 @@ typedef S16       DU;                 ///< data/cell unit
 ///@{
 #define FORTH_BOOT_ADDR  0x0000
 #define FORTH_RAM_ADDR   FORTH_ROM_SZ
-#define FORTH_DIC_ADDR   (FORTH_RAM_ADDR   + 0)
+#define FORTH_DIC_ADDR   FORTH_RAM_ADDR
 #define FORTH_UVAR_ADDR  (FORTH_DIC_ADDR   + FORTH_DIC_SZ)
 #define FORTH_STACK_ADDR (FORTH_UVAR_ADDR  + FORTH_UVAR_SZ)
 #define FORTH_STACK_TOP  (FORTH_STACK_ADDR + FORTH_STACK_SZ)
@@ -145,7 +145,8 @@ typedef S16       DU;                 ///< data/cell unit
     OP(TMR),    \
     OP(PCI),    \
     OP(TMRE),   \
-    OP(PCIE)
+    OP(PCIE),   \
+	OP(RP)
 //
 // eForth function prototypes
 //

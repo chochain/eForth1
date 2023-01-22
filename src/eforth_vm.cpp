@@ -42,10 +42,9 @@ IU  IR;                           ///< interrupt service routine
 ///
 ///@name Storage
 ///@{
-PGM_P cRom;                       ///< ROM, Forth word stored in Arduino Flash Memory
-U8    *cData;                     ///< RAM, memory block for user define dictionary
-DU    *cStack;                    ///< pointer to stack/rack memory block
-DU    *rStack;
+PGM_P _rom;                       ///< ROM, Forth word stored in Arduino Flash Memory
+U8    *_data;                     ///< RAM, memory block for user define dictionary
+DU    *_stack;                    ///< pointer to stack/rack memory block
 ///@}
 #define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
 #define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
@@ -54,22 +53,22 @@ DU    *rStack;
 ///
 /// byte (8-bit) fetch from either RAM or ROM depends on filtered range
 ///
-U8   BGET(U16 d)       {
-    return (U8)((d&RAM_FLAG) ? cData[d&OFF_MASK] : pgm_read_byte(cRom+d));
+U8 BGET(U16 d) {
+    return (U8)((d&RAM_FLAG) ? _data[d&OFF_MASK] : pgm_read_byte(_rom+d));
 }
 ///
 /// word (16-bit) fetch from either RAM or ROM depends on filtered range
 ///
-U16  GET(U16 d)        {
+U16 GET(U16 d) {
     return (d&RAM_FLAG)
-        ? *((U16*)&cData[d&OFF_MASK])
-        : (U16)pgm_read_byte(cRom+d) + ((U16)pgm_read_byte(cRom+d+1)<<8);
+        ? *((U16*)&_data[d&OFF_MASK])
+        : (U16)pgm_read_byte(_rom+d) + ((U16)pgm_read_byte(_rom+d+1)<<8);
 }
 #define SSMAX          (FORTH_STACK_SZ>>1)
-#define BSET(d, c)     (cData[(d)&OFF_MASK]=(U8)(c))
-#define SET(d, v)      (*((DU*)&cData[(d)&OFF_MASK])=(v))
-#define SS(s)          (cStack[s])
-#define RS(r)          (cStack[SSMAX - (r)])
+#define BSET(d, c)     (_data[(d)&OFF_MASK]=(U8)(c))
+#define SET(d, v)      (*((DU*)&_data[(d)&OFF_MASK])=(v))
+#define SS(s)          (_stack[s])
+#define RS(r)          (_stack[SSMAX - (r)])
 #define S2D(h, l)      (((S32)(h)<<16) | ((l)&0xffff))
 ///
 /// push a value onto stack top
@@ -259,12 +258,11 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
 ///
 using namespace EfVM;
 
-void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
+void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     io     = (Stream *)io_stream;
-    cRom   = rom;
-    cData  = cdata;
-    cStack = (DU*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
-    rStack = (DU*)&cdata[FORTH_STACK_TOP - FORTH_RAM_ADDR];
+    _rom   = rom;
+    _data  = data;
+    _stack = (DU*)&_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
     
     _init();                    /// * resetting user variables
 }
@@ -445,9 +443,11 @@ int vm_outer() {
         _X(TMRE, intr_enable_timer(top);     POP());
         _X(PCIE, intr_enable_pci(top);       POP());
         _X(RP,   PUSH(R));
+        _X(TRC,
 #if EXE_TRACE
-        _X(TRC,  tCNT = top; POP());
+        	tCNT = top;
 #endif // EXE_TRACE
+        	POP());
 
     vm_next:
 	    _yield();

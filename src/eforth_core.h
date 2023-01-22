@@ -20,7 +20,7 @@
 ///@name Debug Tracing Flags
 ///@{
 #define ASM_TRACE       0             /**< assembler tracing flag */
-#define EXE_TRACE       0             /**< virtual machine execution tracing flag */
+#define EXE_TRACE       1             /**< virtual machine execution tracing flag */
 ///@}
 ///
 ///@name Portable Types
@@ -146,7 +146,8 @@ typedef S16       DU;                 ///< data/cell unit
     OP(PCI),    \
     OP(TMRE),   \
     OP(PCIE),   \
-	OP(RP)
+	OP(RP),     \
+	OP(TRC)
 //
 // eForth function prototypes
 //

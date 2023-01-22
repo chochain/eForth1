@@ -103,7 +103,7 @@ void _header(int lex, FCHAR *seq) {           /// create a word header in dictio
     BSET(PC++, lex);                          /// * length of word (with optional fIMMED or fCOMPO flags)
     int len = lex & 0x1f;                     /// * Forth allows word max length 31
     PGMCPY(len, seq);                         /// * memcpy word string
-    DEBUG("\n%04x: ", aPC);
+    DEBUG("\n%04x: ", PC);
     DEBUG("%s", seq);
 }
 ///
@@ -347,7 +347,7 @@ int assemble(U8 *cdata)
     IU DADD  = _CODE("D+",      opDADD   );
     IU DSUB  = _CODE("D-",      opDSUB   );
     IU RP    = _CODE("RP",      opRP     );
-
+    IU TRC   = _CODE("TRC",     opTRC    );
     ///
     ///> Common High-Level Colon Words
     ///
@@ -799,8 +799,9 @@ int assemble(U8 *cdata)
     _CODE("PWM",     opPWM  );
     _CODE("TMR",     opTMR  );
     _CODE("PCI",     opPCI  );
-    _CODE("TMRE",    opTMRE);
-    _CODE("PCIE",    opPCIE);
+    _CODE("TMRE",    opTMRE );
+    _CODE("PCIE",    opPCIE );
+    _CODE("TRACE",   opTRC  );
     ///
     ///> Cold Start address (End of dictionary)
     ///

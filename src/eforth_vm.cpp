@@ -34,8 +34,6 @@ static Stream *io;
 ///@{
 IU  PC;                           ///< program counter, IU is 16-bit
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
-U8  R;                            ///< return stack index (0-255)
-U8  S;                            ///< data stack index (0-255)
 DU  top;                          ///< ALU (i.e. cached top of stack value)
 IU  IR;                           ///< interrupt service routine
 ///@}
@@ -44,7 +42,8 @@ IU  IR;                           ///< interrupt service routine
 ///@{
 PGM_P _rom;                       ///< ROM, Forth word stored in Arduino Flash Memory
 U8    *_data;                     ///< RAM, memory block for user define dictionary
-DU    *_stack;                    ///< pointer to stack/rack memory block
+DU    *DS;                        ///< data stack pointer, Dr. Ting's stack
+DU    *RS;                        ///< return stack pointer, Dr. Ting's rack
 ///@}
 #define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
 #define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
@@ -64,24 +63,25 @@ U16 GET(U16 d) {
         ? *((U16*)&_data[d&OFF_MASK])
         : (U16)pgm_read_byte(_rom+d) + ((U16)pgm_read_byte(_rom+d+1)<<8);
 }
-#define SSMAX          (FORTH_STACK_SZ>>1)
 #define BSET(d, c)     (_data[(d)&OFF_MASK]=(U8)(c))
 #define SET(d, v)      (*((DU*)&_data[(d)&OFF_MASK])=(v))
-#define SS(s)          (_stack[s])
-#define RS(r)          (_stack[SSMAX - (r)])
 #define S2D(h, l)      (((S32)(h)<<16) | ((l)&0xffff))
 ///
 /// push a value onto stack top
 ///
-void PUSH(DU v)        { SS(++S) = top; top = v; }
-void RPUSH(DU v)       { RS(++R) = v; }
-#define POP()          (top = SS(S ? S-- : S))
-#define RPOP()         (R ? RS(R--) : RS(R))
-#define DTOP(d)        { SS(S) = (d) & 0xffff; top = (d)>>16; }
+void PUSH(DU v)        { *++DS = top; top = (v); }
+#define RPUSH(v)       (*--RS = (v))
+#define POP()          (top = *DS--)
+#define RPOP()         (*RS++)
+#define DTOP(d)        { *DS = (d) & 0xffff; top = (d)>>16; }
 ///
 /// update program counter (ready to fetch), advance instruction pointer
 ///
 void NEXT() { PC=GET(IP); IP+=sizeof(IU); }
+
+DU _depth() {
+	return (DU)((U8*)DS - &_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR]) >> 1;
+}
 ///
 ///@name Tracing
 ///@{
@@ -92,9 +92,6 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-void _trc_on()  { tCNT++;           NEXT(); }
-void _trc_off() { if (tCNT) --tCNT; NEXT(); }
-
 #define opDOLIT 5
 #define opENTER 7
 #define opEXIT  8
@@ -102,18 +99,18 @@ void TRACE()
 {
     if (!tCNT || !PC) return;             // skip if not tracing or end of program
     U8 op = BGET(PC);
-    /*
-    // dump stack
-    for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
-        LOG_H(s==s0 ? " " : "_", SS(s+1));
-    }
-    LOG_H(S==0 ? " " : "_", top);
-    LOG("_");
-	/// display PC:IP[opcode]
-    LOG_H("", PC); LOG_H(":", IP-2);      // mem pointer, indirect thread
+
+    /// display PC:IP[opcode]
+    LOG_H("", IP-2); LOG_H(":", PC);      // mem pointer, indirect thread
     LOG_H("[", op); LOG("]");             // opcode to be executed
+    // dump stack
+    DU S = _depth();
+    for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
+        LOG_H(s==s0 ? " " : "_", *(DS + s));
+    }
+    LOG_H("_", top);
+    LOG("_");
     /// display word name
-    */
     IU pc = PC-1;                         // reel back one-byte
     for (; (BGET(pc) & 0x7f)>0x20; pc--); // retract pointer to word name (ASCII range: 0x21~0x7f)
     int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
@@ -145,7 +142,7 @@ void TRACE()
 void _init() {
     intr_reset();                     /// * reset interrupt handlers
 
-    R = S = PC = IP = top = 0;        ///> setup control variables
+    PC = IP = IR = top = 0;           ///> setup control variables
 #if EXE_TRACE
     tCNT = 0; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
@@ -172,19 +169,22 @@ void _init() {
 ///
 ///> serve interrupt routines
 ///
-#define YIELD_PERIOD    100
 void _yield()                ///> yield to interrupt service
 {
-	static int n = 0;               /// * trigger control
-	if (IR || ++n < YIELD_PERIOD) return;
-
-	n  = 0;
 	IR = intr_service();            /// * check interrupts
 	if (IR) {                       /// * service interrupt?
 		RPUSH(IP | IRET_FLAG);      /// * flag return address as IRET
 		IP = IR + 1;                /// * skip opENTER
 	}
 }
+int _yield_cnt = 0;          ///< interrupt service throttle counter
+#define YIELD_PERIOD    100
+#define YIELD()                               \
+    if (!IR && ++_yield_cnt > YIELD_PERIOD) { \
+	    _yield_cnt = 0;                       \
+        _yield();                             \
+    }
+
 void _delay()                       /// (n -- ) delay n milli-second
 {
     U32 t  = millis() + top;        ///> calculate break time
@@ -235,9 +235,9 @@ void _execu()               ///> (a -- ) take execution address from data stack 
 void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double by single
 {
     U32 d = (U32)top;       ///> CC: auto variable uses C stack 
-    U32 m = ((U32)SS(S)<<16) + (U16)SS(S-1);
+    U32 m = ((U32)*DS<<16) + (U16)*(DS-1);
     POP();
-    SS(S) = (DU)(m % d);    ///> remainder
+    *DS   = (DU)(m % d);    ///> remainder
     top   = (DU)(m / d);    ///> quotient
     NEXT();
 }
@@ -262,7 +262,8 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     io     = (Stream *)io_stream;
     _rom   = rom;
     _data  = data;
-    _stack = (DU*)&_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
+    DS     = (DU*)&_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
+    RS     = (DU*)&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR];
     
     _init();                    /// * resetting user variables
 }
@@ -321,8 +322,8 @@ int vm_outer() {
 			});
         _Y(EXECU, _execu);
         _X(DONEXT,
-            if (RS(R) > 0) {            ///> check if loop counter > 0
-                RS(R)--;                ///>> decrement loop counter
+            if (*RS > 0) {              ///> check if loop counter > 0
+                *RS -= 1;               ///>> decrement loop counter
                 IP = GET(IP);           ///>> branch back to FOR
             }
             else {                      ///> or,
@@ -338,18 +339,18 @@ int vm_outer() {
         /// @name Memory Storage ops
         /// @{
         _X(STORE,
-            SET(top, SS(S--));
+            SET(top, *DS--);
             POP());
         _X(PSTOR,
-            SET(top, GET(top) + SS(S--));
+            SET(top, GET(top) + *DS--);
             POP());
         _X(AT,    top = (DU)GET(top));
         _X(CSTOR,
-            BSET(top, SS(S--));
+            BSET(top, *DS--);
             POP());
         _X(CAT,   top = (DU)BGET(top));
         _X(RFROM, PUSH(RPOP()));
-        _X(RAT,   PUSH(RS(R)));
+        _X(RAT,   PUSH(*RS));
         _X(TOR,
             RPUSH(top);
             POP());
@@ -357,39 +358,39 @@ int vm_outer() {
         /// @name Stack ops
         /// @}
         _X(DROP,  POP());
-        _X(DUP,   SS(++S)=top);
+        _X(DUP,   *++DS=top);
         _X(SWAP,
             DU tmp = top;
-            top    = SS(S);
-            SS(S)  = tmp);
-        _X(OVER,  PUSH(SS(S)));      ///> push w1
+            top    = *DS;
+            *DS    = tmp);
+        _X(OVER,  DU v = *DS; PUSH(v));      /// * note PUSH macro changes DS
         _X(ROT,
-            DU tmp = SS(S-1);
-            SS(S-1)= SS(S);
-            SS(S)  = top;
+            DU tmp = *(DS-1);
+            *(DS-1)= *DS;
+            *DS    = top;
             top    = tmp);
-        _X(PICK,  top = SS(S - (U8)top));
+        _X(PICK,  top = *(DS - top));
         /// @}
         /// @name ALU ops
         /// @{
-        _X(AND,   top &= SS(S--));
-        _X(OR,    top |= SS(S--));
-        _X(XOR,   top ^= SS(S--));
+        _X(AND,   top &= *DS--);
+        _X(OR,    top |= *DS--);
+        _X(XOR,   top ^= *DS--);
         _X(INV,   top = -top - 1);
-        _X(LSH,   top = SS(S--) << top);
-        _X(RSH,   top = SS(S--) >> top);
-        _X(ADD,   top += SS(S--));
-        _X(SUB,   top = SS(S--) - top);
-        _X(MUL,   top *= SS(S--));
-        _X(DIV,   top = (top) ? SS(S--) / top : (S--, 0));
-        _X(MOD,   top = (top) ? SS(S--) % top : SS(S--));
+        _X(LSH,   top =  *DS-- << top);
+        _X(RSH,   top =  *DS-- >> top);
+        _X(ADD,   top += *DS--);
+        _X(SUB,   top =  *DS-- - top);
+        _X(MUL,   top *= *DS--);
+        _X(DIV,   top = top ? *DS-- / top : (DS--, 0));
+        _X(MOD,   top = top ? *DS-- % top : *DS--);
         _X(NEG,   top = 0 - top);
         /// @}
         /// @name Logic ops
         /// @{
-        _X(GT,    top = BOOL(SS(S--) > top));
-        _X(EQ,    top = BOOL(SS(S--)==top));
-        _X(LT,    top = BOOL(SS(S--) < top));
+        _X(GT,    top = BOOL(*DS-- > top));
+        _X(EQ,    top = BOOL(*DS-- ==top));
+        _X(LT,    top = BOOL(*DS-- < top));
         _X(ZGT,   top = BOOL(top > 0));
         _X(ZEQ,   top = BOOL(top == 0));
         _X(ZLT,   top = BOOL(top < 0));
@@ -398,51 +399,53 @@ int vm_outer() {
         /// @{
         _X(ONEP,  top++);
         _X(ONEM,  top--);
-        _X(QDUP,  if (top) SS(++S) = top);
-        _X(DEPTH, PUSH(S));
-        _X(ULESS, top = BOOL((U16)(SS(S--)) < (U16)top));
+        _X(QDUP,  if (top) *++DS = top);
+        _X(DEPTH, DU d = _depth(); PUSH(d));
+        _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
         _Y(UMMOD, _ummod);                /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
-            U32 u = (U32)SS(S) * top;
+            U32 u = (U32)*DS * top;
             DTOP(u));
         _X(MSTAR,                         /// (n1 n2 -- d) signed multiply, return double product
-            S32 d = (S32)SS(S) * top;
+            S32 d = (S32)*DS * top;
             DTOP(d));
         /// @}
         /// @name Double precision ops
         /// @{
         _X(DNEG,                          /// (d -- -d) two's complemente of top double
-            S32 d = S2D(top, SS(S));
+            S32 d = S2D(top, *DS);
             DTOP(-d));
         _X(DADD,                          /// (d1 d2 -- d1+d2) add two double precision numbers
-            S32 d0 = S2D(top, SS(S));
-            S32 d1 = S2D(SS(S-1), SS(S-2));
-            S -= 2; DTOP(d1 + d0));
+            S32 d0 = S2D(top, *DS);
+            S32 d1 = S2D(*(DS-1), *(DS-2));
+            DS -= 2; DTOP(d1 + d0));
         _X(DSUB,                          /// (d1 d2 -- d1-d2) subtract d2 from d1
-            S32 d0 = S2D(top, SS(S));
-            S32 d1 = S2D(SS(S-1), SS(S-2));
-            S -= 2; DTOP(d1 - d0));
+            S32 d0 = S2D(top, *DS);
+            S32 d1 = S2D(*(DS-1), *(DS-2));
+            DS -= 2; DTOP(d1 - d0));
         /// @}
         /// @name Arduino specific ops
         /// @{
         _Y(DELAY, _delay);
-        _X(CLK,   S += 2; DTOP(millis()));
+        _X(CLK,   DS += 2; DTOP(millis()));
         _X(PIN,
-            pinMode(top, SS(S) ? OUTPUT : INPUT);
+            pinMode(top, *DS ? OUTPUT : INPUT);
             POP(); POP());
         _X(MAP,
-            U16 tmp = map(top, SS(S-3), SS(S-2), SS(S-1), SS(S));
-            S -= 4;
+            U16 tmp = map(top, *(DS-3), *(DS-2), *(DS-1), *DS);
+            DS -= 4;
             top = tmp);
         _X(IN,   top = digitalRead(top));
-        _X(OUT,  digitalWrite(top, SS(S));   POP(); POP());
+        _X(OUT,  digitalWrite(top, *DS);   POP(); POP());
         _X(AIN,  top = analogRead(top));
-        _X(PWM,  analogWrite(top, SS(S));    POP(); POP());
-        _X(TMR,  intr_add_timer(top, SS(S)); POP(); POP());
-        _X(PCI,  intr_add_pci(top, SS(S));   POP(); POP());
-        _X(TMRE, intr_enable_timer(top);     POP());
-        _X(PCIE, intr_enable_pci(top);       POP());
-        _X(RP,   PUSH(R));
+        _X(PWM,  analogWrite(top, *DS);    POP(); POP());
+        _X(TMR,  intr_add_timer(top, *DS); POP(); POP());
+        _X(PCI,  intr_add_pci(top, *DS);   POP(); POP());
+        _X(TMRE, intr_enable_timer(top);   POP());
+        _X(PCIE, intr_enable_pci(top);     POP());
+        _X(RP,
+        	DU r = (&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR] - (U8*)RS) >> 1;
+        	PUSH(r));
         _X(TRC,
 #if EXE_TRACE
         	tCNT = top;
@@ -450,7 +453,7 @@ int vm_outer() {
         	POP());
 
     vm_next:
-	    _yield();
+	    YIELD();                        /// * serve interrupt if any
 		PC = GET(IP);                   /// * fetch next program counter (indirect threading)
 		IP += sizeof(IU); 	            /// * advance to next instruction
     } while (PC);

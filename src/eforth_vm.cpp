@@ -32,12 +32,12 @@ static Stream *io;
 ///
 ///@name Control
 ///@{
-IU  IR;                           ///< interrupt service routine
 IU  PC;                           ///< program counter, IU is 16-bit
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
 U8  R;                            ///< return stack index (0-255)
 U8  S;                            ///< data stack index (0-255)
 DU  top;                          ///< ALU (i.e. cached top of stack value)
+IU  IR;                           ///< interrupt service routine
 ///@}
 ///
 ///@name Storage
@@ -45,6 +45,7 @@ DU  top;                          ///< ALU (i.e. cached top of stack value)
 PGM_P cRom;                       ///< ROM, Forth word stored in Arduino Flash Memory
 U8    *cData;                     ///< RAM, memory block for user define dictionary
 DU    *cStack;                    ///< pointer to stack/rack memory block
+DU    *rStack;
 ///@}
 #define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
 #define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
@@ -64,11 +65,11 @@ U16  GET(U16 d)        {
         ? *((U16*)&cData[d&OFF_MASK])
         : (U16)pgm_read_byte(cRom+d) + ((U16)pgm_read_byte(cRom+d+1)<<8);
 }
+#define SSMAX          (FORTH_STACK_SZ>>1)
 #define BSET(d, c)     (cData[(d)&OFF_MASK]=(U8)(c))
 #define SET(d, v)      (*((DU*)&cData[(d)&OFF_MASK])=(v))
 #define SS(s)          (cStack[s])
-#define RS(r)          (cStack[RS_TOP - (r)])
-#define RS_TOP         (FORTH_STACK_SZ>>1)
+#define RS(r)          (cStack[SSMAX - (r)])
 #define S2D(h, l)      (((S32)(h)<<16) | ((l)&0xffff))
 ///
 /// push a value onto stack top
@@ -145,9 +146,9 @@ void TRACE()
 void _init() {
     intr_reset();                     /// * reset interrupt handlers
 
-    R = S = PC = IP = top = 0;  ///> setup control variables
+    R = S = PC = IP = top = 0;        ///> setup control variables
 #if EXE_TRACE
-    tCNT = 1; tTAB = 0;               ///> setup tracing variables
+    tCNT = 0; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
     
     /// FORTH_UVAR_ADDR;
@@ -211,18 +212,19 @@ void _qrx()                  ///> ( -- c ) fetch a char from console
     
 void _txsto()                ///> (c -- ) send a char to console
 {
-#if !EXE_TRACE
-    LOG_C((char)top);
+#if EXE_TRACE
+	if (tCNT) {
+		switch (top) {
+		case 0xa: LOG(tCNT ? "<LF>" : "\n");  break;
+		case 0xd: LOG("<CR>");    break;
+		case 0x8: LOG("<TAB>");   break;
+		default: LOG("<"); LOG_C((char)top); LOG(">");
+		}
+	}
+	else LOG_C((char)top);
 #else  // !EXE_TRACE
-    switch (top) {
-    case 0xa: LOG("<LF>");  break;
-    case 0xd: LOG("<CR>");  break;
-    case 0x8: LOG("<TAB>"); break;
-    default:
-        if (tCNT) { LOG("<"); LOG_C((char)top); LOG(">"); }
-        else      LOG_C((char)top);
-    }
-#endif // !EXE_TRACE
+	LOG_C((char)top);
+#endif // EXE_TRACE
     POP();
 }
 ///@}
@@ -262,6 +264,7 @@ void vm_init(PGM_P rom, U8 *cdata, void *io_stream) {
     cRom   = rom;
     cData  = cdata;
     cStack = (DU*)&cdata[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
+    rStack = (DU*)&cdata[FORTH_STACK_TOP - FORTH_RAM_ADDR];
     
     _init();                    /// * resetting user variables
 }
@@ -400,24 +403,24 @@ int vm_outer() {
         _X(QDUP,  if (top) SS(++S) = top);
         _X(DEPTH, PUSH(S));
         _X(ULESS, top = BOOL((U16)(SS(S--)) < (U16)top));
-        _Y(UMMOD, _ummod);
-        _X(UMSTAR,               /// (u1 u2 -- ud) unsigned multiply return double product
+        _Y(UMMOD, _ummod);                /// (udl udh u -- ur uq) unsigned divide of a double by single
+        _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
             U32 u = (U32)SS(S) * top;
             DTOP(u));
-        _X(MSTAR,                /// (n1 n2 -- d) signed multiply, return double product
+        _X(MSTAR,                         /// (n1 n2 -- d) signed multiply, return double product
             S32 d = (S32)SS(S) * top;
             DTOP(d));
         /// @}
         /// @name Double precision ops
         /// @{
-        _X(DNEG,                 /// (d -- -d) two's complemente of top double
+        _X(DNEG,                          /// (d -- -d) two's complemente of top double
             S32 d = S2D(top, SS(S));
             DTOP(-d));
-        _X(DADD,                 /// (d1 d2 -- d1+d2) add two double precision numbers
+        _X(DADD,                          /// (d1 d2 -- d1+d2) add two double precision numbers
             S32 d0 = S2D(top, SS(S));
             S32 d1 = S2D(SS(S-1), SS(S-2));
             S -= 2; DTOP(d1 + d0));
-        _X(DSUB,                 /// (d1 d2 -- d1-d2) subtract d2 from d1
+        _X(DSUB,                          /// (d1 d2 -- d1-d2) subtract d2 from d1
             S32 d0 = S2D(top, SS(S));
             S32 d1 = S2D(SS(S-1), SS(S-2));
             S -= 2; DTOP(d1 - d0));
@@ -441,11 +444,15 @@ int vm_outer() {
         _X(PCI,  intr_add_pci(top, SS(S));   POP(); POP());
         _X(TMRE, intr_enable_timer(top);     POP());
         _X(PCIE, intr_enable_pci(top);       POP());
+        _X(RP,   PUSH(R));
+#if EXE_TRACE
+        _X(TRC,  tCNT = top; POP());
+#endif // EXE_TRACE
 
     vm_next:
 	    _yield();
-		PC = GET(IP);                       /// * fetch next program counter (indirect threading)
-		IP += sizeof(IU); 	                /// * advance to next instruction
+		PC = GET(IP);                   /// * fetch next program counter (indirect threading)
+		IP += sizeof(IU); 	            /// * advance to next instruction
     } while (PC);
 
     return (int)PC;

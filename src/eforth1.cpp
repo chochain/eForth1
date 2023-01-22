@@ -30,8 +30,8 @@ void _info(U8 *cdata, int sz, Stream *io) {
 }
 
 #if ARDUINO
-extern U32 forth_rom[];                    // from eforth_rom.c
-extern U32 forth_rom_sz;
+extern U32 forth_rom[];                    ///< from eforth_rom.c
+extern U32 forth_rom_sz;                   ///< actual size of ROM
 ///
 ///> setup (called by Arduino setup)
 ///
@@ -39,7 +39,7 @@ static Stream *io;
 void ef_setup(Stream &io_stream=Serial)
 {
 	io   = &io_stream;
-    _ram = (U8*)malloc(FORTH_RAM_SZ);     // dynamically allocated
+    _ram = (U8*)malloc(FORTH_RAM_SZ);     ///< dynamically allocated
 
     _info(_ram, forth_rom_sz, io);
     vm_init((PGM_P)forth_rom, _ram, io);
@@ -54,13 +54,13 @@ void ef_run()
 
 #else  // !ARDUINO
 
-static U8 _rom[FORTH_ROM_SZ] = {};         // fake rom to simulate run time
+static U8 _rom[FORTH_ROM_SZ] = {};         ///< fake rom to simulate run time
 ///
 ///> main to support C development debugging
 ///
-int main(int ac, char* av[])
-{
-    setvbuf(stdout, NULL, _IONBF, 0);      // autoflush (turn STDOUT buffering off)
+#include <stdlib.h>
+int main(int ac, char* av[]) {
+    setvbuf(stdout, NULL, _IONBF, 0);      /// * autoflush (turn STDOUT buffering off)
 
     int sz = ef_assemble(_rom);
 

@@ -359,17 +359,20 @@ int assemble(U8 *cdata)
     // Dr. Ting's alternate opcodes
     IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
-    IU D2S   = _COLON("D>S",   SWAP, DROP, EXIT);
+    IU D2S   = _COLON("D>S",   ZLT, OVER, ZLT, XOR); {
+    	_IF(NEG);
+    	_THEN(EXIT);
+    }
     IU S2D   = _COLON("S>D",   DUP, ZLT); {
     	_IF(DOLIT, 0xffff);
     	_ELSE(DOLIT, 0);
     	_THEN(EXIT);
     }
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
-    _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);
-    _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
-    _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
-    _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
+    IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);
+    IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
+    IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
+    IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
     IU WITHI = _COLON("WITHIN",OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
     IU ABS   = _COLON("ABS", DUP, ZLT); {
@@ -786,9 +789,9 @@ int assemble(U8 *cdata)
     ///
     ///> Arduino specific opcodes
     ///
-    IU CLK = _CODE("CLOCK",   opCLK  );
-    _COLON("DELAY", S2D, CLK, DADD); {
-        _BEGIN(QKEY);
+    IU CLK = _CODE("CLOCK",   opCLK);
+    _COLON("DELAY", S2D, CLK, DADD, vTEMP, DSTOR); {
+        _BEGIN(vTEMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
         _UNTIL(EXIT);
     }
     _CODE("PINMODE", opPIN  );

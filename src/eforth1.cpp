@@ -20,7 +20,7 @@ void _info(U8 *cdata, int sz, Stream *io) {
     U16 s = (U16)&s;
     LOG_H(" heap=x", h);
     LOG_V("--> ", s - h);
-    LOG_H(" <--auto=x", s);
+    LOG_H(" bytes <--auto=x", s);
 #endif // ARDUINO
     LOG_H("\n  ROM  :x0000+", FORTH_ROM_SZ);
     LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ);   LOG(" <=> EEPROM");
@@ -58,7 +58,6 @@ static U8 _rom[FORTH_ROM_SZ] = {};         ///< fake rom to simulate run time
 ///
 ///> main to support C development debugging
 ///
-#include <stdlib.h>
 int main(int ac, char* av[]) {
     setvbuf(stdout, NULL, _IONBF, 0);      /// * autoflush (turn STDOUT buffering off)
 

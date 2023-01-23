@@ -74,6 +74,13 @@ To understand the philosophy of FORTH, excellent online e-books are here free fo
   > <a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br/>
   > <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a>
 
+### Performance Tuning
+* Check your Arduino IDE installed directory, say C:\Users\myname\AppData\Local\Arduino... on Windows or /home/myname/Arduino/... on Linux,
+* Find the hardware -> arduino -> avr subdirectories,
+* With an editor, open the 'platform.txt' file,
+* Find all three -Os compiler options (i.g. compiler.c.flags=-c -g -Os ...)
+  > change them to -O3 for speed, -Os (default) for smallest size, -O2 for somewhere in-between
+
 ### References to Dr. Ting's Original
 * 328eForth in AVR assembly [table of content](https://chochain.github.io/eForth1/docs/328eForth_content.pdf) and [full document](https://chochain.github.io/eForth1/docs/328eForth.pdf)
 * [328eForth mod for coinForth by D. Ruffer](https://github.com/DRuffer/328eforth)

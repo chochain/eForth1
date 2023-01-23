@@ -105,9 +105,11 @@ void TRACE()
     LOG_H("", IP-2); LOG_H(":", PC);      // mem pointer, indirect thread
     LOG_H("[", op); LOG("]");             // opcode to be executed
     // dump stack
-    DU S = _depth();
-    for (int s=(S>=3 ? S-3 : 0), s0=s; s<S; s++) {
-        LOG_H(s==s0 ? " " : "_", *(DS + s));
+    DU s = _depth() - 1;
+    while (s-- > 0) {
+    	DU *vp = ((DU*)DS - s);
+    	DU v   = *vp;
+        LOG_H("_", v);
     }
     LOG_H("_", top);
     LOG("_");
@@ -131,7 +133,7 @@ void TRACE()
     LOG(" ");
 }
 #else
-#define TRACE()                       /* skip */
+#define TRACE()     /* skip */
 #endif // EXE_TRACE
 ///@}
 //
@@ -145,7 +147,7 @@ void _init() {
 
     PC = IP = IR = top = 0;           ///> setup control variables
 #if EXE_TRACE
-    tCNT = 1; tTAB = 0;               ///> setup tracing variables
+    tCNT = 0; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
 
     /// FORTH_UVAR_ADDR;
@@ -185,16 +187,6 @@ int _yield_cnt = 0;          ///< interrupt service throttle counter
         _yield_cnt = 0;                       \
         _yield();                             \
     }
-
-void _delay()                       /// (n -- ) delay n milli-second
-{
-    U32 t  = millis() + top;        ///> calculate break time
-    POP();
-    while (millis()<t) {            ///> loop until break time reached
-        _yield();                   ///> or, run hardware tasks while waiting
-    }
-    NEXT();
-}
 ///
 ///> console IO functions
 ///
@@ -215,7 +207,7 @@ void _txsto()                ///> (c -- ) send a char to console
 #if EXE_TRACE
     if (tCNT) {
         switch (top) {
-        case 0xa: LOG(tCNT ? "<LF>" : "\n");  break;
+        case 0xa: tCNT ? LOG("<LF>") : LOG("\n");  break;
         case 0xd: LOG("<CR>");    break;
         case 0x8: LOG("<TAB>");   break;
         default: LOG("<"); LOG_C((char)top); LOG(">");
@@ -359,7 +351,7 @@ int vm_outer() {
         /// @name Stack ops
         /// @}
         _X(DROP,  POP());
-        _X(DUP,   *++DS=top);
+        _X(DUP,   *++DS = top);
         _X(SWAP,
             DU tmp = top;
             top    = *DS;
@@ -427,8 +419,10 @@ int vm_outer() {
         /// @}
         /// @name Arduino specific ops
         /// @{
-        _Y(DELAY, _delay);
-        _X(CLK,   DS += 2; DTOP(millis()));
+        _X(CLK,
+        	U32 t = millis();
+        	*++DS = top; DS++;            /// * allocate 2-cells for clock ticks
+        	DTOP(t));
         _X(PIN,
             pinMode(top, *DS ? OUTPUT : INPUT);
             POP(); POP());
@@ -447,11 +441,11 @@ int vm_outer() {
         _X(RP,
             DU r = (&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR] - (U8*)RS) >> 1;
             PUSH(r));
-        _X(TRC,
 #if EXE_TRACE
-            tCNT = top;
+        _X(TRC,  tCNT = top; POP());
+#else
+        _X(TRC,  POP());
 #endif // EXE_TRACE
-            POP());
 
     vm_next:
         YIELD();                        /// * serve interrupt if any

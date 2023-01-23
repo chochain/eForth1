@@ -35,6 +35,7 @@ static Stream *io;
 IU  PC;                           ///< program counter, IU is 16-bit
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
 DU  top;                          ///< ALU (i.e. cached top of stack value)
+DU  rtop;
 IU  IR;                           ///< interrupt service routine
 ///@}
 ///
@@ -69,10 +70,10 @@ U16 GET(U16 d) {
 ///
 /// push a value onto stack top
 ///
-void PUSH(DU v)        { *++DS = top; top = (v); }
-#define RPUSH(v)       (*--RS = (v))
-#define POP()          (top = *DS--)
-#define RPOP()         (*RS++)
+void PUSH(DU v)        { *++DS = top;  top  = v; }
+void RPUSH(DU v)       { *--RS = rtop; rtop = v; }
+#define POP()          (top  = *DS--)
+#define RPOP()         (rtop = *RS++)
 #define DTOP(d)        { *DS = (d) & 0xffff; top = (d)>>16; }
 ///
 /// update program counter (ready to fetch), advance instruction pointer
@@ -80,7 +81,7 @@ void PUSH(DU v)        { *++DS = top; top = (v); }
 void NEXT() { PC=GET(IP); IP+=sizeof(IU); }
 
 DU _depth() {
-	return (DU)((U8*)DS - &_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR]) >> 1;
+    return (DU)((U8*)DS - &_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR]) >> 1;
 }
 ///
 ///@name Tracing
@@ -121,10 +122,10 @@ void TRACE()
     switch (op) {
     case opDOLIT: LOG_H(" $", GET(IP)); break;
     case opENTER:
-    	LOG("\n");
-    	for (int i=0; i<tTAB; i++) LOG("  ");
-    	tTAB++;
-    	LOG(":"); break;
+        LOG("\n");
+        for (int i=0; i<tTAB; i++) LOG("  ");
+        tTAB++;
+        LOG(":"); break;
     case opEXIT:  LOG(" ;"); --tTAB; break;
     }
     LOG(" ");
@@ -136,7 +137,7 @@ void TRACE()
 //
 // Forth Virtual Machine primitive functions
 //
-/// 
+///
 /// virtual machine initializer
 ///
 void _init() {
@@ -144,9 +145,9 @@ void _init() {
 
     PC = IP = IR = top = 0;           ///> setup control variables
 #if EXE_TRACE
-    tCNT = 0; tTAB = 0;               ///> setup tracing variables
+    tCNT = 1; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
-    
+
     /// FORTH_UVAR_ADDR;
     ///   'TIB console input buffer pointer
     ///   BASE current radix for numeric ops
@@ -171,17 +172,17 @@ void _init() {
 ///
 void _yield()                ///> yield to interrupt service
 {
-	IR = intr_service();            /// * check interrupts
-	if (IR) {                       /// * service interrupt?
-		RPUSH(IP | IRET_FLAG);      /// * flag return address as IRET
-		IP = IR + 1;                /// * skip opENTER
-	}
+    IR = intr_service();            /// * check interrupts
+    if (IR) {                       /// * service interrupt?
+        RPUSH(IP | IRET_FLAG);      /// * flag return address as IRET
+        IP = IR + 1;                /// * skip opENTER
+    }
 }
 int _yield_cnt = 0;          ///< interrupt service throttle counter
 #define YIELD_PERIOD    100
 #define YIELD()                               \
     if (!IR && ++_yield_cnt > YIELD_PERIOD) { \
-	    _yield_cnt = 0;                       \
+        _yield_cnt = 0;                       \
         _yield();                             \
     }
 
@@ -200,29 +201,29 @@ void _delay()                       /// (n -- ) delay n milli-second
 void _qrx()                  ///> ( -- c ) fetch a char from console
 {
 #if ARDUINO
-	int rst = io->read();           ///> fetch from IO stream
-	if (rst > 0) PUSH((DU)rst);
-	PUSH(BOOL(rst >= 0));
+    int rst = io->read();           ///> fetch from IO stream
+    if (rst > 0) PUSH((DU)rst);
+    PUSH(BOOL(rst >= 0));
 #else
-	PUSH((DU)getchar());            /// * Note: blocking, i.e. no interrupt support
-	PUSH(TRUE);
+    PUSH((DU)getchar());            /// * Note: blocking, i.e. no interrupt support
+    PUSH(TRUE);
 #endif
 }
-    
+
 void _txsto()                ///> (c -- ) send a char to console
 {
 #if EXE_TRACE
-	if (tCNT) {
-		switch (top) {
-		case 0xa: LOG(tCNT ? "<LF>" : "\n");  break;
-		case 0xd: LOG("<CR>");    break;
-		case 0x8: LOG("<TAB>");   break;
-		default: LOG("<"); LOG_C((char)top); LOG(">");
-		}
-	}
-	else LOG_C((char)top);
+    if (tCNT) {
+        switch (top) {
+        case 0xa: LOG(tCNT ? "<LF>" : "\n");  break;
+        case 0xd: LOG("<CR>");    break;
+        case 0x8: LOG("<TAB>");   break;
+        default: LOG("<"); LOG_C((char)top); LOG(">");
+        }
+    }
+    else LOG_C((char)top);
 #else  // !EXE_TRACE
-	LOG_C((char)top);
+    LOG_C((char)top);
 #endif // EXE_TRACE
     POP();
 }
@@ -264,7 +265,7 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     _data  = data;
     DS     = (DU*)&_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
     RS     = (DU*)&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR];
-    
+
     _init();                    /// * resetting user variables
 }
 ///
@@ -293,7 +294,7 @@ int vm_outer() {
         ///
         _X(NOP,   {});
         _Y(BYE,   _init);
-        /// 
+        ///
         /// @name Console IO
         /// @{
         _X(QRX,   _qrx());              ///> fetch char from input console
@@ -315,15 +316,15 @@ int vm_outer() {
             RPUSH(IP);                  ///> keep return address
             IP = ++PC);                 ///> skip opcode opENTER, advance to next instruction
         _X(EXIT,
-        	IP = RPOP();                ///> pop return address
-			if (IP & IRET_FLAG) {       /// * IRETURN?
-				IR = 0;                 /// * interrupt disabled
-				IP &= ~IRET_FLAG;
-			});
+            IP = rtop;
+            RPOP();                     ///> pop return address
+            if (IP & IRET_FLAG) {       /// * IRETURN?
+                IR = 0;                 /// * interrupt disabled
+                IP &= ~IRET_FLAG;
+            });
         _Y(EXECU, _execu);
         _X(DONEXT,
-            if (*RS > 0) {              ///> check if loop counter > 0
-                *RS -= 1;               ///>> decrement loop counter
+            if (rtop-- > 0) {           ///> check if loop counter > 0
                 IP = GET(IP);           ///>> branch back to FOR
             }
             else {                      ///> or,
@@ -349,8 +350,8 @@ int vm_outer() {
             BSET(top, *DS--);
             POP());
         _X(CAT,   top = (DU)BGET(top));
-        _X(RFROM, PUSH(RPOP()));
-        _X(RAT,   PUSH(*RS));
+        _X(RFROM, PUSH(rtop); RPOP());
+        _X(RAT,   PUSH(rtop));
         _X(TOR,
             RPUSH(top);
             POP());
@@ -384,7 +385,7 @@ int vm_outer() {
         _X(MUL,   top *= *DS--);
         _X(DIV,   top = top ? *DS-- / top : (DS--, 0));
         _X(MOD,   top = top ? *DS-- % top : *DS--);
-        _X(NEG,   top = 0 - top);
+        _X(NEG,   top = -top);
         /// @}
         /// @name Logic ops
         /// @{
@@ -444,18 +445,18 @@ int vm_outer() {
         _X(TMRE, intr_enable_timer(top);   POP());
         _X(PCIE, intr_enable_pci(top);     POP());
         _X(RP,
-        	DU r = (&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR] - (U8*)RS) >> 1;
-        	PUSH(r));
+            DU r = (&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR] - (U8*)RS) >> 1;
+            PUSH(r));
         _X(TRC,
 #if EXE_TRACE
-        	tCNT = top;
+            tCNT = top;
 #endif // EXE_TRACE
-        	POP());
+            POP());
 
     vm_next:
-	    YIELD();                        /// * serve interrupt if any
-		PC = GET(IP);                   /// * fetch next program counter (indirect threading)
-		IP += sizeof(IU); 	            /// * advance to next instruction
+        YIELD();                        /// * serve interrupt if any
+        PC = GET(IP);                   /// * fetch next program counter (indirect threading)
+        IP += sizeof(IU);               /// * advance to next instruction
     } while (PC);
 
     return (int)PC;

@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdint.h>
+#include <time.h>
 #ifdef ESP8266
 #include "user_interface.h"
 #endif // ESP8266
@@ -20,7 +21,7 @@
 ///@name Debug Tracing Flags
 ///@{
 #define ASM_TRACE       0             /**< assembler tracing flag */
-#define EXE_TRACE       0             /**< virtual machine execution tracing flag */
+#define EXE_TRACE       1             /**< virtual machine execution tracing flag */
 ///@}
 ///
 ///@name Portable Types
@@ -134,7 +135,6 @@ typedef S16       DU;                 ///< data/cell unit
     OP(DNEG),   \
     OP(DADD),   \
     OP(DSUB),   \
-    OP(DELAY),  \
     OP(CLK),    \
     OP(PIN),    \
     OP(MAP),    \
@@ -157,11 +157,10 @@ typedef S16       DU;                 ///< data/cell unit
 
 #include <Arduino.h>
 #include <avr/pgmspace.h>
-#include <time.h>
 #define LOG(s)              io->print(F(s))
 #define LOG_C(c)            { io->print(c); if (c=='\n') io->flush(); }
-#define LOG_V(s, n)         { io->print(F(s)); io->print((DU)n); }
-#define LOG_H(s, n)         { io->print(F(s)); io->print(n, HEX); }
+#define LOG_V(s, n)         { io->print(F(s)); io->print((DU)(n)); }
+#define LOG_H(s, n)         { io->print(F(s)); io->print((n), HEX); }
 #define CLI()               cli()
 #define SEI()               sei()
 
@@ -172,17 +171,17 @@ typedef const char          *PGM_P;
 #define pgm_read_byte(b)    *((U8*)(b))
 #define PROGMEM
 #define Stream              char
+#define millis()            ((U32)clock())
 #define pinMode(a,b)
 #define digitalRead(p)      (0)
 #define digitalWrite(p,v)
 #define analogRead(p)       (0)
 #define analogWrite(p,v)
 #define map(a,b,c,d,e)      (0)
-#define millis()            (0x12345678)
-#define LOG(s)              printf("%s", s)
-#define LOG_C(c)            printf("%c", c)
-#define LOG_V(s, n)         printf("%s%d", s, n)
-#define LOG_H(s, n)         printf("%s%x", s, (n)&0xffff)
+#define LOG(s)              printf("%s", (s))
+#define LOG_C(c)            printf("%c", (c))
+#define LOG_V(s, n)         printf("%s%d", (s), (n))
+#define LOG_H(s, n)         printf("%s%x", (s), (n)&0xffff)
 #define LOW                 (0)
 #define HIGH                (1)
 #define CLI()

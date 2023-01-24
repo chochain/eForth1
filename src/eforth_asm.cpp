@@ -24,9 +24,9 @@ namespace EfAsm {
 ///
 ///@name Compiled Address for Branching
 ///@{
-IU BRAN, QBRAN, DONXT;
-IU DOTQ, STRQ, ABORTQ;
-IU TOR;
+IU BRAN, QBRAN, DONXT;              ///< addr of branching ops, used by branching ops
+IU DOTQP, STRQP, ABORQP;            ///< addr of output ops, used by _dotq, _strq, _abortq
+IU TOR;                             ///< addres of ">R" op, used by _for
 IU NOP = 0xffff;                    ///< NOP set to ffff to prevent access before initialized
 ///@}
 ///@name Return Stack for Branching Ops
@@ -59,9 +59,10 @@ void _rdump()                   /// dump return stack
 int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     PGM_P p = reinterpret_cast<PGM_P>(seq);
     int i=0;
-    for (; pgm_read_byte(p); i++, p++);
+    for (; pgm_read_byte(p); i++, p++);  /// * length includes terminating zero
     return i;
 }
+
 #define CELLCPY(n) {                            \
     va_list argList;                            \
     va_start(argList, n);                       \
@@ -74,14 +75,19 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
     va_end(argList);                            \
     _rdump();                                   \
 }
-#define STRCPY(op, seq) {                       \
+
+#define PGMCPY(len, seq) {                      \
+    PGM_P p = reinterpret_cast<PGM_P>(seq);     \
+    for (int i=0; i < len; i++) {               \
+        BSET(PC++, pgm_read_byte(p++));         \
+    }                                           \
+}
+    
+#define OPSTR(op, seq) {                        \
     STORE(op);                                  \
     int len = _strlen(seq);                     \
-    PGM_P p = reinterpret_cast<PGM_P>(seq);     \
     BSET(PC++, len);                            \
-    for (int i=0; i < len; i++) {               \
-    BSET(PC++, pgm_read_byte(p++));             \
-    }                                           \
+    PGMCPY(len, seq);                           \
 }
 ///@}
 ///@name Assembler - Word Creation Headers
@@ -96,11 +102,8 @@ void _header(int lex, FCHAR *seq) {           /// create a word header in dictio
 
     BSET(PC++, lex);                          /// * length of word (with optional fIMMED or fCOMPO flags)
     int len = lex & 0x1f;                     /// * Forth allows word max length 31
-    PGM_P p = reinterpret_cast<PGM_P>(seq);
-    for (int i=0; i < len; i++) {             /// * memcpy word string
-        BSET(PC++, pgm_read_byte(p++));
-    }
-    DEBUG("\n%04x: ", aPC);
+    PGMCPY(len, seq);                         /// * memcpy word string
+    DEBUG("\n%04x: ", PC);
     DEBUG("%s", seq);
 }
 ///
@@ -239,17 +242,17 @@ void _then(int len, ...) {         /// IF-ELSE--**THEN**
 void _dotq(FCHAR *seq) {
     SHOWOP("DOTQ");
     DEBUG("%s", seq);
-    STRCPY(DOTQ, seq);
+    OPSTR(DOTQP, seq);
 }
 void _strq(FCHAR *seq) {
     SHOWOP("STRQ");
     DEBUG("%s", seq);
-    STRCPY(STRQ, seq);
+    OPSTR(STRQP, seq);
 }
 void _abortq(FCHAR *seq) {
     SHOWOP("ABORTQ");
     DEBUG("%s", seq);
-    STRCPY(ABORTQ, seq);
+    OPSTR(ABORQP, seq);
 }
 ///@}
 ///
@@ -266,18 +269,18 @@ int assemble(U8 *cdata)
     IU BOOT  = _LABEL(opENTER, 0);      // reserved for boot vectors
 
     IU ua    = FORTH_UVAR_ADDR;
-    IU vTTIB = _CODE("'TIB",    opDOCON, V32(ua,0));   ///> * 'TIB console input buffer pointer
-    IU vBASE = _CODE("BASE",    opDOCON, V32(ua,1));   ///> * BASE current radix for numeric ops
-    IU vCP   = _CODE("CP",      opDOCON, V32(ua,2));   ///> * CP,  top of dictionary, same as HERE
-    IU vCNTX = _CODE("CONTEXT", opDOCON, V32(ua,3));   ///> * CONTEXT name field of last word
-    IU vLAST = _CODE("LAST",    opDOCON, V32(ua,4));   ///> * LAST, same as CONTEXT
-    IU vMODE = _CODE("'MODE",   opDOCON, V32(ua,5));   ///> * 'MODE (interpreter or compiler)
-    IU vTABRT= _CODE("'ABORT",  opDOCON, V32(ua,6));   ///> * ABORT exception rescue handler (QUIT)
-    IU vHLD  = _CODE("HLD",     opDOCON, V32(ua,7));   ///> * HLD  char pointer to output buffer
-    IU vSPAN = _CODE("SPAN",    opDOCON, V32(ua,8));   ///> * SPAN number of character accepted
-    IU vIN   = _CODE(">IN",     opDOCON, V32(ua,9));   ///> * >IN  interpreter pointer to next char
-    IU vNTIB = _CODE("#TIB",    opDOCON, V32(ua,10));  ///> * #TIB number of character received in TIB
-    IU vTEMP = _CODE("tmp",     opDOCON, V32(ua,11));  ///> * tmp storage (alternative to return stack)
+    IU vTTIB = _CODE("'TIB",    opDOCON, VDU(ua,0));   ///> * 'TIB console input buffer pointer
+    IU vBASE = _CODE("BASE",    opDOCON, VDU(ua,1));   ///> * BASE current radix for numeric ops
+    IU vCP   = _CODE("CP",      opDOCON, VDU(ua,2));   ///> * CP,  top of dictionary, same as HERE
+    IU vCNTX = _CODE("CONTEXT", opDOCON, VDU(ua,3));   ///> * CONTEXT name field of last word
+    IU vLAST = _CODE("LAST",    opDOCON, VDU(ua,4));   ///> * LAST, same as CONTEXT
+    IU vMODE = _CODE("'MODE",   opDOCON, VDU(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
+    IU vTABRT= _CODE("'ABORT",  opDOCON, VDU(ua,6));   ///> * ABORT exception rescue handler (QUIT)
+    IU vHLD  = _CODE("HLD",     opDOCON, VDU(ua,7));   ///> * HLD  char pointer to output buffer
+    IU vSPAN = _CODE("SPAN",    opDOCON, VDU(ua,8));   ///> * SPAN number of character accepted
+    IU vIN   = _CODE(">IN",     opDOCON, VDU(ua,9));   ///> * >IN  interpreter pointer to next char
+    IU vNTIB = _CODE("#TIB",    opDOCON, VDU(ua,10));  ///> * #TIB number of character received in TIB
+    IU vTEMP = _CODE("tmp",     opDOCON, VDU(ua,11));  ///> * tmp storage (alternative to return stack)
     ///
     ///> common constants and variable spec.
     ///
@@ -340,9 +343,11 @@ int assemble(U8 *cdata)
     IU UMMOD = _CODE("UM/MOD",  opUMMOD  );
     IU UMSTA = _CODE("UM*",     opUMSTAR );
     IU MSTAR = _CODE("M*",      opMSTAR  );
-    _CODE("DNEGATE", opDNEG   );
-    _CODE("D+",      opDADD   );
-    _CODE("D-",      opDSUB   );
+    IU DNEG  = _CODE("DNEGATE", opDNEG   );
+    IU DADD  = _CODE("D+",      opDADD   );
+    IU DSUB  = _CODE("D-",      opDSUB   );
+    IU RP    = _CODE("RP",      opRP     );
+    IU TRC   = _CODE("TRC",     opTRC    );
     ///
     ///> Common High-Level Colon Words
     ///
@@ -354,11 +359,20 @@ int assemble(U8 *cdata)
     // Dr. Ting's alternate opcodes
     IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
+    IU D2S   = _COLON("D>S",   ZLT, OVER, ZLT, XOR); {
+    	_IF(NEG);
+    	_THEN(EXIT);
+    }
+    IU S2D   = _COLON("S>D",   DUP, ZLT); {
+    	_IF(DOLIT, 0xffff);
+    	_ELSE(DOLIT, 0);
+    	_THEN(EXIT);
+    }
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
-    _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);
-    _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
-    _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
-    _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
+    IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);
+    IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
+    IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
+    IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
     IU WITHI = _COLON("WITHIN",OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
     IU ABS   = _COLON("ABS", DUP, ZLT); {
@@ -445,7 +459,7 @@ int assemble(U8 *cdata)
     IU KEY   = _COLON("KEY",   NOP); {
         _BEGIN(QKEY);
         _UNTIL(EXIT);
-}
+    }
     IU EMIT  = _COLON("EMIT",  TXSTO, EXIT);
     IU HATH  = _COLON("^H", TOR, OVER, RFROM, SWAP, OVER, XOR); {
         _IF(DOLIT, 8, EMIT, ONEM, BLANK, EMIT, DOLIT, 8, EMIT);
@@ -459,6 +473,8 @@ int assemble(U8 *cdata)
         _NEXT(DROP, EXIT);
     }
     IU TCHAR = _COLON(">CHAR", DOLIT, 0x7f, AND, DUP, DOLIT, 0x7f, BLANK, WITHI); {
+        _IF(DROP, DOLIT, 0x5f);
+        _THEN(EXIT);
     }
     IU SPACS = _COLON("SPACES", BLANK, CHARS, EXIT);
     IU TYPE  = _COLON("TYPE", NOP); {
@@ -472,9 +488,9 @@ int assemble(U8 *cdata)
     }
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);
     // IU CR    = _COLON("CR",   DOLIT, 10, DOLIT, 13, EMIT, EMIT, EXIT);   // LFCR
-    IU DOSTR = _COLON("DOSTR",RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
-    IU STRQ  = _COLON("S\"|", DOSTR, EXIT);
-       DOTQ  = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
+    IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
+    IU STRQP = _COLON("$\"|", DOSTR, EXIT);
+       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
     IU DOTR  = _COLON(".R",   TOR,
             DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // shown as string
             RFROM, OVER, SUB, SPACS, TYPE, EXIT);
@@ -614,14 +630,15 @@ int assemble(U8 *cdata)
             _IF(EXECU);                              // @EXECUTE
             _THEN(EXIT);
         }
-        ABORTQ = _COLON("ABORT\"", NOP); {
+       ABORQP = _COLON("abort\"", NOP); {
         _IF(DOSTR, COUNT, TYPE, ABORT);
         _THEN(DOSTR, DROP, EXIT);
     }
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
-        _IF(CAT, DOLIT, fCMPL, AND); {               // if it is compile only word
+        _IF(CAT, DOLIT, fCMPL, AND); {               // check for compile only word
             _ABORTQ(" compile only");
+            // INTER0 of Dr Ting's
             _LABEL(EXECU, EXIT);
         }
         _THEN(NUMBQ);                                // word name not found, check if it is a number
@@ -636,8 +653,8 @@ int assemble(U8 *cdata)
             _IF(EXECU);
             _THEN(NOP);
         }
-        _REPEAT(DROP, CR, DOLIT, INTER, vMODE, AT, EQ); {
-            _IF(DEPTH, DOLIT, 4, MIN); {             // dump stack and ok prompt
+        _REPEAT(DROP, CR, DOLIT, INTER, vMODE, AT, EQ); { // .OK
+            _IF(DEPTH, DOLIT, 4, MIN); {                  // dump stack and ok prompt
                 _FOR(RAT, PICK, DOT);
                 _NEXT(NOP);
                 _DOTQ(" ok> ");
@@ -735,11 +752,11 @@ int assemble(U8 *cdata)
     ///
     ///> Forth Compiler - String specification
     ///
-    IU STRCQ  = _COLON("S,\"", DOLIT, 0x22, WORD,       // find quote in TIB (0x22 is " in ASCII)
+    IU STRCQ  = _COLON("$,\"", DOLIT, 0x22, WORD,       // find quote in TIB (0x22 is " in ASCII)
                        COUNT, ADD, vCP, STORE, EXIT);   // advance dic pointer
-    _IMMED("ABORT\"", DOLIT, ABORTQ, HERE, STORE, STRCQ, EXIT);
-    _IMMED("S\"",     DOLIT, STRQ,   HERE, STORE, STRCQ, EXIT);
-    _IMMED(".\"",     DOLIT, DOTQ,   HERE, STORE, STRCQ, EXIT);
+    _IMMED("ABORT\"", DOLIT, ABORQP, HERE, STORE, STRCQ, EXIT);
+    _IMMED("$\"",     DOLIT, STRQP,  HERE, STORE, STRCQ, EXIT);
+    _IMMED(".\"",     DOLIT, DOTQP,  HERE, STORE, STRCQ, EXIT);
     ///
     ///> Debugging Tools
     ///
@@ -772,18 +789,24 @@ int assemble(U8 *cdata)
     ///
     ///> Arduino specific opcodes
     ///
-    _CODE("DELAY",   opDELAY);
-    _CODE("CLOCK",   opCLK  );
+    IU CLK = _CODE("CLOCK",   opCLK);
+    _COLON("DELAY", S2D, CLK, DADD, vTEMP, DSTOR); {
+        _BEGIN(vTEMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
+        _UNTIL(EXIT);
+    }
     _CODE("PINMODE", opPIN  );
-    _CODE("MAP",     opMAP  );
-    _CODE("IN",      opIN   );
-    _CODE("OUT",     opOUT  );
-    _CODE("AIN",     opAIN  );
-    _CODE("PWM",     opPWM  );
-    _CODE("TMR",     opTMR  );
-    _CODE("PCI",     opPCI  );
-    _CODE("TMRE",    opTMRE);
-    _CODE("PCIE",    opPCIE);
+    _CODE("MAP",     opMAP  ); ///  ( h l p -- ) set map range to pin
+    _CODE("IN",      opIN   ); ///  ( p -- n )   digitalRead(p)
+    _CODE("OUT",     opOUT  ); ///  ( p n -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
+    _CODE("AIN",     opAIN  ); ///  ( p -- n )   read analog value from pin
+    _CODE("PWM",     opPWM  ); ///  ( n p -- )   set duty cycle % (PWM) to pin
+    _CODE("TMR",     opTMR  ); ///  ( xt n -- )  on timer interrupt calls xt every n ms
+    _CODE("PCI",     opPCI  ); ///  ( xt p -- )  on pin change interrupt calls xt
+    _CODE("TMRE",    opTMRE ); ///  ( f -- )     enable/disable timer interrupt
+    _CODE("PCIE",    opPCIE ); ///  ( f -- )     enable/disable pin change interrupt
+    _CODE("TRACE",   opTRC  ); ///  ( f -- )     enable/disable debug tracing
+    _CODE("SAVE",    opSAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
+    _CODE("LOAD",    opLOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
     ///
     ///> Cold Start address (End of dictionary)
     ///

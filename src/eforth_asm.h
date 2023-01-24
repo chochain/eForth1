@@ -13,7 +13,7 @@ namespace EfAsm {
 //
 #if ASM_TRACE
 #define DEBUG(s,v)      printf(s, v)
-#define SHOWOP(op)      printf("\n%04x: %s\t", aPC, op)
+#define SHOWOP(op)      printf("\n%04x: %s\t", PC, op)
 #else
 #define DEBUG(s,v)
 #define SHOWOP(op)
@@ -69,9 +69,9 @@ typedef const char                FCHAR;
 ///@}
 ///@name Vargs IO
 ///@{
-#define _DOTQ(seq)           _dotq(F(seq))
-#define _STRQ(seq)           _strq(F(seq))
-#define _ABORTQ(seq)         _abortq(F(seq))
+#define _DOTQ(str)           _dotq(F(str))
+#define _STRQ(str)           _strq(F(str))
+#define _ABORTQ(str)         _abortq(F(str))
 ///@}
 ///@name Memory Access and Stack Op
 ///@{
@@ -80,11 +80,11 @@ typedef const char                FCHAR;
 #define SET(d, v)   do { U16 a=(d); U16 x=(v); BSET(a, (x)&0xff); BSET((a)+1, (x)>>8); } while (0)
 #define GET(d)      ({ U16 a=(d); (U16)BGET(a) + ((U16)BGET((a)+1)<<8); })
 #define STORE(v)    do { SET(PC, (v)); PC+=CELLSZ; } while(0)
-#define RPUSH(a)    SET(FORTH_ROM_SZ - (++R)*CELLSZ, (a))
+#define RPUSH(a)    SET(FORTH_ROM_SZ - (++R)*CELLSZ, (a))             /** tail section of memory block */
 #define RPOP()      ((U16)GET(FORTH_ROM_SZ - (R ? R-- : R)*CELLSZ))
 #define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
-#define V32(a, i)   VL(a,i),VH(a,i)
+#define VDU(a, i)   VL(a,i),VH(a,i)
 ///@}
 ///
 

@@ -24,45 +24,45 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
 ### How to install eForth1?
 
 * From Arduino IDE's Library Manager
-> <br/>
-> \> Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
->
-> \> from Arduino IDE > Tools > Manage Libraries, enter FORTH in search box
->
-> \> find eForth1 in the short list, select the latest version, and click the Install button
->
-> \> from Files > Examples, find eForth1 in Examples from Custom Libraries at very buttom section
->
-> \> load one of the nanoForth examples, such as 0_hello
->
-> \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
->
-> \> hit compile and upload. You should see the 'ok' prompt
->
-> \> in Serial Monitor input bar atop, type WORDS and hit <return>. See what eForth1 says.<br/><br/>
+  >
+  > \> Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
+  >
+  > \> from Arduino IDE > Tools > Manage Libraries, enter FORTH in search box
+  >
+  > \> find eForth1 in the short list, select the latest version, and click the Install button
+  >
+  > \> from Files > Examples, find eForth1 in Examples from Custom Libraries at very buttom section
+  >
+  > \> load one of the eForth1 examples, such as 0_hello
+  >
+  > \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
+  >
+  > \> hit compile and upload. You should see the 'ok' prompt
+  >
+  > \> in Serial Monitor input bar atop, type WORDS and hit <return>. See what eForth1 says.<br/>
 
-* or, from GitHub directly, if you prefer managing source codes manually
-> <br/>
-> \> git clone https://github.com/chochain/eForth1 onto your local Sketch directory
->
-> \> copy examples/0_hello/0_heloo.ino from sub-directory, then rename it as eforth1.ino<br/>
->
-> \> open eforth1.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
->
-> \> in nanoFORTH.ino, change the #include <eforth1.h> to #include "./src/eforth1.h"
->
-> \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
->
-> \> compile and upload, you should see the 'ok' prompt
->
-> \> in Serial Monitor input bar atop, type WORDS and hit <return>. See what eForth1 says.<br/><br/>
+* Or, from GitHub directly, if you prefer managing source codes manually
+  >
+  > \> git clone https://github.com/chochain/eForth1 onto your local Sketch directory
+  >
+  > \> copy examples/0_hello/0_heloo.ino from sub-directory, then rename it as eforth1.ino<br/>
+  >
+  > \> open eforth1.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
+  >
+  > \> in eForth1.ino, change the #include <eforth1.h> to #include "./src/eforth1.h"
+  >
+  > \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
+  >
+  > \> compile and upload, you should see the 'ok' prompt
+  >
+  > \> in Serial Monitor input bar atop, type WORDS and hit <return>. See what eForth1 says.<br/>
 
-* Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully 
-> <br/>
-> |screen shot|
-> |:--|
-> |@image html images/eforth1_init_snip.png|
-<br/>
+Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully 
+  > 
+  > |screen shot|
+  > |:--|
+  > |@image html https://chochain.github.io/eForth1/docs/images/eforth1_init_snip.png|
+  <br/>
 
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.

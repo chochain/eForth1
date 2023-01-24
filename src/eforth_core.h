@@ -43,13 +43,13 @@ typedef S16       DU;                 ///< data/cell unit
 ///@{
 #define CELLSZ           2            /**< 16-bit cell size                    */
 #define FORTH_ROM_SZ     0x2000       /**< size of ROM (for pre-defined words) */
-#define FORTH_DIC_SZ     0x400        /**< size of dictionary space            */
 #define FORTH_UVAR_SZ    0x20         /**< size of Forth user variables        */
-#define FORTH_STACK_SZ   0xe0         /**< size of data/return stack           */
+#define FORTH_DIC_SZ     0x3e0        /**< size of dictionary space            */
+#define FORTH_STACK_SZ   0x100        /**< size of data/return stack           */
 #define FORTH_TIB_SZ     0x80         /**< size of terminal input buffer       */
 #define FORTH_PAD_SZ     0x20         /**< size of output pad (in DIC space )  */
 #define FORTH_RAM_SZ     ( \
-        FORTH_DIC_SZ + FORTH_UVAR_SZ + FORTH_STACK_SZ + FORTH_TIB_SZ) /**< total RAM */
+        FORTH_UVAR_SZ + FORTH_DIC_SZ + FORTH_STACK_SZ + FORTH_TIB_SZ) /**< total RAM */
 ///@}
 ///
 ///> note:
@@ -62,9 +62,9 @@ typedef S16       DU;                 ///< data/cell unit
 ///@{
 #define FORTH_BOOT_ADDR  0x0000
 #define FORTH_RAM_ADDR   FORTH_ROM_SZ
-#define FORTH_DIC_ADDR   FORTH_RAM_ADDR
-#define FORTH_UVAR_ADDR  (FORTH_DIC_ADDR   + FORTH_DIC_SZ)
-#define FORTH_STACK_ADDR (FORTH_UVAR_ADDR  + FORTH_UVAR_SZ)
+#define FORTH_UVAR_ADDR  FORTH_RAM_ADDR
+#define FORTH_DIC_ADDR   (FORTH_UVAR_ADDR + FORTH_UVAR_SZ)
+#define FORTH_STACK_ADDR (FORTH_DIC_ADDR  + FORTH_DIC_SZ)
 #define FORTH_STACK_TOP  (FORTH_STACK_ADDR + FORTH_STACK_SZ)
 #define FORTH_TIB_ADDR   (FORTH_STACK_TOP)
 ///@}
@@ -147,7 +147,9 @@ typedef S16       DU;                 ///< data/cell unit
     OP(TMRE),   \
     OP(PCIE),   \
 	OP(RP),     \
-	OP(TRC)
+	OP(TRC),    \
+	OP(SAVE),   \
+	OP(LOAD)
 //
 // eForth function prototypes
 //
@@ -188,6 +190,7 @@ typedef const char          *PGM_P;
 #define SEI()
 
 #endif // ARDUINO
+
 ///@}
 ///@name interrupt handle routines
 ///@{
@@ -213,5 +216,7 @@ int  vm_outer();            ///< Forth outer interpreter
 int  ef_assemble(
     U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
     );
+void ef_save(U8 *data);     ///< save user variables and dictionary to EEPROM
+void ef_load(U8 *data);     ///< load user variables and dictionary from EEPROM
 ///@}
 #endif // __EFORTH_CORE_H

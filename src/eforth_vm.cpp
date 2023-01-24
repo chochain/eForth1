@@ -446,6 +446,14 @@ int vm_outer() {
 #else
         _X(TRC,  POP());
 #endif // EXE_TRACE
+        _X(SAVE,
+        	U16 sz = ef_save(_data);
+        	LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
+        );
+        _X(LOAD,
+        	U16 sz = ef_load(_data);
+        	LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
+        );
 
     vm_next:
         YIELD();                        /// * serve interrupt if any

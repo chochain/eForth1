@@ -23,8 +23,8 @@ void _info(U8 *cdata, int sz, Stream *io) {
     LOG_H(" bytes <--auto=x", s);
 #endif // ARDUINO
     LOG_H("\n  ROM  :x0000+", FORTH_ROM_SZ);
+    LOG_H("\n  UVAR :x", FORTH_UVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);  LOG("  <=> EEPROM");
     LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ);   LOG(" <=> EEPROM");
-    LOG_H("\n  UVAR :x", FORTH_UVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);
     LOG_H("\n  STACK:x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
     LOG_H("\n  TIB  :x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
 }

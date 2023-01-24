@@ -216,7 +216,7 @@ int  vm_outer();            ///< Forth outer interpreter
 int  ef_assemble(
     U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
     );
-void ef_save(U8 *data);     ///< save user variables and dictionary to EEPROM
-void ef_load(U8 *data);     ///< load user variables and dictionary from EEPROM
+int  ef_save(U8 *data);     ///< save user variables and dictionary to EEPROM
+int  ef_load(U8 *data);     ///< load user variables and dictionary from EEPROM
 ///@}
 #endif // __EFORTH_CORE_H

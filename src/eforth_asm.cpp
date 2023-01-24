@@ -269,18 +269,18 @@ int assemble(U8 *cdata)
     IU BOOT  = _LABEL(opENTER, 0);      // reserved for boot vectors
 
     IU ua    = FORTH_UVAR_ADDR;
-    IU vTTIB = _CODE("'TIB",    opDOCON, V32(ua,0));   ///> * 'TIB console input buffer pointer
-    IU vBASE = _CODE("BASE",    opDOCON, V32(ua,1));   ///> * BASE current radix for numeric ops
-    IU vCP   = _CODE("CP",      opDOCON, V32(ua,2));   ///> * CP,  top of dictionary, same as HERE
-    IU vCNTX = _CODE("CONTEXT", opDOCON, V32(ua,3));   ///> * CONTEXT name field of last word
-    IU vLAST = _CODE("LAST",    opDOCON, V32(ua,4));   ///> * LAST, same as CONTEXT
-    IU vMODE = _CODE("'MODE",   opDOCON, V32(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
-    IU vTABRT= _CODE("'ABORT",  opDOCON, V32(ua,6));   ///> * ABORT exception rescue handler (QUIT)
-    IU vHLD  = _CODE("HLD",     opDOCON, V32(ua,7));   ///> * HLD  char pointer to output buffer
-    IU vSPAN = _CODE("SPAN",    opDOCON, V32(ua,8));   ///> * SPAN number of character accepted
-    IU vIN   = _CODE(">IN",     opDOCON, V32(ua,9));   ///> * >IN  interpreter pointer to next char
-    IU vNTIB = _CODE("#TIB",    opDOCON, V32(ua,10));  ///> * #TIB number of character received in TIB
-    IU vTEMP = _CODE("tmp",     opDOCON, V32(ua,11));  ///> * tmp storage (alternative to return stack)
+    IU vTTIB = _CODE("'TIB",    opDOCON, VDU(ua,0));   ///> * 'TIB console input buffer pointer
+    IU vBASE = _CODE("BASE",    opDOCON, VDU(ua,1));   ///> * BASE current radix for numeric ops
+    IU vCP   = _CODE("CP",      opDOCON, VDU(ua,2));   ///> * CP,  top of dictionary, same as HERE
+    IU vCNTX = _CODE("CONTEXT", opDOCON, VDU(ua,3));   ///> * CONTEXT name field of last word
+    IU vLAST = _CODE("LAST",    opDOCON, VDU(ua,4));   ///> * LAST, same as CONTEXT
+    IU vMODE = _CODE("'MODE",   opDOCON, VDU(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
+    IU vTABRT= _CODE("'ABORT",  opDOCON, VDU(ua,6));   ///> * ABORT exception rescue handler (QUIT)
+    IU vHLD  = _CODE("HLD",     opDOCON, VDU(ua,7));   ///> * HLD  char pointer to output buffer
+    IU vSPAN = _CODE("SPAN",    opDOCON, VDU(ua,8));   ///> * SPAN number of character accepted
+    IU vIN   = _CODE(">IN",     opDOCON, VDU(ua,9));   ///> * >IN  interpreter pointer to next char
+    IU vNTIB = _CODE("#TIB",    opDOCON, VDU(ua,10));  ///> * #TIB number of character received in TIB
+    IU vTEMP = _CODE("tmp",     opDOCON, VDU(ua,11));  ///> * tmp storage (alternative to return stack)
     ///
     ///> common constants and variable spec.
     ///
@@ -795,16 +795,18 @@ int assemble(U8 *cdata)
         _UNTIL(EXIT);
     }
     _CODE("PINMODE", opPIN  );
-    _CODE("MAP",     opMAP  );
-    _CODE("IN",      opIN   );
-    _CODE("OUT",     opOUT  );
-    _CODE("AIN",     opAIN  );
-    _CODE("PWM",     opPWM  );
-    _CODE("TMR",     opTMR  );
-    _CODE("PCI",     opPCI  );
-    _CODE("TMRE",    opTMRE );
-    _CODE("PCIE",    opPCIE );
-    _CODE("TRACE",   opTRC  );
+    _CODE("MAP",     opMAP  ); ///  ( h l p -- ) set map range to pin
+    _CODE("IN",      opIN   ); ///  ( p -- n )   digitalRead(p)
+    _CODE("OUT",     opOUT  ); ///  ( p n -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
+    _CODE("AIN",     opAIN  ); ///  ( p -- n )   read analog value from pin
+    _CODE("PWM",     opPWM  ); ///  ( n p -- )   set duty cycle % (PWM) to pin
+    _CODE("TMR",     opTMR  ); ///  ( xt n -- )  on timer interrupt calls xt every n ms
+    _CODE("PCI",     opPCI  ); ///  ( xt p -- )  on pin change interrupt calls xt
+    _CODE("TMRE",    opTMRE ); ///  ( f -- )     enable/disable timer interrupt
+    _CODE("PCIE",    opPCIE ); ///  ( f -- )     enable/disable pin change interrupt
+    _CODE("TRACE",   opTRC  ); ///  ( f -- )     enable/disable debug tracing
+    _CODE("SAVE",    opSAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
+    _CODE("LOAD",    opLOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
     ///
     ///> Cold Start address (End of dictionary)
     ///

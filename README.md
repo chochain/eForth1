@@ -56,14 +56,16 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
   > \> compile and upload, you should see the 'ok' prompt
   >
   > \> in Serial Monitor input bar atop, type WORDS and hit <return>. See what eForth1 says.<br/>
+  <p/>
 
-Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully 
-  > 
-  > |screen shot|
-  > |:--|
-  > |@image html https://chochain.github.io/eForth1/docs/images/eforth1_init_snip.png|
-  <br/>
+Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully. 
 
+  > <img src="./docs/images/eforth1_init_snip.png" width="500px">
+  
+  > You can then type **WORDS** in the input bar above and hit \<return\> to list all the words supprted by eForth1.
+
+  > <img src="./docs/images/eforth1_words_snip.png" width="500px">
+  
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.
 * Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary.

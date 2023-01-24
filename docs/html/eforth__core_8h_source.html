@@ -93,101 +93,101 @@ $(document).ready(function(){initNavTree('eforth__core_8h_source.html',''); init
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;string.h&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;stdarg.h&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#ifdef ESP8266</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;user_interface.h&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#endif // ESP8266</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#af0b5cfa4242ae7f98ba80fd23ef8afa9">   15</a></span>&#160;<span class="preprocessor">#define APP_NAME        &quot;eForth1&quot;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#aa9e8f3bb466bb421d13913df7aeaa20c">   16</a></span>&#160;<span class="preprocessor">#define MAJOR_VERSION   &quot;v1&quot;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a6094f5f4a8aa099faa6d80b4f020927b">   17</a></span>&#160;<span class="preprocessor">#define CASE_SENSITIVE  0             </span></div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ae6bc65df3ece8101857357cbecc60d19">   18</a></span>&#160;<span class="preprocessor">#define ASM_ONLY        0             </span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#define ASM_TRACE       0             </span></div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a4e7ebf605b9379a385139d145f5b1fc5">   23</a></span>&#160;<span class="preprocessor">#define EXE_TRACE       0             </span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">typedef uint32_t  U32;                </span></div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">   29</a></span>&#160;<span class="preprocessor">typedef uint16_t  U16;                </span></div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">   30</a></span>&#160;<span class="preprocessor">typedef uint8_t   U8;                 </span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor"></span> </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">   32</a></span>&#160;<span class="keyword">typedef</span> int32_t   <a class="code" href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">S32</a>;                </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">   33</a></span>&#160;<span class="keyword">typedef</span> int16_t   <a class="code" href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>;                </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#af1475a0bb1962ef08dd1f78bd5dba87a">   34</a></span>&#160;<span class="keyword">typedef</span> int8_t    <a class="code" href="eforth__core_8h.html#af1475a0bb1962ef08dd1f78bd5dba87a">S8</a>;                 </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">   36</a></span>&#160;<span class="keyword">typedef</span> <a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>       <a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>;                 </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">   37</a></span>&#160;<span class="keyword">typedef</span> <a class="code" href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>       <a class="code" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>;                 </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#define CELLSZ           2            </span></div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">   44</a></span>&#160;<span class="preprocessor">#define FORTH_ROM_SZ     0x2000       </span></div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#aff92e9d3a1f1b8f50e5f99f48e415b9a">   45</a></span>&#160;<span class="preprocessor">#define FORTH_DIC_SZ     0x400        </span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;time.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#ifdef ESP8266</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;user_interface.h&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#endif // ESP8266</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#af0b5cfa4242ae7f98ba80fd23ef8afa9">   16</a></span>&#160;<span class="preprocessor">#define APP_NAME        &quot;eForth1&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#aa9e8f3bb466bb421d13913df7aeaa20c">   17</a></span>&#160;<span class="preprocessor">#define MAJOR_VERSION   &quot;v1&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a6094f5f4a8aa099faa6d80b4f020927b">   18</a></span>&#160;<span class="preprocessor">#define CASE_SENSITIVE  0             </span></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ae6bc65df3ece8101857357cbecc60d19">   19</a></span>&#160;<span class="preprocessor">#define ASM_ONLY        0             </span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define ASM_TRACE       0             </span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a4e7ebf605b9379a385139d145f5b1fc5">   24</a></span>&#160;<span class="preprocessor">#define EXE_TRACE       0             </span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">typedef uint32_t  U32;                </span></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">   30</a></span>&#160;<span class="preprocessor">typedef uint16_t  U16;                </span></div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">   31</a></span>&#160;<span class="preprocessor">typedef uint8_t   U8;                 </span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor"></span> </div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">   33</a></span>&#160;<span class="keyword">typedef</span> int32_t   <a class="code" href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">S32</a>;                </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">   34</a></span>&#160;<span class="keyword">typedef</span> int16_t   <a class="code" href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>;                </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#af1475a0bb1962ef08dd1f78bd5dba87a">   35</a></span>&#160;<span class="keyword">typedef</span> int8_t    <a class="code" href="eforth__core_8h.html#af1475a0bb1962ef08dd1f78bd5dba87a">S8</a>;                 </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">   37</a></span>&#160;<span class="keyword">typedef</span> <a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>       <a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>;                 </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">   38</a></span>&#160;<span class="keyword">typedef</span> <a class="code" href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>       <a class="code" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>;                 </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#define CELLSZ           2            </span></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb">   45</a></span>&#160;<span class="preprocessor">#define FORTH_ROM_SZ     0x2000       </span></div>
 <div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ae8b4d200001ac27b69d50b2aa3d659e7">   46</a></span>&#160;<span class="preprocessor">#define FORTH_UVAR_SZ    0x20         </span></div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ae1c5fa2ddd43bad831ec09b454a87476">   47</a></span>&#160;<span class="preprocessor">#define FORTH_STACK_SZ   0xe0         </span></div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ae58acffa6250f628ad15cdc182d146bc">   48</a></span>&#160;<span class="preprocessor">#define FORTH_TIB_SZ     0x80         </span></div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a2d3ef7004f16db9f741d7aa5351ebc5d">   49</a></span>&#160;<span class="preprocessor">#define FORTH_PAD_SZ     0x20         </span></div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ac13ec61d2b1799e4ab11371a4254e7dd">   50</a></span>&#160;<span class="preprocessor">#define FORTH_RAM_SZ     ( \</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">        FORTH_DIC_SZ + FORTH_UVAR_SZ + FORTH_STACK_SZ + FORTH_TIB_SZ) </span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#define FORTH_BOOT_ADDR  0x0000</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad">   63</a></span>&#160;<span class="preprocessor">#define FORTH_RAM_ADDR   FORTH_ROM_SZ</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a9574a362044eba73eb09283aaa5d6ad3">   64</a></span>&#160;<span class="preprocessor">#define FORTH_DIC_ADDR   (FORTH_RAM_ADDR   + 0)</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#af15f803ea14ff0e9a3fa11fe533d0393">   65</a></span>&#160;<span class="preprocessor">#define FORTH_UVAR_ADDR  (FORTH_DIC_ADDR   + FORTH_DIC_SZ)</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#af278ea3f0013fa26db155c0945bcb9d2">   66</a></span>&#160;<span class="preprocessor">#define FORTH_STACK_ADDR (FORTH_UVAR_ADDR  + FORTH_UVAR_SZ)</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a0ff79d0c91d8f4e7af41afdd399d28a4">   67</a></span>&#160;<span class="preprocessor">#define FORTH_STACK_TOP  (FORTH_STACK_ADDR + FORTH_STACK_SZ)</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a7b21761447b5ce2df53bcd72baa34c73">   68</a></span>&#160;<span class="preprocessor">#define FORTH_TIB_ADDR   (FORTH_STACK_TOP)</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#define TRUE             -1</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#aa93f0eb578d23995850d61f7d61c55c1">   76</a></span>&#160;<span class="preprocessor">#define FALSE            0</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#define OPCODES \</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">    OP(BYE),    \</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">    OP(QRX),    \</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">    OP(TXSTO),  \</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">    OP(DOCON),  \</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">    OP(DOLIT),  \</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">    OP(DOVAR),  \</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">    OP(ENTER),  \</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">    OP(EXIT),   \</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">    OP(EXECU),  \</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor">    OP(DONEXT), \</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">    OP(QBRAN),  \</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">    OP(BRAN),   \</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">    OP(STORE),  \</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">    OP(PSTOR),  \</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">    OP(AT),     \</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">    OP(CSTOR),  \</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">    OP(CAT),    \</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">    OP(RFROM),  \</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">    OP(RAT),    \</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">    OP(TOR),    \</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">    OP(DROP),   \</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">    OP(DUP),    \</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">    OP(SWAP),   \</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">    OP(OVER),   \</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">    OP(ROT),    \</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">    OP(PICK),   \</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">    OP(AND),    \</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor">    OP(OR),     \</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="preprocessor">    OP(XOR),    \</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">    OP(INV),    \</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">    OP(LSH),    \</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">    OP(RSH),    \</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">    OP(ADD),    \</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">    OP(SUB),    \</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">    OP(MUL),    \</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">    OP(DIV),    \</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">    OP(MOD),    \</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">    OP(NEG),    \</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">    OP(GT),     \</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">    OP(EQ),     \</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">    OP(LT),     \</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">    OP(ZGT),    \</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">    OP(ZEQ),    \</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">    OP(ZLT),    \</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">    OP(ONEP),   \</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">    OP(ONEM),   \</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">    OP(QDUP),   \</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">    OP(DEPTH),  \</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">    OP(ULESS),  \</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">    OP(UMMOD),  \</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">    OP(UMSTAR), \</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">    OP(MSTAR),  \</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">    OP(DNEG),   \</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">    OP(DADD),   \</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">    OP(DSUB),   \</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">    OP(DELAY),  \</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#aff92e9d3a1f1b8f50e5f99f48e415b9a">   47</a></span>&#160;<span class="preprocessor">#define FORTH_DIC_SZ     0x3e0        </span></div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ae1c5fa2ddd43bad831ec09b454a87476">   48</a></span>&#160;<span class="preprocessor">#define FORTH_STACK_SZ   0x100        </span></div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ae58acffa6250f628ad15cdc182d146bc">   49</a></span>&#160;<span class="preprocessor">#define FORTH_TIB_SZ     0x80         </span></div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a2d3ef7004f16db9f741d7aa5351ebc5d">   50</a></span>&#160;<span class="preprocessor">#define FORTH_PAD_SZ     0x20         </span></div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ac13ec61d2b1799e4ab11371a4254e7dd">   51</a></span>&#160;<span class="preprocessor">#define FORTH_RAM_SZ     ( \</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">        FORTH_UVAR_SZ + FORTH_DIC_SZ + FORTH_STACK_SZ + FORTH_TIB_SZ) </span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#define FORTH_BOOT_ADDR  0x0000</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad">   64</a></span>&#160;<span class="preprocessor">#define FORTH_RAM_ADDR   FORTH_ROM_SZ</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#af15f803ea14ff0e9a3fa11fe533d0393">   65</a></span>&#160;<span class="preprocessor">#define FORTH_UVAR_ADDR  FORTH_RAM_ADDR</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a9574a362044eba73eb09283aaa5d6ad3">   66</a></span>&#160;<span class="preprocessor">#define FORTH_DIC_ADDR   (FORTH_UVAR_ADDR + FORTH_UVAR_SZ)</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#af278ea3f0013fa26db155c0945bcb9d2">   67</a></span>&#160;<span class="preprocessor">#define FORTH_STACK_ADDR (FORTH_DIC_ADDR  + FORTH_DIC_SZ)</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a0ff79d0c91d8f4e7af41afdd399d28a4">   68</a></span>&#160;<span class="preprocessor">#define FORTH_STACK_TOP  (FORTH_STACK_ADDR + FORTH_STACK_SZ)</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a7b21761447b5ce2df53bcd72baa34c73">   69</a></span>&#160;<span class="preprocessor">#define FORTH_TIB_ADDR   (FORTH_STACK_TOP)</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#define TRUE             -1</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#aa93f0eb578d23995850d61f7d61c55c1">   77</a></span>&#160;<span class="preprocessor">#define FALSE            0</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#define OPCODES \</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">    OP(BYE),    \</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">    OP(QRX),    \</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">    OP(TXSTO),  \</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">    OP(DOCON),  \</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">    OP(DOLIT),  \</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">    OP(DOVAR),  \</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">    OP(ENTER),  \</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">    OP(EXIT),   \</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor">    OP(EXECU),  \</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">    OP(DONEXT), \</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">    OP(QBRAN),  \</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">    OP(BRAN),   \</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">    OP(STORE),  \</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">    OP(PSTOR),  \</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">    OP(AT),     \</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">    OP(CSTOR),  \</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">    OP(CAT),    \</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">    OP(RFROM),  \</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">    OP(RAT),    \</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">    OP(TOR),    \</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">    OP(DROP),   \</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">    OP(DUP),    \</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">    OP(SWAP),   \</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">    OP(OVER),   \</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">    OP(ROT),    \</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">    OP(PICK),   \</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor">    OP(AND),    \</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="preprocessor">    OP(OR),     \</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">    OP(XOR),    \</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">    OP(INV),    \</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">    OP(LSH),    \</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">    OP(RSH),    \</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">    OP(ADD),    \</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">    OP(SUB),    \</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">    OP(MUL),    \</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">    OP(DIV),    \</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">    OP(MOD),    \</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">    OP(NEG),    \</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">    OP(GT),     \</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">    OP(EQ),     \</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">    OP(LT),     \</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">    OP(ZGT),    \</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">    OP(ZEQ),    \</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">    OP(ZLT),    \</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">    OP(ONEP),   \</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">    OP(ONEM),   \</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">    OP(QDUP),   \</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">    OP(DEPTH),  \</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">    OP(ULESS),  \</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">    OP(UMMOD),  \</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">    OP(UMSTAR), \</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">    OP(MSTAR),  \</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">    OP(DNEG),   \</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">    OP(DADD),   \</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">    OP(DSUB),   \</span></div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor">    OP(CLK),    \</span></div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="preprocessor">    OP(PIN),    \</span></div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">    OP(MAP),    \</span></div>
@@ -198,82 +198,90 @@ $(document).ready(function(){initNavTree('eforth__core_8h_source.html',''); init
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="preprocessor">    OP(TMR),    \</span></div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="preprocessor">    OP(PCI),    \</span></div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="preprocessor">    OP(TMRE),   \</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor">    OP(PCIE)</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">// eForth function prototypes</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="comment"></span><span class="preprocessor">#if ARDUINO</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor">#include &lt;avr/pgmspace.h&gt;</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">#include &lt;time.h&gt;</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a570713ca4a493fc4d2130a405f3b87ea">  159</a></span>&#160;<span class="preprocessor">#define LOG(s)              io-&gt;print(F(s))</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ad1115aa0a8df497fe7c107d2ac3ab66e">  160</a></span>&#160;<span class="preprocessor">#define LOG_C(c)            { io-&gt;print(c); if (c==&#39;\n&#39;) io-&gt;flush(); }</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a8089c2bc0d4770d10e62c7d74031d497">  161</a></span>&#160;<span class="preprocessor">#define LOG_V(s, n)         { io-&gt;print(F(s)); io-&gt;print((DU)n); }</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a58eef1717c4dffedd3a63d061ed1b4a5">  162</a></span>&#160;<span class="preprocessor">#define LOG_H(s, n)         { io-&gt;print(F(s)); io-&gt;print(n, HEX); }</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a60bc02dc3bbd02fe2c8f7472d473a659">  163</a></span>&#160;<span class="preprocessor">#define CLI()               cli()</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a52e81e3198871fa5ae5c84580a12c032">  164</a></span>&#160;<span class="preprocessor">#define SEI()               sei()</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor">#else  // !ARDUINO</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="keyword">typedef</span> <span class="keyword">const</span> <span class="keywordtype">char</span>          *PGM_P;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="preprocessor">#define pgm_read_byte(b)    *((U8*)(b))</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor">#define PROGMEM</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor">#define Stream              char</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="preprocessor">#define pinMode(a,b)</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="preprocessor">#define digitalRead(p)      (0)</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="preprocessor">#define digitalWrite(p,v)</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="preprocessor">#define analogRead(p)       (0)</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="preprocessor">#define analogWrite(p,v)</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="preprocessor">#define map(a,b,c,d,e)      (0)</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor">#define millis()            (0x12345678)</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="preprocessor">#define LOG(s)              printf(&quot;%s&quot;, s)</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="preprocessor">#define LOG_C(c)            printf(&quot;%c&quot;, c)</span></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="preprocessor">#define LOG_V(s, n)         printf(&quot;%s%d&quot;, s, n)</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="preprocessor">#define LOG_H(s, n)         printf(&quot;%s%x&quot;, s, (n)&amp;0xffff)</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="preprocessor">#define LOW                 (0)</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="preprocessor">#define HIGH                (1)</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="preprocessor">#define CLI()</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="preprocessor">#define SEI()</span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="preprocessor">#endif // ARDUINO</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a0132f57c344961e9ff4037dd06b06948">intr_reset</a>();          </div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>  <a class="code" href="eforth__core_8h.html#a93c9ba339402353230060b417633ccd4">intr_hits</a>();</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>   <a class="code" href="eforth__core_8h.html#a2c97726ffb62839e8c6fe399f6ed83f3">intr_service</a>();</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a940ef1ceaa397087cc42f0eb63a041a3">intr_add_timer</a>(<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> hz10, <a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt);</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a5fa8e2bc9434c475082cfc60db195fce">intr_add_pci</a>(<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> pin, <a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt);</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a8d82211db5e512fd289ddd16c3d608ae">intr_enable_timer</a>(<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f);</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a18a475c1f5e15f4867d6974f8f0c1d43">intr_enable_pci</a>(<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f);</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002">vm_init</a>(</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    PGM_P rom,              </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <a class="code" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata,              </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keywordtype">void</span> *io_stream         </div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    );</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="keywordtype">int</span>  <a class="code" href="eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5">vm_outer</a>();            </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="keywordtype">int</span>  <a class="code" href="eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8">ef_assemble</a>(</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    <a class="code" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata               </div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    );</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="preprocessor">#endif // __EFORTH_CORE_H</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor">    OP(PCIE),   \</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="preprocessor">    OP(RP),     \</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor">    OP(TRC),    \</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor">    OP(SAVE),   \</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">    OP(LOAD)</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="comment">// eForth function prototypes</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="comment"></span><span class="preprocessor">#if ARDUINO</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">#include &lt;avr/pgmspace.h&gt;</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a570713ca4a493fc4d2130a405f3b87ea">  162</a></span>&#160;<span class="preprocessor">#define LOG(s)              io-&gt;print(F(s))</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#ad1115aa0a8df497fe7c107d2ac3ab66e">  163</a></span>&#160;<span class="preprocessor">#define LOG_C(c)            { io-&gt;print(c); if (c==&#39;\n&#39;) io-&gt;flush(); }</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a8089c2bc0d4770d10e62c7d74031d497">  164</a></span>&#160;<span class="preprocessor">#define LOG_V(s, n)         { io-&gt;print(F(s)); io-&gt;print((DU)(n)); }</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a58eef1717c4dffedd3a63d061ed1b4a5">  165</a></span>&#160;<span class="preprocessor">#define LOG_H(s, n)         { io-&gt;print(F(s)); io-&gt;print((n), HEX); }</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a60bc02dc3bbd02fe2c8f7472d473a659">  166</a></span>&#160;<span class="preprocessor">#define CLI()               cli()</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="eforth__core_8h.html#a52e81e3198871fa5ae5c84580a12c032">  167</a></span>&#160;<span class="preprocessor">#define SEI()               sei()</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor">#else  // !ARDUINO</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="keyword">typedef</span> <span class="keyword">const</span> <span class="keywordtype">char</span>          *PGM_P;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="preprocessor">#define pgm_read_byte(b)    *((U8*)(b))</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="preprocessor">#define PROGMEM</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="preprocessor">#define Stream              char</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="preprocessor">#define millis()            ((U32)clock())</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="preprocessor">#define pinMode(a,b)</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="preprocessor">#define digitalRead(p)      (0)</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor">#define digitalWrite(p,v)</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="preprocessor">#define analogRead(p)       (0)</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="preprocessor">#define analogWrite(p,v)</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="preprocessor">#define map(a,b,c,d,e)      (0)</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="preprocessor">#define LOG(s)              printf(&quot;%s&quot;, (s))</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="preprocessor">#define LOG_C(c)            printf(&quot;%c&quot;, (c))</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="preprocessor">#define LOG_V(s, n)         printf(&quot;%s%d&quot;, (s), (n))</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="preprocessor">#define LOG_H(s, n)         printf(&quot;%s%x&quot;, (s), (n)&amp;0xffff)</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="preprocessor">#define LOW                 (0)</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="preprocessor">#define HIGH                (1)</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="preprocessor">#define CLI()</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="preprocessor">#define SEI()</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="preprocessor">#endif // ARDUINO</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a0132f57c344961e9ff4037dd06b06948">intr_reset</a>();          </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>  <a class="code" href="eforth__core_8h.html#a93c9ba339402353230060b417633ccd4">intr_hits</a>();</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>   <a class="code" href="eforth__core_8h.html#a2c97726ffb62839e8c6fe399f6ed83f3">intr_service</a>();</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a940ef1ceaa397087cc42f0eb63a041a3">intr_add_timer</a>(<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> hz10, <a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a5fa8e2bc9434c475082cfc60db195fce">intr_add_pci</a>(<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> pin, <a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a8d82211db5e512fd289ddd16c3d608ae">intr_enable_timer</a>(<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#a18a475c1f5e15f4867d6974f8f0c1d43">intr_enable_pci</a>(<a class="code" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f);</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="keywordtype">void</span> <a class="code" href="eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002">vm_init</a>(</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    PGM_P rom,              </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <a class="code" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata,              </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keywordtype">void</span> *io_stream         </div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    );</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="keywordtype">int</span>  <a class="code" href="eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5">vm_outer</a>();            </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="keywordtype">int</span>  <a class="code" href="eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8">ef_assemble</a>(</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <a class="code" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata               </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    );</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="keywordtype">int</span>  <a class="code" href="eforth__core_8h.html#a739911ef03b2d1a9bb4139a8879c03fa">ef_save</a>(<a class="code" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *data);     </div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="keywordtype">int</span>  <a class="code" href="eforth__core_8h.html#a143ec30cabab5d722b1df76883d4b4f4">ef_load</a>(<a class="code" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *data);     </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="preprocessor">#endif // __EFORTH_CORE_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aeforth__core_8h_html_a5fa8e2bc9434c475082cfc60db195fce"><div class="ttname"><a href="eforth__core_8h.html#a5fa8e2bc9434c475082cfc60db195fce">intr_add_pci</a></div><div class="ttdeci">void intr_add_pci(U16 pin, IU xt)</div><div class="ttdef"><b>Definition:</b> eforth_core.cpp:86</div></div>
-<div class="ttc" id="aeforth__core_8h_html_aa4cce331b74c197758d0b9ada8d58002"><div class="ttname"><a href="eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002">vm_init</a></div><div class="ttdeci">void vm_init(PGM_P rom, U8 *cdata, void *io_stream)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:258</div></div>
+<div class="ttc" id="aeforth__core_8h_html_aa4cce331b74c197758d0b9ada8d58002"><div class="ttname"><a href="eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002">vm_init</a></div><div class="ttdeci">void vm_init(PGM_P rom, U8 *cdata, void *io_stream)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:254</div></div>
 <div class="ttc" id="aeforth__core_8h_html_a18a475c1f5e15f4867d6974f8f0c1d43"><div class="ttname"><a href="eforth__core_8h.html#a18a475c1f5e15f4867d6974f8f0c1d43">intr_enable_pci</a></div><div class="ttdeci">void intr_enable_pci(U16 f)</div><div class="ttdef"><b>Definition:</b> eforth_core.cpp:106</div></div>
-<div class="ttc" id="aeforth__core_8h_html_a5fd90490ca5b2ceb72bf8b2c89a9634b"><div class="ttname"><a href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a></div><div class="ttdeci">U16 IU</div><div class="ttdoc">instruction/address unit (16-bit)</div><div class="ttdef"><b>Definition:</b> eforth_core.h:36</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a5fd90490ca5b2ceb72bf8b2c89a9634b"><div class="ttname"><a href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a></div><div class="ttdeci">U16 IU</div><div class="ttdoc">instruction/address unit (16-bit)</div><div class="ttdef"><b>Definition:</b> eforth_core.h:37</div></div>
 <div class="ttc" id="aeforth__core_8h_html_a1235c887d8bdb522e79d94afa74162c5"><div class="ttname"><a href="eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5">vm_outer</a></div><div class="ttdeci">int vm_outer()</div><div class="ttdoc">Forth outer interpreter.</div></div>
 <div class="ttc" id="aeforth__core_8h_html_a940ef1ceaa397087cc42f0eb63a041a3"><div class="ttname"><a href="eforth__core_8h.html#a940ef1ceaa397087cc42f0eb63a041a3">intr_add_timer</a></div><div class="ttdeci">void intr_add_timer(U16 hz10, IU xt)</div><div class="ttdef"><b>Definition:</b> eforth_core.cpp:72</div></div>
 <div class="ttc" id="aeforth__core_8h_html_a2c97726ffb62839e8c6fe399f6ed83f3"><div class="ttname"><a href="eforth__core_8h.html#a2c97726ffb62839e8c6fe399f6ed83f3">intr_service</a></div><div class="ttdeci">IU intr_service()</div><div class="ttdef"><b>Definition:</b> eforth_core.cpp:43</div></div>
-<div class="ttc" id="aeforth__core_8h_html_a6d241ad21a823c90d4835380787db5d4"><div class="ttname"><a href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a></div><div class="ttdeci">int16_t S16</div><div class="ttdoc">16-bit signed integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:33</div></div>
-<div class="ttc" id="aeforth__core_8h_html_aa63ef7b996d5487ce35a5a66601f3e73"><div class="ttname"><a href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a></div><div class="ttdeci">uint8_t U8</div><div class="ttdoc">8-bit unsigned integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:30</div></div>
-<div class="ttc" id="aeforth__core_8h_html_af1475a0bb1962ef08dd1f78bd5dba87a"><div class="ttname"><a href="eforth__core_8h.html#af1475a0bb1962ef08dd1f78bd5dba87a">S8</a></div><div class="ttdeci">int8_t S8</div><div class="ttdoc">8-bit signed integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:34</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a6d241ad21a823c90d4835380787db5d4"><div class="ttname"><a href="eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a></div><div class="ttdeci">int16_t S16</div><div class="ttdoc">16-bit signed integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:34</div></div>
+<div class="ttc" id="aeforth__core_8h_html_aa63ef7b996d5487ce35a5a66601f3e73"><div class="ttname"><a href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a></div><div class="ttdeci">uint8_t U8</div><div class="ttdoc">8-bit unsigned integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:31</div></div>
+<div class="ttc" id="aeforth__core_8h_html_af1475a0bb1962ef08dd1f78bd5dba87a"><div class="ttname"><a href="eforth__core_8h.html#af1475a0bb1962ef08dd1f78bd5dba87a">S8</a></div><div class="ttdeci">int8_t S8</div><div class="ttdoc">8-bit signed integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:35</div></div>
 <div class="ttc" id="aeforth__core_8h_html_a8d82211db5e512fd289ddd16c3d608ae"><div class="ttname"><a href="eforth__core_8h.html#a8d82211db5e512fd289ddd16c3d608ae">intr_enable_timer</a></div><div class="ttdeci">void intr_enable_timer(U16 f)</div><div class="ttdef"><b>Definition:</b> eforth_core.cpp:119</div></div>
 <div class="ttc" id="aeforth__core_8h_html_a0132f57c344961e9ff4037dd06b06948"><div class="ttname"><a href="eforth__core_8h.html#a0132f57c344961e9ff4037dd06b06948">intr_reset</a></div><div class="ttdeci">void intr_reset()</div><div class="ttdoc">reset interrupts</div><div class="ttdef"><b>Definition:</b> eforth_core.cpp:21</div></div>
 <div class="ttc" id="aeforth__core_8h_html_a93c9ba339402353230060b417633ccd4"><div class="ttname"><a href="eforth__core_8h.html#a93c9ba339402353230060b417633ccd4">intr_hits</a></div><div class="ttdeci">U16 intr_hits()</div></div>
-<div class="ttc" id="aeforth__core_8h_html_a149fe3b107a553d7f4a2fcf3adc02b6a"><div class="ttname"><a href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a></div><div class="ttdeci">S16 DU</div><div class="ttdoc">data/cell unit</div><div class="ttdef"><b>Definition:</b> eforth_core.h:37</div></div>
-<div class="ttc" id="aeforth__core_8h_html_a39c786017723555afb9e8b85accec0de"><div class="ttname"><a href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">S32</a></div><div class="ttdeci">int32_t S32</div><div class="ttdoc">32-bit signed integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:32</div></div>
-<div class="ttc" id="aeforth__core_8h_html_a0a0a322d5fa4a546d293a77ba8b4a71f"><div class="ttname"><a href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a></div><div class="ttdeci">uint16_t U16</div><div class="ttdoc">16-bit unsigned integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:29</div></div>
-<div class="ttc" id="aeforth__core_8h_html_a94e10412bf5e1f89d12efb94e80979c8"><div class="ttname"><a href="eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8">ef_assemble</a></div><div class="ttdeci">int ef_assemble(U8 *cdata)</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:833</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a149fe3b107a553d7f4a2fcf3adc02b6a"><div class="ttname"><a href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a></div><div class="ttdeci">S16 DU</div><div class="ttdoc">data/cell unit</div><div class="ttdef"><b>Definition:</b> eforth_core.h:38</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a39c786017723555afb9e8b85accec0de"><div class="ttname"><a href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">S32</a></div><div class="ttdeci">int32_t S32</div><div class="ttdoc">32-bit signed integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:33</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a739911ef03b2d1a9bb4139a8879c03fa"><div class="ttname"><a href="eforth__core_8h.html#a739911ef03b2d1a9bb4139a8879c03fa">ef_save</a></div><div class="ttdeci">int ef_save(U8 *data)</div><div class="ttdoc">save user variables and dictionary to EEPROM</div><div class="ttdef"><b>Definition:</b> eforth_io.cpp:26</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a0a0a322d5fa4a546d293a77ba8b4a71f"><div class="ttname"><a href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a></div><div class="ttdeci">uint16_t U16</div><div class="ttdoc">16-bit unsigned integer</div><div class="ttdef"><b>Definition:</b> eforth_core.h:30</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a94e10412bf5e1f89d12efb94e80979c8"><div class="ttname"><a href="eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8">ef_assemble</a></div><div class="ttdeci">int ef_assemble(U8 *cdata)</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:856</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a143ec30cabab5d722b1df76883d4b4f4"><div class="ttname"><a href="eforth__core_8h.html#a143ec30cabab5d722b1df76883d4b4f4">ef_load</a></div><div class="ttdeci">int ef_load(U8 *data)</div><div class="ttdoc">load user variables and dictionary from EEPROM</div><div class="ttdef"><b>Definition:</b> eforth_io.cpp:35</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

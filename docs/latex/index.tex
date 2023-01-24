@@ -103,6 +103,18 @@ To understand the philosophy of F\+O\+R\+TH, excellent online e-\/books are here
 
 \end{DoxyItemize}
 
+\doxysubsection*{Performance Tuning}
+
+
+\begin{DoxyItemize}
+\item Check your Arduino I\+DE installed directory, say C\+:\textbackslash{}\+Users\textbackslash{}myname\textbackslash{}\+App\+Data\textbackslash{}\+Local\textbackslash{}\+Arduino... on Windows or /home/myname/\+Arduino/... on Linux,
+\item Find the hardware -\/$>$ arduino -\/$>$ avr subdirectories,
+\item With an editor, open the \textquotesingle{}platform.\+txt\textquotesingle{} file,
+\item Find all three -\/Os compiler options (i.\+g. compiler.\+c.\+flags=-\/c -\/g -\/Os ...) \begin{quote}
+change them to -\/O3 for speed, -\/Os (default) for smallest size, -\/O2 for somewhere in-\/between \end{quote}
+
+\end{DoxyItemize}
+
 \doxysubsection*{References to Dr. Ting\textquotesingle{}s Original}
 
 

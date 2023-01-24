@@ -35,7 +35,12 @@ dump return stack
 \doxysubsubsection{\texorpdfstring{\_strlen()}{\_strlen()}}
 {\footnotesize\ttfamily int Ef\+Asm\+::\+\_\+strlen (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seq }\end{DoxyParamCaption})}
 
-string length (in Arduino Flash memory block)\mbox{\Hypertarget{namespaceEfAsm_a27da79e08a45cd4ad90cffc847a04280}\label{namespaceEfAsm_a27da79e08a45cd4ad90cffc847a04280}} 
+string length (in Arduino Flash memory block)
+
+
+\begin{DoxyItemize}
+\item length includes terminating zero
+\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a27da79e08a45cd4ad90cffc847a04280}\label{namespaceEfAsm_a27da79e08a45cd4ad90cffc847a04280}} 
 \index{EfAsm@{EfAsm}!\_header@{\_header}}
 \index{\_header@{\_header}!EfAsm@{EfAsm}}
 \doxysubsubsection{\texorpdfstring{\_header()}{\_header()}}
@@ -280,7 +285,7 @@ Kernel constants \end{quote}
 \begin{quote}
 
 \begin{DoxyItemize}
-\item \textquotesingle{}M\+O\+DE (interpreter or compiler) 
+\item \textquotesingle{}M\+O\+DE (\textquotesingle{}T\+E\+V\+AL -\/ interpreter or compiler) 
 \end{DoxyItemize}\end{quote}
 
 
@@ -446,6 +451,30 @@ Debugging Tools \end{quote}
 Arduino specific opcodes \end{quote}
 
 
+( h l p -- ) set map range to pin
+
+( p -- n ) digital\+Read(p)
+
+( p n -- ) digitial\+Write(p, n=1 H\+I\+GH, n=0 L\+OW)
+
+( p -- n ) read analog value from pin
+
+( n p -- ) set duty cycle \% (P\+WM) to pin
+
+( xt n -- ) on timer interrupt calls xt every n ms
+
+( xt p -- ) on pin change interrupt calls xt
+
+( f -- ) enable/disable timer interrupt
+
+( f -- ) enable/disable pin change interrupt
+
+( f -- ) enable/disable debug tracing
+
+( -- ) save user variables and dictionary to E\+E\+P\+R\+OM
+
+( -- ) restore user variables and dictionary from E\+E\+R\+P\+R\+OM
+
 \begin{quote}
 Cold Start address (End of dictionary) \end{quote}
 
@@ -479,29 +508,41 @@ Boot Vector Setup \end{quote}
 \doxysubsubsection{\texorpdfstring{DONXT}{DONXT}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+D\+O\+N\+XT}
 
-\mbox{\Hypertarget{namespaceEfAsm_ac277a20e10af2ca53f817b77cb033722}\label{namespaceEfAsm_ac277a20e10af2ca53f817b77cb033722}} 
-\index{EfAsm@{EfAsm}!DOTQ@{DOTQ}}
-\index{DOTQ@{DOTQ}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{DOTQ}{DOTQ}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+D\+O\+TQ}
 
-\mbox{\Hypertarget{namespaceEfAsm_af509e882ed40c423cd8140db6b7ff58b}\label{namespaceEfAsm_af509e882ed40c423cd8140db6b7ff58b}} 
-\index{EfAsm@{EfAsm}!STRQ@{STRQ}}
-\index{STRQ@{STRQ}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{STRQ}{STRQ}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+S\+T\+RQ}
 
-\mbox{\Hypertarget{namespaceEfAsm_a33807b48e38e6eb26c58ce5f4d41d451}\label{namespaceEfAsm_a33807b48e38e6eb26c58ce5f4d41d451}} 
-\index{EfAsm@{EfAsm}!ABORTQ@{ABORTQ}}
-\index{ABORTQ@{ABORTQ}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{ABORTQ}{ABORTQ}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+A\+B\+O\+R\+TQ}
+addr of branching ops, used by branching ops 
+
+\mbox{\Hypertarget{namespaceEfAsm_a6b8f6e7e77a210d6bfaf73bb43897580}\label{namespaceEfAsm_a6b8f6e7e77a210d6bfaf73bb43897580}} 
+\index{EfAsm@{EfAsm}!DOTQP@{DOTQP}}
+\index{DOTQP@{DOTQP}!EfAsm@{EfAsm}}
+\doxysubsubsection{\texorpdfstring{DOTQP}{DOTQP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+D\+O\+T\+QP}
+
+\mbox{\Hypertarget{namespaceEfAsm_ac31352a003705d9569ef3314d62342fb}\label{namespaceEfAsm_ac31352a003705d9569ef3314d62342fb}} 
+\index{EfAsm@{EfAsm}!STRQP@{STRQP}}
+\index{STRQP@{STRQP}!EfAsm@{EfAsm}}
+\doxysubsubsection{\texorpdfstring{STRQP}{STRQP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+S\+T\+R\+QP}
+
+\mbox{\Hypertarget{namespaceEfAsm_a13343dd66b80ba0cbe75877f7a6980d9}\label{namespaceEfAsm_a13343dd66b80ba0cbe75877f7a6980d9}} 
+\index{EfAsm@{EfAsm}!ABORQP@{ABORQP}}
+\index{ABORQP@{ABORQP}!EfAsm@{EfAsm}}
+\doxysubsubsection{\texorpdfstring{ABORQP}{ABORQP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+A\+B\+O\+R\+QP}
+
+
+
+addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq 
 
 \mbox{\Hypertarget{namespaceEfAsm_ab44525c5e6436fa71223dfb207741699}\label{namespaceEfAsm_ab44525c5e6436fa71223dfb207741699}} 
 \index{EfAsm@{EfAsm}!TOR@{TOR}}
 \index{TOR@{TOR}!EfAsm@{EfAsm}}
 \doxysubsubsection{\texorpdfstring{TOR}{TOR}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+T\+OR}
+
+
+
+addres of \char`\"{}$>$\+R\char`\"{} op, used by \+\_\+for 
 
 \mbox{\Hypertarget{namespaceEfAsm_aa3dd7a4f331c954244daaddf0177f059}\label{namespaceEfAsm_aa3dd7a4f331c954244daaddf0177f059}} 
 \index{EfAsm@{EfAsm}!NOP@{NOP}}

@@ -1,0 +1,94 @@
+\hypertarget{eforth__io_8cpp}{}\doxysection{src/eforth\+\_\+io.cpp File Reference}
+\label{eforth__io_8cpp}\index{src/eforth\_io.cpp@{src/eforth\_io.cpp}}
+
+
+
+\begin{DoxyItemize}
+\item e\+Forth1 E\+E\+P\+R\+OM save/load module 
+\end{DoxyItemize} 
+
+
+{\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$E\+E\+P\+R\+O\+M.\+h$>$}\newline
+Include dependency graph for eforth\+\_\+io.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__io_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__io_8cpp_a8c15257f5a5277bb64afcbe594bea146}{G\+ET}}(d)~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&data\mbox{[}d\mbox{]})
+\item 
+\#define \mbox{\hyperlink{eforth__io_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}{S\+ET}}(d,  v)~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&data\mbox{[}d\mbox{]} = (v))
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{eforth__io_8cpp_a739911ef03b2d1a9bb4139a8879c03fa}{ef\+\_\+save}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$data)
+\begin{DoxyCompactList}\small\item\em save user variables and dictionary to E\+E\+P\+R\+OM \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{eforth__io_8cpp_a143ec30cabab5d722b1df76883d4b4f4}{ef\+\_\+load}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$data)
+\begin{DoxyCompactList}\small\item\em load user variables and dictionary from E\+E\+P\+R\+OM \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+\begin{DoxyItemize}
+\item e\+Forth1 E\+E\+P\+R\+OM save/load module 
+\end{DoxyItemize}
+
+\begin{quote}
+e\+Forth1 S\+A\+V\+E/\+L\+O\+AD functions \end{quote}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{eforth__io_8cpp_a8c15257f5a5277bb64afcbe594bea146}\label{eforth__io_8cpp_a8c15257f5a5277bb64afcbe594bea146}} 
+\index{eforth\_io.cpp@{eforth\_io.cpp}!GET@{GET}}
+\index{GET@{GET}!eforth\_io.cpp@{eforth\_io.cpp}}
+\doxysubsubsection{\texorpdfstring{GET}{GET}}
+{\footnotesize\ttfamily \#define G\+ET(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&data\mbox{[}d\mbox{]})}
+
+\mbox{\Hypertarget{eforth__io_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}\label{eforth__io_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}} 
+\index{eforth\_io.cpp@{eforth\_io.cpp}!SET@{SET}}
+\index{SET@{SET}!eforth\_io.cpp@{eforth\_io.cpp}}
+\doxysubsubsection{\texorpdfstring{SET}{SET}}
+{\footnotesize\ttfamily \#define S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{v }\end{DoxyParamCaption})~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&data\mbox{[}d\mbox{]} = (v))}
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{eforth__io_8cpp_a739911ef03b2d1a9bb4139a8879c03fa}\label{eforth__io_8cpp_a739911ef03b2d1a9bb4139a8879c03fa}} 
+\index{eforth\_io.cpp@{eforth\_io.cpp}!ef\_save@{ef\_save}}
+\index{ef\_save@{ef\_save}!eforth\_io.cpp@{eforth\_io.cpp}}
+\doxysubsubsection{\texorpdfstring{ef\_save()}{ef\_save()}}
+{\footnotesize\ttfamily int ef\+\_\+save (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+save user variables and dictionary to E\+E\+P\+R\+OM 
+
+
+\begin{DoxyItemize}
+\item store dictionary byte-\/by-\/byte
+\end{DoxyItemize}\mbox{\Hypertarget{eforth__io_8cpp_a143ec30cabab5d722b1df76883d4b4f4}\label{eforth__io_8cpp_a143ec30cabab5d722b1df76883d4b4f4}} 
+\index{eforth\_io.cpp@{eforth\_io.cpp}!ef\_load@{ef\_load}}
+\index{ef\_load@{ef\_load}!eforth\_io.cpp@{eforth\_io.cpp}}
+\doxysubsubsection{\texorpdfstring{ef\_load()}{ef\_load()}}
+{\footnotesize\ttfamily int ef\+\_\+load (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+load user variables and dictionary from E\+E\+P\+R\+OM 
+
+$<$ CP addr in E\+E\+P\+R\+OM (aka H\+E\+RE)
+
+
+\begin{DoxyItemize}
+\item $>$IN (buffer pointer)
+\item keep v\+IN, v\+N\+T\+IB
+\item retrieve dictionary byte-\/by-\/byte
+\item restore v\+IN, v\+N\+T\+IB
+\end{DoxyItemize}

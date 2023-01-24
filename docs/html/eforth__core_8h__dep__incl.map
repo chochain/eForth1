@@ -1,8 +1,9 @@
 <map id="src/eforth_core.h" name="src/eforth_core.h">
-<area shape="rect" id="node1" title="eForth prototype and interface" alt="" coords="327,5,458,32"/>
+<area shape="rect" id="node1" title="eForth prototype and interface" alt="" coords="409,5,539,32"/>
 <area shape="rect" id="node2" href="$eforth1_8cpp.html" title=" " alt="" coords="5,80,124,107"/>
 <area shape="rect" id="node3" href="$eforth__asm_8cpp.html" title="eForth Assembler module" alt="" coords="149,80,295,107"/>
 <area shape="rect" id="node4" href="$eforth__core_8cpp.html" title="eForth core controller module" alt="" coords="319,80,466,107"/>
-<area shape="rect" id="node5" href="$eforth__rom_8c.html" title="eForth ROM (loaded in Arduino Flash Memory)" alt="" coords="490,80,618,107"/>
-<area shape="rect" id="node6" href="$eforth__vm_8cpp.html" title="eForth Virtual Machine module Note: indirect threading model &#45; computed label jumping replaced EfVMSu..." alt="" coords="642,80,781,107"/>
+<area shape="rect" id="node5" href="$eforth__io_8cpp.html" title="eForth1 EEPROM save/load module" alt="" coords="490,80,621,107"/>
+<area shape="rect" id="node6" href="$eforth__rom_8c.html" title="eForth ROM (loaded in Arduino Flash Memory)" alt="" coords="645,80,773,107"/>
+<area shape="rect" id="node7" href="$eforth__vm_8cpp.html" title="eForth Virtual Machine module Note: indirect threading model &#45; computed label jumping replaced EfVMSu..." alt="" coords="797,80,935,107"/>
 </map>

@@ -1,7 +1,8 @@
 \hypertarget{eforth1_8cpp}{}\doxysection{src/eforth1.cpp File Reference}
 \label{eforth1_8cpp}\index{src/eforth1.cpp@{src/eforth1.cpp}}
 {\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
-Include dependency graph for eforth1.\+cpp\+:\nopagebreak
+Include dependency graph for eforth1.\+cpp\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -23,7 +24,7 @@ void \mbox{\hyperlink{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}{ef\+\_\+ru
 static \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{eforth1_8cpp_a05c7bc09ead4e68622fbbeb7b8d1ecdf}{\+\_\+ram}}
 \begin{DoxyCompactList}\small\item\em forth memory block dynamic allocated \end{DoxyCompactList}\item 
 \mbox{\hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}} \mbox{\hyperlink{eforth1_8cpp_ab122f4898c37a0db81ea641558424375}{forth\+\_\+rom}} \mbox{[}$\,$\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em from \mbox{\hyperlink{eforth__rom_8c}{eforth\+\_\+rom.\+c}} \end{DoxyCompactList}\item 
 \mbox{\hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}} \mbox{\hyperlink{eforth1_8cpp_a6fe6f33736fc0d8ed68fd74b454e00e7}{forth\+\_\+rom\+\_\+sz}}
 \item 
 static Stream $\ast$ \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}
@@ -43,7 +44,7 @@ static Stream $\ast$ \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06
 \doxysubsubsection{\texorpdfstring{ef\_setup()}{ef\_setup()}}
 {\footnotesize\ttfamily void ef\+\_\+setup (\begin{DoxyParamCaption}\item[{Stream \&}]{io\+\_\+stream = {\ttfamily Serial} }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}\label{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}} 
+$<$ dynamically allocated\mbox{\Hypertarget{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}\label{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}} 
 \index{eforth1.cpp@{eforth1.cpp}!ef\_run@{ef\_run}}
 \index{ef\_run@{ef\_run}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{ef\_run()}{ef\_run()}}
@@ -72,13 +73,17 @@ display e\+Forth system information \end{quote}
 \doxysubsubsection{\texorpdfstring{forth\_rom}{forth\_rom}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}} forth\+\_\+rom}
 
+
+
+from \mbox{\hyperlink{eforth__rom_8c}{eforth\+\_\+rom.\+c}} 
+
 \mbox{\Hypertarget{eforth1_8cpp_a6fe6f33736fc0d8ed68fd74b454e00e7}\label{eforth1_8cpp_a6fe6f33736fc0d8ed68fd74b454e00e7}} 
 \index{eforth1.cpp@{eforth1.cpp}!forth\_rom\_sz@{forth\_rom\_sz}}
 \index{forth\_rom\_sz@{forth\_rom\_sz}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{forth\_rom\_sz}{forth\_rom\_sz}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}} forth\+\_\+rom\+\_\+sz}
 
-\mbox{\Hypertarget{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}\label{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}} 
+actual size of R\+OM \mbox{\Hypertarget{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}\label{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}} 
 \index{eforth1.cpp@{eforth1.cpp}!io@{io}}
 \index{io@{io}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{io}{io}}

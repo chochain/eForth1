@@ -164,6 +164,16 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </blockquote>
 </li>
 </ul>
+<h2>Performance Tuning</h2>
+<ul>
+<li>Check your Arduino IDE installed directory, say C:\Users\myname\AppData\Local\Arduino... on Windows or /home/myname/Arduino/... on Linux,</li>
+<li>Find the hardware -&gt; arduino -&gt; avr subdirectories,</li>
+<li>With an editor, open the 'platform.txt' file,</li>
+<li>Find all three -Os compiler options (i.g. compiler.c.flags=-c -g -Os ...) <blockquote class="doxtable">
+<p>change them to -O3 for speed, -Os (default) for smallest size, -O2 for somewhere in-between </p>
+</blockquote>
+</li>
+</ul>
 <h2>References to Dr. Ting's Original</h2>
 <ul>
 <li>328eForth in AVR assembly <a href="https://chochain.github.io/eForth1/docs/328eForth_content.pdf">table of content</a> and <a href="https://chochain.github.io/eForth1/docs/328eForth.pdf">full document</a></li>

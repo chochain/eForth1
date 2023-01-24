@@ -165,6 +165,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>string length (in Arduino Flash memory block)</p>
+<ul>
+<li>length includes terminating zero</li>
+</ul>
 
 </div>
 </div>
@@ -809,7 +812,7 @@ Variables</h2></td></tr>
 </blockquote>
 <blockquote class="doxtable">
 <ul>
-<li>'MODE (interpreter or compiler) </li>
+<li>'MODE ('TEVAL - interpreter or compiler) </li>
 </ul>
 </blockquote>
 <blockquote class="doxtable">
@@ -936,6 +939,18 @@ EXECUTE - attempt to look up that word in the dictionary       \
 <blockquote class="doxtable">
 <p>Arduino specific opcodes </p>
 </blockquote>
+<p>( h l p &ndash; ) set map range to pin</p>
+<p>( p &ndash; n ) digitalRead(p)</p>
+<p>( p n &ndash; ) digitialWrite(p, n=1 HIGH, n=0 LOW)</p>
+<p>( p &ndash; n ) read analog value from pin</p>
+<p>( n p &ndash; ) set duty cycle % (PWM) to pin</p>
+<p>( xt n &ndash; ) on timer interrupt calls xt every n ms</p>
+<p>( xt p &ndash; ) on pin change interrupt calls xt</p>
+<p>( f &ndash; ) enable/disable timer interrupt</p>
+<p>( f &ndash; ) enable/disable pin change interrupt</p>
+<p>( f &ndash; ) enable/disable debug tracing</p>
+<p>( &ndash; ) save user variables and dictionary to EEPROM</p>
+<p>( &ndash; ) restore user variables and dictionary from EERPROM</p>
 <blockquote class="doxtable">
 <p>Cold Start address (End of dictionary) </p>
 </blockquote>
@@ -1000,47 +1015,51 @@ EXECUTE - attempt to look up that word in the dictionary       \
       </table>
 </div><div class="memdoc">
 
+<p>addr of branching ops, used by branching ops </p>
+
 </div>
 </div>
-<a id="ac277a20e10af2ca53f817b77cb033722"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac277a20e10af2ca53f817b77cb033722">&#9670;&nbsp;</a></span>DOTQ</h2>
+<a id="a6b8f6e7e77a210d6bfaf73bb43897580"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b8f6e7e77a210d6bfaf73bb43897580">&#9670;&nbsp;</a></span>DOTQP</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> EfAsm::DOTQ</td>
+          <td class="memname"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> EfAsm::DOTQP</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="af509e882ed40c423cd8140db6b7ff58b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af509e882ed40c423cd8140db6b7ff58b">&#9670;&nbsp;</a></span>STRQ</h2>
+<a id="ac31352a003705d9569ef3314d62342fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac31352a003705d9569ef3314d62342fb">&#9670;&nbsp;</a></span>STRQP</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> EfAsm::STRQ</td>
+          <td class="memname"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> EfAsm::STRQP</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a33807b48e38e6eb26c58ce5f4d41d451"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33807b48e38e6eb26c58ce5f4d41d451">&#9670;&nbsp;</a></span>ABORTQ</h2>
+<a id="a13343dd66b80ba0cbe75877f7a6980d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13343dd66b80ba0cbe75877f7a6980d9">&#9670;&nbsp;</a></span>ABORQP</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> EfAsm::ABORTQ</td>
+          <td class="memname"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> EfAsm::ABORQP</td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>addr of output ops, used by _dotq, _strq, _abortq </p>
 
 </div>
 </div>
@@ -1055,6 +1074,8 @@ EXECUTE - attempt to look up that word in the dictionary       \
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>addres of "&gt;R" op, used by _for </p>
 
 </div>
 </div>

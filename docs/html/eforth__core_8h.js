@@ -8,16 +8,16 @@ var eforth__core_8h =
     [ "EXE_TRACE", "eforth__core_8h.html#a4e7ebf605b9379a385139d145f5b1fc5", null ],
     [ "CELLSZ", "eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc", null ],
     [ "FORTH_ROM_SZ", "eforth__core_8h.html#a68b9e34d65501f01d02ed377146ef0bb", null ],
-    [ "FORTH_DIC_SZ", "eforth__core_8h.html#aff92e9d3a1f1b8f50e5f99f48e415b9a", null ],
     [ "FORTH_UVAR_SZ", "eforth__core_8h.html#ae8b4d200001ac27b69d50b2aa3d659e7", null ],
+    [ "FORTH_DIC_SZ", "eforth__core_8h.html#aff92e9d3a1f1b8f50e5f99f48e415b9a", null ],
     [ "FORTH_STACK_SZ", "eforth__core_8h.html#ae1c5fa2ddd43bad831ec09b454a87476", null ],
     [ "FORTH_TIB_SZ", "eforth__core_8h.html#ae58acffa6250f628ad15cdc182d146bc", null ],
     [ "FORTH_PAD_SZ", "eforth__core_8h.html#a2d3ef7004f16db9f741d7aa5351ebc5d", null ],
     [ "FORTH_RAM_SZ", "eforth__core_8h.html#ac13ec61d2b1799e4ab11371a4254e7dd", null ],
     [ "FORTH_BOOT_ADDR", "eforth__core_8h.html#a8854972678927e0868e458eab4d789a2", null ],
     [ "FORTH_RAM_ADDR", "eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad", null ],
-    [ "FORTH_DIC_ADDR", "eforth__core_8h.html#a9574a362044eba73eb09283aaa5d6ad3", null ],
     [ "FORTH_UVAR_ADDR", "eforth__core_8h.html#af15f803ea14ff0e9a3fa11fe533d0393", null ],
+    [ "FORTH_DIC_ADDR", "eforth__core_8h.html#a9574a362044eba73eb09283aaa5d6ad3", null ],
     [ "FORTH_STACK_ADDR", "eforth__core_8h.html#af278ea3f0013fa26db155c0945bcb9d2", null ],
     [ "FORTH_STACK_TOP", "eforth__core_8h.html#a0ff79d0c91d8f4e7af41afdd399d28a4", null ],
     [ "FORTH_TIB_ADDR", "eforth__core_8h.html#a7b21761447b5ce2df53bcd72baa34c73", null ],
@@ -47,5 +47,7 @@ var eforth__core_8h =
     [ "intr_enable_pci", "eforth__core_8h.html#a18a475c1f5e15f4867d6974f8f0c1d43", null ],
     [ "vm_init", "eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002", null ],
     [ "vm_outer", "eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5", null ],
-    [ "ef_assemble", "eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8", null ]
+    [ "ef_assemble", "eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8", null ],
+    [ "ef_save", "eforth__core_8h.html#a739911ef03b2d1a9bb4139a8879c03fa", null ],
+    [ "ef_load", "eforth__core_8h.html#a143ec30cabab5d722b1df76883d4b4f4", null ]
 ];

@@ -21,9 +21,9 @@ var eforth__asm_8h =
     [ "_FOR", "eforth__asm_8h.html#aa669648c1d0fc7c582dee33709f3dda6", null ],
     [ "_NEXT", "eforth__asm_8h.html#af0e66d121225a0a8f1d53fed567fbbf8", null ],
     [ "_AFT", "eforth__asm_8h.html#a3064c1d97d936efdba7f0e46e31c082d", null ],
-    [ "_DOTQ", "eforth__asm_8h.html#a0137f596b118ed8abce9a2e6476dac25", null ],
-    [ "_STRQ", "eforth__asm_8h.html#abaa56a88ab9dfb73e2c65e9c44847580", null ],
-    [ "_ABORTQ", "eforth__asm_8h.html#a02ad5dad02c47122ee9dbfec101b5175", null ],
+    [ "_DOTQ", "eforth__asm_8h.html#afb0ffc3747e67be35cc9bf0f199b937b", null ],
+    [ "_STRQ", "eforth__asm_8h.html#a72b9c5f86c971f7da409747539e36c03", null ],
+    [ "_ABORTQ", "eforth__asm_8h.html#a48481a4fb54dbf36ff46498a7f87cd3e", null ],
     [ "BSET", "eforth__asm_8h.html#a77270f01b515a878ec2853760cb20dfa", null ],
     [ "BGET", "eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1", null ],
     [ "SET", "eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78", null ],
@@ -33,6 +33,6 @@ var eforth__asm_8h =
     [ "RPOP", "eforth__asm_8h.html#a55b5173e6face979deb7372dcbb643df", null ],
     [ "VL", "eforth__asm_8h.html#a3b1701d44f7b15525bc7b3c0a8f637e1", null ],
     [ "VH", "eforth__asm_8h.html#aca2bbb288661206e28c0488766c22f15", null ],
-    [ "V32", "eforth__asm_8h.html#a3f27926aa2f42e48de202fc7ed8bbfe3", null ],
+    [ "VDU", "eforth__asm_8h.html#a19c77462bb98229bc63d4497185bde42", null ],
     [ "FCHAR", "eforth__asm_8h.html#a1866848c561f07858c76dec0c2b76a78", null ]
 ];

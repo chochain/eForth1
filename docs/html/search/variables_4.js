@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['donxt_238',['DONXT',['../namespaceEfAsm.html#a86b03a1e4d3a8b4c0cdfd8d9fc8f7010',1,'EfAsm']]],
-  ['dotq_239',['DOTQ',['../namespaceEfAsm.html#ac277a20e10af2ca53f817b77cb033722',1,'EfAsm']]]
+  ['fchar_248',['FCHAR',['../namespaceEfAsm.html#a1866848c561f07858c76dec0c2b76a78',1,'EfAsm']]],
+  ['forth_5from_249',['forth_rom',['../eforth1_8cpp.html#ab122f4898c37a0db81ea641558424375',1,'eforth_rom.c']]],
+  ['forth_5from_5fsz_250',['forth_rom_sz',['../eforth1_8cpp.html#a6fe6f33736fc0d8ed68fd74b454e00e7',1,'eforth1.cpp']]]
 ];

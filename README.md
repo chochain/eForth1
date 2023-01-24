@@ -61,7 +61,7 @@ Hopefully, thing goes well and you get something like this if eForth1 is uploade
   > 
   > |screen shot|
   > |:--|
-  > |@image html docs/images/eforth1_init_snip.png|
+  > |@image html https://chochain.github.io/eForth1/docs/images/eforth1_init_snip.png|
   <br/>
 
 ### To Learn More About Forth?

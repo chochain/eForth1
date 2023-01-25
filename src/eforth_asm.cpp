@@ -82,7 +82,7 @@ int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
         BSET(PC++, pgm_read_byte(p++));         \
     }                                           \
 }
-    
+
 #define OPSTR(op, seq) {                        \
     STORE(op);                                  \
     int len = _strlen(seq);                     \
@@ -360,13 +360,13 @@ int assemble(U8 *cdata)
     IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
     IU D2S   = _COLON("D>S",   ZLT, OVER, ZLT, XOR); {
-    	_IF(NEG);
-    	_THEN(EXIT);
+        _IF(NEG);
+        _THEN(EXIT);
     }
     IU S2D   = _COLON("S>D",   DUP, ZLT); {
-    	_IF(DOLIT, 0xffff);
-    	_ELSE(DOLIT, 0);
-    	_THEN(EXIT);
+        _IF(DOLIT, 0xffff);
+        _ELSE(DOLIT, 0);
+        _THEN(EXIT);
     }
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
     IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);
@@ -778,8 +778,8 @@ int assemble(U8 *cdata)
     _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTEMP, STORE); {
         _BEGIN(AT, QDUP);
         _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,            // .ID
-        	DUP, DOLIT, 2, ADD, vTEMP, PSTOR,
-        	TYPE, SPACE, SPACE, CELLM,
+            DUP, DOLIT, 2, ADD, vTEMP, PSTOR,
+            TYPE, SPACE, SPACE, CELLM,
             vTEMP, AT, DOLIT, DUMP_ROW_WIDTH, GT); {    // check row width
             _IF(CR, DOLIT, 0, vTEMP, STORE);
             _THEN(NOP);
@@ -860,4 +860,3 @@ int ef_assemble(U8 *cdata) {
 
     return sz;
 }
-

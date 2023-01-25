@@ -67,12 +67,13 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6)
   <pre>
-    > : toggle 6 in 1 xor 6 out ;⏎           \ create a word to toggle the blue LED 
+    > : toggle 6 in 1 xor 6 out ;⏎           \ create a word to toggle the blue LED
     > : blink for toggle 500 delay next ;⏎   \ create a word to blink
     > 9 blink⏎                               \ run 10 cycles (i.e.9,8,7,...,2,1,0 to on/off 5 times)
-    > 
-    > [![eForth1 Blinks](https://www.youtube.com/embed/--iLaLC5cG0/0.jpg)](https://www.youtube.com/embed/--iLaLC5cG0)
-  </pre>
+  </pre>  
+  |||
+  |:---|:--|
+  |[Watch eForth1 Blinks](https://www.youtube.com/watch?v=--iLaLC5cG0)|[![eForth1 Blinks](https://img.youtube.com/vi/--iLaLC5cG0/hqdefault.jpg)](https://www.youtube.com/watch?v=--iLaLC5cG0)|
   
   * Timer Interrupt (LED on pin 5)
   <pre>
@@ -80,10 +81,10 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > ' my_isr 2 tmr⏎                        \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
     > 1 tmre⏎                                \ enable timer, now you should see red LED blinking
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
-    > 
-<iframe width="400" height="240" src="https://www.youtube.com/embed/--iLaLC5cG0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    > @htmlonly <iframe width="400" height="240" src="https://www.youtube.com/embed/gr3OVOcgF4Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> @endhtmlonly 
   </pre>
+  |||
+  |:---|:--|
+  |[Watch eForth1 Serves Interrupt](https://www.youtube.com/watch?v=gr3OVOcgF4Q)|[![eForth1 Serves Interrupt](https://img.youtube.com/vi/gr3OVOcgF4Q/hqdefault.jpg)](https://www.youtube.com/watch?v=gr3OVOcgF4Q)|
 
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.

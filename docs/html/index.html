@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>eForth1: eForth1 - eForth for Arduino</title>
+<title>eForth1: eForth1 - eForth for Arduino UNO</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,10 +83,10 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">eForth1 - eForth for Arduino </div>  </div>
+<div class="title">eForth1 - eForth for Arduino UNO </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>In 2011, Dr. Chen-Hanson Ting created [328eForth]((<a href="https://chochain.github.io/eForth1/docs/328eForth.pdf">https://chochain.github.io/eForth1/docs/328eForth.pdf</a>) to run Forth on Arduino UNO. Wrote in his ceForth_33 document, the creator of eForth, and one of the inspiring figures of Forth community noted: </p><blockquote class="doxtable">
+<div class="textblock"><p>In 2011, Dr. Chen-Hanson Ting created <a href="https://chochain.github.io/eForth1/docs/328eForth.pdf">328eForth</a> to run Forth on Arduino UNO. Wrote in his ceForth_33 document, the creator of eForth, and one of the inspiring figures of Forth community noted: </p><blockquote class="doxtable">
 <p><em>In 2011, I was attracted to Arduino Uno Kit and ported eForth to it as 328eForth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino IDE...I extended Forth dictionary in the RAM memory. It worked. However, you had only 1.5KB of RAM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.</em> </p>
 </blockquote>
 <p>Before Dr. Ting conceded his fight with cancer in May, 2022, I've spent the last 11 months working with him expanding the concept of "Forth without Forth" - a new eForth model - he called. Traditionally, Forth is built with a set of core words in low-level assembly language and establish the rest of words with high-level Forth scripts which get boot-strapped on start-up time. With the proliferation of modern languages, build Forth without using Forth, he reasoned that Forth built entirely in high-level languages can not only greatly simplify the virtual machine, taking advantage of modern languages and operating system, but also encourage portability and optimization. In a few months, we completed new batch of eForths in Javascript, Java, C++, ported them to Windows, ESP32, which Dr. Ting presented his video on November, 2021 to <a href="https://www.youtube.com/watch?v=bb5vi9kR1tE&amp;t=827s">Sillicon Valley Forth Interest Group</a>. Later, we focused on SystemVerilog's edition with Don &amp; Demitri's CORE-I FPGA project of <a href="https://www.facebook.com/groups/1304548976637542">AI &amp; Robotics Group</a> til his eventual departure.</p>
@@ -96,8 +96,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>I enjoy the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model and have fun with it. However, to make it useful, there are a few things that I need to overcome first i.e. make macro assembler C-coder friendly, remove dependency on extra bootloader programmer, add EEPROM save/load, and support interrupts. So, here we go!</p>
 <h2>What is eForth1?</h2>
 <ul>
-<li>An eForth for Arduino UNO implemented in C.</li>
-<li>A .ino file that can be openned in Arduino IDE and load/run directly onto Arduino UNO.</li>
+<li>An eForth for Arduino UNO/Nano implemented in C.</li>
+<li>A .ino file that can be openned in Arduino IDE and load/run directly onto Arduino.</li>
 <li>Has 16-bit cells and stacks.</li>
 <li>Can read/write Arduino pins.</li>
 <li>Supports Arduino Interrupts.</li>
@@ -108,47 +108,51 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <h2>How to install eForth1?</h2>
 <ul>
 <li>From Arduino IDE's Library Manager <blockquote class="doxtable">
-<p><br  />
- &gt; Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328</p>
+<p></p>
+<p>&gt; Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328</p>
 <p>&gt; from Arduino IDE &gt; Tools &gt; Manage Libraries, enter FORTH in search box</p>
 <p>&gt; find eForth1 in the short list, select the latest version, and click the Install button</p>
 <p>&gt; from Files &gt; Examples, find eForth1 in Examples from Custom Libraries at very buttom section</p>
-<p>&gt; load one of the nanoForth examples, such as 0_hello</p>
+<p>&gt; load one of the eForth1 examples, such as 0_hello</p>
 <p>&gt; open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL &amp; CR'</p>
 <p>&gt; hit compile and upload. You should see the 'ok' prompt</p>
-<p>&gt; in Serial Monitor input bar atop, type WORDS and hit &lt;return&gt;. See what eForth1 says.<br  />
-<br  />
- </p>
+<p></p>
 </blockquote>
 </li>
-<li>or, from GitHub directly, if you prefer managing source codes manually <blockquote class="doxtable">
-<p><br  />
- &gt; git clone <a href="https://github.com/chochain/eForth1">https://github.com/chochain/eForth1</a> onto your local Sketch directory</p>
-<p>&gt; copy examples/0_hello/0_heloo.ino from sub-directory, then rename it as <a class="el" href="eforth1_8ino.html">eforth1.ino</a><br  />
+<li>Or, from GitHub directly, if you prefer managing source codes manually <blockquote class="doxtable">
+<p></p>
+<p>&gt; git clone <a href="https://github.com/chochain/eForth1">https://github.com/chochain/eForth1</a> onto your local Sketch directory</p>
+<p>&gt; copy examples/0_hello/0_hello.ino from sub-directory, then rename it as <a class="el" href="eforth1_8ino.html">eforth1.ino</a><br  />
 </p>
 <p>&gt; open <a class="el" href="eforth1_8ino.html">eforth1.ino</a> with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board</p>
-<p>&gt; in nanoFORTH.ino, change the #include &lt;<a class="el" href="eforth1_8h.html">eforth1.h</a>&gt; to #include "./src/eforth1.h"</p>
+<p>&gt; in eForth1.ino, change the #include &lt;<a class="el" href="eforth1_8h.html">eforth1.h</a>&gt; to #include "./src/eforth1.h"</p>
 <p>&gt; open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL &amp; CR'</p>
 <p>&gt; compile and upload, you should see the 'ok' prompt</p>
-<p>&gt; in Serial Monitor input bar atop, type WORDS and hit &lt;return&gt;. See what eForth1 says.<br  />
-<br  />
- </p>
+<p></p>
 </blockquote>
 </li>
-<li>Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully <blockquote class="doxtable">
-<p><br  />
- </p><table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadLeft">screen shot  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft"><div class="image">
-<img src="images/eforth1_init_snip.png" alt=""/>
-</div>
- </td></tr>
-</table>
+</ul>
+<p>Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully.</p>
+<blockquote class="doxtable">
+<p><img src="./docs/images/eforth1_init_snip.png" alt="" width="500px" class="inline"/> </p>
 </blockquote>
-<br  />
-</li>
+<p>Now type <b>WORDS</b> in the input bar and hit &lt;return&gt; to list all the words supprted by eForth1. It is ready to serve your future fun projects.</p>
+<blockquote class="doxtable">
+<p><img src="./docs/images/eforth1_words_snip.png" alt="" width="500px" class="inline"/> </p>
+</blockquote>
+<h2>Demos</h2>
+<ul>
+<li>LED blinker (assume you have a blue LED on pin 6) <pre>
+    &gt; : toggle 6 in 1 xor 6 out ;⏎           \ create a word to toggle the blue LED
+    &gt; : blink for toggle 500 delay next ;⏎   \ create a word to blink
+    &gt; 9 blink⏎                               \ run 10 cycles (i.e.9,8,7,...,2,1,0 to on/off 5 times)
+  </pre> ||| |:&mdash;|:&ndash;| |<a href="https://www.youtube.com/watch?v=--iLaLC5cG0">Watch eForth1 Blinks</a>|<a href="https://www.youtube.com/watch?v=--iLaLC5cG0"><img src="https://img.youtube.com/vi/--iLaLC5cG0/hqdefault.jpg" alt="eForth1 Blinks" class="inline"/></a>|</li>
+<li>Timer Interrupt (LED on pin 5) <pre>
+    &gt; : my_isr 5 in 1 xor 5 out ;⏎           \ create an interrupt service routine (just a regular word)
+    &gt; ' my_isr 2 tmr⏎                        \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
+    &gt; 1 tmre⏎                                \ enable timer, now you should see red LED blinking
+    &gt; 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
+  </pre> ||| |:&mdash;|:&ndash;| |<a href="https://www.youtube.com/watch?v=gr3OVOcgF4Q">Watch eForth1 Serves Interrupt</a>|<a href="https://www.youtube.com/watch?v=gr3OVOcgF4Q"><img src="https://img.youtube.com/vi/gr3OVOcgF4Q/hqdefault.jpg" alt="eForth1 Serves Interrupt" class="inline"/></a>|</li>
 </ul>
 <h2>To Learn More About Forth?</h2>
 <p>If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite <b>different</b>. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.</p><ul>
@@ -167,7 +171,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <h2>Performance Tuning</h2>
 <ul>
 <li>Check your Arduino IDE installed directory, say C:\Users\myname\AppData\Local\Arduino... on Windows or /home/myname/Arduino/... on Linux,</li>
-<li>Find the hardware -&gt; arduino -&gt; avr subdirectories,</li>
+<li>Find the directory hardware -&gt; arduino -&gt; avr,</li>
 <li>With an editor, open the 'platform.txt' file,</li>
 <li>Find all three -Os compiler options (i.g. compiler.c.flags=-c -g -Os ...) <blockquote class="doxtable">
 <p>change them to -O3 for speed, -Os (default) for smallest size, -O2 for somewhere in-between </p>
@@ -176,12 +180,12 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <h2>References to Dr. Ting's Original</h2>
 <ul>
-<li>328eForth in AVR assembly <a href="https://chochain.github.io/eForth1/docs/328eForth_content.pdf">table of content</a> and <a href="https://chochain.github.io/eForth1/docs/328eForth.pdf">full document</a></li>
+<li><a href="https://chochain.github.io/eForth1/docs/328eForth_content.pdf">328eForth documentation - table of content</a> and <a href="https://chochain.github.io/eForth1/docs/328eForth.pdf">full doc</a></li>
 <li><a href="https://github.com/DRuffer/328eforth">328eForth mod for coinForth by D. Ruffer</a></li>
 <li><a href="https://chochain.github.io/eForth1/docs/ceForth_33.doc">ceForth_33.doc - original documentation</a></li>
 <li><a href="https://chochain.github.io/eForth1/docs/ceForth_33.cpp">ceForth_33.cpp - in C, source assembler + VM</a></li>
-<li>[eforth_328.ino - for Arduino IDE]((<a href="https://chochain.github.io/eForth1/docs/eforth_328.ino">https://chochain.github.io/eForth1/docs/eforth_328.ino</a>)</li>
-<li>[eForth for STM8 - for even smaller apps(<a href="https://github.com/TG9541/stm8ef">https://github.com/TG9541/stm8ef</a>) and <a href="https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8">STM8 Programming</a></li>
+<li>[eforth_328.ino - teaser by Dr. Ting for Arduino IDE]((<a href="https://chochain.github.io/eForth1/docs/eforth_328.ino">https://chochain.github.io/eForth1/docs/eforth_328.ino</a>)</li>
+<li><a href="https://github.com/TG9541/stm8ef">eForth for STM8 - for even smaller apps</a> and <a href="https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8">STM8 Programming</a></li>
 <li><a href="https://github.com/Esp32forth">ESP32Forth for ESP32 - for larger/fancier apps</a> </li>
 </ul>
 </div></div><!-- PageDoc -->

@@ -18,5 +18,5 @@ var searchData=
   ['eforth_5fvm_2ecpp_79',['eforth_vm.cpp',['../eforth__vm_8cpp.html',1,'']]],
   ['efvm_80',['EfVM',['../namespaceEfVM.html',1,'']]],
   ['exe_5ftrace_81',['EXE_TRACE',['../eforth__core_8h.html#a4e7ebf605b9379a385139d145f5b1fc5',1,'eforth_core.h']]],
-  ['eforth1_20_2d_20eforth_20for_20arduino_82',['eForth1 - eForth for Arduino',['../index.html',1,'']]]
+  ['eforth1_20_2d_20eforth_20for_20arduino_20uno_82',['eForth1 - eForth for Arduino UNO',['../index.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
-In 2011, Dr. Chen-\/\+Hanson Ting created \mbox{[}328e\+Forth\mbox{]}((\href{https://chochain.github.io/eForth1/docs/328eForth.pdf}{\texttt{ https\+://chochain.\+github.\+io/e\+Forth1/docs/328e\+Forth.\+pdf}}) to run Forth on Arduino U\+NO. Wrote in his ce\+Forth\+\_\+33 document, the creator of e\+Forth, and one of the inspiring figures of Forth community noted\+: \begin{quote}
+In 2011, Dr. Chen-\/\+Hanson Ting created \href{https://chochain.github.io/eForth1/docs/328eForth.pdf}{\texttt{ 328e\+Forth}} to run Forth on Arduino U\+NO. Wrote in his ce\+Forth\+\_\+33 document, the creator of e\+Forth, and one of the inspiring figures of Forth community noted\+: \begin{quote}
 {\itshape In 2011, I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. However, you had only 1.\+5\+KB of R\+AM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
 
 
@@ -14,8 +14,8 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
 
 
 \begin{DoxyItemize}
-\item An e\+Forth for Arduino U\+NO implemented in C.
-\item A .ino file that can be openned in Arduino I\+DE and load/run directly onto Arduino U\+NO.
+\item An e\+Forth for Arduino U\+N\+O/\+Nano implemented in C.
+\item A .ino file that can be openned in Arduino I\+DE and load/run directly onto Arduino.
 \item Has 16-\/bit cells and stacks.
 \item Can read/write Arduino pins.
 \item Supports Arduino Interrupts.
@@ -29,8 +29,9 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
 
 \begin{DoxyItemize}
 \item From Arduino I\+DE\textquotesingle{}s Library Manager \begin{quote}
-~\newline
- $>$ Make sure you\textquotesingle{}ve hooked up one of Arduino Nano/\+Uno, or a development board that hosts A\+Tmega328
+
+
+$>$ Make sure you\textquotesingle{}ve hooked up one of Arduino Nano/\+Uno, or a development board that hosts A\+Tmega328
 
 $>$ from Arduino I\+DE $>$ Tools $>$ Manage Libraries, enter F\+O\+R\+TH in search box
 
@@ -38,52 +39,65 @@ $>$ find e\+Forth1 in the short list, select the latest version, and click the I
 
 $>$ from Files $>$ Examples, find e\+Forth1 in Examples from Custom Libraries at very buttom section
 
-$>$ load one of the nano\+Forth examples, such as 0\+\_\+hello
+$>$ load one of the e\+Forth1 examples, such as 0\+\_\+hello
 
 $>$ open Serial Monitor, set baud rate to 115200, and line ending to \textquotesingle{}Both NL \& CR\textquotesingle{}
 
 $>$ hit compile and upload. You should see the \textquotesingle{}ok\textquotesingle{} prompt
 
-$>$ in Serial Monitor input bar atop, type W\+O\+R\+DS and hit $<$return$>$. See what e\+Forth1 says.~\newline
-~\newline
- \end{quote}
+\end{quote}
 
-\item or, from Git\+Hub directly, if you prefer managing source codes manually \begin{quote}
-~\newline
- $>$ git clone \href{https://github.com/chochain/eForth1}{\texttt{ https\+://github.\+com/chochain/e\+Forth1}} onto your local Sketch directory
+\item Or, from Git\+Hub directly, if you prefer managing source codes manually \begin{quote}
 
-$>$ copy examples/0\+\_\+hello/0\+\_\+heloo.\+ino from sub-\/directory, then rename it as \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}}~\newline
+
+$>$ git clone \href{https://github.com/chochain/eForth1}{\texttt{ https\+://github.\+com/chochain/e\+Forth1}} onto your local Sketch directory
+
+$>$ copy examples/0\+\_\+hello/0\+\_\+hello.\+ino from sub-\/directory, then rename it as \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}}~\newline
 
 
 $>$ open \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}} with Arduino I\+DE, and setup your Nano/\+Uno (or A\+Tmega328) development board
 
-$>$ in nano\+F\+O\+R\+T\+H.\+ino, change the \#include $<$\mbox{\hyperlink{eforth1_8h}{eforth1.\+h}}$>$ to \#include \char`\"{}./src/eforth1.\+h\char`\"{}
+$>$ in e\+Forth1.\+ino, change the \#include $<$\mbox{\hyperlink{eforth1_8h}{eforth1.\+h}}$>$ to \#include \char`\"{}./src/eforth1.\+h\char`\"{}
 
 $>$ open Serial Monitor, set baud rate to 115200, and line ending to \textquotesingle{}Both NL \& CR\textquotesingle{}
 
 $>$ compile and upload, you should see the \textquotesingle{}ok\textquotesingle{} prompt
 
-$>$ in Serial Monitor input bar atop, type W\+O\+R\+DS and hit $<$return$>$. See what e\+Forth1 says.~\newline
-~\newline
+\end{quote}
+
+\end{DoxyItemize}
+
+Hopefully, thing goes well and you get something like this if e\+Forth1 is uploaded successfully.
+
+\begin{quote}
  \end{quote}
 
-\item Hopefully, thing goes well and you get something like this if e\+Forth1 is uploaded successfully \begin{quote}
-~\newline
- \tabulinesep=1mm
-\begin{longtabu}spread 0pt [c]{*{1}{|X[-1]}|}
-\hline
-\cellcolor{\tableheadbgcolor}\textbf{ screen shot  }\\\cline{1-1}
-\endfirsthead
-\hline
-\endfoot
-\hline
-\cellcolor{\tableheadbgcolor}\textbf{ screen shot  }\\\cline{1-1}
-\endhead
- \\\cline{1-1}
-\end{longtabu}
-\end{quote}
-~\newline
 
+Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list all the words supprted by e\+Forth1. It is ready to serve your future fun projects.
+
+\begin{quote}
+ \end{quote}
+
+
+\doxysubsection*{Demos}
+
+
+\begin{DoxyItemize}
+\item L\+ED blinker (assume you have a blue L\+ED on pin 6) 
+\begin{DoxyPre}
+    > : toggle 6 in 1 xor 6 out ;⏎           \textbackslash{} create a word to toggle the blue LED
+    > : blink for toggle 500 delay next ;⏎   \textbackslash{} create a word to blink
+    > 9 blink⏎                               \textbackslash{} run 10 cycles (i.e.9,8,7,...,2,1,0 to on/off 5 times)
+  \end{DoxyPre}
+ $\vert$$\vert$$\vert$ $\vert$\+:---$\vert$\+:--$\vert$ $\vert$\href{https://www.youtube.com/watch?v=--iLaLC5cG0}{\texttt{ Watch e\+Forth1 Blinks}}$\vert$\href{https://www.youtube.com/watch?v=--iLaLC5cG0}{\texttt{ }}$\vert$
+\item Timer Interrupt (L\+ED on pin 5) 
+\begin{DoxyPre}
+    > : my\_isr 5 in 1 xor 5 out ;⏎           \textbackslash{} create an interrupt service routine (just a regular word)
+    > ' my\_isr 2 tmr⏎                        \textbackslash{} make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
+    > 1 tmre⏎                                \textbackslash{} enable timer, now you should see red LED blinking
+    > 19 blink⏎                              \textbackslash{} let's have them both blink (blue LED 10 times) 
+  \end{DoxyPre}
+ $\vert$$\vert$$\vert$ $\vert$\+:---$\vert$\+:--$\vert$ $\vert$\href{https://www.youtube.com/watch?v=gr3OVOcgF4Q}{\texttt{ Watch e\+Forth1 Serves Interrupt}}$\vert$\href{https://www.youtube.com/watch?v=gr3OVOcgF4Q}{\texttt{ }}$\vert$
 \end{DoxyItemize}
 
 \doxysubsection*{To Learn More About Forth?}
@@ -108,7 +122,7 @@ To understand the philosophy of F\+O\+R\+TH, excellent online e-\/books are here
 
 \begin{DoxyItemize}
 \item Check your Arduino I\+DE installed directory, say C\+:\textbackslash{}\+Users\textbackslash{}myname\textbackslash{}\+App\+Data\textbackslash{}\+Local\textbackslash{}\+Arduino... on Windows or /home/myname/\+Arduino/... on Linux,
-\item Find the hardware -\/$>$ arduino -\/$>$ avr subdirectories,
+\item Find the directory hardware -\/$>$ arduino -\/$>$ avr,
 \item With an editor, open the \textquotesingle{}platform.\+txt\textquotesingle{} file,
 \item Find all three -\/Os compiler options (i.\+g. compiler.\+c.\+flags=-\/c -\/g -\/Os ...) \begin{quote}
 change them to -\/O3 for speed, -\/Os (default) for smallest size, -\/O2 for somewhere in-\/between \end{quote}
@@ -119,11 +133,11 @@ change them to -\/O3 for speed, -\/Os (default) for smallest size, -\/O2 for som
 
 
 \begin{DoxyItemize}
-\item 328e\+Forth in A\+VR assembly \href{https://chochain.github.io/eForth1/docs/328eForth_content.pdf}{\texttt{ table of content}} and \href{https://chochain.github.io/eForth1/docs/328eForth.pdf}{\texttt{ full document}}
+\item \href{https://chochain.github.io/eForth1/docs/328eForth_content.pdf}{\texttt{ 328e\+Forth documentation -\/ table of content}} and \href{https://chochain.github.io/eForth1/docs/328eForth.pdf}{\texttt{ full doc}}
 \item \href{https://github.com/DRuffer/328eforth}{\texttt{ 328e\+Forth mod for coin\+Forth by D. Ruffer}}
 \item \href{https://chochain.github.io/eForth1/docs/ceForth_33.doc}{\texttt{ ce\+Forth\+\_\+33.\+doc -\/ original documentation}}
 \item \href{https://chochain.github.io/eForth1/docs/ceForth_33.cpp}{\texttt{ ce\+Forth\+\_\+33.\+cpp -\/ in C, source assembler + VM}}
-\item \mbox{[}eforth\+\_\+328.\+ino -\/ for Arduino I\+DE\mbox{]}((\href{https://chochain.github.io/eForth1/docs/eforth_328.ino}{\texttt{ https\+://chochain.\+github.\+io/e\+Forth1/docs/eforth\+\_\+328.\+ino}})
-\item \mbox{[}e\+Forth for S\+T\+M8 -\/ for even smaller apps(\href{https://github.com/TG9541/stm8ef}{\texttt{ https\+://github.\+com/\+T\+G9541/stm8ef}}) and \href{https://github.com/TG9541/stm8ef/wiki/STM8S-Programming\#flashing-the-stm8}{\texttt{ S\+T\+M8 Programming}}
+\item \mbox{[}eforth\+\_\+328.\+ino -\/ teaser by Dr. Ting for Arduino I\+DE\mbox{]}((\href{https://chochain.github.io/eForth1/docs/eforth_328.ino}{\texttt{ https\+://chochain.\+github.\+io/e\+Forth1/docs/eforth\+\_\+328.\+ino}})
+\item \href{https://github.com/TG9541/stm8ef}{\texttt{ e\+Forth for S\+T\+M8 -\/ for even smaller apps}} and \href{https://github.com/TG9541/stm8ef/wiki/STM8S-Programming\#flashing-the-stm8}{\texttt{ S\+T\+M8 Programming}}
 \item \href{https://github.com/Esp32forth}{\texttt{ E\+S\+P32\+Forth for E\+S\+P32 -\/ for larger/fancier apps}} 
 \end{DoxyItemize}

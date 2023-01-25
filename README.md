@@ -71,9 +71,9 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > : blink for toggle 500 delay next ;⏎   \ create a word to blink
     > 9 blink⏎                               \ run 10 cycles (i.e.9,8,7,...,2,1,0 to on/off 5 times)
     > 
-    > <iframe width="400" height="240" src="https://www.youtube.com/embed/--iLaLC5cG0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    > [![eForth1 Blinks](https://www.youtube.com/embed/--iLaLC5cG0/0.jpg)](https://www.youtube.com/embed/--iLaLC5cG0)
   </pre>
-
+  
   * Timer Interrupt (LED on pin 5)
   <pre>
     > : my_isr 5 in 1 xor 5 out ;⏎           \ create an interrupt service routine (just a regular word)
@@ -81,7 +81,8 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > 1 tmre⏎                                \ enable timer, now you should see red LED blinking
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     > 
-    > <iframe width="400" height="240" src="https://www.youtube.com/embed/gr3OVOcgF4Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="400" height="240" src="https://www.youtube.com/embed/--iLaLC5cG0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    > @htmlonly <iframe width="400" height="240" src="https://www.youtube.com/embed/gr3OVOcgF4Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> @endhtmlonly 
   </pre>
 
 ### To Learn More About Forth?

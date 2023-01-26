@@ -31,7 +31,7 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
   >
   > \> find eForth1 in the short list, select the latest version, and click the Install button
   >
-  > \> from Files > Examples, find eForth1 in Examples from Custom Libraries at very buttom section
+  > \> from *Files > Examples*, find eForth1 in Examples from Custom Libraries at very buttom section
   >
   > \> load one of the eForth1 examples, such as *0_hello*
   >
@@ -46,9 +46,9 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
   >
   > \> copy *examples/0_hello/0_hello.ino* from sub-directory, then rename it as *eforth1.ino*
   >
-  > \> open eforth1.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
+  > \> open *eforth1.ino* with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
   >
-  > \> in eForth1.ino, change the *#include <eforth1.h>* to *#include "./src/eforth1.h"*
+  > \> in *eforth1.ino*, change the <em>#include \<eforth1.h\></em> to <em>#include "./src/eforth1.h"</em>
   >
   > \> open Serial Monitor, set baud rate to *115200*, and line ending to *Both NL & CR*
   >
@@ -58,11 +58,11 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
 
 Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully. 
 
-  > <img src="images/eforth1_init_snip.png" width="500px">
+  > @image html images/eforth1_init_snip.png
   
 Now type **WORDS** in the input bar and hit \<return\> to list all the words supprted by eForth1. It is ready to serve your future fun projects.
 
-  > <img src="images/eforth1_words_snip.png" width="500px">
+  > @image html images/eforth1_words_snip.png
 
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6)
@@ -81,12 +81,12 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     </pre>
     |||
     |:--|:--|
-    |<iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe>|<iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe>|
+    |@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
 
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.
 * Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary.
-  > <a href="https://skilldrick.github.io/easyforth/#introduction" target="_blank">Easy Forth Tutorial by Nick Morgan</a>
+  > <a href="https://skilldrick.github.io/easyforth/#introduction" target="_blank">Easy Forth Tutorial by Nick Morgan</a> with a [Writeup by Juergen Pintaske](https://wiki.forth-ev.de/lib/exe/fetch.php/en:projects:a-start-with-forth:05_easy_forth_v16_a5_withexp_comments.pdf?fbclid=IwAR0sHmgiDtnMRuQtJdVkhl9bmiitpgcjs4ZlIDVtlxrssMOmLBv0vesvmKQ")
 
 To understand the philosophy of FORTH, excellent online e-books are here free for you.
 * Timeless classic for the history, paths, and thoughts behind FORTH language.
@@ -94,17 +94,17 @@ To understand the philosophy of FORTH, excellent online e-books are here free fo
   > <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a>
 
 ### Performance Tuning
-* Check your Arduino IDE installed directory, say C:\Users\myname\AppData\Local\Arduino... on Windows or /home/myname/Arduino/... on Linux,
-* Find the directory hardware -> arduino -> avr,
-* With an editor, open the 'platform.txt' file,
+* Check your Arduino IDE installed directory, say *C:\Users\myname\AppData\Local\Arduino...* on Windows or */home/myname/Arduino/...* on Linux,
+* Find the directory *hardware -> arduino -> avr*,
+* With an editor, open the *'platform.txt'* file,
 * Find all three -Os compiler options (i.g. compiler.c.flags=-c -g -Os ...)
   > change them to -O3 for speed, -Os (default) for smallest size, -O2 for somewhere in-between
 
 ### References to Dr. Ting's Original
-* [328eForth documentation - table of content](https://chochain.github.io/eForth1/ref/328eForth_content.pdf) and [full doc](https://chochain.github.io/eForth1/ref/328eForth.pdf)
+* [328eForth documentation - table of content](https://chochain.github.io/eForth1/ref/328eForth_contents.pdf) and [full doc](https://chochain.github.io/eForth1/ref/328eForth.pdf)
 * [328eForth mod for coinForth by D. Ruffer](https://github.com/DRuffer/328eforth)
 * [ceForth_33.doc - original documentation](https://chochain.github.io/eForth1/ref/ceForth_33.doc)
 * [ceForth_33.cpp - in C, source assembler + VM](https://chochain.github.io/eForth1/ref/ceForth_33.cpp)
-* [eforth_328.ino - teaser by Dr. Ting for Arduino IDE]((https://chochain.github.io/eForth1/ref/eforth_328.ino)
+* [eforth_328.ino - teaser by Dr. Ting for Arduino IDE](https://chochain.github.io/eForth1/ref/eforth_328.ino)
 * [eForth for STM8 - for even smaller apps](https://github.com/TG9541/stm8ef) and [STM8 Programming](https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8)
 * [ESP32Forth for ESP32 - for larger/fancier apps](https://github.com/Esp32forth)

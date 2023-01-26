@@ -56,13 +56,12 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
   >
   <p/>
 
-Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully. 
-
-  > @image html images/eforth1_init_snip.png
-  
+Hopefully, thing goes well and you get something like the left snip below if eForth1 is uploaded successfully. 
 Now type **WORDS** in the input bar and hit \<return\> to list all the words supprted by eForth1. It is ready to serve your future fun projects.
 
-  > @image html images/eforth1_words_snip.png
+  |||
+  |:--|:--|
+  |@image html images/eforth1_init_snip.png|@image html images/eforth1_words_snip.png|
 
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6)

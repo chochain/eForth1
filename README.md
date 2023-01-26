@@ -24,37 +24,22 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
 ### How to install eForth1?
 
 * From Arduino IDE's Library Manager
-  >
-  > \> Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
-  >
-  > \> from Arduino IDE > Tools > Manage Libraries, enter FORTH in search box
-  >
-  > \> find eForth1 in the short list, select the latest version, and click the Install button
-  >
-  > \> from Files > Examples, find eForth1 in Examples from Custom Libraries at very buttom section
-  >
-  > \> load one of the eForth1 examples, such as 0_hello
-  >
-  > \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
-  >
-  > \> hit compile and upload. You should see the 'ok' prompt
-  >
+  + Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
+  + from Arduino IDE > Tools > Manage Libraries, enter FORTH in search box
+  + find eForth1 in the short list, select the latest version, and click the Install button
+  + from Files > Examples, find eForth1 in Examples from Custom Libraries at very buttom section
+  + load one of the eForth1 examples, such as 0_hello
+  + open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
+  + hit compile and upload. You should see the 'ok' prompt
 
 * Or, from GitHub directly, if you prefer managing source codes manually
-  >
-  > \> git clone https://github.com/chochain/eForth1 onto your local Sketch directory
-  >
-  > \> copy examples/0_hello/0_hello.ino from sub-directory, then rename it as eforth1.ino<br/>
-  >
-  > \> open eforth1.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
-  >
-  > \> in eForth1.ino, change the #include <eforth1.h> to #include "./src/eforth1.h"
-  >
-  > \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
-  >
-  > \> compile and upload, you should see the 'ok' prompt
-  >
-  <p/>
+  + git clone https://github.com/chochain/eForth1 onto your local Sketch directory
+  + copy examples/0_hello/0_hello.ino from sub-directory, then rename it as eforth1.ino<br/>
+  + open eforth1.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
+  + in eForth1.ino, change the #include <eforth1.h> to #include "./src/eforth1.h"
+  + open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
+  + compile and upload, you should see the 'ok' prompt
+<p/>
 
 Hopefully, thing goes well and you get something like this if eForth1 is uploaded successfully. 
 
@@ -67,24 +52,24 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6)
   <pre>
-    > : toggle 6 in 1 xor 6 out ;⏎           \ create a word to toggle the blue LED
-    > : blink for toggle 500 delay next ;⏎   \ create a word to blink
-    > 9 blink⏎                               \ run 10 cycles (i.e.9,8,7,...,2,1,0 to on/off 5 times)
+    > : toggle 6 in 1 xor 6 out ;⏎         \ create a word to toggle the blue LED
+    > : blink for toggle 500 delay next ;⏎ \ create a word to blink
+    > 9 blink⏎                             \ run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
   </pre>  
   |||
   |:---|:--|
-  |[Watch eForth1 Blinks](https://www.youtube.com/watch?v=--iLaLC5cG0)|[![eForth1 Blinks](https://img.youtube.com/vi/--iLaLC5cG0/hqdefault.jpg)](https://www.youtube.com/watch?v=--iLaLC5cG0)|
+  |[Watch eForth1 Blinks](https://www.youtube.com/watch?v=--iLaLC5cG0)|[![eForth1 Blinks](https://img.youtube.com/vi/--iLaLC5cG0/1.jpg)](https://www.youtube.com/watch?v=--iLaLC5cG0)|
   
   * Timer Interrupt (LED on pin 5)
   <pre>
-    > : my_isr 5 in 1 xor 5 out ;⏎           \ create an interrupt service routine (just a regular word)
-    > ' my_isr 2 tmr⏎                        \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
-    > 1 tmre⏎                                \ enable timer, now you should see red LED blinking
-    > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
+    > : my_isr 5 in 1 xor 5 out ;⏎ \ create an interrupt service routine (as a regular word)
+    > ' my_isr 2 tmr⏎              \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
+    > 1 tmre⏎                      \ enable timer, now you should see red LED blinking
+    > 19 blink⏎                    \ let's have them both blink (blue LED 10 times) 
   </pre>
   |||
   |:---|:--|
-  |[Watch eForth1 Serves Interrupt](https://www.youtube.com/watch?v=gr3OVOcgF4Q)|[![eForth1 Serves Interrupt](https://img.youtube.com/vi/gr3OVOcgF4Q/hqdefault.jpg)](https://www.youtube.com/watch?v=gr3OVOcgF4Q)|
+  |[Watch eForth1 Serves Interrupt](https://www.youtube.com/watch?v=gr3OVOcgF4Q)|[![eForth1 Serves Interrupt](https://img.youtube.com/vi/gr3OVOcgF4Q/1.jpg)](https://www.youtube.com/watch?v=gr3OVOcgF4Q)|
 
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.

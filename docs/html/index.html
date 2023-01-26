@@ -131,15 +131,64 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </blockquote>
 </li>
 </ul>
-<p>Hopefully, thing goes well and you get something like the left snip below if eForth1 is uploaded successfully. Now type <b>WORDS</b> in the input bar and hit &lt;return&gt; to list all the words supprted by eForth1. It is ready to serve your future fun projects.</p>
-<p>||| |:&ndash;|:&ndash;| |</p><div class="image">
-<img src="images/eforth1_init_snip.png" alt=""/>
-<div class="caption">
-|<div class="image">
-<img src="images/eforth1_words_snip.png" alt=""/>
-<div class="caption">
-|</div></div>
- h2Demosh2h2LED blinker (assume you have a blue LED on pin 6)  &gt; : toggle 6 in 1 xor 6 out ;⏎ \ create a word to toggle the blue LED &gt; : blink for toggle 500 delay next ;⏎ \ create a word to blink &gt; 9 blink⏎ \ run 10 cycles (i.e.9,8,7,...,2,1,0 to on/off 5 times)  preTimer Interrupt (LED on pin 5)  &gt; : my_isr 5 in 1 xor 5 out ;⏎ \ create an interrupt service routine (just a regular word) &gt; ' my_isr 2 tmr⏎ \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds) &gt; 1 tmre⏎ \ enable timer, now you should see red LED blinking &gt; 19 blink⏎ \ let's have them both blink (blue LED 10 times)  ||| |:&ndash;|:&ndash;| | <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> | <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> | h2To Learn More About Forth?h2 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite <b>different</b>. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials..Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary. blockquote aEasy Forth Tutorial by Nick Morgana with a aWriteup by Juergen Pintaskea blockquote To understand the philosophy of FORTH, excellent online e-books are here free for you..Timeless classic for the history, paths, and thoughts behind FORTH language. blockquote aStarting Forth by Leo Brodieabr aThinking Forth by Leo Brodiea blockquote h2Performance Tuningh2h2Check your Arduino IDE installed directory, say *C:\Users\myname\AppData\Local\Arduino...* on Windows or */home/myname/Arduino/...* on Linux,,Find the directory <em>hardware -&gt; arduino -&gt; avr</em>,,With an editor, open the *'platform.txt'* file,,Find all three -Os compiler options (i.g. compiler.c.flags=-c -g -Os ...) blockquote change them to -O3 for speed, -Os (default) for smallest size, -O2 for somewhere in-between blockquote h2References to Dr. Ting's Originalh2h2a328eForth documentation - table of contenta and afull docaaa328eForth mod for coinForth by D. RufferaaaceForth_33.doc - original documentationaaaceForth_33.cpp - in C, source assembler + VMaaaeforth_328.ino - teaser by Dr. Ting for Arduino IDEaaaeForth for STM8 - for even smaller appsa and aSTM8 ProgrammingaaaESP32Forth for ESP32 - for larger/fancier appsa </div></div>
+<p>Hopefully, thing goes well and you get something like the snip below if eForth1 is uploaded successfully.</p>
+<ul>
+<li>&gt; <img src="https://chochain.github.io/eForth1/images/eforth1_init_snip.png" alt="" width="400" class="inline"/><br  />
+</li>
+</ul>
+<p>Now type <b>WORDS</b> in the input bar and hit &lt;return&gt; to list all the words supprted by eForth1. It is ready to serve your future fun projects.</p>
+<ul>
+<li>&gt; <img src="https://chochain.github.io/eForth1/images/eforth1_words_snip.png" alt="" width="400" class="inline"/></li>
+</ul>
+<h2>Demos</h2>
+<ul>
+<li>LED blinker (assume you have a blue LED on pin 6) <pre>
+    &gt; : toggle 6 in 1 xor 6 out ;⏎           \ create a word to toggle the blue LED
+    &gt; : blink for toggle 500 delay next ;⏎   \ create a word to blink
+    &gt; 9 blink⏎                               \ run 10 cycles (i.e.9,8,7,...,2,1,0 to on/off 5 times)
+    </pre></li>
+<li><p class="startli">Timer Interrupt (LED on pin 5) </p><pre>
+    &gt; : my_isr 5 in 1 xor 5 out ;⏎           \ create an interrupt service routine (just a regular word)
+    &gt; ' my_isr 2 tmr⏎                        \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
+    &gt; 1 tmre⏎                                \ enable timer, now you should see red LED blinking
+    &gt; 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
+    </pre><p class="startli">||| |:&ndash;|:&ndash;| | <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> | <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> |</p>
+</li>
+</ul>
+<h2>To Learn More About Forth?</h2>
+<p>If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite <b>different</b>. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.</p><ul>
+<li>Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary. <blockquote class="doxtable">
+<p><a href="https://skilldrick.github.io/easyforth/#introduction" target="_blank">Easy Forth Tutorial by Nick Morgan</a> with a <a href="https://wiki.forth-ev.de/lib/exe/fetch.php/en:projects:a-start-with-forth:05_easy_forth_v16_a5_withexp_comments.pdf?fbclid=IwAR0sHmgiDtnMRuQtJdVkhl9bmiitpgcjs4ZlIDVtlxrssMOmLBv0vesvmKQ">Writeup by Juergen Pintaske</a> </p>
+</blockquote>
+</li>
+</ul>
+<p>To understand the philosophy of FORTH, excellent online e-books are here free for you.</p><ul>
+<li>Timeless classic for the history, paths, and thoughts behind FORTH language. <blockquote class="doxtable">
+<p><a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br  />
+ <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a> </p>
+</blockquote>
+</li>
+</ul>
+<h2>Performance Tuning</h2>
+<ul>
+<li>Check your Arduino IDE installed directory, say <em>C:\Users\myname\AppData\Local\Arduino...</em> on Windows or <em>/home/myname/Arduino/...</em> on Linux,</li>
+<li>Find the directory <em>hardware -&gt; arduino -&gt; avr</em>,</li>
+<li>With an editor, open the <em>'platform.txt'</em> file,</li>
+<li>Find all three -Os compiler options (i.g. compiler.c.flags=-c -g -Os ...) <blockquote class="doxtable">
+<p>change them to -O3 for speed, -Os (default) for smallest size, -O2 for somewhere in-between </p>
+</blockquote>
+</li>
+</ul>
+<h2>References to Dr. Ting's Original</h2>
+<ul>
+<li><a href="https://chochain.github.io/eForth1/ref/328eForth_contents.pdf">328eForth documentation - table of content</a> and <a href="https://chochain.github.io/eForth1/ref/328eForth.pdf">full doc</a></li>
+<li><a href="https://github.com/DRuffer/328eforth">328eForth mod for coinForth by D. Ruffer</a></li>
+<li><a href="https://chochain.github.io/eForth1/ref/ceForth_33.doc">ceForth_33.doc - original documentation</a></li>
+<li><a href="https://chochain.github.io/eForth1/ref/ceForth_33.cpp">ceForth_33.cpp - in C, source assembler + VM</a></li>
+<li><a href="https://chochain.github.io/eForth1/ref/eforth_328.ino">eforth_328.ino - teaser by Dr. Ting for Arduino IDE</a></li>
+<li><a href="https://github.com/TG9541/stm8ef">eForth for STM8 - for even smaller apps</a> and <a href="https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8">STM8 Programming</a></li>
+<li><a href="https://github.com/Esp32forth">ESP32Forth for ESP32 - for larger/fancier apps</a> </li>
+</ul>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->

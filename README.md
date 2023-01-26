@@ -56,12 +56,13 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
   >
   <p/>
 
-Hopefully, thing goes well and you get something like the left snip below if eForth1 is uploaded successfully. 
+Hopefully, thing goes well and you get something like the snip below if eForth1 is uploaded successfully.
+
+  * > <img src="https://chochain.github.io/eForth1/images/eforth1_init_snip.png" width=400><br/>
+  
 Now type **WORDS** in the input bar and hit \<return\> to list all the words supprted by eForth1. It is ready to serve your future fun projects.
 
-  |||
-  |:--|:--|
-  |@image html images/eforth1_init_snip.png|@image html images/eforth1_words_snip.png|
+  * > <img src="https://chochain.github.io/eForth1/images/eforth1_words_snip.png" width=400>
 
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6)
@@ -78,6 +79,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > 1 tmre⏎                                \ enable timer, now you should see red LED blinking
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>
+    
     |||
     |:--|:--|
     |@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
@@ -93,9 +95,9 @@ To understand the philosophy of FORTH, excellent online e-books are here free fo
   > <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a>
 
 ### Performance Tuning
-* Check your Arduino IDE installed directory, say *C:\Users\myname\AppData\Local\Arduino...* on Windows or */home/myname/Arduino/...* on Linux,
+* Check your Arduino IDE installed directory, say <em>C:\Users\myname\AppData\Local\Arduino...</em> on Windows or <em>/home/myname/Arduino/...</em> on Linux,
 * Find the directory *hardware -> arduino -> avr*,
-* With an editor, open the *'platform.txt'* file,
+* With an editor, open the <em>'platform.txt'</em> file,
 * Find all three -Os compiler options (i.g. compiler.c.flags=-c -g -Os ...)
   > change them to -O3 for speed, -Os (default) for smallest size, -O2 for somewhere in-between
 

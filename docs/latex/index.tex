@@ -37,7 +37,7 @@ $>$ from {\itshape Arduino I\+DE $>$ Tools $>$ Manage} Libraries, enter F\+O\+R\
 
 $>$ find e\+Forth1 in the short list, select the latest version, and click the Install button
 
-$>$ from Files $>$ Examples, find e\+Forth1 in Examples from Custom Libraries at very buttom section
+$>$ from {\itshape Files $>$ Examples}, find e\+Forth1 in Examples from Custom Libraries at very buttom section
 
 $>$ load one of the e\+Forth1 examples, such as {\itshape 0\+\_\+hello}
 
@@ -54,9 +54,9 @@ $>$ git clone {\itshape \href{https://github.com/chochain/eForth1}{\texttt{ http
 
 $>$ copy {\itshape examples/0\+\_\+hello/0\+\_\+hello.\+ino} from sub-\/directory, then rename it as {\itshape \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}}}
 
-$>$ open \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}} with Arduino I\+DE, and setup your Nano/\+Uno (or A\+Tmega328) development board
+$>$ open {\itshape \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}}} with Arduino I\+DE, and setup your Nano/\+Uno (or A\+Tmega328) development board
 
-$>$ in e\+Forth1.\+ino, change the $\ast$\#include $<$\mbox{\hyperlink{eforth1_8h}{eforth1.\+h}}$>$$\ast$ to $\ast$\#include \char`\"{}./src/eforth1.\+h\char`\"{}$\ast$
+$>$ in {\itshape \mbox{\hyperlink{eforth1_8ino}{eforth1.\+ino}}}, change the {\itshape \#include $<$\mbox{\hyperlink{eforth1_8h}{eforth1.\+h}}$>$} to {\itshape \#include \char`\"{}./src/eforth1.\+h\char`\"{}}
 
 $>$ open Serial Monitor, set baud rate to {\itshape 115200}, and line ending to {\itshape Both NL \& CR}
 
@@ -96,7 +96,7 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
     > 1 tmre⏎                                \textbackslash{} enable timer, now you should see red LED blinking
     > 19 blink⏎                              \textbackslash{} let's have them both blink (blue LED 10 times) 
     \end{DoxyPre}
- $\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$<$iframe width=\char`\"{}400\char`\"{} height=\char`\"{}225\char`\"{} src=\char`\"{}https\+://www.\+youtube.\+com/embed/-\/-\/i\+La\+L\+C5c\+G0?version=3\&playlist=-\/-\/i\+La\+L\+C5c\+G0\&loop=1\&controls=0\char`\"{} title=\char`\"{}\char`\"{} frameborder=\char`\"{}0\char`\"{} allow=\char`\"{}autoplay; picture-\/in-\/picture\char`\"{} allowfullscreen$>$$<$/iframe$>$$\vert$$<$iframe width=\char`\"{}400\char`\"{} height=\char`\"{}225\char`\"{} src=\char`\"{}https\+://www.\+youtube.\+com/embed/gr3\+O\+V\+Ocg\+F4\+Q?version=3\&playlist=gr3\+O\+V\+Ocg\+F4\+Q\&loop=1\&controls=0\char`\"{} title=\char`\"{}\char`\"{} frameborder=\char`\"{}0\char`\"{} allow=\char`\"{}autoplay; picture-\/in-\/picture\char`\"{} allowfullscreen$>$$<$/iframe$>$$\vert$
+ $\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$\vert$$\vert$
 \end{DoxyItemize}
 
 \doxysubsection*{To Learn More About Forth?}
@@ -104,7 +104,7 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 If your programming language exposure has been with C, Java, or even Python so far, F\+O\+R\+TH is quite {\bfseries{different}}. Quote Nick\+: {\itshape \char`\"{}\+It\textquotesingle{}s no functional or object oriented, it doesn\textquotesingle{}t have type-\/checking, and it basically has zero syntax\char`\"{}}. No syntax? So, anyway, before you dive right into the deep-\/end, here\textquotesingle{}s a good online materials.
 \begin{DoxyItemize}
 \item Interactive tutorial for F\+O\+R\+TH primer. It teaches you how F\+O\+R\+TH fundamentally works such as the numbers, the stack, and the dictionary. \begin{quote}
-\href{https://skilldrick.github.io/easyforth/\#introduction}{\texttt{ Easy Forth Tutorial by Nick Morgan}} \end{quote}
+\href{https://skilldrick.github.io/easyforth/\#introduction}{\texttt{ Easy Forth Tutorial by Nick Morgan}} with a \href{https://wiki.forth-ev.de/lib/exe/fetch.php/en:projects:a-start-with-forth:05_easy_forth_v16_a5_withexp_comments.pdf?fbclid=IwAR0sHmgiDtnMRuQtJdVkhl9bmiitpgcjs4ZlIDVtlxrssMOmLBv0vesvmKQ}{\texttt{ Writeup by Juergen Pintaske}} \end{quote}
 
 \end{DoxyItemize}
 
@@ -120,9 +120,9 @@ To understand the philosophy of F\+O\+R\+TH, excellent online e-\/books are here
 
 
 \begin{DoxyItemize}
-\item Check your Arduino I\+DE installed directory, say C\+:\textbackslash{}\+Users\textbackslash{}myname\textbackslash{}\+App\+Data\textbackslash{}\+Local\textbackslash{}\+Arduino... on Windows or /home/myname/\+Arduino/... on Linux,
-\item Find the directory hardware -\/$>$ arduino -\/$>$ avr,
-\item With an editor, open the \textquotesingle{}platform.\+txt\textquotesingle{} file,
+\item Check your Arduino I\+DE installed directory, say $\ast$C\+:\textbackslash{}\+Users\textbackslash{}myname\textbackslash{}\+App\+Data\textbackslash{}\+Local\textbackslash{}\+Arduino...$\ast$ on Windows or $\ast$/home/myname/\+Arduino/...$\ast$ on Linux,
+\item Find the directory {\itshape hardware -\/$>$ arduino -\/$>$ avr},
+\item With an editor, open the $\ast$\textquotesingle{}platform.\+txt\textquotesingle{}$\ast$ file,
 \item Find all three -\/Os compiler options (i.\+g. compiler.\+c.\+flags=-\/c -\/g -\/Os ...) \begin{quote}
 change them to -\/O3 for speed, -\/Os (default) for smallest size, -\/O2 for somewhere in-\/between \end{quote}
 
@@ -132,11 +132,11 @@ change them to -\/O3 for speed, -\/Os (default) for smallest size, -\/O2 for som
 
 
 \begin{DoxyItemize}
-\item \href{https://chochain.github.io/eForth1/ref/328eForth_content.pdf}{\texttt{ 328e\+Forth documentation -\/ table of content}} and \href{https://chochain.github.io/eForth1/ref/328eForth.pdf}{\texttt{ full doc}}
+\item \href{https://chochain.github.io/eForth1/ref/328eForth_contents.pdf}{\texttt{ 328e\+Forth documentation -\/ table of content}} and \href{https://chochain.github.io/eForth1/ref/328eForth.pdf}{\texttt{ full doc}}
 \item \href{https://github.com/DRuffer/328eforth}{\texttt{ 328e\+Forth mod for coin\+Forth by D. Ruffer}}
 \item \href{https://chochain.github.io/eForth1/ref/ceForth_33.doc}{\texttt{ ce\+Forth\+\_\+33.\+doc -\/ original documentation}}
 \item \href{https://chochain.github.io/eForth1/ref/ceForth_33.cpp}{\texttt{ ce\+Forth\+\_\+33.\+cpp -\/ in C, source assembler + VM}}
-\item \mbox{[}eforth\+\_\+328.\+ino -\/ teaser by Dr. Ting for Arduino I\+DE\mbox{]}((\href{https://chochain.github.io/eForth1/ref/eforth_328.ino}{\texttt{ https\+://chochain.\+github.\+io/e\+Forth1/ref/eforth\+\_\+328.\+ino}})
+\item \href{https://chochain.github.io/eForth1/ref/eforth_328.ino}{\texttt{ eforth\+\_\+328.\+ino -\/ teaser by Dr. Ting for Arduino I\+DE}}
 \item \href{https://github.com/TG9541/stm8ef}{\texttt{ e\+Forth for S\+T\+M8 -\/ for even smaller apps}} and \href{https://github.com/TG9541/stm8ef/wiki/STM8S-Programming\#flashing-the-stm8}{\texttt{ S\+T\+M8 Programming}}
 \item \href{https://github.com/Esp32forth}{\texttt{ E\+S\+P32\+Forth for E\+S\+P32 -\/ for larger/fancier apps}} 
 \end{DoxyItemize}

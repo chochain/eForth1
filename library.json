@@ -1,7 +1,7 @@
 {
   "name": "eForth1",
   "keywords": "eForth, Arduino UNO",
-  "description": "eForth for Arduino UNO",
+  "description": "A full-fledged FORTH as a .ino load/run from IDE directly. Supports pin change and timer interrupts. App can be saved to EEPROM for turnkey system",
   "authors":
   [
     {
@@ -18,5 +18,5 @@
   "version": "1.0.0",
   "license": "MIT",
   "frameworks": "arduino",
-  "platforms": [ "nano", "uno" ]
+  "platforms": "atmelmegaavr"
 }

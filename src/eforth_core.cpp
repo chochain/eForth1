@@ -7,8 +7,8 @@
 /// interrupt handlers
 ///
 #if !ARDUINO
-U8  tmr_enable = 0;               ///< fake timer enabler
 #endif // !ARDUINO
+
 U8  t_idx  { 0 };                 ///< timer ISR index
 U16 p_xt[] { 0, 0, 0 };           ///< pin change interrupt vectors
 U16 t_xt[8]; 		              ///< timer interrupt vectors
@@ -19,16 +19,11 @@ volatile U8  p_hit { 0 };         ///< pin change interrupt (PORT-B,C,D)
 volatile U16 t_cnt[8];            ///< timer CTC counters
 
 void intr_reset() {
-    intr_enable_timer(false);
-    intr_enable_pci(false);
+    intr_timer_enable(false);
+    intr_pci_enable(false);
     CLI();
     t_idx = t_hit = p_hit = 0;
     SEI();
-
-    const U8 led[] = { 4, 5, 6, 7, 16, 17, 18, 19 };
-    for (int i=0; i<8; i++) {
-        pinMode(led[i], OUTPUT);
-    }
 }
 U16 _intr() {
 	CLI();
@@ -40,24 +35,29 @@ U16 _intr() {
 ///
 ///> service interrupt routines
 ///
+#if ARDUINO
+#define _fake_intr(hits)
+#else // !ARDUINO
+U8  tmr_on = 0;                   ///< fake timer enabler
+void _fake_intr(U16 hits)
+{
+	static int n = 0;                              // fake interrupt
+	if (tmr_on && !hits && ++n >= 1000) {
+		n=0; t_hit = 1;
+	}
+}
+#endif // ARDUINO
+
 IU intr_service() {
 	static U16 hits = 0;
 
-#if !ARDUINO
-	static int n = 0;                              // fake interrupt
-	if (tmr_enable && !hits && ++n >= 1000) {
-		n=0; t_hit = 1;
-	}
-#endif // !ARDUINO
+    _fake_intr(hits);                              // on x86 platform
 
 	if (!hits) hits = _intr();                     // cache hits
 	if (hits) {                                    // serve fairly
 		U8 hx = hits & 0xff;
 		for (int i=0, t=1; hx && i<t_idx; i++, t<<=1, hx>>=1) {
-			if (hits & t) {
-				digitalWrite(16+i, digitalRead(16+i) ? LOW : HIGH);
-				hits &= ~t; return t_xt[i];
-			}
+			if (hits & t) {	hits &= ~t; return t_xt[i]; }
 		}
 		hx = hits >> 8;
 		for (int i=0, t=0x100; hx && i<3; i++, t<<=1, hx>>=1) {
@@ -103,7 +103,7 @@ void intr_add_pci(U16 p, U16 xt) {
 ///
 ///> enable/disable pin change interrupt
 ///
-void intr_enable_pci(U16 f) {
+void intr_pci_enable(U16 f) {
     CLI();
     if (f) {
         if (p_xt[0]) PCICR |= _BV(PCIE0);  // enable PORTB
@@ -116,21 +116,17 @@ void intr_enable_pci(U16 f) {
 ///
 ///> enable/disable timer2 interrupt
 ///
-void intr_enable_timer(U16 f) {
+void intr_timer_enable(U16 f) {
     CLI();
-    pinMode(19, OUTPUT);                   // DEBUG: timer2 interrupt enable/disable
-
     TCCR2A = TCCR2B = TCNT2 = 0;           // reset counter
     if (f) {
         TCCR2A = _BV(WGM21);               // Set CTC mode
         TCCR2B = _BV(CS22)|_BV(CS21);      // prescaler 256 (16000000 / 256) = 62500Hz = 16us
         OCR2A  = 249;                      // 250Hz = 4ms, (250 - 1, must < 256)
         TIMSK2 |= _BV(OCIE2A);             // enable timer2 compare interrupt
-        digitalWrite(19, HIGH);            // DEBUG: timer2 enabled
     }
     else {
         TIMSK2 &= _BV(OCIE2A);             // disable timer2 compare interrupt
-        digitalWrite(19, LOW);             // DEBUG: timer disabled
     }
     SEI();
 }
@@ -138,20 +134,13 @@ void intr_enable_timer(U16 f) {
 ///> Arduino interrupt service routines
 ///
 ISR(TIMER2_COMPA_vect) {
-    volatile static int hz  = 0;
     volatile static int cnt = 0;
     if (++cnt < 25) return;                // 25 * 4ms = 100ms
     cnt = 0;
-    digitalWrite(19, digitalRead(19) ? LOW : HIGH);         // DEBUG: ISR called
     for (U8 i=0, b=1; i < t_idx; i++, b<<=1) {
-    	if (++hz >= 5) {                                    // blinks at 1Hz
-    		digitalWrite(7, digitalRead(7) ? LOW : HIGH);   // service routine provided
-    		hz = 0;
-    	}
         if (++t_cnt[i] < t_max[i]) continue;
         t_hit    |= b;
         t_cnt[i]  = 0;
-        digitalWrite(4+i, digitalRead(4+i) ? LOW : HIGH);   // interrupt hit
     }
 }
 ISR(PCINT0_vect) { p_hit |= 1; }
@@ -160,10 +149,10 @@ ISR(PCINT2_vect) { p_hit |= 4; }
 
 #else // !ARDUINO
 
-void intr_add_pci(U16 p, U16 xt)   {}           // mocked functions for x86
-void intr_enable_pci(U16 f)        {}
-void intr_enable_timer(U16 f)      {
-	tmr_enable = f;
+void intr_add_pci(U16 p, U16 xt) {}        // mocked functions for x86
+void intr_pci_enable(U16 f)      {}
+void intr_timer_enable(U16 f) {
+	tmr_on = f;
 }
 
 #endif // ARDUINO

@@ -794,19 +794,19 @@ int assemble(U8 *cdata)
         _BEGIN(vTEMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
         _UNTIL(EXIT);
     }
-    _CODE("PINMODE", opPIN  );
-    _CODE("MAP",     opMAP  ); ///  ( h l p -- ) set map range to pin
-    _CODE("IN",      opIN   ); ///  ( p -- n )   digitalRead(p)
-    _CODE("OUT",     opOUT  ); ///  ( p n -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
-    _CODE("AIN",     opAIN  ); ///  ( p -- n )   read analog value from pin
-    _CODE("PWM",     opPWM  ); ///  ( n p -- )   set duty cycle % (PWM) to pin
-    _CODE("TMR",     opTMR  ); ///  ( xt n -- )  on timer interrupt calls xt every n ms
-    _CODE("PCI",     opPCI  ); ///  ( xt p -- )  on pin change interrupt calls xt
-    _CODE("TMRE",    opTMRE ); ///  ( f -- )     enable/disable timer interrupt
-    _CODE("PCIE",    opPCIE ); ///  ( f -- )     enable/disable pin change interrupt
-    _CODE("TRACE",   opTRC  ); ///  ( f -- )     enable/disable debug tracing
-    _CODE("SAVE",    opSAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
-    _CODE("LOAD",    opLOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
+    _CODE("PINMODE",  opPIN  );
+    _CODE("MAP",      opMAP  ); ///  ( h l p -- ) set map range to pin
+    _CODE("IN",       opIN   ); ///  ( p -- n )   digitalRead(p)
+    _CODE("OUT",      opOUT  ); ///  ( p n -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
+    _CODE("AIN",      opAIN  ); ///  ( p -- n )   read analog value from pin
+    _CODE("PWM",      opPWM  ); ///  ( n p -- )   set duty cycle % (PWM) to pin
+    _CODE("TMISR",    opTMISR); ///  ( xt n -- )  on timer interrupt calls xt every n ms
+    _CODE("PCISR",    opPCISR); ///  ( xt p -- )  on pin change interrupt calls xt
+    _CODE("TIMER",    opTMRE ); ///  ( f -- )     enable/disable timer interrupt
+    _CODE("PCINT",    opPCIE ); ///  ( f -- )     enable/disable pin change interrupt
+    _CODE("TRACE",    opTRC  ); ///  ( f -- )     enable/disable debug tracing
+    _CODE("SAVE",     opSAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
+    _CODE("LOAD",     opLOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
     ///
     ///> Cold Start address (End of dictionary)
     ///

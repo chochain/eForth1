@@ -430,14 +430,14 @@ int vm_outer() {
             U16 tmp = map(top, *(DS-3), *(DS-2), *(DS-1), *DS);
             DS -= 4;
             top = tmp);
-        _X(IN,   top = digitalRead(top));
-        _X(OUT,  digitalWrite(top, *DS);   POP(); POP());
-        _X(AIN,  top = analogRead(top));
-        _X(PWM,  analogWrite(top, *DS);    POP(); POP());
-        _X(TMR,  intr_add_timer(top, *DS); POP(); POP());
-        _X(PCI,  intr_add_pci(top, *DS);   POP(); POP());
-        _X(TMRE, intr_enable_timer(top);   POP());
-        _X(PCIE, intr_enable_pci(top);     POP());
+        _X(IN,    top = digitalRead(top));
+        _X(OUT,   digitalWrite(top, *DS);   POP(); POP());
+        _X(AIN,   top = analogRead(top));
+        _X(PWM,   analogWrite(top, *DS);    POP(); POP());
+        _X(TMISR, intr_add_timer(top, *DS); POP(); POP());
+        _X(PCISR, intr_add_pci(top, *DS);   POP(); POP());
+        _X(TMRE,  intr_timer_enable(top);   POP());
+        _X(PCIE,  intr_pci_enable(top);     POP());
         _X(RP,
             DU r = (&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR] - (U8*)RS) >> 1;
             PUSH(r));

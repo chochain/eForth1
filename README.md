@@ -64,25 +64,40 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 
   * > <img src="https://chochain.github.io/eForth1/images/eforth1_words_snip.png" width=400>
 
+### Different from Dr. Ting's
+  * Instead of direct GPIO port manipulation with byte read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... for familiarity to the IDE platform.
+  * eForth1 supports multi-tasking through interrupts. It provides a fixed frequency of 0.1Hz using Timer2. You assign mulply of 0.1 second as ISR repetition trigger period. For example 50 means every 5 seconds. Timer1 is left free for Servo or other libraries.
+  * On this 16-bit system, CLOCK will return a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D-.
+  * DELAY takes a 16-bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, DELAY does not interfer with interrupts (see demos below).
+
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6)
     <pre>
     > : toggle 6 in 1 xor 6 out ;⏎           \ create a word to toggle the blue LED
-    > : blink for toggle 500 delay next ;⏎   \ create a word to blink
-    > 9 blink⏎                               \ run 10 cycles (i.e.9,8,7,...,2,1,0 to on/off 5 times)
+    > : blink for toggle 500 delay next ;⏎   \ create a word to blink (i.e. 500ms delay)
+    > 9 blink⏎                               \ run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
     </pre>  
 
-  * Timer Interrupt (LED on pin 5)
+  * Timer Interrupt (a red LED on pin 5)
     <pre>
-    > : my_isr 5 in 1 xor 5 out ;⏎           \ create an interrupt service routine (just a regular word)
-    > ' my_isr 2 tmr⏎                        \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
-    > 1 tmre⏎                                \ enable timer, now you should see red LED blinking
+    > : red_isr 5 in 1 xor 5 out ;⏎          \ create an interrupt service routine (just a regular word)
+    > ' red_isr 2 tmisr⏎                     \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
+    > 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>
     
     |||
     |:--|:--|
     |@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
+
+  * Benchmark - 1 million cycles
+    <pre>
+    > : xx 999 for 34 drop next ;⏎           \ inner loop (put 34 on stack then drop it)
+    > : yy 999 for xx next ;⏎                \ create the outer loop
+    > : zz clock dnegate yy clock d+ ;⏎      \ CLOCK returns a double value
+    > zz⏎                                    \ benchmark the 1000x1000 cycles
+    > 24299 0 ok>                            \ 24299ms =~ 24us/cycle (with ISR running in the background)
+    </pre>
 
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.

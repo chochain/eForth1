@@ -142,8 +142,8 @@ typedef S16       DU;                 ///< data/cell unit
     OP(OUT),    \
     OP(AIN),    \
     OP(PWM),    \
-    OP(TMR),    \
-    OP(PCI),    \
+    OP(TMISR),  \
+    OP(PCISR),  \
     OP(TMRE),   \
     OP(PCIE),   \
     OP(RP),     \
@@ -199,8 +199,8 @@ U16  intr_hits();
 IU   intr_service();
 void intr_add_timer(U16 hz10, IU xt);
 void intr_add_pci(U16 pin, IU xt);
-void intr_enable_timer(U16 f);
-void intr_enable_pci(U16 f);
+void intr_timer_enable(U16 f);
+void intr_pci_enable(U16 f);
 ///@}
 ///@name eForth Virtual Machine Functions
 ///@{

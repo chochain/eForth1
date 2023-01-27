@@ -1,12 +1,13 @@
 var eforth__core_8cpp =
 [
+    [ "_fake_intr", "eforth__core_8cpp.html#ac1200c4eb34e01fd0cfb9f578d8caa27", null ],
     [ "intr_reset", "eforth__core_8cpp.html#a0132f57c344961e9ff4037dd06b06948", null ],
     [ "_intr", "eforth__core_8cpp.html#a21626f172ce1b4f8877e828ae49944c2", null ],
     [ "intr_service", "eforth__core_8cpp.html#a2c97726ffb62839e8c6fe399f6ed83f3", null ],
     [ "intr_add_timer", "eforth__core_8cpp.html#ae02901fc00b0a504db693e560852481b", null ],
     [ "intr_add_pci", "eforth__core_8cpp.html#a896b3ce36b3f0aea63258a3a613d5f56", null ],
-    [ "intr_enable_pci", "eforth__core_8cpp.html#a18a475c1f5e15f4867d6974f8f0c1d43", null ],
-    [ "intr_enable_timer", "eforth__core_8cpp.html#a8d82211db5e512fd289ddd16c3d608ae", null ],
+    [ "intr_pci_enable", "eforth__core_8cpp.html#a227d4b84f416c811b8ac176743593dec", null ],
+    [ "intr_timer_enable", "eforth__core_8cpp.html#a4e469b64b1feed8f578349c87ae2ef84", null ],
     [ "ISR", "eforth__core_8cpp.html#a5686c229bdef50123688ab6cb1404230", null ],
     [ "ISR", "eforth__core_8cpp.html#aa64c6dce15e9de9105b4ae9533c9a267", null ],
     [ "ISR", "eforth__core_8cpp.html#afe6035149a64d5f448fbda08e9d1b67f", null ],

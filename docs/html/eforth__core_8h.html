@@ -250,10 +250,10 @@ Functions</h2></td></tr>
 <tr class="separator:a940ef1ceaa397087cc42f0eb63a041a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fa8e2bc9434c475082cfc60db195fce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a5fa8e2bc9434c475082cfc60db195fce">intr_add_pci</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> pin, <a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt)</td></tr>
 <tr class="separator:a5fa8e2bc9434c475082cfc60db195fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d82211db5e512fd289ddd16c3d608ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a8d82211db5e512fd289ddd16c3d608ae">intr_enable_timer</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f)</td></tr>
-<tr class="separator:a8d82211db5e512fd289ddd16c3d608ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18a475c1f5e15f4867d6974f8f0c1d43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a18a475c1f5e15f4867d6974f8f0c1d43">intr_enable_pci</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f)</td></tr>
-<tr class="separator:a18a475c1f5e15f4867d6974f8f0c1d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e469b64b1feed8f578349c87ae2ef84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a4e469b64b1feed8f578349c87ae2ef84">intr_timer_enable</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f)</td></tr>
+<tr class="separator:a4e469b64b1feed8f578349c87ae2ef84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a227d4b84f416c811b8ac176743593dec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a227d4b84f416c811b8ac176743593dec">intr_pci_enable</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f)</td></tr>
+<tr class="separator:a227d4b84f416c811b8ac176743593dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">eForth Virtual Machine Functions</div></td></tr>
 <tr class="memitem:aa4cce331b74c197758d0b9ada8d58002"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002">vm_init</a> (PGM_P rom, <a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata, void *io_stream)</td></tr>
 <tr class="separator:aa4cce331b74c197758d0b9ada8d58002"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -936,9 +936,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<blockquote class="doxtable">
-<p>service interrupt routines </p>
-</blockquote>
 
 </div>
 </div>
@@ -1004,14 +1001,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8d82211db5e512fd289ddd16c3d608ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d82211db5e512fd289ddd16c3d608ae">&#9670;&nbsp;</a></span>intr_enable_timer()</h2>
+<a id="a4e469b64b1feed8f578349c87ae2ef84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e469b64b1feed8f578349c87ae2ef84">&#9670;&nbsp;</a></span>intr_timer_enable()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void intr_enable_timer </td>
+          <td class="memname">void intr_timer_enable </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td>
           <td class="paramname"><em>f</em></td><td>)</td>
@@ -1025,14 +1022,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a18a475c1f5e15f4867d6974f8f0c1d43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18a475c1f5e15f4867d6974f8f0c1d43">&#9670;&nbsp;</a></span>intr_enable_pci()</h2>
+<a id="a227d4b84f416c811b8ac176743593dec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a227d4b84f416c811b8ac176743593dec">&#9670;&nbsp;</a></span>intr_pci_enable()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void intr_enable_pci </td>
+          <td class="memname">void intr_pci_enable </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td>
           <td class="paramname"><em>f</em></td><td>)</td>

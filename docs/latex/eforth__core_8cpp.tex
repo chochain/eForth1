@@ -13,6 +13,11 @@ Include dependency graph for eforth\+\_\+core.\+cpp\+:\nopagebreak
 \includegraphics[width=350pt]{eforth__core_8cpp__incl}
 \end{center}
 \end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__core_8cpp_ac1200c4eb34e01fd0cfb9f578d8caa27}{\+\_\+fake\+\_\+intr}}(hits)
+\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -26,9 +31,9 @@ void \mbox{\hyperlink{eforth__core_8cpp_ae02901fc00b0a504db693e560852481b}{intr\
 \item 
 void \mbox{\hyperlink{eforth__core_8cpp_a896b3ce36b3f0aea63258a3a613d5f56}{intr\+\_\+add\+\_\+pci}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} p, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} xt)
 \item 
-void \mbox{\hyperlink{eforth__core_8cpp_a18a475c1f5e15f4867d6974f8f0c1d43}{intr\+\_\+enable\+\_\+pci}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} f)
+void \mbox{\hyperlink{eforth__core_8cpp_a227d4b84f416c811b8ac176743593dec}{intr\+\_\+pci\+\_\+enable}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} f)
 \item 
-void \mbox{\hyperlink{eforth__core_8cpp_a8d82211db5e512fd289ddd16c3d608ae}{intr\+\_\+enable\+\_\+timer}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} f)
+void \mbox{\hyperlink{eforth__core_8cpp_a4e469b64b1feed8f578349c87ae2ef84}{intr\+\_\+timer\+\_\+enable}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} f)
 \item 
 \mbox{\hyperlink{eforth__core_8cpp_a5686c229bdef50123688ab6cb1404230}{I\+SR}} (T\+I\+M\+E\+R2\+\_\+\+C\+O\+M\+P\+A\+\_\+vect)
 \item 
@@ -62,6 +67,17 @@ e\+Forth core controller module
 
 
 
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{eforth__core_8cpp_ac1200c4eb34e01fd0cfb9f578d8caa27}\label{eforth__core_8cpp_ac1200c4eb34e01fd0cfb9f578d8caa27}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!\_fake\_intr@{\_fake\_intr}}
+\index{\_fake\_intr@{\_fake\_intr}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{\_fake\_intr}{\_fake\_intr}}
+{\footnotesize\ttfamily \#define \+\_\+fake\+\_\+intr(\begin{DoxyParamCaption}\item[{}]{hits }\end{DoxyParamCaption})}
+
+\begin{quote}
+service interrupt routines \end{quote}
+
+
 \doxysubsection{Function Documentation}
 \mbox{\Hypertarget{eforth__core_8cpp_a0132f57c344961e9ff4037dd06b06948}\label{eforth__core_8cpp_a0132f57c344961e9ff4037dd06b06948}} 
 \index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_reset@{intr\_reset}}
@@ -85,8 +101,6 @@ reset interrupts
 \doxysubsubsection{\texorpdfstring{intr\_service()}{intr\_service()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} intr\+\_\+service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-\begin{quote}
-service interrupt routines \end{quote}
 \mbox{\Hypertarget{eforth__core_8cpp_ae02901fc00b0a504db693e560852481b}\label{eforth__core_8cpp_ae02901fc00b0a504db693e560852481b}} 
 \index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_add\_timer@{intr\_add\_timer}}
 \index{intr\_add\_timer@{intr\_add\_timer}!eforth\_core.cpp@{eforth\_core.cpp}}
@@ -103,19 +117,19 @@ add timer interrupt service routine \end{quote}
 
 \begin{quote}
 add pin change interrupt service routine \end{quote}
-\mbox{\Hypertarget{eforth__core_8cpp_a18a475c1f5e15f4867d6974f8f0c1d43}\label{eforth__core_8cpp_a18a475c1f5e15f4867d6974f8f0c1d43}} 
-\index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_enable\_pci@{intr\_enable\_pci}}
-\index{intr\_enable\_pci@{intr\_enable\_pci}!eforth\_core.cpp@{eforth\_core.cpp}}
-\doxysubsubsection{\texorpdfstring{intr\_enable\_pci()}{intr\_enable\_pci()}}
-{\footnotesize\ttfamily void intr\+\_\+enable\+\_\+pci (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{f }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{eforth__core_8cpp_a227d4b84f416c811b8ac176743593dec}\label{eforth__core_8cpp_a227d4b84f416c811b8ac176743593dec}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_pci\_enable@{intr\_pci\_enable}}
+\index{intr\_pci\_enable@{intr\_pci\_enable}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{intr\_pci\_enable()}{intr\_pci\_enable()}}
+{\footnotesize\ttfamily void intr\+\_\+pci\+\_\+enable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{f }\end{DoxyParamCaption})}
 
 \begin{quote}
 enable/disable pin change interrupt \end{quote}
-\mbox{\Hypertarget{eforth__core_8cpp_a8d82211db5e512fd289ddd16c3d608ae}\label{eforth__core_8cpp_a8d82211db5e512fd289ddd16c3d608ae}} 
-\index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_enable\_timer@{intr\_enable\_timer}}
-\index{intr\_enable\_timer@{intr\_enable\_timer}!eforth\_core.cpp@{eforth\_core.cpp}}
-\doxysubsubsection{\texorpdfstring{intr\_enable\_timer()}{intr\_enable\_timer()}}
-{\footnotesize\ttfamily void intr\+\_\+enable\+\_\+timer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{f }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{eforth__core_8cpp_a4e469b64b1feed8f578349c87ae2ef84}\label{eforth__core_8cpp_a4e469b64b1feed8f578349c87ae2ef84}} 
+\index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_timer\_enable@{intr\_timer\_enable}}
+\index{intr\_timer\_enable@{intr\_timer\_enable}!eforth\_core.cpp@{eforth\_core.cpp}}
+\doxysubsubsection{\texorpdfstring{intr\_timer\_enable()}{intr\_timer\_enable()}}
+{\footnotesize\ttfamily void intr\+\_\+timer\+\_\+enable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{f }\end{DoxyParamCaption})}
 
 \begin{quote}
 enable/disable timer2 interrupt \end{quote}

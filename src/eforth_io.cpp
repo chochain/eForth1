@@ -25,28 +25,28 @@ MockPROM EEPROM;                              ///> fake Arduino EEPROM unit
 
 int ef_save(U8 *data)
 {
-	U16 here = GET(sizeof(DU) * 2);
-	int sz   = here - FORTH_RAM_ADDR;
+    U16 here = GET(sizeof(DU) * 2);
+    int sz   = here - FORTH_RAM_ADDR;
     for (int i=0; i < sz; i++) {
-    	EEPROM.update(i, data[i]);     /// * store dictionary byte-by-byte
+        EEPROM.update(i, data[i]);     /// * store dictionary byte-by-byte
     }
     return sz;
 }
 int ef_load(U8 *data)
 {
-	U16 pidx = sizeof(DU) * 2;         ///< CP addr in EEPROM (aka HERE)
+    U16 pidx = sizeof(DU) * 2;         ///< CP addr in EEPROM (aka HERE)
     U16 vCP  = ((U16)EEPROM.read(pidx+1)<<8) + EEPROM.read(pidx);
     int  sz  = vCP - FORTH_RAM_ADDR;
     if (!vCP || sz > FORTH_DIC_SZ) return 0;
 
     IU  hidx = sizeof(DU) * 9;         /// * >IN (buffer pointer)
-	DU  vIN  = GET(hidx);              /// * keep vIN, vNTIB
-	DU  vNTIB= GET(hidx + sizeof(DU));
+    DU  vIN  = GET(hidx);              /// * keep vIN, vNTIB
+    DU  vNTIB= GET(hidx + sizeof(DU));
 
     for (int i=0; i < sz; i++) {
         data[i] = EEPROM.read(i);      /// * retrieve dictionary byte-by-byte
     }
-    SET(hidx, vIN);					  /// * restore vIN, vNTIB
+    SET(hidx, vIN);                    /// * restore vIN, vNTIB
     SET(hidx + sizeof(DU), vNTIB);
 
     return sz;

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['yield_365',['YIELD',['../eforth__vm_8cpp.html#ab225fd437247be81c502ebd3b4857465',1,'eforth_vm.cpp']]],
-  ['yield_5fperiod_366',['YIELD_PERIOD',['../eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e',1,'eforth_vm.cpp']]]
+  ['words_5frow_5fwidth_362',['WORDS_ROW_WIDTH',['../eforth__asm_8cpp.html#aa18a10c05357a5f4115d17f150a0a0fb',1,'eforth_asm.cpp']]]
 ];

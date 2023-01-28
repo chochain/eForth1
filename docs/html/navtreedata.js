@@ -24,12 +24,14 @@ var NAVTREE =
 [
   [ "eForth1", "index.html", [
     [ "eForth1 - eForth for Arduino UNO", "index.html", null ],
+    [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
-        [ "Variables", "namespacemembers_vars.html", null ]
+        [ "Variables", "namespacemembers_vars.html", null ],
+        [ "Enumerator", "namespacemembers_eval.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -39,7 +41,6 @@ var NAVTREE =
         [ "Functions", "globals_func.html", null ],
         [ "Variables", "globals_vars.html", null ],
         [ "Typedefs", "globals_type.html", null ],
-        [ "Enumerator", "globals_eval.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -48,7 +49,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"dir_68267d1309a1af8e8297ef4c3efbcdba.html"
+"dir_68267d1309a1af8e8297ef4c3efbcdba.html",
+"group__Pseudo.html#ga5b6bf226f290864b6a596069e4a0cf74"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

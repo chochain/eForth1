@@ -85,6 +85,8 @@ $(document).ready(function(){initNavTree('eforth__asm_8h.html',''); initResizabl
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">eforth_asm.h File Reference</div>  </div>
@@ -93,7 +95,24 @@ $(document).ready(function(){initNavTree('eforth__asm_8h.html',''); initResizabl
 
 <p>eForth assembler module header  
 <a href="#details">More...</a></p>
-<div class="textblock"><div class="dynheader">
+<div class="textblock"><code>#include &quot;<a class="el" href="eforth__core_8h_source.html">eforth_core.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for eforth_asm.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="eforth__asm_8h__incl.png" border="0" usemap="#src_2eforth__asm_8h" alt=""/></div>
+<map name="src_2eforth__asm_8h" id="src_2eforth__asm_8h">
+<area shape="rect" title="eForth assembler module header" alt="" coords="261,5,392,32"/>
+<area shape="rect" href="eforth__core_8h.html" title="eForth prototype and interface" alt="" coords="273,80,381,107"/>
+<area shape="rect" title=" " alt="" coords="5,155,72,181"/>
+<area shape="rect" title=" " alt="" coords="97,155,167,181"/>
+<area shape="rect" title=" " alt="" coords="192,155,267,181"/>
+<area shape="rect" title=" " alt="" coords="291,155,362,181"/>
+<area shape="rect" title=" " alt="" coords="387,155,451,181"/>
+<area shape="rect" title=" " alt="" coords="475,155,559,181"/>
+<area shape="rect" title=" " alt="" coords="583,155,710,181"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="eforth__asm_8h__dep__incl.png" border="0" usemap="#src_2eforth__asm_8hdep" alt=""/></div>
@@ -112,6 +131,12 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a9ea1e8dcf59129fa7bfe31bbc1f87d8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a9ea1e8dcf59129fa7bfe31bbc1f87d8e">fCMPL</a>&#160;&#160;&#160;0x40</td></tr>
+<tr class="separator:a9ea1e8dcf59129fa7bfe31bbc1f87d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84054c8a0e922b86c0d99ea4cfdab34e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a84054c8a0e922b86c0d99ea4cfdab34e">fIMMD</a>&#160;&#160;&#160;0x80</td></tr>
+<tr class="separator:a84054c8a0e922b86c0d99ea4cfdab34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7635cecf944d5bfcc89665c08022828"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ac7635cecf944d5bfcc89665c08022828">OP</a>(name)&#160;&#160;&#160;op##name</td></tr>
+<tr class="separator:ac7635cecf944d5bfcc89665c08022828"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3254550e1d6d185f6b3e69b2d6468343"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a3254550e1d6d185f6b3e69b2d6468343">DEBUG</a>(s,  v)</td></tr>
 <tr class="separator:a3254550e1d6d185f6b3e69b2d6468343"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49fac1253499dd76c037d22a8b7bcadf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a49fac1253499dd76c037d22a8b7bcadf">SHOWOP</a>(op)</td></tr>
@@ -124,6 +149,12 @@ Macros</h2></td></tr>
 <tr class="separator:a201f9ddd85daf92a29792435bb50d5bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b4fbd083a242445cf8eba9028c2a715"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a8b4fbd083a242445cf8eba9028c2a715">_NARG</a>(...)&#160;&#160;&#160;<a class="el" href="eforth__asm_8h.html#a201f9ddd85daf92a29792435bb50d5bc">_NARG0</a>(_, ##__VA_ARGS__, <a class="el" href="eforth__asm_8h.html#a9b89373d972926a84265fdbd351494f1">_NUM_N</a>())</td></tr>
 <tr class="separator:a8b4fbd083a242445cf8eba9028c2a715"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga60ef63ffe304267efee1dd841faf4751"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Memory.html#ga60ef63ffe304267efee1dd841faf4751">CELLCPY</a>(n)</td></tr>
+<tr class="separator:ga60ef63ffe304267efee1dd841faf4751"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabee5cbd8a5640f4b067cdc048b4c21ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Memory.html#gabee5cbd8a5640f4b067cdc048b4c21ca">PGMCPY</a>(len,  seq)</td></tr>
+<tr class="separator:gabee5cbd8a5640f4b067cdc048b4c21ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga49723d0c3f14a2ff23c8518ca5730fb0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Memory.html#ga49723d0c3f14a2ff23c8518ca5730fb0">OPSTR</a>(op,  seq)</td></tr>
+<tr class="separator:ga49723d0c3f14a2ff23c8518ca5730fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Vargs Header (calculate number of parameters by compiler)</div></td></tr>
 <tr class="memitem:a6fd020b4ee926c9d86260e283bd2b660"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a6fd020b4ee926c9d86260e283bd2b660">_CODE</a>(seg, ...)&#160;&#160;&#160;_code(F(seg), <a class="el" href="eforth__asm_8h.html#a8b4fbd083a242445cf8eba9028c2a715">_NARG</a>(__VA_ARGS__), __VA_ARGS__)</td></tr>
 <tr class="separator:a6fd020b4ee926c9d86260e283bd2b660"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,9 +195,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a48481a4fb54dbf36ff46498a7f87cd3e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a48481a4fb54dbf36ff46498a7f87cd3e">_ABORTQ</a>(str)&#160;&#160;&#160;_abortq(F(str))</td></tr>
 <tr class="separator:a48481a4fb54dbf36ff46498a7f87cd3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Memory Access and Stack Op</div></td></tr>
-<tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(d,  c)&#160;&#160;&#160;(Byte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
+<tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(d,  c)&#160;&#160;&#160;(_byte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
 <tr class="separator:a77270f01b515a878ec2853760cb20dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77d23ddbb106c14475b4119b06a046a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(d)&#160;&#160;&#160;(Byte[d])</td></tr>
+<tr class="memitem:a77d23ddbb106c14475b4119b06a046a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a77d23ddbb106c14475b4119b06a046a1">BGET</a>(d)&#160;&#160;&#160;(_byte[d])</td></tr>
 <tr class="separator:a77d23ddbb106c14475b4119b06a046a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(d,  v)&#160;&#160;&#160;do { <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> a=(d); <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> x=(v); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(a, (x)&amp;0xff); <a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>((a)+1, (x)&gt;&gt;8); } while (0)</td></tr>
 <tr class="separator:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,6 +216,68 @@ Macros</h2></td></tr>
 <tr class="memitem:a19c77462bb98229bc63d4497185bde42"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a19c77462bb98229bc63d4497185bde42">VDU</a>(a,  i)&#160;&#160;&#160;<a class="el" href="eforth__asm_8h.html#a3b1701d44f7b15525bc7b3c0a8f637e1">VL</a>(a,i),<a class="el" href="eforth__asm_8h.html#aca2bbb288661206e28c0488766c22f15">VH</a>(a,i)</td></tr>
 <tr class="separator:a19c77462bb98229bc63d4497185bde42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a5c160dc5483bdf3d9ed57addbd21ca73"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__Module.html#ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6">EfAsm::opNOP</a> = 0, 
+<a class="el" href="group__Module.html#ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541">EfAsm::OPCODES</a>
+ }</td></tr>
+<tr class="separator:a5c160dc5483bdf3d9ed57addbd21ca73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga3ff1e256bb2a99fdb6fee8b453e4361e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga3ff1e256bb2a99fdb6fee8b453e4361e">EfAsm::_dump</a> (int b, int u)</td></tr>
+<tr class="separator:ga3ff1e256bb2a99fdb6fee8b453e4361e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5bdea27a67eb879d5dd1b58bed56b9bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga5bdea27a67eb879d5dd1b58bed56b9bd">EfAsm::_rdump</a> ()</td></tr>
+<tr class="memdesc:ga5bdea27a67eb879d5dd1b58bed56b9bd"><td class="mdescLeft">&#160;</td><td class="mdescRight"><blockquote class="doxtable">
+<p>dump return stack </p>
+</blockquote>
+ <a href="group__Pseudo.html#ga5bdea27a67eb879d5dd1b58bed56b9bd">More...</a><br /></td></tr>
+<tr class="separator:ga5bdea27a67eb879d5dd1b58bed56b9bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga59af885d0e26e3c82059708948d2df37"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga59af885d0e26e3c82059708948d2df37">EfAsm::_strlen</a> (FCHAR *seq)</td></tr>
+<tr class="separator:ga59af885d0e26e3c82059708948d2df37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga27da79e08a45cd4ad90cffc847a04280"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga27da79e08a45cd4ad90cffc847a04280">EfAsm::_header</a> (int lex, FCHAR *seq)</td></tr>
+<tr class="separator:ga27da79e08a45cd4ad90cffc847a04280"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7d79fdd3d59e237e0381d1798e2050bb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga7d79fdd3d59e237e0381d1798e2050bb">EfAsm::_code</a> (FCHAR *seg, int len,...)</td></tr>
+<tr class="separator:ga7d79fdd3d59e237e0381d1798e2050bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacce2eabb9a04fa5c08fc95932e2f92ae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gacce2eabb9a04fa5c08fc95932e2f92ae">EfAsm::_colon</a> (FCHAR *seg, int len,...)</td></tr>
+<tr class="separator:gacce2eabb9a04fa5c08fc95932e2f92ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacb8719a8b6a78152c8676f735dc7c467"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gacb8719a8b6a78152c8676f735dc7c467">EfAsm::_immed</a> (FCHAR *seg, int len,...)</td></tr>
+<tr class="separator:gacb8719a8b6a78152c8676f735dc7c467"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabb1c9544549fc018a1ed1e8345cc66f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gabb1c9544549fc018a1ed1e8345cc66f3">EfAsm::_label</a> (int len,...)</td></tr>
+<tr class="separator:gabb1c9544549fc018a1ed1e8345cc66f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab18b552c595cf956387d2e4427384563"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gab18b552c595cf956387d2e4427384563">EfAsm::_begin</a> (int len,...)</td></tr>
+<tr class="separator:gab18b552c595cf956387d2e4427384563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5b6bf226f290864b6a596069e4a0cf74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga5b6bf226f290864b6a596069e4a0cf74">EfAsm::_while</a> (int len,...)</td></tr>
+<tr class="separator:ga5b6bf226f290864b6a596069e4a0cf74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3f42a6bd0929a03c700ace952e186997"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga3f42a6bd0929a03c700ace952e186997">EfAsm::_repeat</a> (int len,...)</td></tr>
+<tr class="separator:ga3f42a6bd0929a03c700ace952e186997"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadcd97bc33014c89d91e19cc4a217b5e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gadcd97bc33014c89d91e19cc4a217b5e8">EfAsm::_until</a> (int len,...)</td></tr>
+<tr class="separator:gadcd97bc33014c89d91e19cc4a217b5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab7b5835572c00662317647be9a49b2b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gab7b5835572c00662317647be9a49b2b3">EfAsm::_again</a> (int len,...)</td></tr>
+<tr class="separator:gab7b5835572c00662317647be9a49b2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga771a43815e0f65570de187ee456938e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga771a43815e0f65570de187ee456938e8">EfAsm::_for</a> (int len,...)</td></tr>
+<tr class="separator:ga771a43815e0f65570de187ee456938e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabf110638d9dc2195b884957885128696"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gabf110638d9dc2195b884957885128696">EfAsm::_aft</a> (int len,...)</td></tr>
+<tr class="separator:gabf110638d9dc2195b884957885128696"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2df77b2810440262c7ade5fc911f8c8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga2df77b2810440262c7ade5fc911f8c8a">EfAsm::_nxt</a> (int len,...)</td></tr>
+<tr class="memdesc:ga2df77b2810440262c7ade5fc911f8c8a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><blockquote class="doxtable">
+<p>Note: _next() is multi-defined in vm </p>
+</blockquote>
+ <a href="group__Pseudo.html#ga2df77b2810440262c7ade5fc911f8c8a">More...</a><br /></td></tr>
+<tr class="separator:ga2df77b2810440262c7ade5fc911f8c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab786d49b7cbf077b6a706a308167b5ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gab786d49b7cbf077b6a706a308167b5ce">EfAsm::_if</a> (int len,...)</td></tr>
+<tr class="separator:gab786d49b7cbf077b6a706a308167b5ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8c4966a74388b9427ae2771419d73430"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga8c4966a74388b9427ae2771419d73430">EfAsm::_else</a> (int len,...)</td></tr>
+<tr class="separator:ga8c4966a74388b9427ae2771419d73430"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5a0ec1a59cc273ec7db9b5a2af2779ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga5a0ec1a59cc273ec7db9b5a2af2779ef">EfAsm::_then</a> (int len,...)</td></tr>
+<tr class="separator:ga5a0ec1a59cc273ec7db9b5a2af2779ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafb006746d990ab51ca27545ab004f260"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gafb006746d990ab51ca27545ab004f260">EfAsm::_dotq</a> (FCHAR *seq)</td></tr>
+<tr class="separator:gafb006746d990ab51ca27545ab004f260"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga902f7d3df2665aef0f0aa00269bf932d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga902f7d3df2665aef0f0aa00269bf932d">EfAsm::_strq</a> (FCHAR *seq)</td></tr>
+<tr class="separator:ga902f7d3df2665aef0f0aa00269bf932d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4499c7338bdc153d5f19127e8a3d59a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga4499c7338bdc153d5f19127e8a3d59a7">EfAsm::_abortq</a> (FCHAR *seq)</td></tr>
+<tr class="separator:ga4499c7338bdc153d5f19127e8a3d59a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a1866848c561f07858c76dec0c2b76a78"><td class="memItemLeft" align="right" valign="top">const typedef __FlashStringHelper&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a1866848c561f07858c76dec0c2b76a78">EfAsm::FCHAR</a></td></tr>
@@ -194,6 +287,56 @@ Variables</h2></td></tr>
 <div class="textblock"><p>eForth assembler module header </p>
 <p>Usage of VA_ARGS variable argument for assembler parameter counting </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a9ea1e8dcf59129fa7bfe31bbc1f87d8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ea1e8dcf59129fa7bfe31bbc1f87d8e">&#9670;&nbsp;</a></span>fCMPL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define fCMPL&#160;&#160;&#160;0x40</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>compile only flag </p>
+
+</div>
+</div>
+<a id="a84054c8a0e922b86c0d99ea4cfdab34e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84054c8a0e922b86c0d99ea4cfdab34e">&#9670;&nbsp;</a></span>fIMMD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define fIMMD&#160;&#160;&#160;0x80</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>immediate flag <br  />
+ </p>
+
+</div>
+</div>
+<a id="ac7635cecf944d5bfcc89665c08022828"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7635cecf944d5bfcc89665c08022828">&#9670;&nbsp;</a></span>OP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define OP</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name</td><td>)</td>
+          <td>&#160;&#160;&#160;op##name</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>define opcode enums Note: in sync with VM's vtable </p>
+
+</div>
+</div>
 <a id="a3254550e1d6d185f6b3e69b2d6468343"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3254550e1d6d185f6b3e69b2d6468343">&#9670;&nbsp;</a></span>DEBUG</h2>
 
@@ -1082,7 +1225,7 @@ Variables</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(Byte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td>
+          <td></td><td>&#160;&#160;&#160;(_byte[d]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1100,7 +1243,7 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">d</td><td>)</td>
-          <td>&#160;&#160;&#160;(Byte[d])</td>
+          <td>&#160;&#160;&#160;(_byte[d])</td>
         </tr>
       </table>
 </div><div class="memdoc">

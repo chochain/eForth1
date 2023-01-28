@@ -6,13 +6,10 @@
 ///
 /// interrupt handlers
 ///
-#if !ARDUINO
-#endif // !ARDUINO
-
 U8  t_idx  { 0 };                 ///< timer ISR index
 U16 p_xt[] { 0, 0, 0 };           ///< pin change interrupt vectors
-U16 t_xt[8]; 		              ///< timer interrupt vectors
-U16 t_max[8]; 		              ///< timer CTC top value
+U16 t_xt[8];                      ///< timer interrupt vectors
+U16 t_max[8];                     ///< timer CTC top value
 
 volatile U8  t_hit { 0 };         ///< 8-bit for 8 timer ISR
 volatile U8  p_hit { 0 };         ///< pin change interrupt (PORT-B,C,D)
@@ -26,11 +23,11 @@ void intr_reset() {
     SEI();
 }
 U16 _intr() {
-	CLI();
-	volatile U16 hx = (p_hit << 8) | t_hit;        // capture interrupt flags
-	p_hit = t_hit = 0;
-	SEI();
-	return hx;
+    CLI();
+    volatile U16 hx = (p_hit << 8) | t_hit;        // capture interrupt flags
+    p_hit = t_hit = 0;
+    SEI();
+    return hx;
 }
 ///
 ///> service interrupt routines
@@ -41,30 +38,30 @@ U16 _intr() {
 U8  tmr_on = 0;                   ///< fake timer enabler
 void _fake_intr(U16 hits)
 {
-	static int n = 0;                              // fake interrupt
-	if (tmr_on && !hits && ++n >= 1000) {
-		n=0; t_hit = 1;
-	}
+    static int n = 0;                              // fake interrupt
+    if (tmr_on && !hits && ++n >= 1000) {
+        n=0; t_hit = 1;
+    }
 }
 #endif // ARDUINO
 
 IU intr_service() {
-	static U16 hits = 0;
+    static U16 hits = 0;
 
     _fake_intr(hits);                              // on x86 platform
 
-	if (!hits) hits = _intr();                     // cache hits
-	if (hits) {                                    // serve fairly
-		U8 hx = hits & 0xff;
-		for (int i=0, t=1; hx && i<t_idx; i++, t<<=1, hx>>=1) {
-			if (hits & t) {	hits &= ~t; return t_xt[i]; }
-		}
-		hx = hits >> 8;
-		for (int i=0, t=0x100; hx && i<3; i++, t<<=1, hx>>=1) {
-			if (hits & t) { hits &= ~t; return p_xt[i]; }
-		}
-	}
-	return 0;
+    if (!hits) hits = _intr();                     // cache hits
+    if (hits) {                                    // serve fairly
+        U8 hx = hits & 0xff;
+        for (int i=0, t=1; hx && i<t_idx; i++, t<<=1, hx>>=1) {
+            if (hits & t) {    hits &= ~t; return t_xt[i]; }
+        }
+        hx = hits >> 8;
+        for (int i=0, t=0x100; hx && i<3; i++, t<<=1, hx>>=1) {
+            if (hits & t) { hits &= ~t; return p_xt[i]; }
+        }
+    }
+    return 0;
 }
 ///
 ///> add timer interrupt service routine
@@ -152,7 +149,7 @@ ISR(PCINT2_vect) { p_hit |= 4; }
 void intr_add_pci(U16 p, U16 xt) {}        // mocked functions for x86
 void intr_pci_enable(U16 f)      {}
 void intr_timer_enable(U16 f) {
-	tmr_on = f;
+    tmr_on = f;
 }
 
 #endif // ARDUINO

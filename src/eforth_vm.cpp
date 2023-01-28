@@ -35,7 +35,7 @@ static Stream *io;
 IU  PC;                           ///< program counter, IU is 16-bit
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
 DU  top;                          ///< ALU (i.e. cached top of stack value)
-DU  rtop;
+DU  rtop;                         ///< cached loop counter on return stack
 IU  IR;                           ///< interrupt service routine
 ///@}
 ///
@@ -50,6 +50,7 @@ DU    *RS;                        ///< return stack pointer, Dr. Ting's rack
 #define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
 #define IRET_FLAG      0x8000     /**< interrupt return flag           */
 #define BOOL(f)        ((f) ? TRUE : FALSE)
+#define RAM(i)         &_data[(i) - FORTH_RAM_ADDR]
 ///
 /// byte (8-bit) fetch from either RAM or ROM depends on filtered range
 ///
@@ -81,7 +82,7 @@ void RPUSH(DU v)       { *--RS = rtop; rtop = v; }
 void NEXT() { PC=GET(IP); IP+=sizeof(IU); }
 
 DU _depth() {
-    return (DU)((U8*)DS - &_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR]) >> 1;
+    return (DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1;
 }
 ///
 ///@name Tracing
@@ -107,8 +108,8 @@ void TRACE()
     // dump stack
     DU s = _depth() - 1;
     while (s-- > 0) {
-    	DU *vp = ((DU*)DS - s);
-    	DU v   = *vp;
+        DU *vp = ((DU*)DS - s);
+        DU v   = *vp;
         LOG_H("_", v);
     }
     LOG_H("_", top);
@@ -174,10 +175,10 @@ void _init() {
 ///
 void _yield()                ///> yield to interrupt service
 {
-    IR = intr_service();            /// * check interrupts
-    if (IR) {                       /// * service interrupt?
-        RPUSH(IP | IRET_FLAG);      /// * flag return address as IRET
-        IP = IR + 1;                /// * skip opENTER
+    IR = intr_service();              /// * check interrupts
+    if (IR) {                         /// * service interrupt?
+        RPUSH(IP | IRET_FLAG);        /// * flag return address as IRET
+        IP = IR + 1;                  /// * skip opENTER
     }
 }
 int _yield_cnt = 0;          ///< interrupt service throttle counter
@@ -193,11 +194,11 @@ int _yield_cnt = 0;          ///< interrupt service throttle counter
 void _qrx()                  ///> ( -- c ) fetch a char from console
 {
 #if ARDUINO
-    int rst = io->read();           ///> fetch from IO stream
+    int rst = io->read();             ///> fetch from IO stream
     if (rst > 0) PUSH((DU)rst);
     PUSH(BOOL(rst >= 0));
 #else
-    PUSH((DU)getchar());            /// * Note: blocking, i.e. no interrupt support
+    PUSH((DU)getchar());              /// * Note: blocking, i.e. no interrupt support
     PUSH(TRUE);
 #endif
 }
@@ -220,11 +221,6 @@ void _txsto()                ///> (c -- ) send a char to console
     POP();
 }
 ///@}
-void _execu()               ///> (a -- ) take execution address from data stack and execute the token
-{
-    PC = (IU)top;           ///> fetch program counter
-    POP();
-}
 void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double by single
 {
     U32 d = (U32)top;       ///> CC: auto variable uses C stack 
@@ -232,7 +228,6 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
     POP();
     *DS   = (DU)(m % d);    ///> remainder
     top   = (DU)(m / d);    ///> quotient
-    NEXT();
 }
 ///@}
 }; // namespace EfVM
@@ -255,8 +250,8 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     io     = (Stream *)io_stream;
     _rom   = rom;
     _data  = data;
-    DS     = (DU*)&_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
-    RS     = (DU*)&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR];
+    DS     = (DU*)RAM(FORTH_STACK_ADDR);
+    RS     = (DU*)RAM(FORTH_STACK_TOP);
 
     _init();                    /// * resetting user variables
 }
@@ -269,7 +264,6 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 ///
 #define OP(name)    &&L_##name /** redefined for label address */
 #define _X(n, code) L_##n: { code; goto vm_next; }
-#define _Y(n, fn)   L_##n: { fn(); continue; }
 
 int vm_outer() {
     static void* vt[] = {               ///< computed label lookup table
@@ -285,7 +279,7 @@ int vm_outer() {
         /// the following part is in assembly for most of Forth implementations
         ///
         _X(NOP,   {});
-        _Y(BYE,   _init);
+        _X(BYE,   _init(); continue);   /// * reset, skip NEXT
         ///
         /// @name Console IO
         /// @{
@@ -314,7 +308,10 @@ int vm_outer() {
                 IR = 0;                 /// * interrupt disabled
                 IP &= ~IRET_FLAG;
             });
-        _Y(EXECU, _execu);
+        _X(EXECU,                       ///> ( xt -- ) execute xt
+        	PC = (IU)top;               /// * fetch program counter
+        	POP();
+        	continue);                  /// * skip NEXT
         _X(DONEXT,
             if (rtop-- > 0) {           ///> check if loop counter > 0
                 IP = GET(IP);           ///>> branch back to FOR
@@ -395,7 +392,7 @@ int vm_outer() {
         _X(QDUP,  if (top) *++DS = top);
         _X(DEPTH, DU d = _depth(); PUSH(d));
         _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
-        _Y(UMMOD, _ummod);                /// (udl udh u -- ur uq) unsigned divide of a double by single
+        _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
             U32 u = (U32)*DS * top;
             DTOP(u));
@@ -420,9 +417,9 @@ int vm_outer() {
         /// @name Arduino specific ops
         /// @{
         _X(CLK,
-        	U32 t = millis();
-        	*++DS = top; DS++;            /// * allocate 2-cells for clock ticks
-        	DTOP(t));
+            U32 t = millis();
+            *++DS = top; DS++;            /// * allocate 2-cells for clock ticks
+            DTOP(t));
         _X(PIN,
             pinMode(top, *DS ? OUTPUT : INPUT);
             POP(); POP());
@@ -439,7 +436,7 @@ int vm_outer() {
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
         _X(RP,
-            DU r = (&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR] - (U8*)RS) >> 1;
+            DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
             PUSH(r));
 #if EXE_TRACE
         _X(TRC,  tCNT = top; POP());
@@ -447,12 +444,12 @@ int vm_outer() {
         _X(TRC,  POP());
 #endif // EXE_TRACE
         _X(SAVE,
-        	U16 sz = ef_save(_data);
-        	LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
+            U16 sz = ef_save(_data);
+            LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
         );
         _X(LOAD,
-        	U16 sz = ef_load(_data);
-        	LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
+            U16 sz = ef_load(_data);
+            LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
 
     vm_next:

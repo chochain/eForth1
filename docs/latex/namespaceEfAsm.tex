@@ -1,9 +1,64 @@
 \hypertarget{namespaceEfAsm}{}\doxysection{Ef\+Asm Namespace Reference}
 \label{namespaceEfAsm}\index{EfAsm@{EfAsm}}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \mbox{\hyperlink{group__Module_ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6}{op\+N\+OP}} = 0, 
+\mbox{\hyperlink{group__Module_ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541}{O\+P\+C\+O\+D\+ES}}
+ \}
+\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 int \mbox{\hyperlink{namespaceEfAsm_acc07308cd4b29f3582ea2045d3326915}{assemble}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga3ff1e256bb2a99fdb6fee8b453e4361e}{\+\_\+dump}} (int b, int u)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga5bdea27a67eb879d5dd1b58bed56b9bd}{\+\_\+rdump}} ()
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+dump return stack \end{quote}
+\end{DoxyCompactList}\item 
+int \mbox{\hyperlink{group__Pseudo_ga59af885d0e26e3c82059708948d2df37}{\+\_\+strlen}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seq)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga27da79e08a45cd4ad90cffc847a04280}{\+\_\+header}} (int lex, \mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seq)
+\item 
+int \mbox{\hyperlink{group__Pseudo_ga7d79fdd3d59e237e0381d1798e2050bb}{\+\_\+code}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seg, int len,...)
+\item 
+int \mbox{\hyperlink{group__Pseudo_gacce2eabb9a04fa5c08fc95932e2f92ae}{\+\_\+colon}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seg, int len,...)
+\item 
+int \mbox{\hyperlink{group__Pseudo_gacb8719a8b6a78152c8676f735dc7c467}{\+\_\+immed}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seg, int len,...)
+\item 
+int \mbox{\hyperlink{group__Pseudo_gabb1c9544549fc018a1ed1e8345cc66f3}{\+\_\+label}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gab18b552c595cf956387d2e4427384563}{\+\_\+begin}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga5b6bf226f290864b6a596069e4a0cf74}{\+\_\+while}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga3f42a6bd0929a03c700ace952e186997}{\+\_\+repeat}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gadcd97bc33014c89d91e19cc4a217b5e8}{\+\_\+until}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gab7b5835572c00662317647be9a49b2b3}{\+\_\+again}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga771a43815e0f65570de187ee456938e8}{\+\_\+for}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gabf110638d9dc2195b884957885128696}{\+\_\+aft}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga2df77b2810440262c7ade5fc911f8c8a}{\+\_\+nxt}} (int len,...)
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+Note\+: \+\_\+next() is multi-\/defined in vm \end{quote}
+\end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__Pseudo_gab786d49b7cbf077b6a706a308167b5ce}{\+\_\+if}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga8c4966a74388b9427ae2771419d73430}{\+\_\+else}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga5a0ec1a59cc273ec7db9b5a2af2779ef}{\+\_\+then}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gafb006746d990ab51ca27545ab004f260}{\+\_\+dotq}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seq)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga902f7d3df2665aef0f0aa00269bf932d}{\+\_\+strq}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seq)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga4499c7338bdc153d5f19127e8a3d59a7}{\+\_\+abortq}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seq)
 \end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
@@ -12,238 +67,33 @@ const typedef \+\_\+\+\_\+\+Flash\+String\+Helper \mbox{\hyperlink{namespaceEfAs
 \end{DoxyCompactItemize}
 
 
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespaceEfAsm_a5c160dc5483bdf3d9ed57addbd21ca73}\label{namespaceEfAsm_a5c160dc5483bdf3d9ed57addbd21ca73}} 
+\doxysubsubsection{\texorpdfstring{anonymous enum}{anonymous enum}}
+{\footnotesize\ttfamily anonymous enum}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{opNOP@{opNOP}!EfAsm@{EfAsm}}\index{EfAsm@{EfAsm}!opNOP@{opNOP}}}\mbox{\Hypertarget{namespaceEfAsm_ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6}\label{namespaceEfAsm_ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6}} 
+op\+N\+OP&opcodes start at 0 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OPCODES@{OPCODES}!EfAsm@{EfAsm}}\index{EfAsm@{EfAsm}!OPCODES@{OPCODES}}}\mbox{\Hypertarget{namespaceEfAsm_ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541}\label{namespaceEfAsm_ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541}} 
+O\+P\+C\+O\+D\+ES&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{namespaceEfAsm_a3ff1e256bb2a99fdb6fee8b453e4361e}\label{namespaceEfAsm_a3ff1e256bb2a99fdb6fee8b453e4361e}} 
-\index{EfAsm@{EfAsm}!\_dump@{\_dump}}
-\index{\_dump@{\_dump}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_dump()}{\_dump()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+dump (\begin{DoxyParamCaption}\item[{int}]{b,  }\item[{int}]{u }\end{DoxyParamCaption})}
-
-dump memory between previous word and this\mbox{\Hypertarget{namespaceEfAsm_a5bdea27a67eb879d5dd1b58bed56b9bd}\label{namespaceEfAsm_a5bdea27a67eb879d5dd1b58bed56b9bd}} 
-\index{EfAsm@{EfAsm}!\_rdump@{\_rdump}}
-\index{\_rdump@{\_rdump}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_rdump()}{\_rdump()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+rdump (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-dump return stack 
-
-\mbox{\Hypertarget{namespaceEfAsm_a59af885d0e26e3c82059708948d2df37}\label{namespaceEfAsm_a59af885d0e26e3c82059708948d2df37}} 
-\index{EfAsm@{EfAsm}!\_strlen@{\_strlen}}
-\index{\_strlen@{\_strlen}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_strlen()}{\_strlen()}}
-{\footnotesize\ttfamily int Ef\+Asm\+::\+\_\+strlen (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seq }\end{DoxyParamCaption})}
-
-string length (in Arduino Flash memory block)
-
-
-\begin{DoxyItemize}
-\item length includes terminating zero
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a27da79e08a45cd4ad90cffc847a04280}\label{namespaceEfAsm_a27da79e08a45cd4ad90cffc847a04280}} 
-\index{EfAsm@{EfAsm}!\_header@{\_header}}
-\index{\_header@{\_header}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_header()}{\_header()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+header (\begin{DoxyParamCaption}\item[{int}]{lex,  }\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seq }\end{DoxyParamCaption})}
-
-create a word header in dictionary
-
-
-\begin{DoxyItemize}
-\item dump data from previous word to current word
-\item point to previous word
-\item keep pointer to this word
-\item length of word (with optional f\+I\+M\+M\+ED or f\+C\+O\+M\+PO flags)
-\item Forth allows word max length 31
-\item memcpy word string
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a7d79fdd3d59e237e0381d1798e2050bb}\label{namespaceEfAsm_a7d79fdd3d59e237e0381d1798e2050bb}} 
-\index{EfAsm@{EfAsm}!\_code@{\_code}}
-\index{\_code@{\_code}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_code()}{\_code()}}
-{\footnotesize\ttfamily int Ef\+Asm\+::\+\_\+code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seg,  }\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-create an opcode stream for built-\/in word 
-\begin{DoxyItemize}
-\item keep address of current word
-\item copy bytecodes
-\end{DoxyItemize}
-
-address to be kept in local var\mbox{\Hypertarget{namespaceEfAsm_acce2eabb9a04fa5c08fc95932e2f92ae}\label{namespaceEfAsm_acce2eabb9a04fa5c08fc95932e2f92ae}} 
-\index{EfAsm@{EfAsm}!\_colon@{\_colon}}
-\index{\_colon@{\_colon}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_colon()}{\_colon()}}
-{\footnotesize\ttfamily int Ef\+Asm\+::\+\_\+colon (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seg,  }\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-create a colon word \mbox{\Hypertarget{namespaceEfAsm_acb8719a8b6a78152c8676f735dc7c467}\label{namespaceEfAsm_acb8719a8b6a78152c8676f735dc7c467}} 
-\index{EfAsm@{EfAsm}!\_immed@{\_immed}}
-\index{\_immed@{\_immed}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_immed()}{\_immed()}}
-{\footnotesize\ttfamily int Ef\+Asm\+::\+\_\+immed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seg,  }\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-create a immediate word \mbox{\Hypertarget{namespaceEfAsm_abb1c9544549fc018a1ed1e8345cc66f3}\label{namespaceEfAsm_abb1c9544549fc018a1ed1e8345cc66f3}} 
-\index{EfAsm@{EfAsm}!\_label@{\_label}}
-\index{\_label@{\_label}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_label()}{\_label()}}
-{\footnotesize\ttfamily int Ef\+Asm\+::\+\_\+label (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-create a label \mbox{\Hypertarget{namespaceEfAsm_ab18b552c595cf956387d2e4427384563}\label{namespaceEfAsm_ab18b552c595cf956387d2e4427384563}} 
-\index{EfAsm@{EfAsm}!\_begin@{\_begin}}
-\index{\_begin@{\_begin}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_begin()}{\_begin()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+begin (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-{\bfseries{B\+E\+G\+IN}}-\/(once)-\/W\+H\+I\+L\+E-\/(loop)-\/U\+N\+T\+I\+L/\+R\+E\+P\+E\+AT
-
-{\bfseries{B\+E\+G\+IN}}-\/A\+G\+A\+IN
-
-
-\begin{DoxyItemize}
-\item keep current address for looping
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a5b6bf226f290864b6a596069e4a0cf74}\label{namespaceEfAsm_a5b6bf226f290864b6a596069e4a0cf74}} 
-\index{EfAsm@{EfAsm}!\_while@{\_while}}
-\index{\_while@{\_while}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_while()}{\_while()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+while (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-B\+E\+G\+I\+N-\/(once)--$\ast$$\ast$\+W\+H\+I\+L\+E$\ast$$\ast$-\/(loop)-\/U\+N\+T\+I\+L/\+R\+E\+P\+E\+AT
-
-
-\begin{DoxyItemize}
-\item branching address
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a3f42a6bd0929a03c700ace952e186997}\label{namespaceEfAsm_a3f42a6bd0929a03c700ace952e186997}} 
-\index{EfAsm@{EfAsm}!\_repeat@{\_repeat}}
-\index{\_repeat@{\_repeat}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_repeat()}{\_repeat()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+repeat (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-B\+E\+G\+I\+N-\/(once)-\/W\+H\+I\+L\+E-\/(loop)-\/ {\bfseries{R\+E\+P\+E\+AT}}\mbox{\Hypertarget{namespaceEfAsm_adcd97bc33014c89d91e19cc4a217b5e8}\label{namespaceEfAsm_adcd97bc33014c89d91e19cc4a217b5e8}} 
-\index{EfAsm@{EfAsm}!\_until@{\_until}}
-\index{\_until@{\_until}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_until()}{\_until()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+until (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-B\+E\+G\+I\+N-\/(once)-\/W\+H\+I\+L\+E-\/(loop)--$\ast$$\ast$\+U\+N\+T\+I\+L$\ast$$\ast$
-
-
-\begin{DoxyItemize}
-\item conditional branch
-\item loop begin address
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_ab7b5835572c00662317647be9a49b2b3}\label{namespaceEfAsm_ab7b5835572c00662317647be9a49b2b3}} 
-\index{EfAsm@{EfAsm}!\_again@{\_again}}
-\index{\_again@{\_again}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_again()}{\_again()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+again (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-B\+E\+G\+IN--$\ast$$\ast$\+A\+G\+A\+I\+N$\ast$$\ast$
-
-
-\begin{DoxyItemize}
-\item unconditional branch
-\item store return address
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a771a43815e0f65570de187ee456938e8}\label{namespaceEfAsm_a771a43815e0f65570de187ee456938e8}} 
-\index{EfAsm@{EfAsm}!\_for@{\_for}}
-\index{\_for@{\_for}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_for()}{\_for()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+for (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-{\bfseries{F\+OR}}-\/(first)-\/A\+F\+T-\/(2nd,...)-\/T\+H\+E\+N-\/(every)-\/N\+E\+XT
-
-
-\begin{DoxyItemize}
-\item put loop counter on return stack
-\item keep 1st loop repeat address A0
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_abf110638d9dc2195b884957885128696}\label{namespaceEfAsm_abf110638d9dc2195b884957885128696}} 
-\index{EfAsm@{EfAsm}!\_aft@{\_aft}}
-\index{\_aft@{\_aft}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_aft()}{\_aft()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+aft (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-F\+O\+R-\/(first)--$\ast$$\ast$\+A\+F\+T$\ast$$\ast$-\/(2nd,...)-\/T\+H\+E\+N-\/(every)-\/N\+E\+XT
-
-
-\begin{DoxyItemize}
-\item code between F\+O\+R-\/\+A\+FT run only once
-\item unconditional branch
-\item forward jump address (A1)N\+OP,
-\item pop-\/off A0 (F\+O\+R-\/\+A\+FT once only)
-\item keep repeat address on return stack
-\item keep A1 address on return stack for A\+F\+T-\/\+T\+H\+EN
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a2df77b2810440262c7ade5fc911f8c8a}\label{namespaceEfAsm_a2df77b2810440262c7ade5fc911f8c8a}} 
-\index{EfAsm@{EfAsm}!\_nxt@{\_nxt}}
-\index{\_nxt@{\_nxt}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_nxt()}{\_nxt()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+nxt (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-F\+O\+R-\/(first)-\/A\+F\+T-\/(2nd,...)-\/T\+H\+E\+N-\/(every)--$\ast$$\ast$\+N\+E\+X\+T$\ast$$\ast$
-
-
-\begin{DoxyItemize}
-\item check loop counter (on return stack)
-\item add A0 (F\+O\+R-\/\+N\+E\+XT) or
-\item A1 to repeat loop (conditional branch by D\+O\+N\+XT)
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_ab786d49b7cbf077b6a706a308167b5ce}\label{namespaceEfAsm_ab786d49b7cbf077b6a706a308167b5ce}} 
-\index{EfAsm@{EfAsm}!\_if@{\_if}}
-\index{\_if@{\_if}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_if()}{\_if()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+if (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-{\bfseries{IF}}-\/T\+H\+EN, {\bfseries{IF}}-\/E\+L\+S\+E-\/\+T\+H\+EN
-
-
-\begin{DoxyItemize}
-\item conditional branch
-\item keep A0 address on return stack for E\+L\+SE or T\+H\+EN
-\item reserve branching address (A0)
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a8c4966a74388b9427ae2771419d73430}\label{namespaceEfAsm_a8c4966a74388b9427ae2771419d73430}} 
-\index{EfAsm@{EfAsm}!\_else@{\_else}}
-\index{\_else@{\_else}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_else()}{\_else()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+else (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-IF--$\ast$$\ast$\+E\+L\+S\+E$\ast$$\ast$-\/\+T\+H\+EN
-
-
-\begin{DoxyItemize}
-\item unconditional branch
-\item reserve branching address (A1)
-\item backfill A0 branching address
-\item keep A1 address on return stack for T\+H\+EN
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_a5a0ec1a59cc273ec7db9b5a2af2779ef}\label{namespaceEfAsm_a5a0ec1a59cc273ec7db9b5a2af2779ef}} 
-\index{EfAsm@{EfAsm}!\_then@{\_then}}
-\index{\_then@{\_then}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_then()}{\_then()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+then (\begin{DoxyParamCaption}\item[{int}]{len,  }\item[{}]{... }\end{DoxyParamCaption})}
-
-I\+F-\/\+E\+L\+SE--$\ast$$\ast$\+T\+H\+E\+N$\ast$$\ast$
-
-
-\begin{DoxyItemize}
-\item backfill branching address (A0) or (A1)
-\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfAsm_afb006746d990ab51ca27545ab004f260}\label{namespaceEfAsm_afb006746d990ab51ca27545ab004f260}} 
-\index{EfAsm@{EfAsm}!\_dotq@{\_dotq}}
-\index{\_dotq@{\_dotq}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_dotq()}{\_dotq()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+dotq (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seq }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespaceEfAsm_a902f7d3df2665aef0f0aa00269bf932d}\label{namespaceEfAsm_a902f7d3df2665aef0f0aa00269bf932d}} 
-\index{EfAsm@{EfAsm}!\_strq@{\_strq}}
-\index{\_strq@{\_strq}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_strq()}{\_strq()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+strq (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seq }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespaceEfAsm_a4499c7338bdc153d5f19127e8a3d59a7}\label{namespaceEfAsm_a4499c7338bdc153d5f19127e8a3d59a7}} 
-\index{EfAsm@{EfAsm}!\_abortq@{\_abortq}}
-\index{\_abortq@{\_abortq}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{\_abortq()}{\_abortq()}}
-{\footnotesize\ttfamily void Ef\+Asm\+::\+\_\+abortq (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$}]{seq }\end{DoxyParamCaption})}
-
 \mbox{\Hypertarget{namespaceEfAsm_acc07308cd4b29f3582ea2045d3326915}\label{namespaceEfAsm_acc07308cd4b29f3582ea2045d3326915}} 
 \index{EfAsm@{EfAsm}!assemble@{assemble}}
 \index{assemble@{assemble}!EfAsm@{EfAsm}}
 \doxysubsubsection{\texorpdfstring{assemble()}{assemble()}}
 {\footnotesize\ttfamily int Ef\+Asm\+::assemble (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{cdata }\end{DoxyParamCaption})}
 
-e\+Forth Assembler \begin{quote}
+\begin{quote}
+e\+Forth Macro Assembler \end{quote}
+\begin{quote}
 Kernel constants \end{quote}
 
 
@@ -353,8 +203,14 @@ common constants and variable spec. \end{quote}
 Kernel dictionary (primitive words) \end{quote}
 
 
+T\+O\+DO\+: add U\+M+
+
 \begin{quote}
 Common High-\/\+Level Colon Words \end{quote}
+
+
+\begin{quote}
+Console Input and Common words \end{quote}
 
 
 \begin{quote}
@@ -362,15 +218,19 @@ Number Conversions and formatting \end{quote}
 
 
 \begin{quote}
-Console I/O \end{quote}
+Console Output \end{quote}
 
 
 \begin{quote}
-Parser \end{quote}
+Parsing \end{quote}
 
 
 \begin{quote}
-Interpreter Input String handler \end{quote}
+Dictionary serach \end{quote}
+
+
+\begin{quote}
+Terminal Input \end{quote}
 
 
 \begin{quote}
@@ -403,19 +263,15 @@ EXECUTE - attempt to look up that word in the dictionary       \
 
 
 \begin{quote}
-Forth Compiler -\/ utility functions \end{quote}
+Colon Compiler \end{quote}
 
 
 \begin{quote}
-Forth Compiler -\/ define new word \end{quote}
+Debugging Tools \end{quote}
 
 
 \begin{quote}
-Forth Compiler -\/ variable, constant, and comments \end{quote}
-
-
-\begin{quote}
-Forth Compiler -\/ branching instructions \end{quote}
+Control Structures \end{quote}
 
 
 \begin{quote}
@@ -440,11 +296,19 @@ Forth Compiler -\/ branching instructions \end{quote}
 
 
 \begin{quote}
-Forth Compiler -\/ String specification \end{quote}
+String Literals \end{quote}
 
 
 \begin{quote}
-Debugging Tools \end{quote}
+Defining Words -\/ variable, constant, and comments \end{quote}
+
+
+\begin{quote}
+Comments \end{quote}
+
+
+\begin{quote}
+Lexicon Bits \end{quote}
 
 
 \begin{quote}
@@ -489,108 +353,4 @@ Boot Vector Setup \end{quote}
 \index{FCHAR@{FCHAR}!EfAsm@{EfAsm}}
 \doxysubsubsection{\texorpdfstring{FCHAR}{FCHAR}}
 {\footnotesize\ttfamily const typedef \+\_\+\+\_\+\+Flash\+String\+Helper Ef\+Asm\+::\+F\+C\+H\+AR}
-
-\mbox{\Hypertarget{namespaceEfAsm_a441c683b38bd339236b4bd6e305750cd}\label{namespaceEfAsm_a441c683b38bd339236b4bd6e305750cd}} 
-\index{EfAsm@{EfAsm}!BRAN@{BRAN}}
-\index{BRAN@{BRAN}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{BRAN}{BRAN}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+B\+R\+AN}
-
-\mbox{\Hypertarget{namespaceEfAsm_a7b221cc855cf8ca6334d2c7cb5879542}\label{namespaceEfAsm_a7b221cc855cf8ca6334d2c7cb5879542}} 
-\index{EfAsm@{EfAsm}!QBRAN@{QBRAN}}
-\index{QBRAN@{QBRAN}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{QBRAN}{QBRAN}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+Q\+B\+R\+AN}
-
-\mbox{\Hypertarget{namespaceEfAsm_a86b03a1e4d3a8b4c0cdfd8d9fc8f7010}\label{namespaceEfAsm_a86b03a1e4d3a8b4c0cdfd8d9fc8f7010}} 
-\index{EfAsm@{EfAsm}!DONXT@{DONXT}}
-\index{DONXT@{DONXT}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{DONXT}{DONXT}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+D\+O\+N\+XT}
-
-
-
-addr of branching ops, used by branching ops 
-
-\mbox{\Hypertarget{namespaceEfAsm_a6b8f6e7e77a210d6bfaf73bb43897580}\label{namespaceEfAsm_a6b8f6e7e77a210d6bfaf73bb43897580}} 
-\index{EfAsm@{EfAsm}!DOTQP@{DOTQP}}
-\index{DOTQP@{DOTQP}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{DOTQP}{DOTQP}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+D\+O\+T\+QP}
-
-\mbox{\Hypertarget{namespaceEfAsm_ac31352a003705d9569ef3314d62342fb}\label{namespaceEfAsm_ac31352a003705d9569ef3314d62342fb}} 
-\index{EfAsm@{EfAsm}!STRQP@{STRQP}}
-\index{STRQP@{STRQP}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{STRQP}{STRQP}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+S\+T\+R\+QP}
-
-\mbox{\Hypertarget{namespaceEfAsm_a13343dd66b80ba0cbe75877f7a6980d9}\label{namespaceEfAsm_a13343dd66b80ba0cbe75877f7a6980d9}} 
-\index{EfAsm@{EfAsm}!ABORQP@{ABORQP}}
-\index{ABORQP@{ABORQP}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{ABORQP}{ABORQP}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+A\+B\+O\+R\+QP}
-
-
-
-addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq 
-
-\mbox{\Hypertarget{namespaceEfAsm_ab44525c5e6436fa71223dfb207741699}\label{namespaceEfAsm_ab44525c5e6436fa71223dfb207741699}} 
-\index{EfAsm@{EfAsm}!TOR@{TOR}}
-\index{TOR@{TOR}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{TOR}{TOR}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+T\+OR}
-
-
-
-addres of \char`\"{}$>$\+R\char`\"{} op, used by \+\_\+for 
-
-\mbox{\Hypertarget{namespaceEfAsm_aa3dd7a4f331c954244daaddf0177f059}\label{namespaceEfAsm_aa3dd7a4f331c954244daaddf0177f059}} 
-\index{EfAsm@{EfAsm}!NOP@{NOP}}
-\index{NOP@{NOP}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{NOP}{NOP}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+N\+OP = 0xffff}
-
-
-
-N\+OP set to ffff to prevent access before initialized. 
-
-\mbox{\Hypertarget{namespaceEfAsm_a1b5e7cec0310945601603be02b8f8834}\label{namespaceEfAsm_a1b5e7cec0310945601603be02b8f8834}} 
-\index{EfAsm@{EfAsm}!Byte@{Byte}}
-\index{Byte@{Byte}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{Byte}{Byte}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$ Ef\+Asm\+::\+Byte}
-
-
-
-assembler byte array (heap) 
-
-\mbox{\Hypertarget{namespaceEfAsm_a85323f491b7b3ea3883bad0c91d9de17}\label{namespaceEfAsm_a85323f491b7b3ea3883bad0c91d9de17}} 
-\index{EfAsm@{EfAsm}!R@{R}}
-\index{R@{R}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{R}{R}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} Ef\+Asm\+::R}
-
-
-
-assembler return stack index 
-
-\mbox{\Hypertarget{namespaceEfAsm_a77406fd9edef6925ff2bafc8746085eb}\label{namespaceEfAsm_a77406fd9edef6925ff2bafc8746085eb}} 
-\index{EfAsm@{EfAsm}!PC@{PC}}
-\index{PC@{PC}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{PC}{PC}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+PC}
-
-
-
-assembler program counter 
-
-\mbox{\Hypertarget{namespaceEfAsm_a5bc71a8752683bc40a6f206bf3585d0f}\label{namespaceEfAsm_a5bc71a8752683bc40a6f206bf3585d0f}} 
-\index{EfAsm@{EfAsm}!Link@{Link}}
-\index{Link@{Link}!EfAsm@{EfAsm}}
-\doxysubsubsection{\texorpdfstring{Link}{Link}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+Link}
-
-
-
-link to previous word 
 

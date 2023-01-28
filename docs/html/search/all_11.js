@@ -6,7 +6,7 @@ var searchData=
   ['t_5fmax_157',['t_max',['../eforth__core_8cpp.html#af82b7e8747490fe5fc9691d79c7b6c32',1,'eforth_core.cpp']]],
   ['t_5fxt_158',['t_xt',['../eforth__core_8cpp.html#adef45e007330e1e83b28d4ba32a15c85',1,'eforth_core.cpp']]],
   ['top_159',['top',['../namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169',1,'EfVM']]],
-  ['tor_160',['TOR',['../namespaceEfAsm.html#ab44525c5e6436fa71223dfb207741699',1,'EfAsm']]],
+  ['tor_160',['TOR',['../group__Module.html#gab44525c5e6436fa71223dfb207741699',1,'EfAsm']]],
   ['trace_161',['TRACE',['../eforth__vm_8cpp.html#a7d020b5dd8606c615fa96fbe2647a4b0',1,'eforth_vm.cpp']]],
   ['true_162',['TRUE',['../eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d',1,'eforth_core.h']]]
 ];

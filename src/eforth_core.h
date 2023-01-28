@@ -45,9 +45,8 @@ typedef S16       DU;                 ///< data/cell unit
 #define FORTH_ROM_SZ     0x2000       /**< size of ROM (for pre-defined words) */
 #define FORTH_UVAR_SZ    0x20         /**< size of Forth user variables        */
 #define FORTH_DIC_SZ     0x3e0        /**< size of dictionary space            */
-#define FORTH_STACK_SZ   0x100        /**< size of data/return stack           */
+#define FORTH_STACK_SZ   0x80         /**< size of data/return stack           */
 #define FORTH_TIB_SZ     0x80         /**< size of terminal input buffer       */
-#define FORTH_PAD_SZ     0x20         /**< size of output pad (in DIC space )  */
 #define FORTH_RAM_SZ     ( \
         FORTH_UVAR_SZ + FORTH_DIC_SZ + FORTH_STACK_SZ + FORTH_TIB_SZ) /**< total RAM */
 ///@}
@@ -67,6 +66,7 @@ typedef S16       DU;                 ///< data/cell unit
 #define FORTH_STACK_ADDR (FORTH_DIC_ADDR  + FORTH_DIC_SZ)
 #define FORTH_STACK_TOP  (FORTH_STACK_ADDR + FORTH_STACK_SZ)
 #define FORTH_TIB_ADDR   (FORTH_STACK_TOP)
+#define FORTH_MAX_ADDR   (FORTH_TIB_ADDR + FORTH_TIB_SZ)
 ///@}
 ///
 ///@name Logical

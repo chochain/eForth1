@@ -1,0 +1,71 @@
+\hypertarget{group__Memory}{}\doxysection{copy}
+\label{group__Memory}\index{copy@{copy}}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__Memory_ga60ef63ffe304267efee1dd841faf4751}{C\+E\+L\+L\+C\+PY}}(n)
+\item 
+\#define \mbox{\hyperlink{group__Memory_gabee5cbd8a5640f4b067cdc048b4c21ca}{P\+G\+M\+C\+PY}}(len,  seq)
+\item 
+\#define \mbox{\hyperlink{group__Memory_ga49723d0c3f14a2ff23c8518ca5730fb0}{O\+P\+S\+TR}}(op,  seq)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{group__Memory_ga60ef63ffe304267efee1dd841faf4751}\label{group__Memory_ga60ef63ffe304267efee1dd841faf4751}} 
+\index{copy@{copy}!CELLCPY@{CELLCPY}}
+\index{CELLCPY@{CELLCPY}!copy@{copy}}
+\doxysubsubsection{\texorpdfstring{CELLCPY}{CELLCPY}}
+{\footnotesize\ttfamily \#define C\+E\+L\+L\+C\+PY(\begin{DoxyParamCaption}\item[{}]{n }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                            \(\backslash\)}
+\DoxyCodeLine{    va\_list argList;                            \(\backslash\)}
+\DoxyCodeLine{    va\_start(argList, n);                       \(\backslash\)}
+\DoxyCodeLine{    for (; n; n-\/-\/) \{                            \(\backslash\)}
+\DoxyCodeLine{        IU j = (\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}})va\_arg(argList, \textcolor{keywordtype}{int});        \(\backslash\)}
+\DoxyCodeLine{        if (j==\mbox{\hyperlink{group__Module_gaa3dd7a4f331c954244daaddf0177f059}{NOP}}) \textcolor{keywordflow}{continue};                   \(\backslash\)}
+\DoxyCodeLine{        STORE(j);                               \(\backslash\)}
+\DoxyCodeLine{        DEBUG(\textcolor{stringliteral}{" \%04x"}, j);                      \(\backslash\)}
+\DoxyCodeLine{    \}                                           \(\backslash\)}
+\DoxyCodeLine{    va\_end(argList);                            \(\backslash\)}
+\DoxyCodeLine{    \_rdump();                                   \(\backslash\)}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{group__Memory_gabee5cbd8a5640f4b067cdc048b4c21ca}\label{group__Memory_gabee5cbd8a5640f4b067cdc048b4c21ca}} 
+\index{copy@{copy}!PGMCPY@{PGMCPY}}
+\index{PGMCPY@{PGMCPY}!copy@{copy}}
+\doxysubsubsection{\texorpdfstring{PGMCPY}{PGMCPY}}
+{\footnotesize\ttfamily \#define P\+G\+M\+C\+PY(\begin{DoxyParamCaption}\item[{}]{len,  }\item[{}]{seq }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                      \(\backslash\)}
+\DoxyCodeLine{    PGM\_P p = \textcolor{keyword}{reinterpret\_cast<}PGM\_P\textcolor{keyword}{>}(seq);     \(\backslash\)}
+\DoxyCodeLine{    for (\textcolor{keywordtype}{int} i=0; i < len; i++) \{               \(\backslash\)}
+\DoxyCodeLine{        BSET(\mbox{\hyperlink{group__Module_ga77406fd9edef6925ff2bafc8746085eb}{PC}}++, pgm\_read\_byte(p++));         \(\backslash\)}
+\DoxyCodeLine{    \}                                           \(\backslash\)}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{group__Memory_ga49723d0c3f14a2ff23c8518ca5730fb0}\label{group__Memory_ga49723d0c3f14a2ff23c8518ca5730fb0}} 
+\index{copy@{copy}!OPSTR@{OPSTR}}
+\index{OPSTR@{OPSTR}!copy@{copy}}
+\doxysubsubsection{\texorpdfstring{OPSTR}{OPSTR}}
+{\footnotesize\ttfamily \#define O\+P\+S\+TR(\begin{DoxyParamCaption}\item[{}]{op,  }\item[{}]{seq }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{                        \(\backslash\)}
+\DoxyCodeLine{    STORE(op);                                  \(\backslash\)}
+\DoxyCodeLine{    int len = \mbox{\hyperlink{group__Pseudo_ga59af885d0e26e3c82059708948d2df37}{\_strlen}}(seq);                     \(\backslash\)}
+\DoxyCodeLine{    BSET(\mbox{\hyperlink{group__Module_ga77406fd9edef6925ff2bafc8746085eb}{PC}}++, len);                            \(\backslash\)}
+\DoxyCodeLine{    PGMCPY(len, seq);                           \(\backslash\)}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}

@@ -5,6 +5,15 @@
 e\+Forth assembler module header  
 
 
+{\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
+Include dependency graph for eforth\+\_\+asm.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__asm_8h__incl}
+\end{center}
+\end{figure}
 This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -20,6 +29,12 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \doxysubsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
+\#define \mbox{\hyperlink{eforth__asm_8h_a9ea1e8dcf59129fa7bfe31bbc1f87d8e}{f\+C\+M\+PL}}~0x40
+\item 
+\#define \mbox{\hyperlink{eforth__asm_8h_a84054c8a0e922b86c0d99ea4cfdab34e}{f\+I\+M\+MD}}~0x80
+\item 
+\#define \mbox{\hyperlink{eforth__asm_8h_ac7635cecf944d5bfcc89665c08022828}{OP}}(name)~op\#\#name
+\item 
 \#define \mbox{\hyperlink{eforth__asm_8h_a3254550e1d6d185f6b3e69b2d6468343}{D\+E\+B\+UG}}(s,  v)
 \item 
 \#define \mbox{\hyperlink{eforth__asm_8h_a49fac1253499dd76c037d22a8b7bcadf}{S\+H\+O\+W\+OP}}(op)
@@ -31,6 +46,12 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \#define \mbox{\hyperlink{eforth__asm_8h_a201f9ddd85daf92a29792435bb50d5bc}{\+\_\+\+N\+A\+R\+G0}}(...)~\mbox{\hyperlink{eforth__asm_8h_a3041e6b675661edeec3883dd37d305af}{\+\_\+\+A\+R\+G\+\_\+N}}(\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)
 \item 
 \#define \mbox{\hyperlink{eforth__asm_8h_a8b4fbd083a242445cf8eba9028c2a715}{\+\_\+\+N\+A\+RG}}(...)~\mbox{\hyperlink{eforth__asm_8h_a201f9ddd85daf92a29792435bb50d5bc}{\+\_\+\+N\+A\+R\+G0}}(\+\_\+, \#\#\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+, \mbox{\hyperlink{eforth__asm_8h_a9b89373d972926a84265fdbd351494f1}{\+\_\+\+N\+U\+M\+\_\+N}}())
+\item 
+\#define \mbox{\hyperlink{group__Memory_ga60ef63ffe304267efee1dd841faf4751}{C\+E\+L\+L\+C\+PY}}(n)
+\item 
+\#define \mbox{\hyperlink{group__Memory_gabee5cbd8a5640f4b067cdc048b4c21ca}{P\+G\+M\+C\+PY}}(len,  seq)
+\item 
+\#define \mbox{\hyperlink{group__Memory_ga49723d0c3f14a2ff23c8518ca5730fb0}{O\+P\+S\+TR}}(op,  seq)
 \end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Vargs Header (calculate number of parameters by compiler)}\par
 \begin{DoxyCompactItemize}
@@ -83,9 +104,9 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{Indent}\textbf{ Memory Access and Stack Op}\par
 \begin{DoxyCompactItemize}
 \item 
-\#define \mbox{\hyperlink{eforth__asm_8h_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}(d,  c)~(Byte\mbox{[}d\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))
+\#define \mbox{\hyperlink{eforth__asm_8h_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}(d,  c)~(\+\_\+byte\mbox{[}d\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))
 \item 
-\#define \mbox{\hyperlink{eforth__asm_8h_a77d23ddbb106c14475b4119b06a046a1}{B\+G\+ET}}(d)~(Byte\mbox{[}d\mbox{]})
+\#define \mbox{\hyperlink{eforth__asm_8h_a77d23ddbb106c14475b4119b06a046a1}{B\+G\+ET}}(d)~(\+\_\+byte\mbox{[}d\mbox{]})
 \item 
 \#define \mbox{\hyperlink{eforth__asm_8h_ac90aeca39f45fc56ac96c675d18a7e78}{S\+ET}}(d,  v)~do \{ \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} a=(d); \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} x=(v); \mbox{\hyperlink{eforth__vm_8cpp_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}(a, (x)\&0xff); \mbox{\hyperlink{eforth__vm_8cpp_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}((a)+1, (x)$>$$>$8); \} while (0)
 \item 
@@ -104,6 +125,64 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \#define \mbox{\hyperlink{eforth__asm_8h_a19c77462bb98229bc63d4497185bde42}{V\+DU}}(a,  i)~\mbox{\hyperlink{eforth__asm_8h_a3b1701d44f7b15525bc7b3c0a8f637e1}{VL}}(a,i),\mbox{\hyperlink{eforth__asm_8h_aca2bbb288661206e28c0488766c22f15}{VH}}(a,i)
 \end{DoxyCompactItemize}
 \end{Indent}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \mbox{\hyperlink{group__Module_ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6}{Ef\+Asm\+::op\+N\+OP}} = 0, 
+\mbox{\hyperlink{group__Module_ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541}{Ef\+Asm\+::\+O\+P\+C\+O\+D\+ES}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga3ff1e256bb2a99fdb6fee8b453e4361e}{Ef\+Asm\+::\+\_\+dump}} (int b, int u)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga5bdea27a67eb879d5dd1b58bed56b9bd}{Ef\+Asm\+::\+\_\+rdump}} ()
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+dump return stack \end{quote}
+\end{DoxyCompactList}\item 
+int \mbox{\hyperlink{group__Pseudo_ga59af885d0e26e3c82059708948d2df37}{Ef\+Asm\+::\+\_\+strlen}} (F\+C\+H\+AR $\ast$seq)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga27da79e08a45cd4ad90cffc847a04280}{Ef\+Asm\+::\+\_\+header}} (int lex, F\+C\+H\+AR $\ast$seq)
+\item 
+int \mbox{\hyperlink{group__Pseudo_ga7d79fdd3d59e237e0381d1798e2050bb}{Ef\+Asm\+::\+\_\+code}} (F\+C\+H\+AR $\ast$seg, int len,...)
+\item 
+int \mbox{\hyperlink{group__Pseudo_gacce2eabb9a04fa5c08fc95932e2f92ae}{Ef\+Asm\+::\+\_\+colon}} (F\+C\+H\+AR $\ast$seg, int len,...)
+\item 
+int \mbox{\hyperlink{group__Pseudo_gacb8719a8b6a78152c8676f735dc7c467}{Ef\+Asm\+::\+\_\+immed}} (F\+C\+H\+AR $\ast$seg, int len,...)
+\item 
+int \mbox{\hyperlink{group__Pseudo_gabb1c9544549fc018a1ed1e8345cc66f3}{Ef\+Asm\+::\+\_\+label}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gab18b552c595cf956387d2e4427384563}{Ef\+Asm\+::\+\_\+begin}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga5b6bf226f290864b6a596069e4a0cf74}{Ef\+Asm\+::\+\_\+while}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga3f42a6bd0929a03c700ace952e186997}{Ef\+Asm\+::\+\_\+repeat}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gadcd97bc33014c89d91e19cc4a217b5e8}{Ef\+Asm\+::\+\_\+until}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gab7b5835572c00662317647be9a49b2b3}{Ef\+Asm\+::\+\_\+again}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga771a43815e0f65570de187ee456938e8}{Ef\+Asm\+::\+\_\+for}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gabf110638d9dc2195b884957885128696}{Ef\+Asm\+::\+\_\+aft}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga2df77b2810440262c7ade5fc911f8c8a}{Ef\+Asm\+::\+\_\+nxt}} (int len,...)
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+Note\+: \+\_\+next() is multi-\/defined in vm \end{quote}
+\end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__Pseudo_gab786d49b7cbf077b6a706a308167b5ce}{Ef\+Asm\+::\+\_\+if}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga8c4966a74388b9427ae2771419d73430}{Ef\+Asm\+::\+\_\+else}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga5a0ec1a59cc273ec7db9b5a2af2779ef}{Ef\+Asm\+::\+\_\+then}} (int len,...)
+\item 
+void \mbox{\hyperlink{group__Pseudo_gafb006746d990ab51ca27545ab004f260}{Ef\+Asm\+::\+\_\+dotq}} (F\+C\+H\+AR $\ast$seq)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga902f7d3df2665aef0f0aa00269bf932d}{Ef\+Asm\+::\+\_\+strq}} (F\+C\+H\+AR $\ast$seq)
+\item 
+void \mbox{\hyperlink{group__Pseudo_ga4499c7338bdc153d5f19127e8a3d59a7}{Ef\+Asm\+::\+\_\+abortq}} (F\+C\+H\+AR $\ast$seq)
+\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -117,7 +196,26 @@ e\+Forth assembler module header
 Usage of V\+A\+\_\+\+A\+R\+GS variable argument for assembler parameter counting 
 
 \doxysubsection{Macro Definition Documentation}
-\mbox{\Hypertarget{eforth__asm_8h_a3254550e1d6d185f6b3e69b2d6468343}\label{eforth__asm_8h_a3254550e1d6d185f6b3e69b2d6468343}} 
+\mbox{\Hypertarget{eforth__asm_8h_a9ea1e8dcf59129fa7bfe31bbc1f87d8e}\label{eforth__asm_8h_a9ea1e8dcf59129fa7bfe31bbc1f87d8e}} 
+\index{eforth\_asm.h@{eforth\_asm.h}!fCMPL@{fCMPL}}
+\index{fCMPL@{fCMPL}!eforth\_asm.h@{eforth\_asm.h}}
+\doxysubsubsection{\texorpdfstring{fCMPL}{fCMPL}}
+{\footnotesize\ttfamily \#define f\+C\+M\+PL~0x40}
+
+compile only flag \mbox{\Hypertarget{eforth__asm_8h_a84054c8a0e922b86c0d99ea4cfdab34e}\label{eforth__asm_8h_a84054c8a0e922b86c0d99ea4cfdab34e}} 
+\index{eforth\_asm.h@{eforth\_asm.h}!fIMMD@{fIMMD}}
+\index{fIMMD@{fIMMD}!eforth\_asm.h@{eforth\_asm.h}}
+\doxysubsubsection{\texorpdfstring{fIMMD}{fIMMD}}
+{\footnotesize\ttfamily \#define f\+I\+M\+MD~0x80}
+
+immediate flag ~\newline
+ \mbox{\Hypertarget{eforth__asm_8h_ac7635cecf944d5bfcc89665c08022828}\label{eforth__asm_8h_ac7635cecf944d5bfcc89665c08022828}} 
+\index{eforth\_asm.h@{eforth\_asm.h}!OP@{OP}}
+\index{OP@{OP}!eforth\_asm.h@{eforth\_asm.h}}
+\doxysubsubsection{\texorpdfstring{OP}{OP}}
+{\footnotesize\ttfamily \#define OP(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})~op\#\#name}
+
+define opcode enums Note\+: in sync with VM\textquotesingle{}s vtable \mbox{\Hypertarget{eforth__asm_8h_a3254550e1d6d185f6b3e69b2d6468343}\label{eforth__asm_8h_a3254550e1d6d185f6b3e69b2d6468343}} 
 \index{eforth\_asm.h@{eforth\_asm.h}!DEBUG@{DEBUG}}
 \index{DEBUG@{DEBUG}!eforth\_asm.h@{eforth\_asm.h}}
 \doxysubsubsection{\texorpdfstring{DEBUG}{DEBUG}}
@@ -276,13 +374,13 @@ variable length parameter handler macros \mbox{\Hypertarget{eforth__asm_8h_a9b89
 \index{eforth\_asm.h@{eforth\_asm.h}!BSET@{BSET}}
 \index{BSET@{BSET}!eforth\_asm.h@{eforth\_asm.h}}
 \doxysubsubsection{\texorpdfstring{BSET}{BSET}}
-{\footnotesize\ttfamily \#define B\+S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{c }\end{DoxyParamCaption})~(Byte\mbox{[}d\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))}
+{\footnotesize\ttfamily \#define B\+S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{c }\end{DoxyParamCaption})~(\+\_\+byte\mbox{[}d\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))}
 
 \mbox{\Hypertarget{eforth__asm_8h_a77d23ddbb106c14475b4119b06a046a1}\label{eforth__asm_8h_a77d23ddbb106c14475b4119b06a046a1}} 
 \index{eforth\_asm.h@{eforth\_asm.h}!BGET@{BGET}}
 \index{BGET@{BGET}!eforth\_asm.h@{eforth\_asm.h}}
 \doxysubsubsection{\texorpdfstring{BGET}{BGET}}
-{\footnotesize\ttfamily \#define B\+G\+ET(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~(Byte\mbox{[}d\mbox{]})}
+{\footnotesize\ttfamily \#define B\+G\+ET(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~(\+\_\+byte\mbox{[}d\mbox{]})}
 
 \mbox{\Hypertarget{eforth__asm_8h_ac90aeca39f45fc56ac96c675d18a7e78}\label{eforth__asm_8h_ac90aeca39f45fc56ac96c675d18a7e78}} 
 \index{eforth\_asm.h@{eforth\_asm.h}!SET@{SET}}

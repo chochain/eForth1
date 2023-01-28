@@ -8,5 +8,5 @@ var searchData=
   ['set_150',['SET',['../eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78',1,'SET():&#160;eforth_asm.h'],['../eforth__io_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78',1,'SET():&#160;eforth_io.cpp'],['../eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78',1,'SET():&#160;eforth_vm.cpp']]],
   ['showop_151',['SHOWOP',['../eforth__asm_8h.html#a49fac1253499dd76c037d22a8b7bcadf',1,'eforth_asm.h']]],
   ['store_152',['STORE',['../eforth__asm_8h.html#ad15c88ea1b3da2e52aac4a4d3810a045',1,'eforth_asm.h']]],
-  ['strqp_153',['STRQP',['../namespaceEfAsm.html#ac31352a003705d9569ef3314d62342fb',1,'EfAsm']]]
+  ['strqp_153',['STRQP',['../group__Module.html#gac31352a003705d9569ef3314d62342fb',1,'EfAsm']]]
 ];

@@ -29,10 +29,6 @@ void \mbox{\hyperlink{namespaceEfVM_ad93fbce2cb609c605aa8df2355c8e16b}{\+\_\+txs
 \begin{DoxyCompactList}\small\item\em \begin{quote}
 (c -- ) send a char to console \end{quote}
 \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{namespaceEfVM_a88be037f3c5ddd06681d8775769b5bec}{\+\_\+execu}} ()
-\begin{DoxyCompactList}\small\item\em \begin{quote}
-(a -- ) take execution address from data stack and execute the token \end{quote}
-\end{DoxyCompactList}\item 
 void \mbox{\hyperlink{namespaceEfVM_a04b479eed7bc0fa0b9c8600f47c04cba}{\+\_\+ummod}} ()
 \begin{DoxyCompactList}\small\item\em (udl udh u -- ur uq) unsigned divide of a double by single \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
@@ -157,20 +153,6 @@ fetch from IO stream \end{quote}
 (c -- ) send a char to console \end{quote}
 
 
-\mbox{\Hypertarget{namespaceEfVM_a88be037f3c5ddd06681d8775769b5bec}\label{namespaceEfVM_a88be037f3c5ddd06681d8775769b5bec}} 
-\index{EfVM@{EfVM}!\_execu@{\_execu}}
-\index{\_execu@{\_execu}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{\_execu()}{\_execu()}}
-{\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+execu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-\begin{quote}
-(a -- ) take execution address from data stack and execute the token \end{quote}
-
-
-\begin{quote}
-fetch program counter \end{quote}
 \mbox{\Hypertarget{namespaceEfVM_a04b479eed7bc0fa0b9c8600f47c04cba}\label{namespaceEfVM_a04b479eed7bc0fa0b9c8600f47c04cba}} 
 \index{EfVM@{EfVM}!\_ummod@{\_ummod}}
 \index{\_ummod@{\_ummod}!EfVM@{EfVM}}
@@ -235,6 +217,10 @@ A\+LU (i.\+e. cached top of stack value)
 \index{rtop@{rtop}!EfVM@{EfVM}}
 \doxysubsubsection{\texorpdfstring{rtop}{rtop}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} Ef\+V\+M\+::rtop}
+
+
+
+cached loop counter on return stack 
 
 \mbox{\Hypertarget{namespaceEfVM_ad6bf1128d9ffa5007021ecabed123c74}\label{namespaceEfVM_ad6bf1128d9ffa5007021ecabed123c74}} 
 \index{EfVM@{EfVM}!IR@{IR}}

@@ -85,7 +85,6 @@ $(document).ready(function(){initNavTree('eforth__asm_8cpp.html',''); initResiza
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">eforth_asm.cpp File Reference</div>  </div>
@@ -94,23 +93,22 @@ $(document).ready(function(){initNavTree('eforth__asm_8cpp.html',''); initResiza
 
 <p>eForth Assembler module  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="eforth__core_8h_source.html">eforth_core.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="eforth__asm_8h_source.html">eforth_asm.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="eforth__asm_8h_source.html">eforth_asm.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for eforth_asm.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="eforth__asm_8cpp__incl.png" border="0" usemap="#src_2eforth__asm_8cpp" alt=""/></div>
 <map name="src_2eforth__asm_8cpp" id="src_2eforth__asm_8cpp">
-<area shape="rect" title="eForth Assembler module" alt="" coords="319,5,465,32"/>
-<area shape="rect" href="eforth__core_8h.html" title="eForth prototype and interface" alt="" coords="273,80,381,107"/>
-<area shape="rect" href="eforth__asm_8h.html" title="eForth assembler module header" alt="" coords="405,80,513,107"/>
-<area shape="rect" title=" " alt="" coords="5,155,72,181"/>
-<area shape="rect" title=" " alt="" coords="97,155,167,181"/>
-<area shape="rect" title=" " alt="" coords="192,155,267,181"/>
-<area shape="rect" title=" " alt="" coords="291,155,362,181"/>
-<area shape="rect" title=" " alt="" coords="387,155,451,181"/>
-<area shape="rect" title=" " alt="" coords="475,155,559,181"/>
-<area shape="rect" title=" " alt="" coords="583,155,710,181"/>
+<area shape="rect" title="eForth Assembler module" alt="" coords="253,5,400,32"/>
+<area shape="rect" href="eforth__asm_8h.html" title="eForth assembler module header" alt="" coords="273,80,381,107"/>
+<area shape="rect" href="eforth__core_8h.html" title="eForth prototype and interface" alt="" coords="273,155,381,181"/>
+<area shape="rect" title=" " alt="" coords="5,229,72,256"/>
+<area shape="rect" title=" " alt="" coords="97,229,167,256"/>
+<area shape="rect" title=" " alt="" coords="192,229,267,256"/>
+<area shape="rect" title=" " alt="" coords="291,229,362,256"/>
+<area shape="rect" title=" " alt="" coords="387,229,451,256"/>
+<area shape="rect" title=" " alt="" coords="475,229,559,256"/>
+<area shape="rect" title=" " alt="" coords="583,229,710,256"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -121,21 +119,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a9ea1e8dcf59129fa7bfe31bbc1f87d8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#a9ea1e8dcf59129fa7bfe31bbc1f87d8e">fCMPL</a>&#160;&#160;&#160;0x40</td></tr>
-<tr class="separator:a9ea1e8dcf59129fa7bfe31bbc1f87d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84054c8a0e922b86c0d99ea4cfdab34e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#a84054c8a0e922b86c0d99ea4cfdab34e">fIMMD</a>&#160;&#160;&#160;0x80</td></tr>
-<tr class="separator:a84054c8a0e922b86c0d99ea4cfdab34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27fcb44e39b3c4a0d37e34faab596803"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#a27fcb44e39b3c4a0d37e34faab596803">DUMP_ROW_WIDTH</a>&#160;&#160;&#160;0x40</td></tr>
-<tr class="separator:a27fcb44e39b3c4a0d37e34faab596803"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7635cecf944d5bfcc89665c08022828"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#ac7635cecf944d5bfcc89665c08022828">OP</a>(name)&#160;&#160;&#160;op##name</td></tr>
-<tr class="separator:ac7635cecf944d5bfcc89665c08022828"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a06fc87d81c62e9abb8790b6e5713c55b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="eforth__asm_8cpp.html#a06fc87d81c62e9abb8790b6e5713c55ba40ca1718b18204c5206b1cdf98ddead4">opNOP</a> = 0, 
-<a class="el" href="eforth__asm_8cpp.html#a06fc87d81c62e9abb8790b6e5713c55ba9985f02d910b285a8c65e383fb1b2f0d">OPCODES</a>
- }</td></tr>
-<tr class="separator:a06fc87d81c62e9abb8790b6e5713c55b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa18a10c05357a5f4115d17f150a0a0fb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#aa18a10c05357a5f4115d17f150a0a0fb">WORDS_ROW_WIDTH</a>&#160;&#160;&#160;0x44        /** WORDS row width control */</td></tr>
+<tr class="separator:aa18a10c05357a5f4115d17f150a0a0fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -145,369 +130,93 @@ Functions</h2></td></tr>
 <tr class="separator:ac7b7418379a5743a1883314bfd9ee874"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94e10412bf5e1f89d12efb94e80979c8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#a94e10412bf5e1f89d12efb94e80979c8">ef_assemble</a> (<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata)</td></tr>
 <tr class="separator:a94e10412bf5e1f89d12efb94e80979c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Memory Dumpers</div></td></tr>
-<tr class="memitem:a3ff1e256bb2a99fdb6fee8b453e4361e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a3ff1e256bb2a99fdb6fee8b453e4361e">EfAsm::_dump</a> (int b, int u)</td></tr>
-<tr class="separator:a3ff1e256bb2a99fdb6fee8b453e4361e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bdea27a67eb879d5dd1b58bed56b9bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a5bdea27a67eb879d5dd1b58bed56b9bd">EfAsm::_rdump</a> ()</td></tr>
-<tr class="memdesc:a5bdea27a67eb879d5dd1b58bed56b9bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">dump return stack  <a href="namespaceEfAsm.html#a5bdea27a67eb879d5dd1b58bed56b9bd">More...</a><br /></td></tr>
-<tr class="separator:a5bdea27a67eb879d5dd1b58bed56b9bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Assembler - Word Creation Headers</div></td></tr>
-<tr class="memitem:a27da79e08a45cd4ad90cffc847a04280"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a27da79e08a45cd4ad90cffc847a04280">EfAsm::_header</a> (int lex, FCHAR *seq)</td></tr>
-<tr class="separator:a27da79e08a45cd4ad90cffc847a04280"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d79fdd3d59e237e0381d1798e2050bb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a7d79fdd3d59e237e0381d1798e2050bb">EfAsm::_code</a> (FCHAR *seg, int len,...)</td></tr>
-<tr class="separator:a7d79fdd3d59e237e0381d1798e2050bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acce2eabb9a04fa5c08fc95932e2f92ae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#acce2eabb9a04fa5c08fc95932e2f92ae">EfAsm::_colon</a> (FCHAR *seg, int len,...)</td></tr>
-<tr class="separator:acce2eabb9a04fa5c08fc95932e2f92ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb8719a8b6a78152c8676f735dc7c467"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#acb8719a8b6a78152c8676f735dc7c467">EfAsm::_immed</a> (FCHAR *seg, int len,...)</td></tr>
-<tr class="separator:acb8719a8b6a78152c8676f735dc7c467"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb1c9544549fc018a1ed1e8345cc66f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#abb1c9544549fc018a1ed1e8345cc66f3">EfAsm::_label</a> (int len,...)</td></tr>
-<tr class="separator:abb1c9544549fc018a1ed1e8345cc66f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Assembler - Branching Ops</div></td></tr>
-<tr class="memitem:ab18b552c595cf956387d2e4427384563"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ab18b552c595cf956387d2e4427384563">EfAsm::_begin</a> (int len,...)</td></tr>
-<tr class="separator:ab18b552c595cf956387d2e4427384563"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b6bf226f290864b6a596069e4a0cf74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a5b6bf226f290864b6a596069e4a0cf74">EfAsm::_while</a> (int len,...)</td></tr>
-<tr class="separator:a5b6bf226f290864b6a596069e4a0cf74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f42a6bd0929a03c700ace952e186997"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a3f42a6bd0929a03c700ace952e186997">EfAsm::_repeat</a> (int len,...)</td></tr>
-<tr class="separator:a3f42a6bd0929a03c700ace952e186997"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcd97bc33014c89d91e19cc4a217b5e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#adcd97bc33014c89d91e19cc4a217b5e8">EfAsm::_until</a> (int len,...)</td></tr>
-<tr class="separator:adcd97bc33014c89d91e19cc4a217b5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7b5835572c00662317647be9a49b2b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ab7b5835572c00662317647be9a49b2b3">EfAsm::_again</a> (int len,...)</td></tr>
-<tr class="separator:ab7b5835572c00662317647be9a49b2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a771a43815e0f65570de187ee456938e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a771a43815e0f65570de187ee456938e8">EfAsm::_for</a> (int len,...)</td></tr>
-<tr class="separator:a771a43815e0f65570de187ee456938e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf110638d9dc2195b884957885128696"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#abf110638d9dc2195b884957885128696">EfAsm::_aft</a> (int len,...)</td></tr>
-<tr class="separator:abf110638d9dc2195b884957885128696"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2df77b2810440262c7ade5fc911f8c8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a2df77b2810440262c7ade5fc911f8c8a">EfAsm::_nxt</a> (int len,...)</td></tr>
-<tr class="separator:a2df77b2810440262c7ade5fc911f8c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab786d49b7cbf077b6a706a308167b5ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ab786d49b7cbf077b6a706a308167b5ce">EfAsm::_if</a> (int len,...)</td></tr>
-<tr class="separator:ab786d49b7cbf077b6a706a308167b5ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c4966a74388b9427ae2771419d73430"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a8c4966a74388b9427ae2771419d73430">EfAsm::_else</a> (int len,...)</td></tr>
-<tr class="separator:a8c4966a74388b9427ae2771419d73430"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a0ec1a59cc273ec7db9b5a2af2779ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a5a0ec1a59cc273ec7db9b5a2af2779ef">EfAsm::_then</a> (int len,...)</td></tr>
-<tr class="separator:a5a0ec1a59cc273ec7db9b5a2af2779ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Assembler - IO Functions</div></td></tr>
-<tr class="memitem:afb006746d990ab51ca27545ab004f260"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#afb006746d990ab51ca27545ab004f260">EfAsm::_dotq</a> (FCHAR *seq)</td></tr>
-<tr class="separator:afb006746d990ab51ca27545ab004f260"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a902f7d3df2665aef0f0aa00269bf932d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a902f7d3df2665aef0f0aa00269bf932d">EfAsm::_strq</a> (FCHAR *seq)</td></tr>
-<tr class="separator:a902f7d3df2665aef0f0aa00269bf932d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4499c7338bdc153d5f19127e8a3d59a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a4499c7338bdc153d5f19127e8a3d59a7">EfAsm::_abortq</a> (FCHAR *seq)</td></tr>
-<tr class="separator:a4499c7338bdc153d5f19127e8a3d59a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Memory Dumpers</div></td></tr>
-<tr class="memitem:a3ff1e256bb2a99fdb6fee8b453e4361e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a3ff1e256bb2a99fdb6fee8b453e4361e">EfAsm::_dump</a> (int b, int u)</td></tr>
-<tr class="separator:a3ff1e256bb2a99fdb6fee8b453e4361e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bdea27a67eb879d5dd1b58bed56b9bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a5bdea27a67eb879d5dd1b58bed56b9bd">EfAsm::_rdump</a> ()</td></tr>
-<tr class="memdesc:a5bdea27a67eb879d5dd1b58bed56b9bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">dump return stack  <a href="namespaceEfAsm.html#a5bdea27a67eb879d5dd1b58bed56b9bd">More...</a><br /></td></tr>
-<tr class="separator:a5bdea27a67eb879d5dd1b58bed56b9bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Assembler - String/Byte Movers</div></td></tr>
-<tr class="memitem:a59af885d0e26e3c82059708948d2df37"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a59af885d0e26e3c82059708948d2df37">EfAsm::_strlen</a> (FCHAR *seq)</td></tr>
-<tr class="separator:a59af885d0e26e3c82059708948d2df37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Assembler - Word Creation Headers</div></td></tr>
-<tr class="memitem:a27da79e08a45cd4ad90cffc847a04280"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a27da79e08a45cd4ad90cffc847a04280">EfAsm::_header</a> (int lex, FCHAR *seq)</td></tr>
-<tr class="separator:a27da79e08a45cd4ad90cffc847a04280"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d79fdd3d59e237e0381d1798e2050bb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a7d79fdd3d59e237e0381d1798e2050bb">EfAsm::_code</a> (FCHAR *seg, int len,...)</td></tr>
-<tr class="separator:a7d79fdd3d59e237e0381d1798e2050bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acce2eabb9a04fa5c08fc95932e2f92ae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#acce2eabb9a04fa5c08fc95932e2f92ae">EfAsm::_colon</a> (FCHAR *seg, int len,...)</td></tr>
-<tr class="separator:acce2eabb9a04fa5c08fc95932e2f92ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb8719a8b6a78152c8676f735dc7c467"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#acb8719a8b6a78152c8676f735dc7c467">EfAsm::_immed</a> (FCHAR *seg, int len,...)</td></tr>
-<tr class="separator:acb8719a8b6a78152c8676f735dc7c467"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb1c9544549fc018a1ed1e8345cc66f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#abb1c9544549fc018a1ed1e8345cc66f3">EfAsm::_label</a> (int len,...)</td></tr>
-<tr class="separator:abb1c9544549fc018a1ed1e8345cc66f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Assembler - Branching Ops</div></td></tr>
-<tr class="memitem:ab18b552c595cf956387d2e4427384563"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ab18b552c595cf956387d2e4427384563">EfAsm::_begin</a> (int len,...)</td></tr>
-<tr class="separator:ab18b552c595cf956387d2e4427384563"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b6bf226f290864b6a596069e4a0cf74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a5b6bf226f290864b6a596069e4a0cf74">EfAsm::_while</a> (int len,...)</td></tr>
-<tr class="separator:a5b6bf226f290864b6a596069e4a0cf74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f42a6bd0929a03c700ace952e186997"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a3f42a6bd0929a03c700ace952e186997">EfAsm::_repeat</a> (int len,...)</td></tr>
-<tr class="separator:a3f42a6bd0929a03c700ace952e186997"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcd97bc33014c89d91e19cc4a217b5e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#adcd97bc33014c89d91e19cc4a217b5e8">EfAsm::_until</a> (int len,...)</td></tr>
-<tr class="separator:adcd97bc33014c89d91e19cc4a217b5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7b5835572c00662317647be9a49b2b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ab7b5835572c00662317647be9a49b2b3">EfAsm::_again</a> (int len,...)</td></tr>
-<tr class="separator:ab7b5835572c00662317647be9a49b2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a771a43815e0f65570de187ee456938e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a771a43815e0f65570de187ee456938e8">EfAsm::_for</a> (int len,...)</td></tr>
-<tr class="separator:a771a43815e0f65570de187ee456938e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf110638d9dc2195b884957885128696"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#abf110638d9dc2195b884957885128696">EfAsm::_aft</a> (int len,...)</td></tr>
-<tr class="separator:abf110638d9dc2195b884957885128696"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2df77b2810440262c7ade5fc911f8c8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a2df77b2810440262c7ade5fc911f8c8a">EfAsm::_nxt</a> (int len,...)</td></tr>
-<tr class="separator:a2df77b2810440262c7ade5fc911f8c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab786d49b7cbf077b6a706a308167b5ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ab786d49b7cbf077b6a706a308167b5ce">EfAsm::_if</a> (int len,...)</td></tr>
-<tr class="separator:ab786d49b7cbf077b6a706a308167b5ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c4966a74388b9427ae2771419d73430"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a8c4966a74388b9427ae2771419d73430">EfAsm::_else</a> (int len,...)</td></tr>
-<tr class="separator:a8c4966a74388b9427ae2771419d73430"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a0ec1a59cc273ec7db9b5a2af2779ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a5a0ec1a59cc273ec7db9b5a2af2779ef">EfAsm::_then</a> (int len,...)</td></tr>
-<tr class="separator:a5a0ec1a59cc273ec7db9b5a2af2779ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Assembler - IO Functions</div></td></tr>
-<tr class="memitem:afb006746d990ab51ca27545ab004f260"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#afb006746d990ab51ca27545ab004f260">EfAsm::_dotq</a> (FCHAR *seq)</td></tr>
-<tr class="separator:afb006746d990ab51ca27545ab004f260"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a902f7d3df2665aef0f0aa00269bf932d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a902f7d3df2665aef0f0aa00269bf932d">EfAsm::_strq</a> (FCHAR *seq)</td></tr>
-<tr class="separator:a902f7d3df2665aef0f0aa00269bf932d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4499c7338bdc153d5f19127e8a3d59a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a4499c7338bdc153d5f19127e8a3d59a7">EfAsm::_abortq</a> (FCHAR *seq)</td></tr>
-<tr class="separator:a4499c7338bdc153d5f19127e8a3d59a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">eForth Assembler module variables</div></td></tr>
+<tr class="memitem:gad509ea2c54d134a1ef2f093eb460817f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gad509ea2c54d134a1ef2f093eb460817f">EfAsm::_byte</a></td></tr>
+<tr class="memdesc:gad509ea2c54d134a1ef2f093eb460817f"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler byte array (heap)  <a href="group__Module.html#gad509ea2c54d134a1ef2f093eb460817f">More...</a><br /></td></tr>
+<tr class="separator:gad509ea2c54d134a1ef2f093eb460817f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac44a2258aabda459216d48b8fa99e73a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gac44a2258aabda459216d48b8fa99e73a">EfAsm::_link</a></td></tr>
+<tr class="memdesc:gac44a2258aabda459216d48b8fa99e73a"><td class="mdescLeft">&#160;</td><td class="mdescRight">link to previous word  <a href="group__Module.html#gac44a2258aabda459216d48b8fa99e73a">More...</a><br /></td></tr>
+<tr class="separator:gac44a2258aabda459216d48b8fa99e73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga85323f491b7b3ea3883bad0c91d9de17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17">EfAsm::R</a></td></tr>
+<tr class="memdesc:ga85323f491b7b3ea3883bad0c91d9de17"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler return stack index  <a href="group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17">More...</a><br /></td></tr>
+<tr class="separator:ga85323f491b7b3ea3883bad0c91d9de17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga77406fd9edef6925ff2bafc8746085eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga77406fd9edef6925ff2bafc8746085eb">EfAsm::PC</a></td></tr>
+<tr class="memdesc:ga77406fd9edef6925ff2bafc8746085eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler program counter  <a href="group__Module.html#ga77406fd9edef6925ff2bafc8746085eb">More...</a><br /></td></tr>
+<tr class="separator:ga77406fd9edef6925ff2bafc8746085eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Compiled Address for Branching</div></td></tr>
-<tr class="memitem:a441c683b38bd339236b4bd6e305750cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a441c683b38bd339236b4bd6e305750cd">EfAsm::BRAN</a></td></tr>
-<tr class="separator:a441c683b38bd339236b4bd6e305750cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b221cc855cf8ca6334d2c7cb5879542"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a7b221cc855cf8ca6334d2c7cb5879542">EfAsm::QBRAN</a></td></tr>
-<tr class="separator:a7b221cc855cf8ca6334d2c7cb5879542"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a86b03a1e4d3a8b4c0cdfd8d9fc8f7010">EfAsm::DONXT</a></td></tr>
-<tr class="memdesc:a86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="mdescLeft">&#160;</td><td class="mdescRight">addr of branching ops, used by branching ops  <a href="namespaceEfAsm.html#a86b03a1e4d3a8b4c0cdfd8d9fc8f7010">More...</a><br /></td></tr>
-<tr class="separator:a86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b8f6e7e77a210d6bfaf73bb43897580"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a6b8f6e7e77a210d6bfaf73bb43897580">EfAsm::DOTQP</a></td></tr>
-<tr class="separator:a6b8f6e7e77a210d6bfaf73bb43897580"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac31352a003705d9569ef3314d62342fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ac31352a003705d9569ef3314d62342fb">EfAsm::STRQP</a></td></tr>
-<tr class="separator:ac31352a003705d9569ef3314d62342fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13343dd66b80ba0cbe75877f7a6980d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a13343dd66b80ba0cbe75877f7a6980d9">EfAsm::ABORQP</a></td></tr>
-<tr class="memdesc:a13343dd66b80ba0cbe75877f7a6980d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">addr of output ops, used by _dotq, _strq, _abortq  <a href="namespaceEfAsm.html#a13343dd66b80ba0cbe75877f7a6980d9">More...</a><br /></td></tr>
-<tr class="separator:a13343dd66b80ba0cbe75877f7a6980d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab44525c5e6436fa71223dfb207741699"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ab44525c5e6436fa71223dfb207741699">EfAsm::TOR</a></td></tr>
-<tr class="memdesc:ab44525c5e6436fa71223dfb207741699"><td class="mdescLeft">&#160;</td><td class="mdescRight">addres of "&gt;R" op, used by _for  <a href="namespaceEfAsm.html#ab44525c5e6436fa71223dfb207741699">More...</a><br /></td></tr>
-<tr class="separator:ab44525c5e6436fa71223dfb207741699"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3dd7a4f331c954244daaddf0177f059"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#aa3dd7a4f331c954244daaddf0177f059">EfAsm::NOP</a> = 0xffff</td></tr>
-<tr class="memdesc:aa3dd7a4f331c954244daaddf0177f059"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOP set to ffff to prevent access before initialized.  <a href="namespaceEfAsm.html#aa3dd7a4f331c954244daaddf0177f059">More...</a><br /></td></tr>
-<tr class="separator:aa3dd7a4f331c954244daaddf0177f059"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Return Stack for Branching Ops</div></td></tr>
-<tr class="memitem:a1b5e7cec0310945601603be02b8f8834"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a1b5e7cec0310945601603be02b8f8834">EfAsm::Byte</a></td></tr>
-<tr class="memdesc:a1b5e7cec0310945601603be02b8f8834"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler byte array (heap)  <a href="namespaceEfAsm.html#a1b5e7cec0310945601603be02b8f8834">More...</a><br /></td></tr>
-<tr class="separator:a1b5e7cec0310945601603be02b8f8834"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85323f491b7b3ea3883bad0c91d9de17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a85323f491b7b3ea3883bad0c91d9de17">EfAsm::R</a></td></tr>
-<tr class="memdesc:a85323f491b7b3ea3883bad0c91d9de17"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler return stack index  <a href="namespaceEfAsm.html#a85323f491b7b3ea3883bad0c91d9de17">More...</a><br /></td></tr>
-<tr class="separator:a85323f491b7b3ea3883bad0c91d9de17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77406fd9edef6925ff2bafc8746085eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a77406fd9edef6925ff2bafc8746085eb">EfAsm::PC</a></td></tr>
-<tr class="memdesc:a77406fd9edef6925ff2bafc8746085eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler program counter  <a href="namespaceEfAsm.html#a77406fd9edef6925ff2bafc8746085eb">More...</a><br /></td></tr>
-<tr class="separator:a77406fd9edef6925ff2bafc8746085eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bc71a8752683bc40a6f206bf3585d0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a5bc71a8752683bc40a6f206bf3585d0f">EfAsm::Link</a></td></tr>
-<tr class="memdesc:a5bc71a8752683bc40a6f206bf3585d0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">link to previous word  <a href="namespaceEfAsm.html#a5bc71a8752683bc40a6f206bf3585d0f">More...</a><br /></td></tr>
-<tr class="separator:a5bc71a8752683bc40a6f206bf3585d0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga441c683b38bd339236b4bd6e305750cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga441c683b38bd339236b4bd6e305750cd">EfAsm::BRAN</a></td></tr>
+<tr class="separator:ga441c683b38bd339236b4bd6e305750cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7b221cc855cf8ca6334d2c7cb5879542"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga7b221cc855cf8ca6334d2c7cb5879542">EfAsm::QBRAN</a></td></tr>
+<tr class="separator:ga7b221cc855cf8ca6334d2c7cb5879542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010">EfAsm::DONXT</a></td></tr>
+<tr class="memdesc:ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="mdescLeft">&#160;</td><td class="mdescRight">addr of branching ops, used by branching ops  <a href="group__Module.html#ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010">More...</a><br /></td></tr>
+<tr class="separator:ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6b8f6e7e77a210d6bfaf73bb43897580"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga6b8f6e7e77a210d6bfaf73bb43897580">EfAsm::DOTQP</a></td></tr>
+<tr class="separator:ga6b8f6e7e77a210d6bfaf73bb43897580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac31352a003705d9569ef3314d62342fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gac31352a003705d9569ef3314d62342fb">EfAsm::STRQP</a></td></tr>
+<tr class="separator:gac31352a003705d9569ef3314d62342fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga13343dd66b80ba0cbe75877f7a6980d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga13343dd66b80ba0cbe75877f7a6980d9">EfAsm::ABORQP</a></td></tr>
+<tr class="memdesc:ga13343dd66b80ba0cbe75877f7a6980d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">addr of output ops, used by _dotq, _strq, _abortq  <a href="group__Module.html#ga13343dd66b80ba0cbe75877f7a6980d9">More...</a><br /></td></tr>
+<tr class="separator:ga13343dd66b80ba0cbe75877f7a6980d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab44525c5e6436fa71223dfb207741699"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gab44525c5e6436fa71223dfb207741699">EfAsm::TOR</a></td></tr>
+<tr class="memdesc:gab44525c5e6436fa71223dfb207741699"><td class="mdescLeft">&#160;</td><td class="mdescRight">addres of "&gt;R" op, used by _for  <a href="group__Module.html#gab44525c5e6436fa71223dfb207741699">More...</a><br /></td></tr>
+<tr class="separator:gab44525c5e6436fa71223dfb207741699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa3dd7a4f331c954244daaddf0177f059"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gaa3dd7a4f331c954244daaddf0177f059">EfAsm::NOP</a> = 0xffff</td></tr>
+<tr class="memdesc:gaa3dd7a4f331c954244daaddf0177f059"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOP set to ffff to prevent access before initialized.  <a href="group__Module.html#gaa3dd7a4f331c954244daaddf0177f059">More...</a><br /></td></tr>
+<tr class="separator:gaa3dd7a4f331c954244daaddf0177f059"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">eForth Assembler module variables</div></td></tr>
+<tr class="memitem:gad509ea2c54d134a1ef2f093eb460817f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gad509ea2c54d134a1ef2f093eb460817f">EfAsm::_byte</a></td></tr>
+<tr class="memdesc:gad509ea2c54d134a1ef2f093eb460817f"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler byte array (heap)  <a href="group__Module.html#gad509ea2c54d134a1ef2f093eb460817f">More...</a><br /></td></tr>
+<tr class="separator:gad509ea2c54d134a1ef2f093eb460817f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac44a2258aabda459216d48b8fa99e73a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gac44a2258aabda459216d48b8fa99e73a">EfAsm::_link</a></td></tr>
+<tr class="memdesc:gac44a2258aabda459216d48b8fa99e73a"><td class="mdescLeft">&#160;</td><td class="mdescRight">link to previous word  <a href="group__Module.html#gac44a2258aabda459216d48b8fa99e73a">More...</a><br /></td></tr>
+<tr class="separator:gac44a2258aabda459216d48b8fa99e73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga85323f491b7b3ea3883bad0c91d9de17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17">EfAsm::R</a></td></tr>
+<tr class="memdesc:ga85323f491b7b3ea3883bad0c91d9de17"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler return stack index  <a href="group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17">More...</a><br /></td></tr>
+<tr class="separator:ga85323f491b7b3ea3883bad0c91d9de17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga77406fd9edef6925ff2bafc8746085eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga77406fd9edef6925ff2bafc8746085eb">EfAsm::PC</a></td></tr>
+<tr class="memdesc:ga77406fd9edef6925ff2bafc8746085eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler program counter  <a href="group__Module.html#ga77406fd9edef6925ff2bafc8746085eb">More...</a><br /></td></tr>
+<tr class="separator:ga77406fd9edef6925ff2bafc8746085eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Compiled Address for Branching</div></td></tr>
-<tr class="memitem:a441c683b38bd339236b4bd6e305750cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a441c683b38bd339236b4bd6e305750cd">EfAsm::BRAN</a></td></tr>
-<tr class="separator:a441c683b38bd339236b4bd6e305750cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b221cc855cf8ca6334d2c7cb5879542"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a7b221cc855cf8ca6334d2c7cb5879542">EfAsm::QBRAN</a></td></tr>
-<tr class="separator:a7b221cc855cf8ca6334d2c7cb5879542"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a86b03a1e4d3a8b4c0cdfd8d9fc8f7010">EfAsm::DONXT</a></td></tr>
-<tr class="memdesc:a86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="mdescLeft">&#160;</td><td class="mdescRight">addr of branching ops, used by branching ops  <a href="namespaceEfAsm.html#a86b03a1e4d3a8b4c0cdfd8d9fc8f7010">More...</a><br /></td></tr>
-<tr class="separator:a86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b8f6e7e77a210d6bfaf73bb43897580"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a6b8f6e7e77a210d6bfaf73bb43897580">EfAsm::DOTQP</a></td></tr>
-<tr class="separator:a6b8f6e7e77a210d6bfaf73bb43897580"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac31352a003705d9569ef3314d62342fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ac31352a003705d9569ef3314d62342fb">EfAsm::STRQP</a></td></tr>
-<tr class="separator:ac31352a003705d9569ef3314d62342fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13343dd66b80ba0cbe75877f7a6980d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a13343dd66b80ba0cbe75877f7a6980d9">EfAsm::ABORQP</a></td></tr>
-<tr class="memdesc:a13343dd66b80ba0cbe75877f7a6980d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">addr of output ops, used by _dotq, _strq, _abortq  <a href="namespaceEfAsm.html#a13343dd66b80ba0cbe75877f7a6980d9">More...</a><br /></td></tr>
-<tr class="separator:a13343dd66b80ba0cbe75877f7a6980d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab44525c5e6436fa71223dfb207741699"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#ab44525c5e6436fa71223dfb207741699">EfAsm::TOR</a></td></tr>
-<tr class="memdesc:ab44525c5e6436fa71223dfb207741699"><td class="mdescLeft">&#160;</td><td class="mdescRight">addres of "&gt;R" op, used by _for  <a href="namespaceEfAsm.html#ab44525c5e6436fa71223dfb207741699">More...</a><br /></td></tr>
-<tr class="separator:ab44525c5e6436fa71223dfb207741699"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3dd7a4f331c954244daaddf0177f059"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#aa3dd7a4f331c954244daaddf0177f059">EfAsm::NOP</a> = 0xffff</td></tr>
-<tr class="memdesc:aa3dd7a4f331c954244daaddf0177f059"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOP set to ffff to prevent access before initialized.  <a href="namespaceEfAsm.html#aa3dd7a4f331c954244daaddf0177f059">More...</a><br /></td></tr>
-<tr class="separator:aa3dd7a4f331c954244daaddf0177f059"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Return Stack for Branching Ops</div></td></tr>
-<tr class="memitem:a1b5e7cec0310945601603be02b8f8834"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a1b5e7cec0310945601603be02b8f8834">EfAsm::Byte</a></td></tr>
-<tr class="memdesc:a1b5e7cec0310945601603be02b8f8834"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler byte array (heap)  <a href="namespaceEfAsm.html#a1b5e7cec0310945601603be02b8f8834">More...</a><br /></td></tr>
-<tr class="separator:a1b5e7cec0310945601603be02b8f8834"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85323f491b7b3ea3883bad0c91d9de17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a85323f491b7b3ea3883bad0c91d9de17">EfAsm::R</a></td></tr>
-<tr class="memdesc:a85323f491b7b3ea3883bad0c91d9de17"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler return stack index  <a href="namespaceEfAsm.html#a85323f491b7b3ea3883bad0c91d9de17">More...</a><br /></td></tr>
-<tr class="separator:a85323f491b7b3ea3883bad0c91d9de17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77406fd9edef6925ff2bafc8746085eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a77406fd9edef6925ff2bafc8746085eb">EfAsm::PC</a></td></tr>
-<tr class="memdesc:a77406fd9edef6925ff2bafc8746085eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">assembler program counter  <a href="namespaceEfAsm.html#a77406fd9edef6925ff2bafc8746085eb">More...</a><br /></td></tr>
-<tr class="separator:a77406fd9edef6925ff2bafc8746085eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bc71a8752683bc40a6f206bf3585d0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a5bc71a8752683bc40a6f206bf3585d0f">EfAsm::Link</a></td></tr>
-<tr class="memdesc:a5bc71a8752683bc40a6f206bf3585d0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">link to previous word  <a href="namespaceEfAsm.html#a5bc71a8752683bc40a6f206bf3585d0f">More...</a><br /></td></tr>
-<tr class="separator:a5bc71a8752683bc40a6f206bf3585d0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
-Assembler - String/Byte Movers</h2></td></tr>
-<tr class="memitem:a60ef63ffe304267efee1dd841faf4751"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#a60ef63ffe304267efee1dd841faf4751">CELLCPY</a>(n)</td></tr>
-<tr class="separator:a60ef63ffe304267efee1dd841faf4751"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abee5cbd8a5640f4b067cdc048b4c21ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#abee5cbd8a5640f4b067cdc048b4c21ca">PGMCPY</a>(len,  seq)</td></tr>
-<tr class="separator:abee5cbd8a5640f4b067cdc048b4c21ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49723d0c3f14a2ff23c8518ca5730fb0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8cpp.html#a49723d0c3f14a2ff23c8518ca5730fb0">OPSTR</a>(op,  seq)</td></tr>
-<tr class="separator:a49723d0c3f14a2ff23c8518ca5730fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59af885d0e26e3c82059708948d2df37"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfAsm.html#a59af885d0e26e3c82059708948d2df37">EfAsm::_strlen</a> (FCHAR *seq)</td></tr>
-<tr class="separator:a59af885d0e26e3c82059708948d2df37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga441c683b38bd339236b4bd6e305750cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga441c683b38bd339236b4bd6e305750cd">EfAsm::BRAN</a></td></tr>
+<tr class="separator:ga441c683b38bd339236b4bd6e305750cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7b221cc855cf8ca6334d2c7cb5879542"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga7b221cc855cf8ca6334d2c7cb5879542">EfAsm::QBRAN</a></td></tr>
+<tr class="separator:ga7b221cc855cf8ca6334d2c7cb5879542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010">EfAsm::DONXT</a></td></tr>
+<tr class="memdesc:ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="mdescLeft">&#160;</td><td class="mdescRight">addr of branching ops, used by branching ops  <a href="group__Module.html#ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010">More...</a><br /></td></tr>
+<tr class="separator:ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6b8f6e7e77a210d6bfaf73bb43897580"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga6b8f6e7e77a210d6bfaf73bb43897580">EfAsm::DOTQP</a></td></tr>
+<tr class="separator:ga6b8f6e7e77a210d6bfaf73bb43897580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac31352a003705d9569ef3314d62342fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gac31352a003705d9569ef3314d62342fb">EfAsm::STRQP</a></td></tr>
+<tr class="separator:gac31352a003705d9569ef3314d62342fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga13343dd66b80ba0cbe75877f7a6980d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#ga13343dd66b80ba0cbe75877f7a6980d9">EfAsm::ABORQP</a></td></tr>
+<tr class="memdesc:ga13343dd66b80ba0cbe75877f7a6980d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">addr of output ops, used by _dotq, _strq, _abortq  <a href="group__Module.html#ga13343dd66b80ba0cbe75877f7a6980d9">More...</a><br /></td></tr>
+<tr class="separator:ga13343dd66b80ba0cbe75877f7a6980d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab44525c5e6436fa71223dfb207741699"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gab44525c5e6436fa71223dfb207741699">EfAsm::TOR</a></td></tr>
+<tr class="memdesc:gab44525c5e6436fa71223dfb207741699"><td class="mdescLeft">&#160;</td><td class="mdescRight">addres of "&gt;R" op, used by _for  <a href="group__Module.html#gab44525c5e6436fa71223dfb207741699">More...</a><br /></td></tr>
+<tr class="separator:gab44525c5e6436fa71223dfb207741699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa3dd7a4f331c954244daaddf0177f059"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Module.html#gaa3dd7a4f331c954244daaddf0177f059">EfAsm::NOP</a> = 0xffff</td></tr>
+<tr class="memdesc:gaa3dd7a4f331c954244daaddf0177f059"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOP set to ffff to prevent access before initialized.  <a href="group__Module.html#gaa3dd7a4f331c954244daaddf0177f059">More...</a><br /></td></tr>
+<tr class="separator:gaa3dd7a4f331c954244daaddf0177f059"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>eForth Assembler module </p>
 <p>Forth Macro Assembler </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a9ea1e8dcf59129fa7bfe31bbc1f87d8e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ea1e8dcf59129fa7bfe31bbc1f87d8e">&#9670;&nbsp;</a></span>fCMPL</h2>
+<a id="aa18a10c05357a5f4115d17f150a0a0fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa18a10c05357a5f4115d17f150a0a0fb">&#9670;&nbsp;</a></span>WORDS_ROW_WIDTH</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define fCMPL&#160;&#160;&#160;0x40</td>
+          <td class="memname">#define WORDS_ROW_WIDTH&#160;&#160;&#160;0x44        /** WORDS row width control */</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>compile only flag </p>
-
-</div>
-</div>
-<a id="a84054c8a0e922b86c0d99ea4cfdab34e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84054c8a0e922b86c0d99ea4cfdab34e">&#9670;&nbsp;</a></span>fIMMD</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define fIMMD&#160;&#160;&#160;0x80</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>immediate flag <br  />
- </p>
-
-</div>
-</div>
-<a id="a27fcb44e39b3c4a0d37e34faab596803"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27fcb44e39b3c4a0d37e34faab596803">&#9670;&nbsp;</a></span>DUMP_ROW_WIDTH</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DUMP_ROW_WIDTH&#160;&#160;&#160;0x40</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac7635cecf944d5bfcc89665c08022828"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7635cecf944d5bfcc89665c08022828">&#9670;&nbsp;</a></span>OP</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define OP</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">name</td><td>)</td>
-          <td>&#160;&#160;&#160;op##name</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>define opcode enums Note: in sync with VM's vtable </p>
-
-</div>
-</div>
-<a id="a60ef63ffe304267efee1dd841faf4751"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60ef63ffe304267efee1dd841faf4751">&#9670;&nbsp;</a></span>CELLCPY</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CELLCPY</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">n</td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    {                            \</div>
-<div class="line">    va_list argList;                            \</div>
-<div class="line">    va_start(argList, n);                       \</div>
-<div class="line">    for (; n; n--) {                            \</div>
-<div class="line">        IU j = (<a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>)va_arg(argList, <span class="keywordtype">int</span>);        \</div>
-<div class="line">        if (j==<a class="code" href="namespaceEfAsm.html#aa3dd7a4f331c954244daaddf0177f059">NOP</a>) <span class="keywordflow">continue</span>;                   \</div>
-<div class="line">        STORE(j);                               \</div>
-<div class="line">        DEBUG(<span class="stringliteral">&quot; %04x&quot;</span>, j);                      \</div>
-<div class="line">    }                                           \</div>
-<div class="line">    va_end(argList);                            \</div>
-<div class="line">    _rdump();                                   \</div>
-<div class="line">}</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="abee5cbd8a5640f4b067cdc048b4c21ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abee5cbd8a5640f4b067cdc048b4c21ca">&#9670;&nbsp;</a></span>PGMCPY</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PGMCPY</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">len, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">seq&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    {                      \</div>
-<div class="line">    PGM_P p = <span class="keyword">reinterpret_cast&lt;</span>PGM_P<span class="keyword">&gt;</span>(seq);     \</div>
-<div class="line">    for (<span class="keywordtype">int</span> i=0; i &lt; len; i++) {               \</div>
-<div class="line">        BSET(<a class="code" href="namespaceEfAsm.html#a77406fd9edef6925ff2bafc8746085eb">PC</a>++, pgm_read_byte(p++));         \</div>
-<div class="line">    }                                           \</div>
-<div class="line">}</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a49723d0c3f14a2ff23c8518ca5730fb0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49723d0c3f14a2ff23c8518ca5730fb0">&#9670;&nbsp;</a></span>OPSTR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define OPSTR</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">op, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">seq&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    {                        \</div>
-<div class="line">    STORE(op);                                  \</div>
-<div class="line">    int len = <a class="code" href="namespaceEfAsm.html#a59af885d0e26e3c82059708948d2df37">_strlen</a>(seq);                     \</div>
-<div class="line">    BSET(<a class="code" href="namespaceEfAsm.html#a77406fd9edef6925ff2bafc8746085eb">PC</a>++, len);                            \</div>
-<div class="line">    PGMCPY(len, seq);                           \</div>
-<div class="line">}</div>
-</div><!-- fragment -->
-</div>
-</div>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="a06fc87d81c62e9abb8790b6e5713c55b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06fc87d81c62e9abb8790b6e5713c55b">&#9670;&nbsp;</a></span>anonymous enum</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">anonymous enum</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a06fc87d81c62e9abb8790b6e5713c55ba40ca1718b18204c5206b1cdf98ddead4"></a>opNOP&#160;</td><td class="fielddoc"><p>opcodes start at 0 </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a06fc87d81c62e9abb8790b6e5713c55ba9985f02d910b285a8c65e383fb1b2f0d"></a>OPCODES&#160;</td><td class="fielddoc"></td></tr>
-</table>
 
 </div>
 </div>
@@ -561,10 +270,6 @@ Assembler - String/Byte Movers</h2></td></tr>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespaceEfAsm_html_aa3dd7a4f331c954244daaddf0177f059"><div class="ttname"><a href="namespaceEfAsm.html#aa3dd7a4f331c954244daaddf0177f059">EfAsm::NOP</a></div><div class="ttdeci">IU NOP</div><div class="ttdoc">NOP set to ffff to prevent access before initialized.</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:30</div></div>
-<div class="ttc" id="anamespaceEfAsm_html_a77406fd9edef6925ff2bafc8746085eb"><div class="ttname"><a href="namespaceEfAsm.html#a77406fd9edef6925ff2bafc8746085eb">EfAsm::PC</a></div><div class="ttdeci">IU PC</div><div class="ttdoc">assembler program counter</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:36</div></div>
-<div class="ttc" id="aeforth__core_8h_html_a5fd90490ca5b2ceb72bf8b2c89a9634b"><div class="ttname"><a href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a></div><div class="ttdeci">U16 IU</div><div class="ttdoc">instruction/address unit (16-bit)</div><div class="ttdef"><b>Definition:</b> eforth_core.h:37</div></div>
-<div class="ttc" id="anamespaceEfAsm_html_a59af885d0e26e3c82059708948d2df37"><div class="ttname"><a href="namespaceEfAsm.html#a59af885d0e26e3c82059708948d2df37">EfAsm::_strlen</a></div><div class="ttdeci">int _strlen(FCHAR *seq)</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:59</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -1,0 +1,159 @@
+\hypertarget{group__Module}{}\doxysection{variables}
+\label{group__Module}\index{variables@{variables}}
+Collaboration diagram for variables\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{group__Module}
+\end{center}
+\end{figure}
+\doxysubsection*{Modules}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__Pseudo}{macros (to handle va\+\_\+list)}}
+\begin{DoxyCompactList}\small\item\em 
+\begin{DoxyItemize}
+\item keeping functions in the header is considered a bad practice! 
+\end{DoxyItemize}\end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{e\+Forth Assembler module variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{group__Module_gad509ea2c54d134a1ef2f093eb460817f}{Ef\+Asm\+::\+\_\+byte}}
+\begin{DoxyCompactList}\small\item\em assembler byte array (heap) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{group__Module_ga85323f491b7b3ea3883bad0c91d9de17}{Ef\+Asm\+::R}}
+\begin{DoxyCompactList}\small\item\em assembler return stack index \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga77406fd9edef6925ff2bafc8746085eb}{Ef\+Asm\+::\+PC}}
+\begin{DoxyCompactList}\small\item\em assembler program counter \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gac44a2258aabda459216d48b8fa99e73a}{Ef\+Asm\+::\+\_\+link}}
+\begin{DoxyCompactList}\small\item\em link to previous word \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Compiled Address for Branching}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga441c683b38bd339236b4bd6e305750cd}{Ef\+Asm\+::\+B\+R\+AN}}
+\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga7b221cc855cf8ca6334d2c7cb5879542}{Ef\+Asm\+::\+Q\+B\+R\+AN}}
+\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010}{Ef\+Asm\+::\+D\+O\+N\+XT}}
+\begin{DoxyCompactList}\small\item\em addr of branching ops, used by branching ops \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga6b8f6e7e77a210d6bfaf73bb43897580}{Ef\+Asm\+::\+D\+O\+T\+QP}}
+\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gac31352a003705d9569ef3314d62342fb}{Ef\+Asm\+::\+S\+T\+R\+QP}}
+\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga13343dd66b80ba0cbe75877f7a6980d9}{Ef\+Asm\+::\+A\+B\+O\+R\+QP}}
+\begin{DoxyCompactList}\small\item\em addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gab44525c5e6436fa71223dfb207741699}{Ef\+Asm\+::\+T\+OR}}
+\begin{DoxyCompactList}\small\item\em addres of \char`\"{}$>$\+R\char`\"{} op, used by \+\_\+for \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gaa3dd7a4f331c954244daaddf0177f059}{Ef\+Asm\+::\+N\+OP}} = 0xffff
+\begin{DoxyCompactList}\small\item\em N\+OP set to ffff to prevent access before initialized. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{group__Module_gad509ea2c54d134a1ef2f093eb460817f}\label{group__Module_gad509ea2c54d134a1ef2f093eb460817f}} 
+\index{variables@{variables}!\_byte@{\_byte}}
+\index{\_byte@{\_byte}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{\_byte}{\_byte}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ Ef\+Asm\+::\+\_\+byte}
+
+
+
+assembler byte array (heap) 
+
+\mbox{\Hypertarget{group__Module_ga85323f491b7b3ea3883bad0c91d9de17}\label{group__Module_ga85323f491b7b3ea3883bad0c91d9de17}} 
+\index{variables@{variables}!R@{R}}
+\index{R@{R}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{R}{R}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} Ef\+Asm\+::R}
+
+
+
+assembler return stack index 
+
+\mbox{\Hypertarget{group__Module_ga77406fd9edef6925ff2bafc8746085eb}\label{group__Module_ga77406fd9edef6925ff2bafc8746085eb}} 
+\index{variables@{variables}!PC@{PC}}
+\index{PC@{PC}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{PC}{PC}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+PC}
+
+
+
+assembler program counter 
+
+\mbox{\Hypertarget{group__Module_gac44a2258aabda459216d48b8fa99e73a}\label{group__Module_gac44a2258aabda459216d48b8fa99e73a}} 
+\index{variables@{variables}!\_link@{\_link}}
+\index{\_link@{\_link}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{\_link}{\_link}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+\_\+link}
+
+
+
+link to previous word 
+
+\mbox{\Hypertarget{group__Module_ga441c683b38bd339236b4bd6e305750cd}\label{group__Module_ga441c683b38bd339236b4bd6e305750cd}} 
+\index{variables@{variables}!BRAN@{BRAN}}
+\index{BRAN@{BRAN}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{BRAN}{BRAN}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+B\+R\+AN}
+
+\mbox{\Hypertarget{group__Module_ga7b221cc855cf8ca6334d2c7cb5879542}\label{group__Module_ga7b221cc855cf8ca6334d2c7cb5879542}} 
+\index{variables@{variables}!QBRAN@{QBRAN}}
+\index{QBRAN@{QBRAN}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{QBRAN}{QBRAN}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+Q\+B\+R\+AN}
+
+\mbox{\Hypertarget{group__Module_ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010}\label{group__Module_ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010}} 
+\index{variables@{variables}!DONXT@{DONXT}}
+\index{DONXT@{DONXT}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{DONXT}{DONXT}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+D\+O\+N\+XT}
+
+
+
+addr of branching ops, used by branching ops 
+
+\mbox{\Hypertarget{group__Module_ga6b8f6e7e77a210d6bfaf73bb43897580}\label{group__Module_ga6b8f6e7e77a210d6bfaf73bb43897580}} 
+\index{variables@{variables}!DOTQP@{DOTQP}}
+\index{DOTQP@{DOTQP}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{DOTQP}{DOTQP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+D\+O\+T\+QP}
+
+\mbox{\Hypertarget{group__Module_gac31352a003705d9569ef3314d62342fb}\label{group__Module_gac31352a003705d9569ef3314d62342fb}} 
+\index{variables@{variables}!STRQP@{STRQP}}
+\index{STRQP@{STRQP}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{STRQP}{STRQP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+S\+T\+R\+QP}
+
+\mbox{\Hypertarget{group__Module_ga13343dd66b80ba0cbe75877f7a6980d9}\label{group__Module_ga13343dd66b80ba0cbe75877f7a6980d9}} 
+\index{variables@{variables}!ABORQP@{ABORQP}}
+\index{ABORQP@{ABORQP}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{ABORQP}{ABORQP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+A\+B\+O\+R\+QP}
+
+
+
+addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq 
+
+\mbox{\Hypertarget{group__Module_gab44525c5e6436fa71223dfb207741699}\label{group__Module_gab44525c5e6436fa71223dfb207741699}} 
+\index{variables@{variables}!TOR@{TOR}}
+\index{TOR@{TOR}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{TOR}{TOR}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+T\+OR}
+
+
+
+addres of \char`\"{}$>$\+R\char`\"{} op, used by \+\_\+for 
+
+\mbox{\Hypertarget{group__Module_gaa3dd7a4f331c954244daaddf0177f059}\label{group__Module_gaa3dd7a4f331c954244daaddf0177f059}} 
+\index{variables@{variables}!NOP@{NOP}}
+\index{NOP@{NOP}!variables@{variables}}
+\doxysubsubsection{\texorpdfstring{NOP}{NOP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+N\+OP = 0xffff}
+
+
+
+N\+OP set to ffff to prevent access before initialized. 
+
+N\+OP set to ffff to prevent access before initialized 

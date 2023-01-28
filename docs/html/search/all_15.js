@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['while_308',['WHILE',['../ceForth__33_8cpp.html#ab870c5e44c047d1aea72df04d03809bf',1,'ceForth_33.cpp']]],
-  ['wp_309',['WP',['../ceForth__33_8cpp.html#a953c29b79fff2e9251b042755b9a92fb',1,'ceForth_33.cpp']]]
+  ['yield_173',['YIELD',['../eforth__vm_8cpp.html#ab225fd437247be81c502ebd3b4857465',1,'eforth_vm.cpp']]],
+  ['yield_5fperiod_174',['YIELD_PERIOD',['../eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e',1,'eforth_vm.cpp']]]
 ];

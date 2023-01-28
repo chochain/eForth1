@@ -127,6 +127,8 @@ Macros</h2></td></tr>
 <tr class="separator:a9d91438cfe35ddd3db827add653cf917"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f75956c7e91b6411417071ea93f7bfe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a1f75956c7e91b6411417071ea93f7bfe">BOOL</a>(f)&#160;&#160;&#160;((f) ? <a class="el" href="eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d">TRUE</a> : <a class="el" href="eforth__core_8h.html#aa93f0eb578d23995850d61f7d61c55c1">FALSE</a>)</td></tr>
 <tr class="separator:a1f75956c7e91b6411417071ea93f7bfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf6b91711b3d8b68c942eccd99b9d19e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(i)&#160;&#160;&#160;&amp;_data[(i) - <a class="el" href="eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad">FORTH_RAM_ADDR</a>]</td></tr>
+<tr class="separator:aaf6b91711b3d8b68c942eccd99b9d19e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(d,  c)&#160;&#160;&#160;(_data[(d)&amp;<a class="el" href="eforth__vm_8cpp.html#ab57397937f994e7b94ffe50762a7d046">OFF_MASK</a>]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
 <tr class="separator:a77270f01b515a878ec2853760cb20dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(d,  v)&#160;&#160;&#160;(*((<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;_data[(d)&amp;<a class="el" href="eforth__vm_8cpp.html#ab57397937f994e7b94ffe50762a7d046">OFF_MASK</a>])=(v))</td></tr>
@@ -147,8 +149,6 @@ Macros</h2></td></tr>
 <tr class="separator:ac7635cecf944d5bfcc89665c08022828"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a694d28437d830c2e82367a5b56ae5163"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a694d28437d830c2e82367a5b56ae5163">_X</a>(n,  code)&#160;&#160;&#160;L_##n: { code; goto vm_next; }</td></tr>
 <tr class="separator:a694d28437d830c2e82367a5b56ae5163"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb8567e3f319c82c1818e2ead689e355"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#afb8567e3f319c82c1818e2ead689e355">_Y</a>(n,  fn)&#160;&#160;&#160;L_##n: { fn(); continue; }</td></tr>
-<tr class="separator:afb8567e3f319c82c1818e2ead689e355"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Tracing</div></td></tr>
 <tr class="memitem:a7d020b5dd8606c615fa96fbe2647a4b0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a7d020b5dd8606c615fa96fbe2647a4b0">TRACE</a>()&#160;&#160;&#160;/* skip */</td></tr>
 <tr class="separator:a7d020b5dd8606c615fa96fbe2647a4b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -187,12 +187,6 @@ Functions</h2></td></tr>
 </blockquote>
  <a href="namespaceEfVM.html#ad93fbce2cb609c605aa8df2355c8e16b">More...</a><br /></td></tr>
 <tr class="separator:ad93fbce2cb609c605aa8df2355c8e16b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88be037f3c5ddd06681d8775769b5bec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#a88be037f3c5ddd06681d8775769b5bec">EfVM::_execu</a> ()</td></tr>
-<tr class="memdesc:a88be037f3c5ddd06681d8775769b5bec"><td class="mdescLeft">&#160;</td><td class="mdescRight"><blockquote class="doxtable">
-<p>(a &ndash; ) take execution address from data stack and execute the token </p>
-</blockquote>
- <a href="namespaceEfVM.html#a88be037f3c5ddd06681d8775769b5bec">More...</a><br /></td></tr>
-<tr class="separator:a88be037f3c5ddd06681d8775769b5bec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04b479eed7bc0fa0b9c8600f47c04cba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#a04b479eed7bc0fa0b9c8600f47c04cba">EfVM::_ummod</a> ()</td></tr>
 <tr class="memdesc:a04b479eed7bc0fa0b9c8600f47c04cba"><td class="mdescLeft">&#160;</td><td class="mdescRight">(udl udh u &ndash; ur uq) unsigned divide of a double by single  <a href="namespaceEfVM.html#a04b479eed7bc0fa0b9c8600f47c04cba">More...</a><br /></td></tr>
 <tr class="separator:a04b479eed7bc0fa0b9c8600f47c04cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,6 +211,7 @@ Variables</h2></td></tr>
 <tr class="memdesc:a0d508bfbdbd7a09dcd56a24e3b6cb169"><td class="mdescLeft">&#160;</td><td class="mdescRight">ALU (i.e. cached top of stack value)  <a href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">More...</a><br /></td></tr>
 <tr class="separator:a0d508bfbdbd7a09dcd56a24e3b6cb169"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61aea862ab3bab556736663c844366c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">EfVM::rtop</a></td></tr>
+<tr class="memdesc:a61aea862ab3bab556736663c844366c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">cached loop counter on return stack  <a href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">More...</a><br /></td></tr>
 <tr class="separator:a61aea862ab3bab556736663c844366c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6bf1128d9ffa5007021ecabed123c74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74">EfVM::IR</a></td></tr>
 <tr class="memdesc:ad6bf1128d9ffa5007021ecabed123c74"><td class="mdescLeft">&#160;</td><td class="mdescRight">interrupt service routine  <a href="namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74">More...</a><br /></td></tr>
@@ -245,6 +240,7 @@ Variables</h2></td></tr>
 <tr class="memdesc:a0d508bfbdbd7a09dcd56a24e3b6cb169"><td class="mdescLeft">&#160;</td><td class="mdescRight">ALU (i.e. cached top of stack value)  <a href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">More...</a><br /></td></tr>
 <tr class="separator:a0d508bfbdbd7a09dcd56a24e3b6cb169"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61aea862ab3bab556736663c844366c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">EfVM::rtop</a></td></tr>
+<tr class="memdesc:a61aea862ab3bab556736663c844366c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">cached loop counter on return stack  <a href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">More...</a><br /></td></tr>
 <tr class="separator:a61aea862ab3bab556736663c844366c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6bf1128d9ffa5007021ecabed123c74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74">EfVM::IR</a></td></tr>
 <tr class="memdesc:ad6bf1128d9ffa5007021ecabed123c74"><td class="mdescLeft">&#160;</td><td class="mdescRight">interrupt service routine  <a href="namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74">More...</a><br /></td></tr>
@@ -267,13 +263,13 @@ Variables</h2></td></tr>
 <div class="textblock"><p>eForth Virtual Machine module Note: indirect threading model - computed label jumping replaced EfVMSub module - vtable subroutine calling </p>
 <h4>eForth Memory map</h4>
 <div class="fragment"><div class="line">0x0000-0x1fff ROM (8K Flash memory)</div>
-<div class="line">0x2000-0x27ff RAM (2K dynamic memory)</div>
+<div class="line">0x2000-0x27ff <a class="code" href="eforth__vm_8cpp.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a> (2K dynamic memory)</div>
 <div class="line">    0x2000-0x23ff User Dictionary</div>
 <div class="line">    0x2400-0x241f User Variables</div>
 <div class="line">    0x2420-0x24ff Return/Data Stack</div>
 <div class="line">    0x2500-0x257f TIB (Terminal Input Buffer)</div>
 </div><!-- fragment --><h4>Data and Return Stack</h4>
-<div class="fragment"><div class="line">        S                   <a class="code" href="namespaceEfAsm.html#a85323f491b7b3ea3883bad0c91d9de17">R</a></div>
+<div class="fragment"><div class="line">        S                   <a class="code" href="group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17">R</a></div>
 <div class="line">        |                   |</div>
 <div class="line"><a class="code" href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">top</a> -&gt; [S0, S1, S2,..., R1, R0]</div>
 </div><!-- fragment --><p> Note: Dr. Ting uses U8 (0~255) for wrap-around control </p>
@@ -336,6 +332,24 @@ Variables</h2></td></tr>
           <td class="paramtype">&#160;</td>
           <td class="paramname">f</td><td>)</td>
           <td>&#160;&#160;&#160;((f) ? <a class="el" href="eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d">TRUE</a> : <a class="el" href="eforth__core_8h.html#aa93f0eb578d23995850d61f7d61c55c1">FALSE</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaf6b91711b3d8b68c942eccd99b9d19e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf6b91711b3d8b68c942eccd99b9d19e">&#9670;&nbsp;</a></span>RAM</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RAM</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">i</td><td>)</td>
+          <td>&#160;&#160;&#160;&amp;_data[(i) - <a class="el" href="eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad">FORTH_RAM_ADDR</a>]</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -577,34 +591,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="afb8567e3f319c82c1818e2ead689e355"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb8567e3f319c82c1818e2ead689e355">&#9670;&nbsp;</a></span>_Y</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define _Y</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">n, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">fn&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;L_##n: { fn(); continue; }</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ab96d3e1cfedd27d24fea512540b32a98"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab96d3e1cfedd27d24fea512540b32a98">&#9670;&nbsp;</a></span>vm_init()</h2>
@@ -646,10 +632,11 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespaceEfVM_html_a0d508bfbdbd7a09dcd56a24e3b6cb169"><div class="ttname"><a href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">EfVM::top</a></div><div class="ttdeci">DU top</div><div class="ttdoc">ALU (i.e. cached top of stack value)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:37</div></div>
-<div class="ttc" id="anamespaceEfAsm_html_a85323f491b7b3ea3883bad0c91d9de17"><div class="ttname"><a href="namespaceEfAsm.html#a85323f491b7b3ea3883bad0c91d9de17">EfAsm::R</a></div><div class="ttdeci">U8 R</div><div class="ttdoc">assembler return stack index</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:35</div></div>
+<div class="ttc" id="agroup__Module_html_ga85323f491b7b3ea3883bad0c91d9de17"><div class="ttname"><a href="group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17">EfAsm::R</a></div><div class="ttdeci">U8 R</div><div class="ttdoc">assembler return stack index</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:17</div></div>
 <div class="ttc" id="anamespaceEfVM_html_ad6bf1128d9ffa5007021ecabed123c74"><div class="ttname"><a href="namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74">EfVM::IR</a></div><div class="ttdeci">IU IR</div><div class="ttdoc">interrupt service routine</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:39</div></div>
-<div class="ttc" id="anamespaceEfVM_html_a09d628000e6b3bb7306a3bc9c3299efe"><div class="ttname"><a href="namespaceEfVM.html#a09d628000e6b3bb7306a3bc9c3299efe">EfVM::_yield_cnt</a></div><div class="ttdeci">int _yield_cnt</div><div class="ttdoc">interrupt service throttle counter</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:183</div></div>
-<div class="ttc" id="aeforth__vm_8cpp_html_afc09b15fce90b9e00aa7277e7edd5c4e"><div class="ttname"><a href="eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e">YIELD_PERIOD</a></div><div class="ttdeci">#define YIELD_PERIOD</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:184</div></div>
+<div class="ttc" id="aeforth__vm_8cpp_html_aaf6b91711b3d8b68c942eccd99b9d19e"><div class="ttname"><a href="eforth__vm_8cpp.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a></div><div class="ttdeci">#define RAM(i)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:53</div></div>
+<div class="ttc" id="anamespaceEfVM_html_a09d628000e6b3bb7306a3bc9c3299efe"><div class="ttname"><a href="namespaceEfVM.html#a09d628000e6b3bb7306a3bc9c3299efe">EfVM::_yield_cnt</a></div><div class="ttdeci">int _yield_cnt</div><div class="ttdoc">interrupt service throttle counter</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:184</div></div>
+<div class="ttc" id="aeforth__vm_8cpp_html_afc09b15fce90b9e00aa7277e7edd5c4e"><div class="ttname"><a href="eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e">YIELD_PERIOD</a></div><div class="ttdeci">#define YIELD_PERIOD</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:185</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

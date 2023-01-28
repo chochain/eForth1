@@ -8,11 +8,12 @@
  *
  * @code
  *     0x0000-0x1fff ROM (8K Flash memory)
- *     0x2000-0x27ff RAM (2K dynamic memory)
- *         0x2000-0x23ff User Dictionary
- *         0x2400-0x241f User Variables
- *         0x2420-0x24ff Return/Data Stack
- *         0x2500-0x257f TIB (Terminal Input Buffer)
+ *     0x2000-0x24ff RAM (2K dynamic memory)
+ *         0x2000-0x201f User Variables
+ *         0x2020-0x23ff User Dictionary
+ *         0x2400-0x247f Data/Return Stacks
+ *         0x2480-0x24ff TIB (Terminal Input Buffer)
+ *         0x2500        heap
  * @endcode
  *
  * ####Data and Return Stack
@@ -20,7 +21,7 @@
  * @code
  *            S                   R
  *            |                   |
- *    top -> [S0, S1, S2,..., R1, R0]
+ *    top -> [S0, S1, S2,..., R1, R0] <- rtop
  * @endcode
  * Note: Dr. Ting uses U8 (0~255) for wrap-around control
  */

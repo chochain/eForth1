@@ -263,15 +263,16 @@ Variables</h2></td></tr>
 <div class="textblock"><p>eForth Virtual Machine module Note: indirect threading model - computed label jumping replaced EfVMSub module - vtable subroutine calling </p>
 <h4>eForth Memory map</h4>
 <div class="fragment"><div class="line">0x0000-0x1fff ROM (8K Flash memory)</div>
-<div class="line">0x2000-0x27ff <a class="code" href="eforth__vm_8cpp.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a> (2K dynamic memory)</div>
-<div class="line">    0x2000-0x23ff User Dictionary</div>
-<div class="line">    0x2400-0x241f User Variables</div>
-<div class="line">    0x2420-0x24ff Return/Data Stack</div>
-<div class="line">    0x2500-0x257f TIB (Terminal Input Buffer)</div>
+<div class="line">0x2000-0x24ff <a class="code" href="eforth__vm_8cpp.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a> (2K dynamic memory)</div>
+<div class="line">    0x2000-0x201f User Variables</div>
+<div class="line">    0x2020-0x23ff User Dictionary</div>
+<div class="line">    0x2400-0x247f Data/Return Stacks</div>
+<div class="line">    0x2480-0x24ff TIB (Terminal Input Buffer)</div>
+<div class="line">    0x2500        heap</div>
 </div><!-- fragment --><h4>Data and Return Stack</h4>
 <div class="fragment"><div class="line">        S                   <a class="code" href="group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17">R</a></div>
 <div class="line">        |                   |</div>
-<div class="line"><a class="code" href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">top</a> -&gt; [S0, S1, S2,..., R1, R0]</div>
+<div class="line"><a class="code" href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">top</a> -&gt; [S0, S1, S2,..., R1, R0] &lt;- <a class="code" href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">rtop</a></div>
 </div><!-- fragment --><p> Note: Dr. Ting uses U8 (0~255) for wrap-around control </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ad572a768450b0c645d096d7e830c25cc"></a>
@@ -631,12 +632,13 @@ Variables</h2></td></tr>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespaceEfVM_html_a0d508bfbdbd7a09dcd56a24e3b6cb169"><div class="ttname"><a href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">EfVM::top</a></div><div class="ttdeci">DU top</div><div class="ttdoc">ALU (i.e. cached top of stack value)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:37</div></div>
+<div class="ttc" id="anamespaceEfVM_html_a0d508bfbdbd7a09dcd56a24e3b6cb169"><div class="ttname"><a href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">EfVM::top</a></div><div class="ttdeci">DU top</div><div class="ttdoc">ALU (i.e. cached top of stack value)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:38</div></div>
 <div class="ttc" id="agroup__Module_html_ga85323f491b7b3ea3883bad0c91d9de17"><div class="ttname"><a href="group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17">EfAsm::R</a></div><div class="ttdeci">U8 R</div><div class="ttdoc">assembler return stack index</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:17</div></div>
-<div class="ttc" id="anamespaceEfVM_html_ad6bf1128d9ffa5007021ecabed123c74"><div class="ttname"><a href="namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74">EfVM::IR</a></div><div class="ttdeci">IU IR</div><div class="ttdoc">interrupt service routine</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:39</div></div>
-<div class="ttc" id="aeforth__vm_8cpp_html_aaf6b91711b3d8b68c942eccd99b9d19e"><div class="ttname"><a href="eforth__vm_8cpp.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a></div><div class="ttdeci">#define RAM(i)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:53</div></div>
-<div class="ttc" id="anamespaceEfVM_html_a09d628000e6b3bb7306a3bc9c3299efe"><div class="ttname"><a href="namespaceEfVM.html#a09d628000e6b3bb7306a3bc9c3299efe">EfVM::_yield_cnt</a></div><div class="ttdeci">int _yield_cnt</div><div class="ttdoc">interrupt service throttle counter</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:184</div></div>
-<div class="ttc" id="aeforth__vm_8cpp_html_afc09b15fce90b9e00aa7277e7edd5c4e"><div class="ttname"><a href="eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e">YIELD_PERIOD</a></div><div class="ttdeci">#define YIELD_PERIOD</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:185</div></div>
+<div class="ttc" id="anamespaceEfVM_html_ad6bf1128d9ffa5007021ecabed123c74"><div class="ttname"><a href="namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74">EfVM::IR</a></div><div class="ttdeci">IU IR</div><div class="ttdoc">interrupt service routine</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:40</div></div>
+<div class="ttc" id="aeforth__vm_8cpp_html_aaf6b91711b3d8b68c942eccd99b9d19e"><div class="ttname"><a href="eforth__vm_8cpp.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a></div><div class="ttdeci">#define RAM(i)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:54</div></div>
+<div class="ttc" id="anamespaceEfVM_html_a09d628000e6b3bb7306a3bc9c3299efe"><div class="ttname"><a href="namespaceEfVM.html#a09d628000e6b3bb7306a3bc9c3299efe">EfVM::_yield_cnt</a></div><div class="ttdeci">int _yield_cnt</div><div class="ttdoc">interrupt service throttle counter</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:185</div></div>
+<div class="ttc" id="anamespaceEfVM_html_a61aea862ab3bab556736663c844366c7"><div class="ttname"><a href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">EfVM::rtop</a></div><div class="ttdeci">DU rtop</div><div class="ttdoc">cached loop counter on return stack</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:39</div></div>
+<div class="ttc" id="aeforth__vm_8cpp_html_afc09b15fce90b9e00aa7277e7edd5c4e"><div class="ttname"><a href="eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e">YIELD_PERIOD</a></div><div class="ttdeci">#define YIELD_PERIOD</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:186</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

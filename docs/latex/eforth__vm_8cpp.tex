@@ -159,11 +159,12 @@ e\+Forth Virtual Machine module Note\+: indirect threading model -\/ computed la
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{0x0000-\/0x1fff ROM (8K Flash memory)}
-\DoxyCodeLine{0x2000-\/0x27ff \mbox{\hyperlink{eforth__vm_8cpp_aaf6b91711b3d8b68c942eccd99b9d19e}{RAM}} (2K dynamic memory)}
-\DoxyCodeLine{    0x2000-\/0x23ff User Dictionary}
-\DoxyCodeLine{    0x2400-\/0x241f User Variables}
-\DoxyCodeLine{    0x2420-\/0x24ff Return/Data Stack}
-\DoxyCodeLine{    0x2500-\/0x257f TIB (Terminal Input Buffer)}
+\DoxyCodeLine{0x2000-\/0x24ff \mbox{\hyperlink{eforth__vm_8cpp_aaf6b91711b3d8b68c942eccd99b9d19e}{RAM}} (2K dynamic memory)}
+\DoxyCodeLine{    0x2000-\/0x201f User Variables}
+\DoxyCodeLine{    0x2020-\/0x23ff User Dictionary}
+\DoxyCodeLine{    0x2400-\/0x247f Data/Return Stacks}
+\DoxyCodeLine{    0x2480-\/0x24ff TIB (Terminal Input Buffer)}
+\DoxyCodeLine{    0x2500        heap}
 \end{DoxyCode}
 
 
@@ -173,7 +174,7 @@ e\+Forth Virtual Machine module Note\+: indirect threading model -\/ computed la
 \begin{DoxyCode}{0}
 \DoxyCodeLine{        S                   \mbox{\hyperlink{group__Module_ga85323f491b7b3ea3883bad0c91d9de17}{R}}}
 \DoxyCodeLine{        |                   |}
-\DoxyCodeLine{\mbox{\hyperlink{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}{top}} -\/> [S0, S1, S2,..., R1, R0]}
+\DoxyCodeLine{\mbox{\hyperlink{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}{top}} -\/> [S0, S1, S2,..., R1, R0] <-\/ \mbox{\hyperlink{namespaceEfVM_a61aea862ab3bab556736663c844366c7}{rtop}}}
 \end{DoxyCode}
  Note\+: Dr. Ting uses U8 (0$\sim$255) for wrap-\/around control 
 

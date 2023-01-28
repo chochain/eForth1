@@ -35,7 +35,7 @@ static Stream *io;
 IU  PC;                           ///< program counter, IU is 16-bit
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
 DU  top;                          ///< ALU (i.e. cached top of stack value)
-DU  rtop;
+DU  rtop;                         ///< cached loop counter on return stack
 IU  IR;                           ///< interrupt service routine
 ///@}
 ///
@@ -50,6 +50,7 @@ DU    *RS;                        ///< return stack pointer, Dr. Ting's rack
 #define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
 #define IRET_FLAG      0x8000     /**< interrupt return flag           */
 #define BOOL(f)        ((f) ? TRUE : FALSE)
+#define RAM(i)         &_data[(i) - FORTH_RAM_ADDR]
 ///
 /// byte (8-bit) fetch from either RAM or ROM depends on filtered range
 ///
@@ -81,7 +82,7 @@ void RPUSH(DU v)       { *--RS = rtop; rtop = v; }
 void NEXT() { PC=GET(IP); IP+=sizeof(IU); }
 
 DU _depth() {
-    return (DU)((U8*)DS - &_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR]) >> 1;
+    return (DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1;
 }
 ///
 ///@name Tracing
@@ -107,8 +108,8 @@ void TRACE()
     // dump stack
     DU s = _depth() - 1;
     while (s-- > 0) {
-    	DU *vp = ((DU*)DS - s);
-    	DU v   = *vp;
+        DU *vp = ((DU*)DS - s);
+        DU v   = *vp;
         LOG_H("_", v);
     }
     LOG_H("_", top);
@@ -174,10 +175,10 @@ void _init() {
 ///
 void _yield()                ///> yield to interrupt service
 {
-    IR = intr_service();            /// * check interrupts
-    if (IR) {                       /// * service interrupt?
-        RPUSH(IP | IRET_FLAG);      /// * flag return address as IRET
-        IP = IR + 1;                /// * skip opENTER
+    IR = intr_service();              /// * check interrupts
+    if (IR) {                         /// * service interrupt?
+        RPUSH(IP | IRET_FLAG);        /// * flag return address as IRET
+        IP = IR + 1;                  /// * skip opENTER
     }
 }
 int _yield_cnt = 0;          ///< interrupt service throttle counter
@@ -193,11 +194,11 @@ int _yield_cnt = 0;          ///< interrupt service throttle counter
 void _qrx()                  ///> ( -- c ) fetch a char from console
 {
 #if ARDUINO
-    int rst = io->read();           ///> fetch from IO stream
+    int rst = io->read();             ///> fetch from IO stream
     if (rst > 0) PUSH((DU)rst);
     PUSH(BOOL(rst >= 0));
 #else
-    PUSH((DU)getchar());            /// * Note: blocking, i.e. no interrupt support
+    PUSH((DU)getchar());              /// * Note: blocking, i.e. no interrupt support
     PUSH(TRUE);
 #endif
 }
@@ -255,8 +256,8 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     io     = (Stream *)io_stream;
     _rom   = rom;
     _data  = data;
-    DS     = (DU*)&_data[FORTH_STACK_ADDR - FORTH_RAM_ADDR];
-    RS     = (DU*)&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR];
+    DS     = (DU*)RAM(FORTH_STACK_ADDR);
+    RS     = (DU*)RAM(FORTH_STACK_TOP);
 
     _init();                    /// * resetting user variables
 }
@@ -420,9 +421,9 @@ int vm_outer() {
         /// @name Arduino specific ops
         /// @{
         _X(CLK,
-        	U32 t = millis();
-        	*++DS = top; DS++;            /// * allocate 2-cells for clock ticks
-        	DTOP(t));
+            U32 t = millis();
+            *++DS = top; DS++;            /// * allocate 2-cells for clock ticks
+            DTOP(t));
         _X(PIN,
             pinMode(top, *DS ? OUTPUT : INPUT);
             POP(); POP());
@@ -439,7 +440,7 @@ int vm_outer() {
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
         _X(RP,
-            DU r = (&_data[FORTH_STACK_TOP - FORTH_RAM_ADDR] - (U8*)RS) >> 1;
+            DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
             PUSH(r));
 #if EXE_TRACE
         _X(TRC,  tCNT = top; POP());
@@ -447,12 +448,12 @@ int vm_outer() {
         _X(TRC,  POP());
 #endif // EXE_TRACE
         _X(SAVE,
-        	U16 sz = ef_save(_data);
-        	LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
+            U16 sz = ef_save(_data);
+            LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
         );
         _X(LOAD,
-        	U16 sz = ef_load(_data);
-        	LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
+            U16 sz = ef_load(_data);
+            LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
 
     vm_next:

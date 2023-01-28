@@ -4,24 +4,19 @@
  *
  * Forth Macro Assembler
  */
-#include "eforth_core.h"
 #include "eforth_asm.h"
 
-#define fCMPL          0x40         /**< compile only flag */
-#define fIMMD          0x80         /**< immediate flag    */
-#define DUMP_ROW_WIDTH 0x44
-///
-/// define opcode enums
-/// Note: in sync with VM's vtable
-///
-#define OP(name)  op##name
-enum {
-    opNOP = 0,                      ///< opcodes start at 0
-    OPCODES
-};
+#define WORDS_ROW_WIDTH 0x44        /** WORDS row width control */
 
 namespace EfAsm {
 ///
+///@name eForth Assembler module variables
+///@{
+U8 *_byte;                          ///< assembler byte array (heap)
+IU _link;                           ///< link to previous word
+U8 R;                               ///< assembler return stack index
+IU PC;                              ///< assembler program counter
+///@}
 ///@name Compiled Address for Branching
 ///@{
 IU BRAN, QBRAN, DONXT;              ///< addr of branching ops, used by branching ops
@@ -29,239 +24,13 @@ IU DOTQP, STRQP, ABORQP;            ///< addr of output ops, used by _dotq, _str
 IU TOR;                             ///< addres of ">R" op, used by _for
 IU NOP = 0xffff;                    ///< NOP set to ffff to prevent access before initialized
 ///@}
-///@name Return Stack for Branching Ops
-///@{
-U8 *Byte;                           ///< assembler byte array (heap)
-U8 R;                               ///< assembler return stack index
-IU PC;                              ///< assembler program counter
-IU Link;                            ///< link to previous word
-///@}
-///@name Memory Dumpers
-///@{
-void _dump(int b, int u) {      /// dump memory between previous word and this
-    DEBUG("%s", "\n    :");
-    for (int i=b; i<u; i+=sizeof(IU)) {
-        if ((i+1)<u) DEBUG(" %04x", GET(i));
-        else         DEBUG(" %02x", BGET(i));
-    }
-}
-void _rdump()                   /// dump return stack
-{
-    DEBUG("%cR[", ' ');
-    for (int i=1; i<=R; i++) {
-        DEBUG(" %04x", GET(FORTH_ROM_SZ - i*CELLSZ));
-    }
-    DEBUG("%c]", ' ');
-}
-///@}
-///@name Assembler - String/Byte Movers
-///@{
-int _strlen(FCHAR *seq) {      /// string length (in Arduino Flash memory block)
-    PGM_P p = reinterpret_cast<PGM_P>(seq);
-    int i=0;
-    for (; pgm_read_byte(p); i++, p++);  /// * length includes terminating zero
-    return i;
-}
-
-#define CELLCPY(n) {                            \
-    va_list argList;                            \
-    va_start(argList, n);                       \
-    for (; n; n--) {                            \
-        IU j = (IU)va_arg(argList, int);        \
-        if (j==NOP) continue;                   \
-        STORE(j);                               \
-        DEBUG(" %04x", j);                      \
-    }                                           \
-    va_end(argList);                            \
-    _rdump();                                   \
-}
-
-#define PGMCPY(len, seq) {                      \
-    PGM_P p = reinterpret_cast<PGM_P>(seq);     \
-    for (int i=0; i < len; i++) {               \
-        BSET(PC++, pgm_read_byte(p++));         \
-    }                                           \
-}
-
-#define OPSTR(op, seq) {                        \
-    STORE(op);                                  \
-    int len = _strlen(seq);                     \
-    BSET(PC++, len);                            \
-    PGMCPY(len, seq);                           \
-}
-///@}
-///@name Assembler - Word Creation Headers
-///@{
-void _header(int lex, FCHAR *seq) {           /// create a word header in dictionary
-    if (Link) {
-        if (PC >= FORTH_ROM_SZ) DEBUG("ROM %s", "max!");
-        _dump(Link - sizeof(IU), PC);         /// * dump data from previous word to current word
-    }
-    STORE(Link);                              /// * point to previous word
-    Link = PC;                                /// * keep pointer to this word
-
-    BSET(PC++, lex);                          /// * length of word (with optional fIMMED or fCOMPO flags)
-    int len = lex & 0x1f;                     /// * Forth allows word max length 31
-    PGMCPY(len, seq);                         /// * memcpy word string
-    DEBUG("\n%04x: ", PC);
-    DEBUG("%s", seq);
-}
 ///
-/// create an opcode stream for built-in word
-///
-int _code(FCHAR *seg, int len, ...) {
-    _header(_strlen(seg), seg);
-    int addr = PC;                            /// * keep address of current word
-    va_list argList;
-    va_start(argList, len);
-    for (; len; len--) {                      /// * copy bytecodes
-        U8 b = (U8)va_arg(argList, int);
-        BSET(PC++, b);
-        DEBUG(" %02x", b);
-    }
-    va_end(argList);
-    return addr;                              /// address to be kept in local var
-}
-///
-/// create a colon word
-///
-int _colon(FCHAR *seg, int len, ...) {
-    _header(_strlen(seg), seg);
-    DEBUG(" %s", ":06");
-    int addr = PC;
-    BSET(PC++, opENTER);
-    CELLCPY(len);
-    return addr;
-}
-///
-/// create a immediate word
-///
-int _immed(FCHAR *seg, int len, ...) {
-    _header(fIMMD | _strlen(seg), seg);
-    DEBUG(" %s", "i06");
-    int addr = PC;
-    BSET(PC++, opENTER);
-    CELLCPY(len);
-    return addr;
-}
-///
-/// create a label
-///
-int _label(int len, ...) {
-    SHOWOP("LABEL");
-    int addr = PC;
-    // label has no opcode here
-    CELLCPY(len);
-    return addr;
-}
-///@}
-///
-///@name Assembler - Branching Ops
-///@{
-void _begin(int len, ...) {        /// **BEGIN**-(once)-WHILE-(loop)-UNTIL/REPEAT
-    SHOWOP("BEGIN");               /// **BEGIN**-AGAIN
-    RPUSH(PC);                     /// * keep current address for looping
-    CELLCPY(len);
-}
-void _while(int len, ...) {        /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPEAT
-    SHOWOP("WHILE");
-    STORE(QBRAN);
-    STORE(0);                      /// * branching address
-    int k = RPOP();
-    RPUSH(PC - CELLSZ);
-    RPUSH(k);
-    CELLCPY(len);
-}
-void _repeat(int len, ...) {       /// BEGIN-(once)-WHILE-(loop)- **REPEAT**
-    SHOWOP("REPEAT");
-    STORE(BRAN);
-    STORE(RPOP());
-    SET(RPOP(), PC);
-    CELLCPY(len);
-}
-void _until(int len, ...) {        /// BEGIN-(once)-WHILE-(loop)--**UNTIL**
-    SHOWOP("UNTIL");
-    STORE(QBRAN);                  /// * conditional branch
-    STORE(RPOP());                 /// * loop begin address
-    CELLCPY(len);
-}
-void _again(int len, ...) {        /// BEGIN--**AGAIN**
-    SHOWOP("AGAIN");
-    STORE(BRAN);                   /// * unconditional branch
-    STORE(RPOP());                 /// * store return address
-    CELLCPY(len);
-}
-void _for(int len, ...) {          /// **FOR**-(first)-AFT-(2nd,...)-THEN-(every)-NEXT
-    SHOWOP("FOR");
-    STORE(TOR);                    /// * put loop counter on return stack
-    RPUSH(PC);                     /// * keep 1st loop repeat address A0
-    CELLCPY(len);
-}
-void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(every)-NEXT
-    SHOWOP("AFT");                 /// * code between FOR-AFT run only once
-    STORE(BRAN);                   /// * unconditional branch
-    STORE(0);                      /// * forward jump address (A1)NOP,
-    RPOP();                        /// * pop-off A0 (FOR-AFT once only)
-    RPUSH(PC);                     /// * keep repeat address on return stack
-    RPUSH(PC - CELLSZ);            /// * keep A1 address on return stack for AFT-THEN
-    CELLCPY(len);
-}
-//
-// Note: _next() is multi-defined in vm
-//
-void _nxt(int len, ...) {          /// FOR-(first)-AFT-(2nd,...)-THEN-(every)--**NEXT**
-    SHOWOP("NEXT");
-    STORE(DONXT);                  /// * check loop counter (on return stack)
-    STORE(RPOP());                 /// * add A0 (FOR-NEXT) or
-    CELLCPY(len);                  /// * A1 to repeat loop (conditional branch by DONXT)
-}
-void _if(int len, ...) {           /// **IF**-THEN, **IF**-ELSE-THEN
-    SHOWOP("IF");
-    STORE(QBRAN);                  /// * conditional branch
-    RPUSH(PC);                     /// * keep A0 address on return stack for ELSE or THEN
-    STORE(0);                      /// * reserve branching address (A0)
-    CELLCPY(len);
-}
-void _else(int len, ...) {         /// IF--**ELSE**-THEN
-    SHOWOP("ELSE");
-    STORE(BRAN);                   /// * unconditional branch
-    STORE(0);                      /// * reserve branching address (A1)
-    SET(RPOP(), PC);               /// * backfill A0 branching address
-    RPUSH(PC - CELLSZ);            /// * keep A1 address on return stack for THEN
-    CELLCPY(len);
-}
-void _then(int len, ...) {         /// IF-ELSE--**THEN**
-    SHOWOP("THEN");
-    SET(RPOP(), PC);               /// * backfill branching address (A0) or (A1)
-    CELLCPY(len);
-}
-///@}
-///
-///@name Assembler - IO Functions
-///@{
-void _dotq(FCHAR *seq) {
-    SHOWOP("DOTQ");
-    DEBUG("%s", seq);
-    OPSTR(DOTQP, seq);
-}
-void _strq(FCHAR *seq) {
-    SHOWOP("STRQ");
-    DEBUG("%s", seq);
-    OPSTR(STRQP, seq);
-}
-void _abortq(FCHAR *seq) {
-    SHOWOP("ABORTQ");
-    DEBUG("%s", seq);
-    OPSTR(ABORQP, seq);
-}
-///@}
-///
-/// eForth Assembler
+///> eForth Macro Assembler
 ///
 int assemble(U8 *cdata)
 {
-    Byte = cdata;
-    R    = Link = 0;
+    _byte = cdata;
+    _link = R = 0;
     ///
     ///> Kernel constants
     ///
@@ -732,7 +501,7 @@ int assemble(U8 *cdata)
         _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,            // .ID
             DUP, DOLIT, 2, ADD, vTMP, PSTOR,
             TYPE, SPACE, SPACE, CELLM,
-            vTMP, AT, DOLIT, DUMP_ROW_WIDTH, GT); {     // check row width
+            vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {    // check row width
             _IF(CR, DOLIT, 0, vTMP, STORE);
             _THEN(NOP);
         }

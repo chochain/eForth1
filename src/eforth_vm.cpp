@@ -221,11 +221,6 @@ void _txsto()                ///> (c -- ) send a char to console
     POP();
 }
 ///@}
-void _execu()               ///> (a -- ) take execution address from data stack and execute the token
-{
-    PC = (IU)top;           ///> fetch program counter
-    POP();
-}
 void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double by single
 {
     U32 d = (U32)top;       ///> CC: auto variable uses C stack 
@@ -233,7 +228,6 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double
     POP();
     *DS   = (DU)(m % d);    ///> remainder
     top   = (DU)(m / d);    ///> quotient
-    NEXT();
 }
 ///@}
 }; // namespace EfVM
@@ -270,7 +264,6 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 ///
 #define OP(name)    &&L_##name /** redefined for label address */
 #define _X(n, code) L_##n: { code; goto vm_next; }
-#define _Y(n, fn)   L_##n: { fn(); continue; }
 
 int vm_outer() {
     static void* vt[] = {               ///< computed label lookup table
@@ -286,7 +279,7 @@ int vm_outer() {
         /// the following part is in assembly for most of Forth implementations
         ///
         _X(NOP,   {});
-        _Y(BYE,   _init);
+        _X(BYE,   _init(); continue);   /// * reset, skip NEXT
         ///
         /// @name Console IO
         /// @{
@@ -315,7 +308,10 @@ int vm_outer() {
                 IR = 0;                 /// * interrupt disabled
                 IP &= ~IRET_FLAG;
             });
-        _Y(EXECU, _execu);
+        _X(EXECU,                       ///> ( xt -- ) execute xt
+        	PC = (IU)top;               /// * fetch program counter
+        	POP();
+        	continue);                  /// * skip NEXT
         _X(DONEXT,
             if (rtop-- > 0) {           ///> check if loop counter > 0
                 IP = GET(IP);           ///>> branch back to FOR
@@ -396,7 +392,7 @@ int vm_outer() {
         _X(QDUP,  if (top) *++DS = top);
         _X(DEPTH, DU d = _depth(); PUSH(d));
         _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
-        _Y(UMMOD, _ummod);                /// (udl udh u -- ur uq) unsigned divide of a double by single
+        _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
             U32 u = (U32)*DS * top;
             DTOP(u));

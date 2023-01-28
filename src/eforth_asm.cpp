@@ -280,7 +280,7 @@ int assemble(U8 *cdata)
     IU vSPAN = _CODE("SPAN",    opDOCON, VDU(ua,8));   ///> * SPAN number of character accepted
     IU vIN   = _CODE(">IN",     opDOCON, VDU(ua,9));   ///> * >IN  interpreter pointer to next char
     IU vNTIB = _CODE("#TIB",    opDOCON, VDU(ua,10));  ///> * #TIB number of character received in TIB
-    IU vTEMP = _CODE("tmp",     opDOCON, VDU(ua,11));  ///> * tmp storage (alternative to return stack)
+    IU vTMP  = _CODE("tmp",     opDOCON, VDU(ua,11));  ///> * tmp storage (alternative to return stack)
     ///
     ///> common constants and variable spec.
     ///
@@ -351,8 +351,8 @@ int assemble(U8 *cdata)
     ///
     ///> Common High-Level Colon Words
     ///
-    IU HERE  = _COLON("HERE",  vCP, AT, EXIT);                          // top of dictionary
-    IU PAD   = _COLON("PAD",   HERE, DOLIT, FORTH_PAD_SZ, ADD, EXIT);   // use HERE for output buffer
+    IU HERE  = _COLON("HERE",  vCP, AT, EXIT);                // top of dictionary
+    IU PAD   = _COLON("PAD",   DOLIT, FORTH_MAX_ADDR, EXIT);  // use tail of TIB for output
     IU CELLP = _COLON("CELL+", CELL, ADD, EXIT);
     IU CELLM = _COLON("CELL-", CELL, SUB, EXIT);
     IU CELLS = _COLON("CELLS", CELL, MUL, EXIT);
@@ -505,8 +505,8 @@ int assemble(U8 *cdata)
     ///
     ///> Parser
     ///
-    IU PARSE0= _COLON("(parse)", vTEMP, CSTOR, OVER, TOR, DUP); {  // delimiter kept in vTEMP
-        _IF(ONEM, vTEMP, CAT, BLANK, EQ); {                   // check <SPC>
+    IU PARSE0= _COLON("(parse)", vTMP, CSTOR, OVER, TOR, DUP); {   // delimiter kept in vTMP
+        _IF(ONEM, vTMP, CAT, BLANK, EQ); {                    // check <SPC>
             _IF(NOP); {
                 // a FOR..WHILE..NEXT..THEN construct =~ for {..break..}
                 _FOR(BLANK, OVER, CAT, SUB, ZLT, INV);        //
@@ -516,7 +516,7 @@ int assemble(U8 *cdata)
             }
             _THEN(OVER, SWAP);                                // advance until next space found
             // a FOR..WHILE..NEXT..ELSE..THEN construct =~ DO..LEAVE..+LOOP
-            _FOR(vTEMP, CAT, OVER, CAT, SUB, vTEMP, CAT, BLANK, EQ); {
+            _FOR(vTMP, CAT, OVER, CAT, SUB, vTMP, CAT, BLANK, EQ); {
                 _IF(ZLT);
                 _THEN(NOP);
             }
@@ -550,7 +550,7 @@ int assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DDROP, DOLIT, 0, EXIT);
     }
-    IU FIND = _COLON("FIND", SWAP, DUP, CAT, vTEMP, STORE,      // keep length in temp
+    IU FIND = _COLON("FIND", SWAP, DUP, CAT, vTMP, STORE,       // keep length in tmp
                      DUP, AT, TOR, CELLP, SWAP); {              // fetch 1st cell
         _BEGIN(AT, DUP); {                                      // 0000 = end of dic
 #if CASE_SENSITIVE
@@ -561,7 +561,7 @@ int assemble(U8 *cdata)
                     DOLIT, 0x5f5f, AND, XOR); {                 // compare 2-byte (uppercased)
 #endif // CASE_SENSITIVE
                 _IF(CELLP, DOLIT, 0xffff);                      // miss, try next word
-                _ELSE(CELLP, vTEMP, AT, ONEM, DUP); {           // -1, since 1st byte has been compared
+                _ELSE(CELLP, vTMP, AT, ONEM, DUP); {            // -1, since 1st byte has been compared
                     _IF(SAMEQ);                                 // compare strings if larger than 2 bytes
                     _THEN(NOP);
                 }
@@ -775,13 +775,13 @@ int assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DROP, RFROM, vBASE, STORE, EXIT);         // restore BASE
     }
-    _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTEMP, STORE); {
+    _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {
         _BEGIN(AT, QDUP);
         _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,            // .ID
-            DUP, DOLIT, 2, ADD, vTEMP, PSTOR,
+            DUP, DOLIT, 2, ADD, vTMP, PSTOR,
             TYPE, SPACE, SPACE, CELLM,
-            vTEMP, AT, DOLIT, DUMP_ROW_WIDTH, GT); {    // check row width
-            _IF(CR, DOLIT, 0, vTEMP, STORE);
+            vTMP, AT, DOLIT, DUMP_ROW_WIDTH, GT); {     // check row width
+            _IF(CR, DOLIT, 0, vTMP, STORE);
             _THEN(NOP);
         }
         _REPEAT(EXIT);
@@ -790,8 +790,8 @@ int assemble(U8 *cdata)
     ///> Arduino specific opcodes
     ///
     IU CLK = _CODE("CLOCK",   opCLK);
-    _COLON("DELAY", S2D, CLK, DADD, vTEMP, DSTOR); {
-        _BEGIN(vTEMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
+    _COLON("DELAY", S2D, CLK, DADD, vTMP, DSTOR); {
+        _BEGIN(vTMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
         _UNTIL(EXIT);
     }
     _CODE("PINMODE",  opPIN  );

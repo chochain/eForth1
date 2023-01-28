@@ -9,7 +9,7 @@
 
 #define fCMPL          0x40         /**< compile only flag */
 #define fIMMD          0x80         /**< immediate flag    */
-#define DUMP_ROW_WIDTH 0x40
+#define DUMP_ROW_WIDTH 0x44
 ///
 /// define opcode enums
 /// Note: in sync with VM's vtable
@@ -367,9 +367,6 @@ int assemble(U8 *cdata)
         _ELSE(DOLIT, 0);
         _THEN(EXIT);
     }
-    IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
-    IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);
-    IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
     IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
     IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
@@ -637,7 +634,7 @@ int assemble(U8 *cdata)
             _IF(EXECU);                              // @EXECUTE
             _THEN(EXIT);
         }
-       ABORQP = _COLON("abort\"", NOP); {
+    ABORQP = _COLON("abort\"", NOP); {
         _IF(DOSTR, COUNT, TYPE, ABORT);
         _THEN(DOSTR, DROP, EXIT);
     }

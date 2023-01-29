@@ -3,6 +3,7 @@
  * @brief eForth Assembler module
  *
  * Forth Macro Assembler
+ * Note: TODO: adding Leo Brodie's words
  */
 #include "eforth_asm.h"
 
@@ -127,6 +128,7 @@ int assemble(U8 *cdata)
     // Dr. Ting's alternate opcodes
     IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
+    /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
     IU D2S   = _COLON("D>S",   ZLT, OVER, ZLT, XOR); {
         _IF(NEG);
         _THEN(EXIT);
@@ -136,6 +138,10 @@ int assemble(U8 *cdata)
         _ELSE(DOLIT, 0);
         _THEN(EXIT);
     }
+    /// TODO: add I, J
+    IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);     // Leo B. has it
+    IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
+    IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
     IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
     IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
@@ -167,6 +173,7 @@ int assemble(U8 *cdata)
     IU HERE  = _COLON("HERE",  vCP, AT, EXIT);                // top of dictionary
     IU PAD   = _COLON("PAD",   DOLIT, FORTH_MAX_ADDR, EXIT);  // use tail of TIB for output
     IU TIB   = _COLON("TIB",   vTTIB, AT, EXIT);
+    /// TODO: add SP@, SP0
     IU CMOVE = _COLON("CMOVE", NOP); {
         _FOR(NOP);
         _AFT(OVER, CAT, OVER, CSTOR, TOR, ONEP, RFROM, ONEP);
@@ -213,6 +220,7 @@ int assemble(U8 *cdata)
         _IF(DOLIT, 7, SUB, DUP, DOLIT, 10, LT, OR);           // handle hex number
         _THEN(DUP, RFROM, ULESS, EXIT);                       // handle base > 10
     }
+    /// TODO: add >NUMBER
     IU NUMBQ = _COLON("NUMBER?", vBASE, AT, TOR, DOLIT, 0, OVER, COUNT,
                       OVER, CAT, DOLIT, 0x24, EQ); {          // leading with $ (i.e. 0x24)
         _IF(HEX_, SWAP, ONEP, SWAP, ONEM);
@@ -268,6 +276,7 @@ int assemble(U8 *cdata)
               SPACE, TYPE, EXIT);
     }
     IU QUEST = _COLON("?", AT, DOT, EXIT);
+    /// TODO: add PAGE
     ///
     ///> Parsing
     ///
@@ -319,6 +328,7 @@ int assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DDROP, DOLIT, 0, EXIT);
     }
+    /// TODO: add COMPARE
     IU FIND = _COLON("FIND", SWAP, DUP, CAT, vTMP, STORE,       // ( a va -- cfa nfa, a F ) keep length in tmp
                      DUP, AT, TOR, CELLP, SWAP); {              // fetch 1st cell
         _BEGIN(AT, DUP); {                                      // 0000 = end of dic
@@ -407,6 +417,7 @@ int assemble(U8 *cdata)
         _IF(DOSTR, COUNT, TYPE, ABORT);
         _THEN(DOSTR, DROP, EXIT);
     }
+    /// TODO: add ?STACK
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
         _IF(CAT, DOLIT, fCMPL, AND); {               // check for compile only word
@@ -473,6 +484,7 @@ int assemble(U8 *cdata)
         _THEN(ERROR);
     }
     IU RBRAC = _COLON("]", DOLIT, SCOMP, vMODE, STORE, EXIT);       // switch into compiler-mode
+    /// TODO: add [']
     _IMMED("[COMPILE]",    TICK, COMMA, EXIT);                      // add word address to dictionary
     _COLON(":", TOKEN,
             SNAME,
@@ -532,6 +544,8 @@ int assemble(U8 *cdata)
     ///
     ///> * n FOR...NEXT, n FOR...(first)... f AFT...(2nd,...)...THEN...(every)...NEXT
     ///
+    /// TODO: add DO...LOOP, +LOOP, LEAVE
+    ///
     _IMMED("FOR",     COMPI, TOR, HERE, EXIT);
     _IMMED("AFT",     DROP, iAHEAD, HERE, SWAP, EXIT);
     _IMMED("NEXT",    COMPI, DONXT, COMMA, EXIT);
@@ -548,8 +562,10 @@ int assemble(U8 *cdata)
     ///
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
     IU CREAT = _COLON("CREATE", CODE,  DOLIT, opDOVAR, CCMMA, EXIT);
+    /// TODO: add DOES>, POSTPONE
     _COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
     _COLON("CONSTANT",CODE,  DOLIT, opDOCON, CCMMA, COMMA, EXIT);
+    /// TODO: 2CONSTANT, 2VARIABLE
     ///
     ///> Comments
     ///

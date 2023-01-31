@@ -63,11 +63,14 @@ U8 BGET(U16 d) {
 ///
 U16 GET(U16 d) {
     return (d&RAM_FLAG)
-        ? *((U16*)&_data[d&OFF_MASK])
-        : (U16)pgm_read_byte(_rom+d) + ((U16)pgm_read_byte(_rom+d+1)<<8);
+        ? ((U16)_data[d&OFF_MASK]<<8) | _data[(d+1)&OFF_MASK]
+        : ((U16)pgm_read_byte(_rom+d)<<8) | pgm_read_byte(_rom+d+1);
 }
 #define BSET(d, c)     (_data[(d)&OFF_MASK]=(U8)(c))
-#define SET(d, v)      (*((DU*)&_data[(d)&OFF_MASK])=(v))
+void SET(U16 d, U16 v) {
+	_data[(d)&OFF_MASK]   = v>>8;
+	_data[(d+1)&OFF_MASK] = v&0xff;
+}
 #define S2D(h, l)      (((S32)(h)<<16) | ((l)&0xffff))
 ///
 /// push a value onto stack top
@@ -95,13 +98,11 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-#define opDOLIT 5
-#define opENTER 7
-#define opEXIT  8
-void TRACE()
+#define opDOLIT 4
+#define opEXIT  7
+void TRACE(U8 op, int colon)
 {
     if (!tCNT || !PC) return;             // skip if not tracing or end of program
-    U8 op = BGET(PC);
 
     /// display PC:IP[opcode]
     LOG_H("", IP-2); LOG_H(":", PC);      // mem pointer, indirect thread
@@ -115,23 +116,23 @@ void TRACE()
     }
     LOG_H("_", top);
     LOG("_");
-    /// display word name
-    IU pc = PC-1;                         // reel back one-byte
-    for (; (BGET(pc) & 0x7f)>0x20; pc--); // retract pointer to word name (ASCII range: 0x21~0x7f)
-    int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
-    for (int i=0; i<len; i++, pc++) {
-        LOG_C((char)BGET(pc));
-    }
-    /// special opcode handlers for DOLIT, ENTER, EXIT
-    switch (op) {
-    case opDOLIT: LOG_H(" $", GET(IP)); break;
-    case opENTER:
+    if (colon) {                          /// display word name
+    	IU pc = PC-1;                         // reel back one-byte
+    	for (; (BGET(pc) & 0x7f)>0x20; pc--); // retract pointer to word name (ASCII range: 0x21~0x7f)
+    	int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
+    	for (int i=0; i<len; i++, pc++) {
+    		LOG_C((char)BGET(pc));
+    	}
         LOG("\n");
         for (int i=0; i<tTAB; i++) LOG("  ");
         tTAB++;
-        LOG(":"); break;
-    case opEXIT:  LOG(" ;"); --tTAB; break;
+        LOG(":");
     }
+    else LOG_H("OP%02x", op);
+
+    /// special opcode handlers for DOLIT, ENTER, EXIT
+    if      (op==opDOLIT) LOG_H(" $", GET(IP));
+    else if (op==opEXIT) { LOG(" ;"); --tTAB; }
     LOG(" ");
 }
 #else
@@ -267,14 +268,12 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 #define _X(n, code) L_##n: { code; goto vm_next; }
 
 int vm_outer() {
-    static void* vt[] = {               ///< computed label lookup table
+    static void* vt[] PROGMEM = {       ///< computed label lookup table
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
+    U8 op = BGET(PC);                   ///> fetch COLD opcode
     do {
-        TRACE();                        /// * tracing stack and word name
-
-        U8 op = BGET(PC);               ///> fetch next opcode
         goto *vt[op];                   ///> jump to computed label
         ///
         /// the following part is in assembly for most of Forth implementations
@@ -454,9 +453,15 @@ int vm_outer() {
         );
 
     vm_next:
-        YIELD();                        /// * serve interrupt if any
-        PC = GET(IP);                   /// * fetch next program counter (indirect threading)
-        IP += sizeof(IU);               /// * advance to next instruction
+        //YIELD();                        /// * serve interrupt if any
+        op = BGET(IP++);
+        if (op & 0x80) {
+        	PC = ((U16)(op&0x7f)<<8) | BGET(IP++);
+        	op = BGET(PC);
+        	RPUSH(IP);
+            TRACE(op, true);                        /// * tracing stack and word name
+        }
+        else TRACE(op, false);
     } while (PC);
 
     return (int)PC;

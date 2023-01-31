@@ -20,10 +20,7 @@ IU PC;                              ///< assembler program counter
 ///@}
 ///@name Compiled Address for Branching
 ///@{
-IU BRAN, QBRAN, DONXT;              ///< addr of branching ops, used by branching ops
 IU DOTQP, STRQP, ABORQP;            ///< addr of output ops, used by _dotq, _strq, _abortq
-IU TOR;                             ///< addres of ">R" op, used by _for
-IU NOP = 0xffff;                    ///< NOP set to ffff to prevent access before initialized
 ///@}
 ///
 ///> eForth Macro Assembler
@@ -33,11 +30,75 @@ int assemble(U8 *cdata)
     _byte = cdata;
     _link = R = 0;
     ///
-    ///> Kernel constants
+    ///> Cold boot vector
     ///
     PC = FORTH_BOOT_ADDR;
     IU BOOT  = _LABEL(opENTER, 0);      // reserved for boot vectors
-
+    ///
+    ///> Kernel dictionary (primitive words)
+    ///
+    IU NOP   = _XCODE("NOP",     NOP    );
+    IU BYE   = _XCODE("BYE",     BYE    );
+    IU QRX   = _XCODE("?RX",     QRX    );
+    IU TXSTO = _XCODE("TX!",     TXSTO  );
+    IU DOCON = _XCODE("DOCON",   DOCON  );
+    IU DOLIT = _XCODE("DOLIT",   DOLIT  );
+    IU DOVAR = _XCODE("DOVAR",   DOVAR  );
+    IU DOLST = _XCODE("DOLIST",  ENTER  );
+    IU ENTER = _XCODE("ENTER",   ENTER  );  //alias doLIST
+    IU EXIT  = _XCODE("EXIT",    EXIT   );
+    IU EXECU = _XCODE("EXECUTE", EXECU  );
+    IU DONXT = _XCODE("DONEXT",  DONEXT );
+    IU QBRAN = _XCODE("QBRANCH", QBRAN  );
+    IU BRAN  = _XCODE("BRANCH",  BRAN   );
+    IU STORE = _XCODE("!",       STORE  );
+    IU PSTOR = _XCODE("+!",      PSTOR  );
+    IU AT    = _XCODE("@",       AT     );
+    IU CSTOR = _XCODE("C!",      CSTOR  );
+    IU CAT   = _XCODE("C@",      CAT    );
+    IU RFROM = _XCODE("R>",      RFROM  );
+    IU RAT   = _XCODE("R@",      RAT    );
+    IU TOR   = _XCODE(">R",      TOR    );
+    IU DROP  = _XCODE("DROP",    DROP   );
+    IU DUP   = _XCODE("DUP",     DUP    );
+    IU SWAP  = _XCODE("SWAP",    SWAP   );
+    IU OVER  = _XCODE("OVER",    OVER   );
+    IU ROT   = _XCODE("ROT",     ROT    );
+    IU PICK  = _XCODE("PICK",    PICK   );
+    IU AND   = _XCODE("AND",     AND    );
+    IU OR    = _XCODE("OR",      OR     );
+    IU XOR   = _XCODE("XOR",     XOR    );
+    IU INV   = _XCODE("INVERT",  INV    );
+    IU LSH   = _XCODE("LSHIFT",  LSH    );
+    IU RSH   = _XCODE("RSHIFT",  RSH    );
+    IU ADD   = _XCODE("+",       ADD    );
+    IU SUB   = _XCODE("-",       SUB    );
+    IU MUL   = _XCODE("*",       MUL    );
+    IU DIV   = _XCODE("/",       DIV    );
+    IU MOD   = _XCODE("MOD",     MOD    );
+    IU NEG   = _XCODE("NEGATE",  NEG    );
+    IU GT    = _XCODE(">",       GT     );
+    IU EQ    = _XCODE("=",       EQ     );
+    IU LT    = _XCODE("<",       LT     );
+    IU ZGT   = _XCODE("0>",      ZGT    );
+    IU ZEQ   = _XCODE("0=",      ZEQ    );
+    IU ZLT   = _XCODE("0<",      ZLT    );
+    IU ONEP  = _XCODE("1+",      ONEP   );
+    IU ONEM  = _XCODE("1-",      ONEM   );
+    IU QDUP  = _XCODE("?DUP",    QDUP   );
+    IU DEPTH = _XCODE("DEPTH",   DEPTH  );
+    IU ULESS = _XCODE("U<",      ULESS  );
+    /// TODO: add UM+
+    IU UMMOD = _XCODE("UM/MOD",  UMMOD  );
+    IU UMSTA = _XCODE("UM*",     UMSTAR );
+    IU MSTAR = _XCODE("M*",      MSTAR  );
+    IU DNEG  = _XCODE("DNEGATE", DNEG   );
+    IU DADD  = _XCODE("D+",      DADD   );
+    IU DSUB  = _XCODE("D-",      DSUB   );
+    IU RP    = _XCODE("RP",      RP     );
+    ///
+    /// Kernel constants
+    ///
     IU ua    = FORTH_UVAR_ADDR;
     IU vTTIB = _CODE("'TIB",    opDOCON, VDU(ua,0));   ///> * 'TIB console input buffer pointer
     IU vBASE = _CODE("BASE",    opDOCON, VDU(ua,1));   ///> * BASE current radix for numeric ops
@@ -56,69 +117,6 @@ int assemble(U8 *cdata)
     ///
     IU BLANK = _CODE("BL",      opDOCON, 0x20,   0);   ///> * BL blank
     IU CELL  = _CODE("CELL",    opDOCON, CELLSZ, 0);   ///> * CELL cell size
-    ///
-    ///> Kernel dictionary (primitive words)
-    ///
-       NOP   = _CODE("NOP",     opNOP    );
-    IU BYE   = _CODE("BYE",     opBYE    );
-    IU QRX   = _CODE("?RX",     opQRX    );
-    IU TXSTO = _CODE("TX!",     opTXSTO  );
-    IU DOCON = _CODE("DOCON",   opDOCON  );
-    IU DOLIT = _CODE("DOLIT",   opDOLIT  );
-    IU DOVAR = _CODE("DOVAR",   opDOVAR  );
-    IU DOLST = _CODE("DOLIST",  opENTER  );
-    IU ENTER = _CODE("ENTER",   opENTER  );  //alias doLIST
-    IU EXIT  = _CODE("EXIT",    opEXIT   );
-    IU EXECU = _CODE("EXECUTE", opEXECU  );
-       DONXT = _CODE("DONEXT",  opDONEXT );
-       QBRAN = _CODE("QBRANCH", opQBRAN  );
-       BRAN  = _CODE("BRANCH",  opBRAN   );
-    IU STORE = _CODE("!",       opSTORE  );
-    IU PSTOR = _CODE("+!",      opPSTOR  );
-    IU AT    = _CODE("@",       opAT     );
-    IU CSTOR = _CODE("C!",      opCSTOR  );
-    IU CAT   = _CODE("C@",      opCAT    );
-    IU RFROM = _CODE("R>",      opRFROM  );
-    IU RAT   = _CODE("R@",      opRAT    );
-       TOR   = _CODE(">R",      opTOR    );
-    IU DROP  = _CODE("DROP",    opDROP   );
-    IU DUP   = _CODE("DUP",     opDUP    );
-    IU SWAP  = _CODE("SWAP",    opSWAP   );
-    IU OVER  = _CODE("OVER",    opOVER   );
-    IU ROT   = _CODE("ROT",     opROT    );
-    IU PICK  = _CODE("PICK",    opPICK   );
-    IU AND   = _CODE("AND",     opAND    );
-    IU OR    = _CODE("OR",      opOR     );
-    IU XOR   = _CODE("XOR",     opXOR    );
-    IU INV   = _CODE("INVERT",  opINV    );
-    IU LSH   = _CODE("LSHIFT",  opLSH    );
-    IU RSH   = _CODE("RSHIFT",  opRSH    );
-    IU ADD   = _CODE("+",       opADD    );
-    IU SUB   = _CODE("-",       opSUB    );
-    IU MUL   = _CODE("*",       opMUL    );
-    IU DIV   = _CODE("/",       opDIV    );
-    IU MOD   = _CODE("MOD",     opMOD    );
-    IU NEG   = _CODE("NEGATE",  opNEG    );
-    IU GT    = _CODE(">",       opGT     );
-    IU EQ    = _CODE("=",       opEQ     );
-    IU LT    = _CODE("<",       opLT     );
-    IU ZGT   = _CODE("0>",      opZGT    );
-    IU ZEQ   = _CODE("0=",      opZEQ    );
-    IU ZLT   = _CODE("0<",      opZLT    );
-    IU ONEP  = _CODE("1+",      opONEP   );
-    IU ONEM  = _CODE("1-",      opONEM   );
-    IU QDUP  = _CODE("?DUP",    opQDUP   );
-    IU DEPTH = _CODE("DEPTH",   opDEPTH  );
-    IU ULESS = _CODE("U<",      opULESS  );
-    /// TODO: add UM+
-    IU UMMOD = _CODE("UM/MOD",  opUMMOD  );
-    IU UMSTA = _CODE("UM*",     opUMSTAR );
-    IU MSTAR = _CODE("M*",      opMSTAR  );
-    IU DNEG  = _CODE("DNEGATE", opDNEG   );
-    IU DADD  = _CODE("D+",      opDADD   );
-    IU DSUB  = _CODE("D-",      opDSUB   );
-    IU RP    = _CODE("RP",      opRP     );
-    IU TRC   = _CODE("TRC",     opTRC    );
     ///
     ///> Common High-Level Colon Words
     ///
@@ -139,9 +137,9 @@ int assemble(U8 *cdata)
         _THEN(EXIT);
     }
     /// TODO: add I, J
+    IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
     IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);     // Leo B. has it
     IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
-    IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
     IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
     IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
@@ -263,7 +261,7 @@ int assemble(U8 *cdata)
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);
     // IU CR    = _COLON("CR",   DOLIT, 10, DOLIT, 13, EMIT, EMIT, EXIT);   // LFCR
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
-    IU STRQP = _COLON("$\"|", DOSTR, EXIT);
+       STRQP = _COLON("$\"|", DOSTR, EXIT);
        DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
     IU DOTR  = _COLON(".R",   TOR,
             DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // shown as string
@@ -585,19 +583,19 @@ int assemble(U8 *cdata)
         _BEGIN(vTMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
         _UNTIL(EXIT);
     }
-    _CODE("PINMODE",  opPIN  );
-    _CODE("MAP",      opMAP  ); ///  ( h l p -- ) set map range to pin
-    _CODE("IN",       opIN   ); ///  ( p -- n )   digitalRead(p)
-    _CODE("OUT",      opOUT  ); ///  ( p n -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
-    _CODE("AIN",      opAIN  ); ///  ( p -- n )   read analog value from pin
-    _CODE("PWM",      opPWM  ); ///  ( n p -- )   set duty cycle % (PWM) to pin
-    _CODE("TMISR",    opTMISR); ///  ( xt n -- )  on timer interrupt calls xt every n ms
-    _CODE("PCISR",    opPCISR); ///  ( xt p -- )  on pin change interrupt calls xt
-    _CODE("TIMER",    opTMRE ); ///  ( f -- )     enable/disable timer interrupt
-    _CODE("PCINT",    opPCIE ); ///  ( f -- )     enable/disable pin change interrupt
-    _CODE("TRACE",    opTRC  ); ///  ( f -- )     enable/disable debug tracing
-    _CODE("SAVE",     opSAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
-    _CODE("LOAD",     opLOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
+    IU PINMODE = _XCODE("PINMODE",  PIN  );
+    IU MAP     = _XCODE("MAP",      MAP  ); ///  ( h l p -- ) set map range to pin
+    IU IN      = _XCODE("IN",       IN   ); ///  ( p -- n )   digitalRead(p)
+    IU OUT     = _XCODE("OUT",      OUT  ); ///  ( p n -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
+    IU AIN     = _XCODE("AIN",      AIN  ); ///  ( p -- n )   read analog value from pin
+    IU PWM     = _XCODE("PWM",      PWM  ); ///  ( n p -- )   set duty cycle % (PWM) to pin
+    IU TMISR   = _XCODE("TMISR",    TMISR); ///  ( xt n -- )  on timer interrupt calls xt every n ms
+    IU PCISR   = _XCODE("PCISR",    PCISR); ///  ( xt p -- )  on pin change interrupt calls xt
+    IU TIMER   = _XCODE("TIMER",    TMRE ); ///  ( f -- )     enable/disable timer interrupt
+    IU PCINT   = _XCODE("PCINT",    PCIE ); ///  ( f -- )     enable/disable pin change interrupt
+    IU TRACE   = _XCODE("TRACE",    TRC  ); ///  ( f -- )     enable/disable debug tracing
+    IU SAVE    = _XCODE("SAVE",     SAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
+    IU LOAD    = _XCODE("LOAD",     LOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
     ///
     ///> Cold Start address (End of dictionary)
     ///
@@ -612,7 +610,7 @@ int assemble(U8 *cdata)
     ///
     ///> Boot Vector Setup
     ///
-    SET(FORTH_BOOT_ADDR+1, COLD);
+    SET(FORTH_BOOT_ADDR+1, COLD | 0x8000);
 
     return here;
 }

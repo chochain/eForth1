@@ -14,14 +14,14 @@
 #endif // ESP8266
 
 #define APP_NAME        "eForth1"
-#define MAJOR_VERSION   "v1"
+#define MAJOR_VERSION   "v2\n"
 #define CASE_SENSITIVE  0             /**< define case sensitivity */
 #define ASM_ONLY        0             /**< create ROM only (i.e. no debugging) */
 ///
 ///@name Debug Tracing Flags
 ///@{
-#define ASM_TRACE       0             /**< assembler tracing flag */
-#define EXE_TRACE       0             /**< virtual machine execution tracing flag */
+#define ASM_TRACE       1             /**< assembler tracing flag */
+#define EXE_TRACE       1             /**< virtual machine execution tracing flag */
 ///@}
 ///
 ///@name Portable Types

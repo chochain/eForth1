@@ -77,10 +77,6 @@ void RPUSH(DU v)       { *--RS = rtop; rtop = v; }
 #define POP()          (top  = *DS--)
 #define RPOP()         (rtop = *RS++)
 #define DTOP(d)        { *DS = (d) & 0xffff; top = (d)>>16; }
-///
-/// update program counter (ready to fetch), advance instruction pointer
-///
-void NEXT() { PC=GET(IP); IP+=sizeof(IU); }
 
 DU _depth() {
     return (DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1;
@@ -267,7 +263,7 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 #define _X(n, code) L_##n: { code; goto vm_next; }
 
 int vm_outer() {
-    static void* vt[] = {               ///< computed label lookup table
+    const void* vt[] PROGMEM = {        ///< computed label lookup table
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };

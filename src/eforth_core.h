@@ -209,7 +209,7 @@ void vm_init(
     U8 *cdata,              ///< pointer to Arduino RAM block (RAM)
     void *io_stream         ///< pointer to Stream object of Arduino
     );
-int  vm_outer();            ///< Forth outer interpreter
+void vm_outer();            ///< Forth outer interpreter
 ///@}
 ///@name eForth Assembler Functions
 ///@{

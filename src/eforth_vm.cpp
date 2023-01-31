@@ -98,14 +98,16 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-#define opDOLIT 4
-#define opEXIT  7
-void TRACE(U8 op, int colon)
+#define opDOCON 4
+#define opDOLIT 5
+#define opEXIT  8
+void TRACE(U8 op, int i2)
 {
-    if (!tCNT || !PC) return;             // skip if not tracing or end of program
+    if (!tCNT) return;                    // skip if not tracing or end of program
 
-    /// display PC:IP[opcode]
-    LOG_H("", IP-2); LOG_H(":", PC);      // mem pointer, indirect thread
+    // display IP:PC[opcode]
+    LOG_H(" ", IP - (i2 ? 2 : 1));     // mem pointer
+    LOG_H(":", PC);                       // program counter, for indirect thread
     LOG_H("[", op); LOG("]");             // opcode to be executed
     // dump stack
     DU s = _depth() - 1;
@@ -116,23 +118,24 @@ void TRACE(U8 op, int colon)
     }
     LOG_H("_", top);
     LOG("_");
-    if (colon) {                          /// display word name
+    if (i2) {                             /// display word name
     	IU pc = PC-1;                         // reel back one-byte
     	for (; (BGET(pc) & 0x7f)>0x20; pc--); // retract pointer to word name (ASCII range: 0x21~0x7f)
     	int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
     	for (int i=0; i<len; i++, pc++) {
     		LOG_C((char)BGET(pc));
     	}
-        LOG("\n");
-        for (int i=0; i<tTAB; i++) LOG("  ");
-        tTAB++;
-        LOG(":");
+    	if (op!=opDOCON) {
+        	LOG("\n");
+        	for (int i=0; i<tTAB; i++) LOG("  ");
+        	tTAB++;
+        	LOG(":");
+        }
     }
-    else LOG_H("OP%02x", op);
+    else if (op==opDOLIT) LOG_H(" $", GET(IP));
+    else if (op==opEXIT) { LOG(" ;"); --tTAB; }
 
     /// special opcode handlers for DOLIT, ENTER, EXIT
-    if      (op==opDOLIT) LOG_H(" $", GET(IP));
-    else if (op==opEXIT) { LOG(" ;"); --tTAB; }
     LOG(" ");
 }
 #else
@@ -150,7 +153,7 @@ void _init() {
 
     PC = IP = IR = top = 0;           ///> setup control variables
 #if EXE_TRACE
-    tCNT = 0; tTAB = 0;               ///> setup tracing variables
+    tCNT = 1; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
 
     /// FORTH_UVAR_ADDR;
@@ -265,21 +268,37 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 ///   vm_outer - computed label jumps (25% faster than subroutine calls)
 ///
 #define OP(name)    &&L_##name /** redefined for label address */
-#define _X(n, code) L_##n: { code; goto vm_next; }
+#define _X(n, code) L_##n: { code; LOG(#n); continue; }
 
-int vm_outer() {
+void vm_outer() {
     static void* vt[] PROGMEM = {       ///< computed label lookup table
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
-    U8 op = BGET(PC);                   ///> fetch COLD opcode
-    do {
+    IP = GET(0) & ~0x8000;              ///> fetch cold boot vector
+    while (1) {
+       //YIELD();                       /// * serve interrupt if any
+       U8  op = BGET(IP++);
+       U16 pc, ip = IP;
+       if (op & 0x80) {
+           pc = PC = ((U16)(op&0x7f)<<8) | BGET(IP++);
+           op = BGET(PC);
+           if (op != opDOCON) {         /// ENTER
+        	   RPUSH(IP);
+        	   LOG_H(">>", IP);
+               IP = PC + 1;
+           }
+           ip = IP;
+           TRACE(op, true);             /// * tracing stack and word name
+        }
+        else TRACE(op, false);
+
         goto *vt[op];                   ///> jump to computed label
         ///
         /// the following part is in assembly for most of Forth implementations
         ///
         _X(NOP,   {});
-        _X(BYE,   _init(); continue);   /// * reset, skip NEXT
+        _X(BYE,   _init());             /// * reset, skip NEXT
         ///
         /// @name Console IO
         /// @{
@@ -288,13 +307,11 @@ int vm_outer() {
         /// @}
         /// @name Built-in ops
         /// @{
-        _X(DOCON,
-            ++PC;                       ///> skip opDOCON opcode
-            PUSH(GET(PC)));             ///> push cell value onto stack
+        _X(DOCON, PUSH(GET(++PC)));     ///> push cell value onto stack
         _X(DOLIT,
             PUSH(GET(IP));              ///> push onto data stack
             IP += CELLSZ);              ///> skip to next instruction
-        _X(DOVAR, ++PC; PUSH(PC));
+        _X(DOVAR, PUSH(++PC));
         /// @}
         /// @name Branching ops
         /// @{
@@ -309,9 +326,8 @@ int vm_outer() {
                 IP &= ~IRET_FLAG;
             });
         _X(EXECU,                       ///> ( xt -- ) execute xt
-        	PC = (IU)top;               /// * fetch program counter
-        	POP();
-        	continue);                  /// * skip NEXT
+        	IP = (IU)top;               /// * fetch program counter
+        	POP());
         _X(DONEXT,
             if (rtop-- > 0) {           ///> check if loop counter > 0
                 IP = GET(IP);           ///>> branch back to FOR
@@ -451,18 +467,5 @@ int vm_outer() {
             U16 sz = ef_load(_data);
             LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
-
-    vm_next:
-        //YIELD();                        /// * serve interrupt if any
-        op = BGET(IP++);
-        if (op & 0x80) {
-        	PC = ((U16)(op&0x7f)<<8) | BGET(IP++);
-        	op = BGET(PC);
-        	RPUSH(IP);
-            TRACE(op, true);                        /// * tracing stack and word name
-        }
-        else TRACE(op, false);
-    } while (PC);
-
-    return (int)PC;
+    };
 }

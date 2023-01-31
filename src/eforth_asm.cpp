@@ -33,7 +33,7 @@ int assemble(U8 *cdata)
     ///> Cold boot vector
     ///
     PC = FORTH_BOOT_ADDR;
-    IU BOOT  = _LABEL(opENTER, 0);      // reserved for boot vectors
+    IU BOOT  = _LABEL(0);           /// reserved for COLD boot vector
     ///
     ///> Kernel dictionary (primitive words)
     ///
@@ -484,10 +484,8 @@ int assemble(U8 *cdata)
     IU RBRAC = _COLON("]", DOLIT, SCOMP, vMODE, STORE, EXIT);       // switch into compiler-mode
     /// TODO: add [']
     _IMMED("[COMPILE]",    TICK, COMMA, EXIT);                      // add word address to dictionary
-    _COLON(":", TOKEN,
-            SNAME,
-            RBRAC, DOLIT, opENTER, CCMMA, EXIT);
-    _IMMED(";",  DOLIT, EXIT, COMMA, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
+    _COLON(":", TOKEN, SNAME, RBRAC, EXIT);
+    _IMMED(";", DOLIT, EXIT, COMMA, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
     ///
     ///> Debugging Tools
     ///
@@ -559,10 +557,10 @@ int assemble(U8 *cdata)
     ///> Defining Words - variable, constant, and comments
     ///
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
-    IU CREAT = _COLON("CREATE", CODE,  DOLIT, opDOVAR, CCMMA, EXIT);
+    IU CREAT = _COLON("CREATE", CODE, DOLIT, DOVAR, CCMMA, EXIT);
     /// TODO: add DOES>, POSTPONE
     _COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
-    _COLON("CONSTANT",CODE,  DOLIT, opDOCON, CCMMA, COMMA, EXIT);
+    _COLON("CONSTANT",CODE,  DOLIT, DOCON, CCMMA, COMMA, EXIT);
     /// TODO: 2CONSTANT, 2VARIABLE
     ///
     ///> Comments
@@ -578,7 +576,7 @@ int assemble(U8 *cdata)
     ///
     ///> Arduino specific opcodes
     ///
-    IU CLK = _CODE("CLOCK",   opCLK);
+    IU CLK = _XCODE("CLOCK",   CLK);
     _COLON("DELAY", S2D, CLK, DADD, vTMP, DSTOR); {
         _BEGIN(vTMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
         _UNTIL(EXIT);
@@ -610,7 +608,7 @@ int assemble(U8 *cdata)
     ///
     ///> Boot Vector Setup
     ///
-    SET(FORTH_BOOT_ADDR+1, COLD | 0x8000);
+    SET(FORTH_BOOT_ADDR, COLD | 0x8000);
 
     return here;
 }

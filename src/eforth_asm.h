@@ -25,7 +25,7 @@ enum {
 //
 #if ASM_TRACE
 #define DEBUG(s,v)      printf(s, v)
-#define SHOWOP(op)      printf("\n%04x: %s\t", PC, op)
+#define SHOWOP(op)      printf("\n%04x: _%s\t", PC, op)
 #else
 #define DEBUG(s,v)
 #define SHOWOP(op)
@@ -62,6 +62,7 @@ typedef const char                FCHAR;
 ///@name Vargs Header (calculate number of parameters by compiler)
 ///@{
 #define _CODE(seg, ...)      _code(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _XCODE(seg, x)       op##x; _CODE(seg, op##x)
 #define _COLON(seg, ...)     _colon(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _IMMED(seg, ...)     _immed(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _LABEL(...)          _label(_NARG(__VA_ARGS__), __VA_ARGS__)
@@ -90,25 +91,39 @@ typedef const char                FCHAR;
 ///@{
 #define BSET(d, c)  (_byte[d]=(U8)(c))
 #define BGET(d)     (_byte[d])
-#define SET(d, v)   do { U16 a=(d); U16 x=(v); BSET(a, (x)&0xff); BSET((a)+1, (x)>>8); } while (0)
-#define GET(d)      ({ U16 a=(d); (U16)BGET(a) + ((U16)BGET((a)+1)<<8); })
-#define STORE(v)    do { SET(PC, (v)); PC+=CELLSZ; } while(0)
+#define SET(d, v)   do { U16 a=(d); U16 x=(v); BSET(a,(x)>>8); BSET((a)+1,(x)&0xff); } while (0)
+#define GET(d)      ({ U16 a=(d); ((U16)BGET(a)<<8) | BGET((a)+1); })
+#define STORE(v)    do { SET(PC,(v)); PC+=CELLSZ; } while(0)
 #define RPUSH(a)    SET(FORTH_ROM_SZ - (++R)*CELLSZ, (a))             /** tail section of memory block */
 #define RPOP()      ((U16)GET(FORTH_ROM_SZ - (R ? R-- : R)*CELLSZ))
 #define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
-#define VDU(a, i)   VL(a,i),VH(a,i)
+#define VDU(a, i)   VH(a,i),VL(a,i)
 ///@}
 ///@defgroup Memory copy
 ///@{
 #define CELLCPY(n) {                            \
     va_list argList;                            \
     va_start(argList, n);                       \
+    int lit=0; \
     for (; n; n--) {                            \
         IU j = (IU)va_arg(argList, int);        \
-        if (j==NOP) continue;                   \
-        STORE(j);                               \
-        DEBUG(" %04x", j);                      \
+        if (lit) { \
+            STORE(j); \
+            lit = 0; \
+            DEBUG(" %04x", j); \
+            continue; \
+        } \
+        if (j==opNOP) continue;                 \
+        if (j < 0x80) { \
+          lit = (j==opDOLIT); \
+          BSET(PC++, j); \
+          DEBUG(" %02x", j); \
+        } \
+        else { \
+          STORE(j | 0x8000); \
+          DEBUG(" %04x", j); \
+        } \
     }                                           \
     va_end(argList);                            \
     _rdump();                                   \
@@ -122,7 +137,7 @@ typedef const char                FCHAR;
 }
 
 #define OPSTR(op, seq) {                        \
-    STORE(op);                                  \
+    BSET(PC++, op);                             \
     int len = _strlen(seq);                     \
     BSET(PC++, len);                            \
     PGMCPY(len, seq);                           \
@@ -207,9 +222,9 @@ int _code(FCHAR *seg, int len, ...) {
 ///
 int _colon(FCHAR *seg, int len, ...) {
     _header(_strlen(seg), seg);
-    DEBUG(" %s", ":06");
+    DEBUG(" %s", ":_COLON");
     int addr = PC;
-    BSET(PC++, opENTER);
+    //BSET(PC++, opENTER);    // no need for direct threading
     CELLCPY(len);
     return addr;
 }
@@ -218,7 +233,7 @@ int _colon(FCHAR *seg, int len, ...) {
 ///
 int _immed(FCHAR *seg, int len, ...) {
     _header(fIMMD | _strlen(seg), seg);
-    DEBUG(" %s", "i06");
+    SHOWOP("IMMD");
     int addr = PC;
     BSET(PC++, opENTER);
     CELLCPY(len);
@@ -244,7 +259,7 @@ void _begin(int len, ...) {        /// **BEGIN**-(once)-WHILE-(loop)-UNTIL/REPEA
 }
 void _while(int len, ...) {        /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPEAT
     SHOWOP("WHILE");
-    STORE(QBRAN);
+    BSET(PC++, opQBRAN);
     STORE(0);                      /// * branching address
     int k = RPOP();
     RPUSH(PC - CELLSZ);
@@ -253,32 +268,32 @@ void _while(int len, ...) {        /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPE
 }
 void _repeat(int len, ...) {       /// BEGIN-(once)-WHILE-(loop)- **REPEAT**
     SHOWOP("REPEAT");
-    STORE(BRAN);
+    BSET(PC++, opBRAN);
     STORE(RPOP());
     SET(RPOP(), PC);
     CELLCPY(len);
 }
 void _until(int len, ...) {        /// BEGIN-(once)-WHILE-(loop)--**UNTIL**
     SHOWOP("UNTIL");
-    STORE(QBRAN);                  /// * conditional branch
+    BSET(PC++, opQBRAN);           /// * conditional branch
     STORE(RPOP());                 /// * loop begin address
     CELLCPY(len);
 }
 void _again(int len, ...) {        /// BEGIN--**AGAIN**
     SHOWOP("AGAIN");
-    STORE(BRAN);                   /// * unconditional branch
+    BSET(PC++, opBRAN);            /// * unconditional branch
     STORE(RPOP());                 /// * store return address
     CELLCPY(len);
 }
 void _for(int len, ...) {          /// **FOR**-(first)-AFT-(2nd,...)-THEN-(every)-NEXT
     SHOWOP("FOR");
-    STORE(TOR);                    /// * put loop counter on return stack
+    BSET(PC++, opTOR);             /// * put loop counter on return stack
     RPUSH(PC);                     /// * keep 1st loop repeat address A0
     CELLCPY(len);
 }
 void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(every)-NEXT
     SHOWOP("AFT");                 /// * code between FOR-AFT run only once
-    STORE(BRAN);                   /// * unconditional branch
+    BSET(PC++, opBRAN);            /// * unconditional branch
     STORE(0);                      /// * forward jump address (A1)NOP,
     RPOP();                        /// * pop-off A0 (FOR-AFT once only)
     RPUSH(PC);                     /// * keep repeat address on return stack
@@ -290,20 +305,20 @@ void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(ever
 //
 void _nxt(int len, ...) {          /// FOR-(first)-AFT-(2nd,...)-THEN-(every)--**NEXT**
     SHOWOP("NEXT");
-    STORE(DONXT);                  /// * check loop counter (on return stack)
+    BSET(PC++, opDONEXT);          /// * check loop counter (on return stack)
     STORE(RPOP());                 /// * add A0 (FOR-NEXT) or
     CELLCPY(len);                  /// * A1 to repeat loop (conditional branch by DONXT)
 }
 void _if(int len, ...) {           /// **IF**-THEN, **IF**-ELSE-THEN
     SHOWOP("IF");
-    STORE(QBRAN);                  /// * conditional branch
+    BSET(PC++, opQBRAN);           /// * conditional branch
     RPUSH(PC);                     /// * keep A0 address on return stack for ELSE or THEN
     STORE(0);                      /// * reserve branching address (A0)
     CELLCPY(len);
 }
 void _else(int len, ...) {         /// IF--**ELSE**-THEN
     SHOWOP("ELSE");
-    STORE(BRAN);                   /// * unconditional branch
+    BSET(PC++, opBRAN);            /// * unconditional branch
     STORE(0);                      /// * reserve branching address (A1)
     SET(RPOP(), PC);               /// * backfill A0 branching address
     RPUSH(PC - CELLSZ);            /// * keep A1 address on return stack for THEN

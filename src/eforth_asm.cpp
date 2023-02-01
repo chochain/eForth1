@@ -278,25 +278,26 @@ int assemble(U8 *cdata)
     ///
     ///> Parsing
     ///
-    IU PARSE0= _COLON("(parse)", vTMP, CSTOR, OVER, TOR, DUP); {   // delimiter kept in vTMP
-        _IF(ONEM, vTMP, CAT, BLANK, EQ); {                    // check <SPC>
+    IU PARSE0= _COLON("(parse)", vTMP, CSTOR, OVER, TOR, DUP); {   // ( addr len delim -- ) delimiter kept tmp, addr in R
+        _IF(ONEM, vTMP, CAT, BLANK, EQ); {                    // if (len) { --len; if (delim==" ") {...} }
             _IF(NOP); {
                 // a FOR..WHILE..NEXT..THEN construct =~ for {..break..}
-                _FOR(BLANK, OVER, CAT, SUB, ZLT, INV);        //
+                _FOR(BLANK, OVER, CAT, SUB, ZLT, INV);        // for (len)
                 _WHILE(ONEP);                                 // break to THEN if is char, or next char
                 _NEXT(RFROM, DROP, DOLIT, 0, DUP, EXIT);      // no break, (R>, DROP to rm loop counter)
                 _THEN(RFROM);                                 // populate A0, i.e. break comes here, rm counter
             }
-            _THEN(OVER, SWAP);                                // advance until next space found
-            // a FOR..WHILE..NEXT..ELSE..THEN construct =~ DO..LEAVE..+LOOP
-            _FOR(vTMP, CAT, OVER, CAT, SUB, vTMP, CAT, BLANK, EQ); {
-                _IF(ZLT);
-                _THEN(NOP);
+            _THEN(OVER, SWAP); {                              // advance until next space found
+                // a FOR..WHILE..NEXT..ELSE..THEN construct =~ DO..LEAVE..+LOOP
+                _FOR(vTMP, CAT, OVER, CAT, SUB, vTMP, CAT, BLANK, EQ); {
+                  _IF(ZLT);
+                  _THEN(NOP);
+                }
+                _WHILE(ONEP);                                  // if (char <= space) break to ELSE
+                _NEXT(DUP, TOR);                               // no break, if counter < limit loop back to FOR
+                _ELSE(RFROM, DROP, DUP, ONEP, TOR);            // R>, DROP to rm loop counter
+               _THEN(OVER, SUB, RFROM, RFROM, SUB, EXIT);      // put token length on stack
             }
-            _WHILE(ONEP);                                     // if (char <= space) break to ELSE
-            _NEXT(DUP, TOR);                                  // no break, if counter < limit loop back to FOR
-            _ELSE(RFROM, DROP, DUP, ONEP, TOR);               // R>, DROP to rm loop counter
-            _THEN(OVER, SUB, RFROM, RFROM, SUB, EXIT);        // put token length on stack
         }
         _THEN(OVER, RFROM, SUB, EXIT);
     }

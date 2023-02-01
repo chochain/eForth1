@@ -98,7 +98,7 @@ typedef const char                FCHAR;
 #define RPOP()      ((U16)GET(FORTH_ROM_SZ - (R ? R-- : R)*CELLSZ))
 #define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
-#define VDU(a, i)   VH(a,i),VL(a,i)
+#define CST(a, i)   opDOCON,VH(a,i),VL(a,i),opEXIT
 ///@}
 ///@defgroup Memory copy
 ///@{
@@ -235,7 +235,7 @@ int _immed(FCHAR *seg, int len, ...) {
     _header(fIMMD | _strlen(seg), seg);
     SHOWOP("IMMD");
     int addr = PC;
-    BSET(PC++, opENTER);
+    //BSET(PC++, opENTER);    // no need for direct threading
     CELLCPY(len);
     return addr;
 }

@@ -103,10 +103,18 @@ int tTAB;           ///< tracing indentation counter
 #define opENTER 7
 #define opEXIT  8
 
+void TAB() {
+    LOG("\n");
+    for (int i=0; i<tTAB; i++) LOG("  ");
+}
 void TRACE(U8 op)
 {
     if (!tCNT) return;                       /// * skip if not tracing or end of program
-
+    // indent call depth
+    if (op==opENTER) {
+    	TAB();
+    	tTAB++;
+    }
     IU pc = (op==opENTER) ? (PC | BGET(IP)) : PC;
     // display IP:PC[opcode]
     LOG_H(" ", IP-1);                        /// * mem pointer
@@ -121,26 +129,26 @@ void TRACE(U8 op)
     }
     LOG_H("_", top);
     LOG("_");
-
     /// special opcode handlers for DOLIT, ENTER, EXIT
     switch (op) {
     case opDOCON:
     case opDOLIT: LOG_H("$", GET(IP)); LOG(" "); break;
-    case opEXIT:  LOG(";"); --tTAB; break;
+    case opEXIT:
+    	LOG(";");
+    	--tTAB;
+    	break;
     case opENTER:                                 /// * display word name
     	for (--pc; (BGET(pc) & 0x7f)>0x20; pc--); /// * retract pointer to word name (ASCII range: 0x21~0x7f)
     	int len = BGET(pc++) & 0x1f;              /// Forth allows 31 char max
     	for (int i=0; i<len; i++, pc++) {
     		LOG_C((char)BGET(pc));
     	}
-        LOG("\n");
-        tTAB++;
-        for (int i=0; i<tTAB; i++) LOG("  ");
-        LOG(":");
+    	LOG(" :");
         break;
     }
 }
 #else
+#define TAB()       /* skip */
 #define TRACE()     /* skip */
 #endif // EXE_TRACE
 ///@}
@@ -278,10 +286,10 @@ void vm_outer() {
         OPCODES                         ///< convert opcodes to address of labels
     };
     IP = GET(0) & ~0x8000;              ///> fetch cold boot vector
+
     while (1) {
         //YIELD();                      /// * serve interrupt if any
         U8  op = BGET(IP++);
-        U16 pc, ip = IP;
         if (op & 0x80) {
         	PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
         	op = opENTER;
@@ -313,12 +321,13 @@ void vm_outer() {
         /// @name Branching ops
         /// @{
         _X(ENTER,
-            PC |= BGET(IP++);
-            LOG_H("<<", pc = PC);
-            RPUSH(IP);                  ///> keep return address
+            PC |= BGET(IP++);           /// * fetch low-byte of PC
+            LOG_H("<<", PC);
             LOG_H(">>", IP);
-            IP = PC);                   ///> skip opcode opENTER, advance to next instruction
+            RPUSH(IP);                  ///> keep return address
+            IP = PC);                   ///> jump to next instruction
         _X(EXIT,
+        	TAB();
             IP = rtop;
             RPOP();                     ///> pop return address
             if (IP & IRET_FLAG) {       /// * IRETURN?
@@ -467,5 +476,5 @@ void vm_outer() {
             U16 sz = ef_load(_data);
             LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
-    };
+    }
 }

@@ -100,23 +100,23 @@ int assemble(U8 *cdata)
     /// Kernel constants
     ///
     IU ua    = FORTH_UVAR_ADDR;
-    IU vTTIB = _CODE("'TIB",    opDOCON, VDU(ua,0));   ///> * 'TIB console input buffer pointer
-    IU vBASE = _CODE("BASE",    opDOCON, VDU(ua,1));   ///> * BASE current radix for numeric ops
-    IU vCP   = _CODE("CP",      opDOCON, VDU(ua,2));   ///> * CP,  top of dictionary, same as HERE
-    IU vCNTX = _CODE("CONTEXT", opDOCON, VDU(ua,3));   ///> * CONTEXT name field of last word
-    IU vLAST = _CODE("LAST",    opDOCON, VDU(ua,4));   ///> * LAST, same as CONTEXT
-    IU vMODE = _CODE("'MODE",   opDOCON, VDU(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
-    IU vTABRT= _CODE("'ABORT",  opDOCON, VDU(ua,6));   ///> * ABORT exception rescue handler (QUIT)
-    IU vHLD  = _CODE("HLD",     opDOCON, VDU(ua,7));   ///> * HLD  char pointer to output buffer
-    IU vSPAN = _CODE("SPAN",    opDOCON, VDU(ua,8));   ///> * SPAN number of character accepted
-    IU vIN   = _CODE(">IN",     opDOCON, VDU(ua,9));   ///> * >IN  interpreter pointer to next char
-    IU vNTIB = _CODE("#TIB",    opDOCON, VDU(ua,10));  ///> * #TIB number of character received in TIB
-    IU vTMP  = _CODE("tmp",     opDOCON, VDU(ua,11));  ///> * tmp storage (alternative to return stack)
+    IU vTTIB = _CODE("'TIB",    CST(ua,0));   ///> * 'TIB console input buffer pointer
+    IU vBASE = _CODE("BASE",    CST(ua,1));   ///> * BASE current radix for numeric ops
+    IU vCP   = _CODE("CP",      CST(ua,2));   ///> * CP,  top of dictionary, same as HERE
+    IU vCNTX = _CODE("CONTEXT", CST(ua,3));   ///> * CONTEXT name field of last word
+    IU vLAST = _CODE("LAST",    CST(ua,4));   ///> * LAST, same as CONTEXT
+    IU vMODE = _CODE("'MODE",   CST(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
+    IU vTABRT= _CODE("'ABORT",  CST(ua,6));   ///> * ABORT exception rescue handler (QUIT)
+    IU vHLD  = _CODE("HLD",     CST(ua,7));   ///> * HLD  char pointer to output buffer
+    IU vSPAN = _CODE("SPAN",    CST(ua,8));   ///> * SPAN number of character accepted
+    IU vIN   = _CODE(">IN",     CST(ua,9));   ///> * >IN  interpreter pointer to next char
+    IU vNTIB = _CODE("#TIB",    CST(ua,10));  ///> * #TIB number of character received in TIB
+    IU vTMP  = _CODE("tmp",     CST(ua,11));  ///> * tmp storage (alternative to return stack)
     ///
     ///> common constants and variable spec.
     ///
-    IU BLANK = _CODE("BL",      opDOCON, 0x20,   0);   ///> * BL blank
-    IU CELL  = _CODE("CELL",    opDOCON, CELLSZ, 0);   ///> * CELL cell size
+    IU BLANK = _CODE("BL",      CST(0x20,  0));  ///> * BL blank
+    IU CELL  = _CODE("CELL",    CST(CELLSZ,0));  ///> * CELL cell size
     ///
     ///> Common High-Level Colon Words
     ///

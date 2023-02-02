@@ -33,7 +33,7 @@ int assemble(U8 *cdata)
     ///> Cold boot vector
     ///
     PC = FORTH_BOOT_ADDR;
-    IU BOOT  = _LABEL(0);           /// reserved for COLD boot vector
+    IU BOOT  = _LABEL(0xfeed);           /// reserved for COLD boot vector
     ///
     ///> Kernel dictionary (primitive words)
     ///

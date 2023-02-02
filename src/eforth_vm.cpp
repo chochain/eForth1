@@ -104,6 +104,7 @@ int tTAB;           ///< tracing indentation counter
 #define opEXIT  8
 #define opEXEC  9
 
+#define DEBUG(s,v)  printf((s),(v))
 void TAB() {
     LOG("\n");
     for (int i=0; i<tTAB; i++) LOG("  ");
@@ -150,8 +151,10 @@ void TRACE(U8 op)
     }
 }
 #else
-#define TAB()       /* skip */
-#define TRACE()     /* skip */
+#define opENTER 7
+#define DEBUG(s,v)
+#define TAB()         /* skip */
+#define TRACE(op)     /* skip */
 #endif // EXE_TRACE
 ///@}
 //
@@ -280,7 +283,7 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 ///   vm_outer - computed label jumps (25% faster than subroutine calls)
 ///
 #define OP(name)    &&L_##name /** redefined for label address */
-#define _X(n, code) L_##n: { LOG(#n); code; continue; }
+#define _X(n, code) L_##n: { DEBUG("%s",#n); code; continue; }
 
 void vm_outer() {
     static void* vt[] PROGMEM = {       ///< computed label lookup table
@@ -328,7 +331,7 @@ void vm_outer() {
         /// @{
         _X(ENTER,
             PC |= BGET(IP++);           /// * fetch low-byte of PC
-            LOG_H(">>", IP);
+            DEBUG(">>%x", IP);
             RPUSH(IP);                  ///> keep return address
             IP = PC);                   ///> jump to next instruction
         _X(EXIT,
@@ -340,7 +343,7 @@ void vm_outer() {
                 IP &= ~IRET_FLAG;
             });
         _X(EXECU,                       ///> ( xt -- ) execute xt
-            LOG_H(">>", IP);
+            DEBUG(">>%x", IP);
             RPUSH(IP);
         	IP = (IU)top;               /// * fetch program counter
         	POP());

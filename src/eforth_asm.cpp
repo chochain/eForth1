@@ -461,11 +461,11 @@ int assemble(U8 *cdata)
     ///
     IU COMMA = _COLON(",",  HERE, DUP, CELLP, vCP, STORE, STORE, EXIT);   // store a byte
     IU CCMMA = _COLON("C,", HERE, DUP, ONEP,  vCP, STORE, CSTOR, EXIT);   // store a word
-    IU iLITR = _IMMED("LITERAL",  DOLIT, DOLIT, COMMA, COMMA, EXIT);      // create a literal
+    IU iLITR = _IMMED("LITERAL",  DOLIT, DOLIT, CCMMA, COMMA, EXIT);      // create a literal
     IU ALLOT = _COLON("ALLOT",    vCP, PSTOR, EXIT);
     IU COMPI = _COLON("COMPILE",  RFROM, DUP, AT, COMMA, CELLP, TOR, EXIT);
     IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); { // name found?
-        _IF(AT, DOLIT, fIMMD, AND); {             // is immediate?
+        _IF(CAT, DOLIT, fIMMD, AND); {            // is immediate?
             _IF(EXECU);                           // execute
             _ELSE(COMMA);                         // or, add to dictionary
             _THEN(EXIT);
@@ -481,7 +481,9 @@ int assemble(U8 *cdata)
         _THEN(DROP, EXIT);
     }
     IU SNAME = _COLON("$,n", DUP, AT); {          // add new name field which is already build by PACK$
-        _IF(UNIQU, DUP, NAMET, vCP, STORE, DUP, vLAST, STORE, CELLM, vCNTX, AT, SWAP, STORE, EXIT);
+        _IF(UNIQU,
+            DUP, NAMET, vCP, STORE,    DUP, vLAST, STORE,
+            CELLM, vCNTX, AT, SWAP, STORE, EXIT);
         _THEN(ERROR);
     }
     IU TICK  = _COLON("'", TOKEN, NAMEQ); {
@@ -492,7 +494,7 @@ int assemble(U8 *cdata)
     /// TODO: add [']
     _IMMED("[COMPILE]",    TICK, COMMA, EXIT);                      // add word address to dictionary
     _COLON(":", TOKEN, SNAME, RBRAC, EXIT);
-    _IMMED(";", DOLIT, EXIT, COMMA, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
+    _IMMED(";", DOLIT, EXIT, CCMMA, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
     ///
     ///> Debugging Tools
     ///

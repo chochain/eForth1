@@ -41,7 +41,6 @@ int assemble(U8 *cdata)
     IU BYE   = _XCODE("BYE",     BYE    );
     IU QRX   = _XCODE("?RX",     QRX    );
     IU TXSTO = _XCODE("TX!",     TXSTO  );
-    IU DOCON = _XCODE("DOCON",   DOCON  );
     IU DOLIT = _XCODE("DOLIT",   DOLIT  );
     IU DOVAR = _XCODE("DOVAR",   DOVAR  );
     IU DOLST = _XCODE("DOLIST",  ENTER  );
@@ -568,7 +567,7 @@ int assemble(U8 *cdata)
     IU CREAT = _COLON("CREATE", CODE, DOLIT, DOVAR, CCMMA, EXIT);
     /// TODO: add DOES>, POSTPONE
     _COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
-    _COLON("CONSTANT",CODE,  DOLIT, DOCON, CCMMA, COMMA, EXIT);
+    _COLON("CONSTANT",CODE,  DOLIT, DOLIT, CCMMA, COMMA, EXIT);
     /// TODO: 2CONSTANT, 2VARIABLE
     ///
     ///> Comments

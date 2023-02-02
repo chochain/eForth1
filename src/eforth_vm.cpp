@@ -133,6 +133,7 @@ void TRACE(U8 op)
     /// special opcode handlers for DOLIT, ENTER, EXIT
     switch (op) {
     case opDOLIT: LOG_H("$", GET(IP)); LOG(" "); break;
+    case opEXIT:  LOG(";");  --tTAB;             break;
     case opEXEC: pc = top; /** no break */
     case opENTER:                                 /// * display word name
     	for (--pc; (BGET(pc) & 0x7f)>0x20; pc--); /// * retract pointer to word name (ASCII range: 0x21~0x7f)
@@ -142,10 +143,6 @@ void TRACE(U8 op)
     	}
     	LOG(" :");
         break;
-    case opEXIT:
-    	LOG(";");
-    	--tTAB;
-    	break;
     }
 }
 #else

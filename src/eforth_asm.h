@@ -136,8 +136,9 @@ typedef const char                FCHAR;
     }                                           \
 }
 
-#define OPSTR(op, seq) {                        \
-    BSET(PC++, op);                             \
+#define OPSTR(ip, seq) {                        \
+    SET(PC, ip | 0x8000);                       \
+    PC += CELLSZ;                               \
     int len = _strlen(seq);                     \
     BSET(PC++, len);                            \
     PGMCPY(len, seq);                           \

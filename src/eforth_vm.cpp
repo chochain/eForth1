@@ -102,6 +102,7 @@ int tTAB;           ///< tracing indentation counter
 #define opDOLIT 5
 #define opENTER 7
 #define opEXIT  8
+#define opEXEC  9
 
 void TAB() {
     LOG("\n");
@@ -137,6 +138,7 @@ void TRACE(U8 op)
     	LOG(";");
     	--tTAB;
     	break;
+    case opEXEC: pc = top; /** no break */
     case opENTER:                                 /// * display word name
     	for (--pc; (BGET(pc) & 0x7f)>0x20; pc--); /// * retract pointer to word name (ASCII range: 0x21~0x7f)
     	int len = BGET(pc++) & 0x1f;              /// Forth allows 31 char max
@@ -301,7 +303,11 @@ void vm_outer() {
         /// the following part is in assembly for most of Forth implementations
         ///
         _X(NOP,   {});
-        _X(BYE,   _init());             /// * reset, skip NEXT
+#if ARDUINO
+        _X(BYE,   _init());            /// * reset
+#else // !ARDUINO
+        _X(BYE,   break);              /// quit
+#endif // ARDUINO
         ///
         /// @name Console IO
         /// @{
@@ -322,7 +328,6 @@ void vm_outer() {
         /// @{
         _X(ENTER,
             PC |= BGET(IP++);           /// * fetch low-byte of PC
-            LOG_H("<<", PC);
             LOG_H(">>", IP);
             RPUSH(IP);                  ///> keep return address
             IP = PC);                   ///> jump to next instruction
@@ -335,6 +340,8 @@ void vm_outer() {
                 IP &= ~IRET_FLAG;
             });
         _X(EXECU,                       ///> ( xt -- ) execute xt
+            LOG_H(">>", IP);
+            RPUSH(IP);
         	IP = (IU)top;               /// * fetch program counter
         	POP());
         _X(DONEXT,

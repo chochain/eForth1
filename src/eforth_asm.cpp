@@ -325,20 +325,20 @@ int assemble(U8 *cdata)
             _THEN(NOP);
         }
         _THEN(NOP);
-        _NEXT(DDROP, DOLIT, 0, EXIT);
+        _NEXT(DDROP, DOLIT, FALSE, EXIT);                       // SAME!
     }
     /// TODO: add COMPARE
     IU FIND = _COLON("FIND", SWAP, DUP, CAT, vTMP, STORE,       // ( a va -- cfa nfa, a F ) keep length in tmp
                      DUP, AT, TOR, CELLP, SWAP); {              // fetch 1st cell
         _BEGIN(AT, DUP); {                                      // 0000 = end of dic
 #if CASE_SENSITIVE
-            _IF(DUP, AT, DOLIT, 0xff3f, AND, RAT, XOR); {       // compare 2-byte
+            _IF(DUP, AT, DOLIT, 0x3fff, AND, RAT, XOR); {       // compare 2-byte
 #else
-            _IF(DUP, AT, DOLIT, 0xff3f, AND,
+            _IF(DUP, AT, DOLIT, 0x3fff, AND,
                     DOLIT, 0x5f5f, AND, RAT,
                     DOLIT, 0x5f5f, AND, XOR); {                 // compare 2-byte (uppercased)
 #endif // CASE_SENSITIVE
-                _IF(CELLP, DOLIT, 0xffff);                      // miss, try next word
+                _IF(CELLP, DOLIT, TRUE);                        // miss, try next word
                 _ELSE(CELLP, vTMP, AT, ONEM, DUP); {            // -1, since 1st byte has been compared
                     _IF(SAMEQ);                                 // compare strings if larger than 2 bytes
                     _THEN(NOP);
@@ -384,8 +384,8 @@ int assemble(U8 *cdata)
     ///> Text Interpreter
     ///
     ///    QUERY/TIB/ACCEPT - start the interpreter loop <-------<------.
-    ///    TOKEN/PARSE - get a space delimited word                      \
-    ///    EXECUTE - attempt to look up that word in the dictionary       \
+    ///    TOKEN/PARSE - get a space delimited word                      .
+    ///    EXECUTE - attempt to look up that word in the dictionary       .
     ///      NAME?/find - was the word found?                              ^
     ///      |-Yes:                                                        |
     ///      |   $INTERPRET - are we in compile mode?                      |
@@ -393,6 +393,8 @@ int assemble(U8 *cdata)
     ///      |   |  \-Is the Word an Immediate word?                       |
     ///      |   |   |-Yes:                                                |
     ///      |   |   |    \- EXECUTE Execute the word -------------------->.
+    ///      |   |   |     |                                               |
+    ///      |   |   |     \- if (NAME?) EXECU else NUMBQ ---------------->.
     ///      |   |    \-No:                                                |
     ///      |   |        \-Compile the word into the dictionary --------->.
     ///      |    \-No:                                                    |
@@ -402,10 +404,13 @@ int assemble(U8 *cdata)
     ///          |-Yes:                                                    |
     ///          | \-Are we in compile mode?                               |
     ///          |  |-Yes:                                                 |
+    ///          |  |  |                                                   |
     ///          |  |   \-Compile a literal into the dictionary >--------->.
+    ///          |  |                                                      |
     ///          |   \-No:                                                 |
+    ///          |     |                                                   |
     ///          |      \-Push the number to the variable stack >--------->.
-    ///           \-No:                                                    /
+    ///           \-No:                                                   .
     ///              \-An Error has occurred, prIU out an error message ->
     ///
     IU ABORT  = _COLON("ABORT", vTABRT, AT, QDUP); {
@@ -420,9 +425,11 @@ int assemble(U8 *cdata)
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
         _IF(CAT, DOLIT, fCMPL, AND); {               // check for compile only word
-            _ABORTQ(" compile only");
-            // INTER0 of Dr Ting's
-            _LABEL(EXECU, EXIT);
+            _IF(NOP); {
+                _ABORTQ(" compile only");
+            }
+            _ELSE(EXECU);                            // INTER0 of Dr Ting's
+            _THEN(EXIT);
         }
         _THEN(NUMBQ);                                // word name not found, check if it is a number
         _IF(EXIT);
@@ -440,8 +447,8 @@ int assemble(U8 *cdata)
     }
     IU EVAL  = _COLON("EVAL", NOP); {
         _BEGIN(TOKEN, DUP, CAT);                     // fetch token length
-        _WHILE(vMODE, AT, QDUP); {                   // execute if word exist 
-            _IF(EXECU);
+        _WHILE(vMODE, AT, QDUP); {                   // fetch operation mode ($INTERPRET or $COMPILE)
+            _IF(EXECU);                              // execute according to mode
             _THEN(NOP);
         }
         _REPEAT(DROP, DOTOK, EXIT);
@@ -609,7 +616,7 @@ int assemble(U8 *cdata)
     ///
     ///> Boot Vector Setup
     ///
-    SET(FORTH_BOOT_ADDR, COLD | 0x8000);
+    SET(FORTH_BOOT_ADDR, COLD);
 
     return here;
 }

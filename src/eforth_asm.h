@@ -105,25 +105,26 @@ typedef const char                FCHAR;
 #define CELLCPY(n) {                            \
     va_list argList;                            \
     va_start(argList, n);                       \
-    int lit=0; \
+    int lit=0;                                  \
     for (; n; n--) {                            \
         IU j = (IU)va_arg(argList, int);        \
-        if (lit) { \
-            STORE(j); \
-            lit = 0; \
-            DEBUG(" %04x", j); \
-            continue; \
-        } \
-        if (j==opNOP) continue;                 \
-        if (j < 0x80) { \
-          lit = (j==opDOLIT); \
-          BSET(PC++, j); \
-          DEBUG(" %02x", j); \
-        } \
-        else { \
-          STORE(j | 0x8000); \
-          DEBUG(" %04x", j); \
-        } \
+        if (lit) {      /** literal */          \
+            STORE(j);                           \
+            lit = 0;                            \
+            DEBUG(" %04x", j);                  \
+            continue;                           \
+        }                                       \
+        if (j < 0x80) {  /** opcode */          \
+            lit = (j==opDOLIT);                 \
+            if (j != opNOP) {                   \
+               BSET(PC++, j);                   \
+               DEBUG(" %02x", j);               \
+            }                                   \
+        }                                       \
+        else {          /** colon words */      \
+          STORE(j | 0x8000);                    \
+          DEBUG(" %04x", j);                    \
+        }                                       \
     }                                           \
     va_end(argList);                            \
     _rdump();                                   \

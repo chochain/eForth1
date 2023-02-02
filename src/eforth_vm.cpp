@@ -98,11 +98,10 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-#define opDOCON 4
-#define opDOLIT 5
+#define opDOLIT 4
+#define opEXEC  6
 #define opENTER 7
 #define opEXIT  8
-#define opEXEC  9
 
 #define DEBUG(s,v)  printf((s),(v))
 void TAB() {
@@ -133,12 +132,7 @@ void TRACE(U8 op)
     LOG("_");
     /// special opcode handlers for DOLIT, ENTER, EXIT
     switch (op) {
-    case opDOCON:
     case opDOLIT: LOG_H("$", GET(IP)); LOG(" "); break;
-    case opEXIT:
-    	LOG(";");
-    	--tTAB;
-    	break;
     case opEXEC: pc = top; /** no break */
     case opENTER:                                 /// * display word name
     	for (--pc; (BGET(pc) & 0x7f)>0x20; pc--); /// * retract pointer to word name (ASCII range: 0x21~0x7f)
@@ -148,6 +142,10 @@ void TRACE(U8 op)
     	}
     	LOG(" :");
         break;
+    case opEXIT:
+    	LOG(";");
+    	--tTAB;
+    	break;
     }
 }
 #else
@@ -319,9 +317,6 @@ void vm_outer() {
         /// @}
         /// @name Built-in ops
         /// @{
-        _X(DOCON,
-            PUSH(GET(IP));              ///> push onto data stack
-            IP += CELLSZ);              ///> skip to next instruction
         _X(DOLIT,
             PUSH(GET(IP));              ///> push onto data stack
             IP += CELLSZ);              ///> skip to next instruction
@@ -329,6 +324,11 @@ void vm_outer() {
         /// @}
         /// @name Branching ops
         /// @{
+        _X(EXECU,                       ///> ( xt -- ) execute xt
+            DEBUG(">>%x", IP);
+            RPUSH(IP);
+        	IP = (IU)top;               /// * fetch program counter
+        	POP());
         _X(ENTER,
             PC |= BGET(IP++);           /// * fetch low-byte of PC
             DEBUG(">>%x", IP);
@@ -342,11 +342,6 @@ void vm_outer() {
                 IR = 0;                 /// * interrupt disabled
                 IP &= ~IRET_FLAG;
             });
-        _X(EXECU,                       ///> ( xt -- ) execute xt
-            DEBUG(">>%x", IP);
-            RPUSH(IP);
-        	IP = (IU)top;               /// * fetch program counter
-        	POP());
         _X(DONEXT,
             if (rtop-- > 0) {           ///> check if loop counter > 0
                 IP = GET(IP);           ///>> branch back to FOR

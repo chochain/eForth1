@@ -497,7 +497,7 @@ int assemble(U8 *cdata)
     /// TODO: add [']
     _IMMED("[COMPILE]",    TICK, COMMA, EXIT);                      // add word address to dictionary
     _COLON(":", TOKEN, SNAME, RBRAC, EXIT);
-    _IMMED(";", DOLIT, EXIT, CCMMA, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
+    _IMMED(";", COMPI, EXIT, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
     ///
     ///> Debugging Tools
     ///
@@ -536,8 +536,8 @@ int assemble(U8 *cdata)
     ///
     ///> * BEGIN...AGAIN, BEGIN... f UNTIL, BEGIN...(once)...f WHILE...(loop)...REPEAT
     ///
-    IU iAHEAD = _IMMED("AHEAD",  COMPI, BRAN, HERE, DOLIT, 0, COMMA, EXIT);
-    IU iAGAIN = _IMMED("AGAIN",  COMPI, BRAN, COMMA, EXIT);
+    IU iAHEAD = _IMMED("AHEAD", COMPI, BRAN, HERE, DOLIT, 0, COMMA, EXIT);
+    IU iAGAIN = _IMMED("AGAIN", COMPI, BRAN, COMMA, EXIT);
     _IMMED("BEGIN",   HERE, EXIT);
     _IMMED("UNTIL",   COMPI, QBRAN, EXIT);
     ///
@@ -556,7 +556,7 @@ int assemble(U8 *cdata)
     ///
     _IMMED("FOR",     COMPI, TOR, HERE, EXIT);
     _IMMED("AFT",     DROP, iAHEAD, HERE, SWAP, EXIT);
-    _IMMED("NEXT",    COMPI, DONXT, EXIT);
+    _IMMED("NEXT",    COMPI, DONXT, COMMA, EXIT);
     ///
     ///> String Literals
     ///
@@ -569,7 +569,7 @@ int assemble(U8 *cdata)
     ///> Defining Words - variable, constant, and comments
     ///
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
-    IU CREAT = _COLON("CREATE", CODE, DOLIT, DOVAR, CCMMA, DOLIT, EXIT, CCMMA, EXIT);
+    IU CREAT = _COLON("CREATE", CODE, COMPI, DOVAR, COMPI, EXIT, EXIT);       /// * opDOVAR padded with opEXIT
     /// TODO: add DOES>, POSTPONE
     _COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
     _COLON("CONSTANT",CODE,  DOLIT, DOLIT, CCMMA, DOLIT, EXIT, CCMMA, COMMA, EXIT);

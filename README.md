@@ -118,10 +118,10 @@ To understand the philosophy of FORTH, excellent online e-books are here free fo
 
 ### References to Dr. Ting's Original
 * [eForth and Zen](https://chochain.github.io/eForth1/ref/1013_eForthAndZen.pdf)
-* [328eForth documentation - table of content](https://chochain.github.io/eForth1/ref/328eForth_contents.pdf) and [full doc](https://chochain.github.io/eForth1/ref/328eForth.pdf)
+* [The Arduino controlled by eForth](https://chochain.github.io/eForth1/ref/The_Arduino_controlled_by_eForth.pdf)
 * [328eForth mod for coinForth by D. Ruffer](https://github.com/DRuffer/328eforth)
 * [ceForth_33.doc - original documentation](https://chochain.github.io/eForth1/ref/ceForth_33.doc)
-* [ceForth_33.cpp - in C, source assembler + VM](https://chochain.github.io/eForth1/ref/ceForth_33.cpp)
-* [eforth_328.ino - teaser by Dr. Ting for Arduino IDE](https://chochain.github.io/eForth1/ref/eforth_328.ino)
+* [ceForth_33.cpp - source code in C](https://chochain.github.io/eForth1/ref/ceForth_33.cpp)
+* [eforth_328.ino - Arduino IDE teaser by Dr. Ting](https://chochain.github.io/eForth1/ref/eforth_328.ino)
 * [eForth for STM8 - for even smaller apps](https://github.com/TG9541/stm8ef) and [STM8 Programming](https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8)
 * [ESP32Forth for ESP32 - for larger/fancier apps](https://github.com/Esp32forth)

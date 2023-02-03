@@ -466,7 +466,8 @@ int assemble(U8 *cdata)
     IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); {      // name found?
         _IF(CAT, DOLIT, fIMMD, AND); {                 // is immediate?
             _IF(EXECU);                                // execute
-            _ELSE(DUP, ONEP, CAT, DOLIT, EXIT, EQ); {  // a primitive?
+            _ELSE(DUP, DUP, DOLIT, FORTH_ROM_SZ, LT,   // a primitive?
+            	  SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {
                 _IF(CAT, CCMMA);                       // append just the opcode
                 _ELSE(DOLIT, 0x8000, OR, COMMA);       // append colon word address with flag
                 _THEN(NOP);

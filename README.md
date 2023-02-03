@@ -117,6 +117,7 @@ To understand the philosophy of FORTH, excellent online e-books are here free fo
   > change them to -O3 for speed, -Os (default) for smallest size, -O2 for somewhere in-between
 
 ### References to Dr. Ting's Original
+* [eForth and Zen](https://chochain.github.io/eForth1/ref/1013_eForthAndZen.pdf)
 * [328eForth documentation - table of content](https://chochain.github.io/eForth1/ref/328eForth_contents.pdf) and [full doc](https://chochain.github.io/eForth1/ref/328eForth.pdf)
 * [328eForth mod for coinForth by D. Ruffer](https://github.com/DRuffer/328eforth)
 * [ceForth_33.doc - original documentation](https://chochain.github.io/eForth1/ref/ceForth_33.doc)

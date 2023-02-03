@@ -14,7 +14,7 @@
 #endif // ESP8266
 
 #define APP_NAME        "eForth1"
-#define MAJOR_VERSION   "v2\n"
+#define MAJOR_VERSION   "v2"
 #define CASE_SENSITIVE  0             /**< define case sensitivity */
 #define ASM_ONLY        0             /**< create ROM only (i.e. no debugging) */
 ///
@@ -70,7 +70,7 @@ typedef S16       DU;                 ///< data/cell unit
 ///@}
 ///
 ///@name Logical
-/// TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff
+/// TRUE cannot use 1 because NOT(ffff)==0 while NOT(1)==ffff
 /// which does not need boolean op (i.e. in C)
 /// @{
 #define TRUE             -1

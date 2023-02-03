@@ -45,6 +45,9 @@ int assemble(U8 *cdata)
     IU DOVAR = _XCODE("DOVAR",   DOVAR  );
     IU ENTER = _XCODE("ENTER",   ENTER  );  //alias doLIST
     IU EXIT  = _XCODE("EXIT",    EXIT   );
+    IU QBRAN = _XCODE("QBRANCH", QBRAN  );
+    IU BRAN  = _XCODE("BRANCH",  BRAN   );
+    IU DONXT = _XCODE("DONEXT",  DONEXT );
     IU EXECU = _XCODE("EXECUTE", EXECU  );
     IU STORE = _XCODE("!",       STORE  );
     IU PSTOR = _XCODE("+!",      PSTOR  );
@@ -459,7 +462,7 @@ int assemble(U8 *cdata)
     IU CCMMA = _COLON("C,", HERE, DUP, ONEP,  vCP, STORE, CSTOR, EXIT);   // store a word
     IU iLITR = _IMMED("LITERAL",  DOLIT, DOLIT, CCMMA, COMMA, EXIT);      // create a literal
     IU ALLOT = _COLON("ALLOT",    vCP, PSTOR, EXIT);
-    IU COMPI = _COLON("COMPILE",  RFROM, DUP, AT, COMMA, CELLP, TOR, EXIT);
+    IU COMPI = _COLON("COMPILE",  RFROM, DUP, CAT, CCMMA, ONEP, TOR, EXIT);
     IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); {      // name found?
         _IF(CAT, DOLIT, fIMMD, AND); {                 // is immediate?
             _IF(EXECU);                                // execute
@@ -533,17 +536,14 @@ int assemble(U8 *cdata)
     ///
     ///> * BEGIN...AGAIN, BEGIN... f UNTIL, BEGIN...(once)...f WHILE...(loop)...REPEAT
     ///
-    IU iQBRAN = _IMMED("QBRANCH",DOLIT, opQBRAN,  CCMMA, EXIT);
-    IU iBRAN  = _IMMED("BRANCH", DOLIT, opBRAN,   CCMMA, EXIT);
-    IU iDONXT = _IMMED("DONEXT", DOLIT, opDONEXT, CCMMA, EXIT);
-    IU iAHEAD = _IMMED("AHEAD",  COMPI, iBRAN, HERE, DOLIT, 0, COMMA, EXIT);
-    IU iAGAIN = _IMMED("AGAIN",  COMPI, iBRAN, COMMA, EXIT);
+    IU iAHEAD = _IMMED("AHEAD",  COMPI, BRAN, HERE, DOLIT, 0, COMMA, EXIT);
+    IU iAGAIN = _IMMED("AGAIN",  COMPI, BRAN, COMMA, EXIT);
     _IMMED("BEGIN",   HERE, EXIT);
-    _IMMED("UNTIL",   COMPI, iQBRAN, EXIT);
+    _IMMED("UNTIL",   COMPI, QBRAN, EXIT);
     ///
     ///> * f IF...THEN, f IF...ELSE...THEN
     ///
-    IU iIF    = _IMMED("IF",   COMPI, iQBRAN, HERE, DOLIT, 0, COMMA, EXIT);
+    IU iIF    = _IMMED("IF",   COMPI, QBRAN, HERE, DOLIT, 0, COMMA, EXIT);
     IU iTHEN  = _IMMED("THEN", HERE, SWAP, STORE, EXIT);
     _IMMED("ELSE",    iAHEAD, SWAP, iTHEN, EXIT);
     _IMMED("WHILE",   iIF, SWAP, EXIT);
@@ -556,7 +556,7 @@ int assemble(U8 *cdata)
     ///
     _IMMED("FOR",     COMPI, TOR, HERE, EXIT);
     _IMMED("AFT",     DROP, iAHEAD, HERE, SWAP, EXIT);
-    _IMMED("NEXT",    COMPI, iDONXT, EXIT);
+    _IMMED("NEXT",    COMPI, DONXT, EXIT);
     ///
     ///> String Literals
     ///

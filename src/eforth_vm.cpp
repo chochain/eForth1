@@ -276,12 +276,13 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 ///   0 - exit
 /// Note:
 ///   vm_outer - computed label jumps (25% faster than subroutine calls)
+///   continue in _X() macro behaves as $NEXT
 ///
 #define OP(name)    &&L_##name /** redefined for label address */
 #define _X(n, code) L_##n: { DEBUG("%s",#n); code; continue; }
 
 void vm_outer() {
-    static void* vt[] PROGMEM = {       ///< computed label lookup table
+    const void* vt[] PROGMEM = {        ///< computed label lookup table
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
@@ -315,9 +316,9 @@ void vm_outer() {
         /// @name Built-in ops
         /// @{
         _X(DOLIT,
-            PUSH(GET(IP));              ///> push onto data stack
-            IP += CELLSZ);              ///> skip to next instruction
-        _X(DOVAR, PUSH(++PC));
+        	PUSH(GET(IP));              ///> push literal onto data stack
+            IP += CELLSZ);
+        _X(DOVAR, PUSH(IP+1));          ///> push literal addr to data stack
         /// @}
         /// @name Branching ops
         /// @{

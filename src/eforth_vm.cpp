@@ -66,10 +66,10 @@ void _init() {
 ///
 void _yield()                ///> yield to interrupt service
 {
-    IR = intr_service();              /// * check interrupts
-    if (IR) {                         /// * service interrupt?
-        RPUSH(IP | IRET_FLAG);        /// * flag return address as IRET
-        IP = IR + 1;                  /// * skip opENTER
+    IR = intr_service();          /// * check interrupts
+    if (IR) {                     /// * service interrupt?
+        RPUSH(IP | IRET_FLAG);    /// * flag return address as IRET
+        IP = IR;                  /// * skip opENTER
     }
 }
 int _yield_cnt = 0;          ///< interrupt service throttle counter
@@ -165,7 +165,7 @@ void vm_outer() {
     IP = GET(0) & ~0x8000;              ///> fetch cold boot vector
 
     while (1) {
-        //YIELD();                      /// * serve interrupt if any
+        YIELD();                        /// * serve interrupt if any
         U8  op = BGET(IP++);
         if (op & 0x80) {
         	PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address

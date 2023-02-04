@@ -13,10 +13,10 @@ namespace EfAsm {
 ///
 ///@name eForth Assembler module variables
 ///@{
+IU PC;                              ///< assembler program counter
+U8 R;                               ///< assembler return stack index
 U8 *_byte;                          ///< assembler byte array (heap)
 IU _link;                           ///< link to previous word
-U8 R;                               ///< assembler return stack index
-IU PC;                              ///< assembler program counter
 ///@}
 ///@name Compiled Address for Branching
 ///@{
@@ -30,7 +30,7 @@ int assemble(U8 *cdata)
     _byte = cdata;
     _link = R = 0;
     ///
-    ///> Cold boot vector
+    ///> ROM starting address
     ///
     PC = FORTH_BOOT_ADDR;
     IU BOOT  = _LABEL(0xfeed);           /// reserved for COLD boot vector
@@ -87,9 +87,9 @@ int assemble(U8 *cdata)
     IU DEPTH = _XCODE("DEPTH",   DEPTH  );
     IU ULESS = _XCODE("U<",      ULESS  );
     /// TODO: add UM+
-    IU UMMOD = _XCODE("UM/MOD",  UMMOD  );
-    IU UMSTA = _XCODE("UM*",     UMSTAR );
-    IU MSTAR = _XCODE("M*",      MSTAR  );
+    IU UMMOD = _XCODE("UM/MOD",  UMMOD  );    ///> ( udl udh u -- ur uq ) unsigned double divided by a single
+    IU UMSTA = _XCODE("UM*",     UMSTAR );    ///> ( u1 u2 -- ud ) unsigned double = multiply unsigned singles
+    IU MSTAR = _XCODE("M*",      MSTAR  );    ///> ( n1 n2 -- d ) double = single * single
     IU DNEG  = _XCODE("DNEGATE", DNEG   );
     IU DADD  = _XCODE("D+",      DADD   );
     IU DSUB  = _XCODE("D-",      DSUB   );
@@ -135,8 +135,8 @@ int assemble(U8 *cdata)
         _THEN(EXIT);
     }
     /// TODO: add I, J
-    IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);
-    IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT);     // Leo B. has it
+    IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);  // ( dl dh n -- r q ) double div/mod by a single
+    IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT); // ( n1 n2 -- r q ) single devide
     IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
     IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
     IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
@@ -259,8 +259,8 @@ int assemble(U8 *cdata)
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);
     // IU CR    = _COLON("CR",   DOLIT, 10, DOLIT, 13, EMIT, EMIT, EXIT);   // LFCR
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
-       STRQP = _COLON("$\"|", DOSTR, EXIT);
-       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
+       STRQP = 0x8000 | _COLON("$\"|", DOSTR, EXIT);
+       DOTQP = 0x8000 | _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
     IU DOTR  = _COLON(".R",   TOR,
             DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // shown as string
             RFROM, OVER, SUB, SPACS, TYPE, EXIT);
@@ -415,7 +415,7 @@ int assemble(U8 *cdata)
             _IF(EXECU);                              // @EXECUTE
             _THEN(EXIT);
         }
-    ABORQP = _COLON("abort\"", NOP); {
+    ABORQP = 0x8000 | _COLON("abort\"", NOP); {
         _IF(DOSTR, COUNT, TYPE, ABORT);
         _THEN(DOSTR, DROP, EXIT);
     }

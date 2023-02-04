@@ -145,17 +145,13 @@ typedef const char                FCHAR;
     PGMCPY(len, seq);                           \
 }
 ///@}
-///@defgroup Module variables
+///@defgroup Assembler Module variables
 ///@{
-extern U8 *_byte;                     ///< assembler byte array (heap)
-extern U8 R;                          ///< assembler return stack index
 extern IU PC;                         ///< assembler program counter
+extern U8 R;                          ///< assembler return stack index
 extern IU _link;                      ///< link to previous word
-
-extern IU BRAN, QBRAN, DONXT;         ///< addr of branching ops, used by branching ops
+extern U8 *_byte;                     ///< assembler byte array (heap)
 extern IU DOTQP, STRQP, ABORQP;       ///< addr of output ops, used by _dotq, _strq, _abortq
-extern IU TOR;                        ///< addres of ">R" op, used by _for
-extern IU NOP;                        ///< NOP set to ffff to prevent access before initialized
 ///
 ///@defgroup Pseudo macros (to handle va_list)
 ///@brief - keeping functions in the header is considered a bad practice!

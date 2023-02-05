@@ -43,7 +43,7 @@ int assemble(U8 *cdata)
     IU TXSTO = _XCODE("TX!",     TXSTO  );
     IU DOLIT = _XCODE("DOLIT",   DOLIT  );
     IU DOVAR = _XCODE("DOVAR",   DOVAR  );
-    IU ENTER = _XCODE("ENTER",   ENTER  );  //alias doLIST
+    IU ENTER = _XCODE("ENTER",   ENTER  );  // aka doLIST
     IU EXIT  = _XCODE("EXIT",    EXIT   );
     IU QBRAN = _XCODE("QBRANCH", QBRAN  );
     IU BRAN  = _XCODE("BRANCH",  BRAN   );
@@ -258,8 +258,8 @@ int assemble(U8 *cdata)
     }
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);               // LF i.e. \n actually
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
-    IU STRQP = fCOLON | _COLON("$\"|", DOSTR, EXIT);
-       DOTQP = fCOLON | _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);   // Note: DOTQP export to _dotq
+    IU STRQP = _COLON("$\"|", DOSTR, EXIT);
+       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);            // Note: DOTQP export to _dotq
     IU DOTR  = _COLON(".R",   TOR,
             DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // shown as string
             RFROM, OVER, SUB, SPACS, TYPE, EXIT);
@@ -460,7 +460,7 @@ int assemble(U8 *cdata)
         _IF(CAT, DOLIT, fIMMD, AND); {                 // is immediate?
             _IF(EXECU);                                // execute
             _ELSE(DUP, DUP, DOLIT, FORTH_ROM_SZ, LT,   // a primitive?
-            	  SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {
+            	  SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {  // XX08 <= this might break
                 _IF(CAT, CCMMA);                       // append just the opcode
                 _ELSE(DOLIT, fCOLON, OR, COMMA);       // append colon word address with flag
                 _THEN(NOP);
@@ -556,8 +556,8 @@ int assemble(U8 *cdata)
     ///
     IU STRCQ  = _COLON("$,\"", DOLIT, 0x22, WORD,       // find quote in TIB (0x22 is " in ASCII)
                     COUNT, ADD, vCP, STORE, EXIT);      // advance dic pointer
-    _IMMED("$\"",   DOLIT, STRQP, HERE, STORE, STRCQ, EXIT);
-    _IMMED(".\"",   DOLIT, DOTQP, HERE, STORE, STRCQ, EXIT);
+    _IMMED("$\"",   DOLIT, STRQP | fCOLON, HERE, STORE, STRCQ, EXIT);
+    _IMMED(".\"",   DOLIT, DOTQP | fCOLON, HERE, STORE, STRCQ, EXIT);
     ///
     ///> Defining Words - variable, constant, and comments
     ///

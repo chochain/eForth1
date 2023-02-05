@@ -43,7 +43,7 @@ extern PGM_P _rom;                ///< ROM, Forth word stored in Arduino Flash M
 extern U8    *_data;              ///< RAM, memory block for user define dictionary
 ///@}
 #define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
-#define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
+#define IDX_MASK       0x07ff     /**< RAM index mask  (0x0000~0x07ff) */
 #define IRET_FLAG      0x8000     /**< interrupt return flag           */
 #define BOOL(f)        ((f) ? TRUE : FALSE)
 #define RAM(i)         &_data[(i) - FORTH_RAM_ADDR]
@@ -51,20 +51,20 @@ extern U8    *_data;              ///< RAM, memory block for user define diction
 /// byte (8-bit) fetch from either RAM or ROM depends on filtered range
 ///
 U8 BGET(U16 d) {
-    return (U8)((d&RAM_FLAG) ? _data[d&OFF_MASK] : pgm_read_byte(_rom+d));
+    return (U8)((d&RAM_FLAG) ? _data[d&IDX_MASK] : pgm_read_byte(_rom+d));
 }
 ///
 /// word (16-bit) fetch from either RAM or ROM depends on filtered range
 ///
 U16 GET(U16 d) {
     return (d&RAM_FLAG)
-        ? ((U16)_data[d&OFF_MASK]<<8) | _data[(d+1)&OFF_MASK]
+        ? ((U16)_data[d&IDX_MASK]<<8) | _data[(d+1)&IDX_MASK]
         : ((U16)pgm_read_byte(_rom+d)<<8) | pgm_read_byte(_rom+d+1);
 }
-#define BSET(d, c)     (_data[(d)&OFF_MASK]=(U8)(c))
+#define BSET(d, c)     (_data[(d)&IDX_MASK]=(U8)(c))
 void SET(U16 d, U16 v) {
-	_data[(d)&OFF_MASK]   = v>>8;
-	_data[(d+1)&OFF_MASK] = v&0xff;
+	_data[(d)&IDX_MASK]   = v>>8;
+	_data[(d+1)&IDX_MASK] = v&0xff;
 }
 #define S2D(h, l) (((S32)(h)<<16) | ((l)&0xffff))
 ///

@@ -84,8 +84,6 @@ typedef const char                FCHAR;
 ///@name Vargs IO
 ///@{
 #define _DOTQ(str)           _dotq(F(str))
-#define _STRQ(str)           _strq(F(str))
-#define _ABORTQ(str)         _abortq(F(str))
 ///@}
 ///@name Memory Access and Stack Op
 ///@{
@@ -114,7 +112,7 @@ typedef const char                FCHAR;
             DEBUG(" %04x", j);                  \
             continue;                           \
         }                                       \
-        if (j < 0x80) {  /** opcode */          \
+        if (j < 0x80) {  /** max 128 opcode */  \
             lit = (j==opDOLIT);                 \
             if (j != opNOP) {                   \
                BSET(PC++, j);                   \
@@ -147,11 +145,11 @@ typedef const char                FCHAR;
 ///@}
 ///@defgroup Assembler Module variables
 ///@{
-extern IU PC;                         ///< assembler program counter
-extern U8 R;                          ///< assembler return stack index
-extern IU _link;                      ///< link to previous word
-extern U8 *_byte;                     ///< assembler byte array (heap)
-extern IU DOTQP, STRQP, ABORQP;       ///< addr of output ops, used by _dotq, _strq, _abortq
+extern IU PC;          ///< assembler program counter
+extern U8 R;           ///< assembler return stack index
+extern IU _link;       ///< link to previous word
+extern U8 *_byte;      ///< assembler byte array (heap)
+extern IU DOTQP;       ///< addr of output function _dotq
 ///
 ///@defgroup Pseudo macros (to handle va_list)
 ///@brief - keeping functions in the header is considered a bad practice!
@@ -334,16 +332,6 @@ void _dotq(FCHAR *seq) {
     SHOWOP("DOTQ");
     DEBUG("%s", seq);
     OPSTR(DOTQP, seq);
-}
-void _strq(FCHAR *seq) {
-    SHOWOP("STRQ");
-    DEBUG("%s", seq);
-    OPSTR(STRQP, seq);
-}
-void _abortq(FCHAR *seq) {
-    SHOWOP("ABORTQ");
-    DEBUG("%s", seq);
-    OPSTR(ABORQP, seq);
 }
 ///@}
 };  // namespace EfAsm

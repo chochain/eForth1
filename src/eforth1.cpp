@@ -30,11 +30,11 @@ void _info(U8 *cdata, int sz, Stream *io) {
 #endif // ARDUINO
 }
 ///
-///> Arduino EEPROM interface
+///> EEPROM interface
 ///
 #if ARDUINO
 #include <EEPROM.h>
-#else // ARDUINO
+#else  // !ARDUINO
 class MockPROM                                ///< mock EEPROM access class
 {
     U8 _prom[FORTH_UVAR_SZ + FORTH_DIC_SZ];   ///< mock EEPROM storage
@@ -43,10 +43,9 @@ public:
     void update(U16 idx, U8 v) { _prom[idx] = v; }
 };
 MockPROM EEPROM;                              ///> fake Arduino EEPROM unit
-
 #endif // ARDUINO
 ///
-///> Arduino EEPROM Save/Load
+///> EEPROM Save/Load
 ///
 #define GET(d)    (*(DU*)&data[d])
 #define SET(d, v) (*(DU*)&data[d] = (v))

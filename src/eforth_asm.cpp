@@ -20,7 +20,7 @@ IU _link;                           ///< link to previous word
 ///@}
 ///@name Compiled Address for Branching
 ///@{
-IU DOTQP, STRQP, ABORQP;            ///< addr of output ops, used by _dotq, _strq, _abortq
+IU DOTQP;                           ///< addr of output ops, used by _dotq, _strq, _abortq
 ///@}
 ///
 ///> eForth Macro Assembler
@@ -256,11 +256,10 @@ int assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DROP, EXIT);
     }
-    IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);
-    // IU CR    = _COLON("CR",   DOLIT, 10, DOLIT, 13, EMIT, EMIT, EXIT);   // LFCR
+    IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);               // LF i.e. \n actually
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
-       STRQP = fCOLON | _COLON("$\"|", DOSTR, EXIT);
-       DOTQP = fCOLON | _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
+    IU STRQP = fCOLON | _COLON("$\"|", DOSTR, EXIT);
+       DOTQP = fCOLON | _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);   // Note: DOTQP export to _dotq
     IU DOTR  = _COLON(".R",   TOR,
             DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // shown as string
             RFROM, OVER, SUB, SPACS, TYPE, EXIT);
@@ -411,21 +410,15 @@ int assemble(U8 *cdata)
     ///           \-No:                                                   .
     ///              \-An Error has occurred, prIU out an error message ->
     ///
-    IU ABORT  = _COLON("ABORT", vTABRT, AT, QDUP); {
+    IU ABORT = _COLON("ABORT", vTABRT, AT, QDUP); {
             _IF(EXECU);                              // @EXECUTE
             _THEN(EXIT);
         }
-    ABORQP = fCOLON | _COLON("abort\"", NOP); {
-        _IF(DOSTR, COUNT, TYPE, ABORT);
-        _THEN(DOSTR, DROP, EXIT);
-    }
     /// TODO: add ?STACK
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
         _IF(CAT, DOLIT, fCMPL, AND); {               // check for compile only word
-            _IF(NOP); {
-                _ABORTQ(" compile only");
-            }
+            _IF(ABORT);
             _ELSE(EXECU);                            // INTER0 of Dr Ting's
             _THEN(EXIT);
         }
@@ -539,33 +532,32 @@ int assemble(U8 *cdata)
     ///
     IU iAHEAD = _IMMED("AHEAD", COMPI, BRAN, HERE, DOLIT, 0, COMMA, EXIT);
     IU iAGAIN = _IMMED("AGAIN", COMPI, BRAN, COMMA, EXIT);
-    _IMMED("BEGIN",   HERE, EXIT);
-    _IMMED("UNTIL",   COMPI, QBRAN, EXIT);
+    _IMMED("BEGIN", HERE, EXIT);
+    _IMMED("UNTIL", COMPI, QBRAN, EXIT);
     ///
     ///> * f IF...THEN, f IF...ELSE...THEN
     ///
     IU iIF    = _IMMED("IF",   COMPI, QBRAN, HERE, DOLIT, 0, COMMA, EXIT);
     IU iTHEN  = _IMMED("THEN", HERE, SWAP, STORE, EXIT);
-    _IMMED("ELSE",    iAHEAD, SWAP, iTHEN, EXIT);
-    _IMMED("WHILE",   iIF, SWAP, EXIT);
-    _IMMED("WHEN",    iIF, OVER, EXIT);
-    _IMMED("REPEAT",  iAGAIN, iTHEN, EXIT);
+    _IMMED("ELSE",  iAHEAD, SWAP, iTHEN, EXIT);
+    _IMMED("WHILE", iIF, SWAP, EXIT);
+    _IMMED("WHEN",  iIF, OVER, EXIT);
+    _IMMED("REPEAT",iAGAIN, iTHEN, EXIT);
     ///
     ///> * n FOR...NEXT, n FOR...(first)... f AFT...(2nd,...)...THEN...(every)...NEXT
     ///
     /// TODO: add DO...LOOP, +LOOP, LEAVE
     ///
-    _IMMED("FOR",     COMPI, TOR, HERE, EXIT);
-    _IMMED("AFT",     DROP, iAHEAD, HERE, SWAP, EXIT);
-    _IMMED("NEXT",    COMPI, DONXT, COMMA, EXIT);
+    _IMMED("FOR",   COMPI, TOR, HERE, EXIT);
+    _IMMED("AFT",   DROP, iAHEAD, HERE, SWAP, EXIT);
+    _IMMED("NEXT",  COMPI, DONXT, COMMA, EXIT);
     ///
     ///> String Literals
     ///
     IU STRCQ  = _COLON("$,\"", DOLIT, 0x22, WORD,       // find quote in TIB (0x22 is " in ASCII)
-                       COUNT, ADD, vCP, STORE, EXIT);   // advance dic pointer
-    _IMMED("ABORT\"", DOLIT, ABORQP, HERE, STORE, STRCQ, EXIT);
-    _IMMED("$\"",     DOLIT, STRQP,  HERE, STORE, STRCQ, EXIT);
-    _IMMED(".\"",     DOLIT, DOTQP,  HERE, STORE, STRCQ, EXIT);
+                    COUNT, ADD, vCP, STORE, EXIT);      // advance dic pointer
+    _IMMED("$\"",   DOLIT, STRQP, HERE, STORE, STRCQ, EXIT);
+    _IMMED(".\"",   DOLIT, DOTQP, HERE, STORE, STRCQ, EXIT);
     ///
     ///> Defining Words - variable, constant, and comments
     ///

@@ -410,7 +410,7 @@ int assemble(U8 *cdata)
     ///           \-No:                                                   .
     ///              \-An Error has occurred, prIU out an error message ->
     ///
-    IU ABORT = _COLON("ABORT", vTABRT, AT, QDUP); {
+    IU ABORT = _COLON("ABORT", vTABRT, AT, QDUP); {  // load ABORT vector
             _IF(EXECU);                              // @EXECUTE
             _THEN(EXIT);
         }

@@ -76,6 +76,10 @@ typedef S16       DU;                 ///< data/cell unit
 #define TRUE             -1
 #define FALSE            0
 ///@}
+///@name VM operational flags
+///@{
+#define fCOLON           0x8000       /**< flag a colon word */
+///@}
 ///
 /// Forth VM Opcodes (for Bytecode Assembler)
 ///

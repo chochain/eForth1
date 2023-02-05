@@ -259,8 +259,8 @@ int assemble(U8 *cdata)
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);
     // IU CR    = _COLON("CR",   DOLIT, 10, DOLIT, 13, EMIT, EMIT, EXIT);   // LFCR
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
-       STRQP = 0x8000 | _COLON("$\"|", DOSTR, EXIT);
-       DOTQP = 0x8000 | _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
+       STRQP = fCOLON | _COLON("$\"|", DOSTR, EXIT);
+       DOTQP = fCOLON | _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);
     IU DOTR  = _COLON(".R",   TOR,
             DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // shown as string
             RFROM, OVER, SUB, SPACS, TYPE, EXIT);
@@ -415,7 +415,7 @@ int assemble(U8 *cdata)
             _IF(EXECU);                              // @EXECUTE
             _THEN(EXIT);
         }
-    ABORQP = 0x8000 | _COLON("abort\"", NOP); {
+    ABORQP = fCOLON | _COLON("abort\"", NOP); {
         _IF(DOSTR, COUNT, TYPE, ABORT);
         _THEN(DOSTR, DROP, EXIT);
     }
@@ -469,7 +469,7 @@ int assemble(U8 *cdata)
             _ELSE(DUP, DUP, DOLIT, FORTH_ROM_SZ, LT,   // a primitive?
             	  SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {
                 _IF(CAT, CCMMA);                       // append just the opcode
-                _ELSE(DOLIT, 0x8000, OR, COMMA);       // append colon word address with flag
+                _ELSE(DOLIT, fCOLON, OR, COMMA);       // append colon word address with flag
                 _THEN(NOP);
             }
             _THEN(EXIT);

@@ -122,7 +122,7 @@ typedef const char                FCHAR;
             }                                   \
         }                                       \
         else {          /** colon words */      \
-          STORE(j | 0x8000);                    \
+          STORE(j | fCOLON);                    \
           DEBUG(" %04x", j);                    \
         }                                       \
     }                                           \
@@ -138,7 +138,7 @@ typedef const char                FCHAR;
 }
 
 #define OPSTR(ip, seq) {                        \
-    SET(PC, ip | 0x8000);                       \
+    SET(PC, ip | fCOLON);                       \
     PC += CELLSZ;                               \
     int len = _strlen(seq);                     \
     BSET(PC++, len);                            \

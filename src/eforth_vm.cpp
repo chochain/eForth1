@@ -162,7 +162,7 @@ void vm_outer() {
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
-    IP = GET(0) & ~0x8000;              ///> fetch cold boot vector
+    IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
     while (1) {
         YIELD();                        /// * serve interrupt if any

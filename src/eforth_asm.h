@@ -9,6 +9,13 @@
 #include "eforth_core.h"
 
 namespace EfAsm {
+/// Name field
+/// +----------+-------------+
+/// | len byte | name string |
+/// +----------+-------------+
+/// Forth name len max 31
+/// the following flags are used to flag word attributes
+///
 #define fCMPL          0x40         /**< compile only flag */
 #define fIMMD          0x80         /**< immediate flag    */
 ///

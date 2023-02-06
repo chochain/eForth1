@@ -1,142 +1,32 @@
 /**
  * @file
  * @brief eForth Virtual Machine module
- * Note: indirect threading model - computed label jumping
- *       replaced EfVMSub module - vtable subroutine calling
  *
- * ####eForth Memory map
- *
- * @code
- *     0x0000-0x1fff ROM (8K Flash memory)
- *     0x2000-0x24ff RAM (2K dynamic memory)
- *         0x2000-0x201f User Variables
- *         0x2020-0x23ff User Dictionary
- *         0x2400-0x247f Data/Return Stacks
- *         0x2480-0x24ff TIB (Terminal Input Buffer)
- *         0x2500        heap
- * @endcode
- *
- * ####Data and Return Stack
- *
- * @code
- *            S                   R
- *            |                   |
- *    top -> [S0, S1, S2,..., R1, R0] <- rtop
- * @endcode
- * Note: Dr. Ting uses U8 (0~255) for wrap-around control
+ * Revision Note: Threading model evolution
+ *   202212 EfVMSub module - vtable subroutine calling
+ *   202301 indirect threading - computed label jumping
+ *   202302 direct threading - opcode => code(); continue = $NEXT
  */
-#include "eforth_core.h"
+#include "eforth_vm.h"
 
 namespace EfVM {
 
 static Stream *io;
 ///
-///@name Control
+///@name VM Registers
 ///@{
-IU  PC;                           ///< program counter, IU is 16-bit
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
+IU  PC;                           ///< program counter, IU is 16-bit
+DU  *DS;                          ///< data stack pointer, Dr. Ting's stack
+DU  *RS;                          ///< return stack pointer, Dr. Ting's rack
 DU  top;                          ///< ALU (i.e. cached top of stack value)
 DU  rtop;                         ///< cached loop counter on return stack
 IU  IR;                           ///< interrupt service routine
 ///@}
-///
-///@name Storage
+///@name Memory Management Unit
 ///@{
 PGM_P _rom;                       ///< ROM, Forth word stored in Arduino Flash Memory
 U8    *_data;                     ///< RAM, memory block for user define dictionary
-DU    *DS;                        ///< data stack pointer, Dr. Ting's stack
-DU    *RS;                        ///< return stack pointer, Dr. Ting's rack
-///@}
-#define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
-#define OFF_MASK       0x07ff     /**< RAM offset mask (0x0000~0x07ff) */
-#define IRET_FLAG      0x8000     /**< interrupt return flag           */
-#define BOOL(f)        ((f) ? TRUE : FALSE)
-#define RAM(i)         &_data[(i) - FORTH_RAM_ADDR]
-///
-/// byte (8-bit) fetch from either RAM or ROM depends on filtered range
-///
-U8 BGET(U16 d) {
-    return (U8)((d&RAM_FLAG) ? _data[d&OFF_MASK] : pgm_read_byte(_rom+d));
-}
-///
-/// word (16-bit) fetch from either RAM or ROM depends on filtered range
-///
-U16 GET(U16 d) {
-    return (d&RAM_FLAG)
-        ? *((U16*)&_data[d&OFF_MASK])
-        : (U16)pgm_read_byte(_rom+d) + ((U16)pgm_read_byte(_rom+d+1)<<8);
-}
-#define BSET(d, c)     (_data[(d)&OFF_MASK]=(U8)(c))
-#define SET(d, v)      (*((DU*)&_data[(d)&OFF_MASK])=(v))
-#define S2D(h, l)      (((S32)(h)<<16) | ((l)&0xffff))
-///
-/// push a value onto stack top
-///
-void PUSH(DU v)        { *++DS = top;  top  = v; }
-void RPUSH(DU v)       { *--RS = rtop; rtop = v; }
-#define POP()          (top  = *DS--)
-#define RPOP()         (rtop = *RS++)
-#define DTOP(d)        { *DS = (d) & 0xffff; top = (d)>>16; }
-///
-/// update program counter (ready to fetch), advance instruction pointer
-///
-void NEXT() { PC=GET(IP); IP+=sizeof(IU); }
-
-DU _depth() {
-    return (DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1;
-}
-///
-///@name Tracing
-///@{
-#if EXE_TRACE
-int tCNT;           ///< tracing depth counters
-int tTAB;           ///< tracing indentation counter
-///@}
-///
-///@name Tracing Functions
-///@{
-#define opDOLIT 5
-#define opENTER 7
-#define opEXIT  8
-void TRACE()
-{
-    if (!tCNT || !PC) return;             // skip if not tracing or end of program
-    U8 op = BGET(PC);
-
-    /// display PC:IP[opcode]
-    LOG_H("", IP-2); LOG_H(":", PC);      // mem pointer, indirect thread
-    LOG_H("[", op); LOG("]");             // opcode to be executed
-    // dump stack
-    DU s = _depth() - 1;
-    while (s-- > 0) {
-        DU *vp = ((DU*)DS - s);
-        DU v   = *vp;
-        LOG_H("_", v);
-    }
-    LOG_H("_", top);
-    LOG("_");
-    /// display word name
-    IU pc = PC-1;                         // reel back one-byte
-    for (; (BGET(pc) & 0x7f)>0x20; pc--); // retract pointer to word name (ASCII range: 0x21~0x7f)
-    int len = BGET(pc++) & 0x1f;          // Forth allows 31 char max
-    for (int i=0; i<len; i++, pc++) {
-        LOG_C((char)BGET(pc));
-    }
-    /// special opcode handlers for DOLIT, ENTER, EXIT
-    switch (op) {
-    case opDOLIT: LOG_H(" $", GET(IP)); break;
-    case opENTER:
-        LOG("\n");
-        for (int i=0; i<tTAB; i++) LOG("  ");
-        tTAB++;
-        LOG(":"); break;
-    case opEXIT:  LOG(" ;"); --tTAB; break;
-    }
-    LOG(" ");
-}
-#else
-#define TRACE()     /* skip */
-#endif // EXE_TRACE
 ///@}
 //
 // Forth Virtual Machine primitive functions
@@ -148,8 +38,11 @@ void _init() {
     intr_reset();                     /// * reset interrupt handlers
 
     PC = IP = IR = top = 0;           ///> setup control variables
+    DS = (DU*)RAM(FORTH_STACK_ADDR - CELLSZ);
+    RS = (DU*)RAM(FORTH_STACK_TOP);
+
 #if EXE_TRACE
-    tCNT = 0; tTAB = 0;               ///> setup tracing variables
+    tCNT = 1; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
 
     /// FORTH_UVAR_ADDR;
@@ -158,7 +51,7 @@ void _init() {
     ///   CP,  top of dictionary, same as HERE
     ///   CONTEXT name field of last word
     ///   LAST, same as CONTEXT
-    ///   'EVAL eval mode (interpreter or compiler)
+    ///   'MODE eval mode (interpreter or compiler)
     ///   'ABORT exception rescue handler (QUIT)
     ///   tmp storage (alternative to return stack)
     IU p = FORTH_UVAR_ADDR;           ///> setup Forth user variables
@@ -176,10 +69,10 @@ void _init() {
 ///
 void _yield()                ///> yield to interrupt service
 {
-    IR = intr_service();              /// * check interrupts
-    if (IR) {                         /// * service interrupt?
-        RPUSH(IP | IRET_FLAG);        /// * flag return address as IRET
-        IP = IR + 1;                  /// * skip opENTER
+    IR = intr_service();          /// * check interrupts
+    if (IR) {                     /// * service interrupt?
+        RPUSH(IP | IRET_FLAG);    /// * flag return address as IRET
+        IP = IR;                  /// * skip opENTER
     }
 }
 int _yield_cnt = 0;          ///< interrupt service throttle counter
@@ -222,7 +115,7 @@ void _txsto()                ///> (c -- ) send a char to console
     POP();
 }
 ///@}
-void _ummod()               /// (udl udh u -- ur uq) unsigned divide of a double by single
+void _ummod()               /// (udl udh u -- ur uq) unsigned double divided by a single
 {
     U32 d = (U32)top;       ///> CC: auto variable uses C stack 
     U32 m = ((U32)*DS<<16) + (U16)*(DS-1);
@@ -251,8 +144,6 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     io     = (Stream *)io_stream;
     _rom   = rom;
     _data  = data;
-    DS     = (DU*)RAM(FORTH_STACK_ADDR);
-    RS     = (DU*)RAM(FORTH_STACK_TOP);
 
     _init();                    /// * resetting user variables
 }
@@ -262,25 +153,37 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 ///   0 - exit
 /// Note:
 ///   vm_outer - computed label jumps (25% faster than subroutine calls)
+///   continue in _X() macro behaves as $NEXT
 ///
-#define OP(name)    &&L_##name /** redefined for label address */
-#define _X(n, code) L_##n: { code; goto vm_next; }
+#define OP(name)    &&L_##name          /** redefined for label address     */
+#define _X(n, code) L_##n: { DEBUG("%s",#n); code; continue; }
 
-int vm_outer() {
-    static void* vt[] = {               ///< computed label lookup table
+void vm_outer() {
+    const void* vt[] PROGMEM = {        ///< computed label lookup table
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
-    do {
-        TRACE();                        /// * tracing stack and word name
+    IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
-        U8 op = BGET(PC);               ///> fetch next opcode
+    while (1) {
+        YIELD();                        /// * serve interrupt if any
+        U8  op = BGET(IP++);
+        if (op & 0x80) {
+        	PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
+        	op = opENTER;
+        }
+        TRACE(op);
+
         goto *vt[op];                   ///> jump to computed label
         ///
         /// the following part is in assembly for most of Forth implementations
         ///
         _X(NOP,   {});
-        _X(BYE,   _init(); continue);   /// * reset, skip NEXT
+#if ARDUINO
+        _X(BYE,   _init());            /// * reset
+#else // !ARDUINO
+        _X(BYE,   break);              /// quit
+#endif // ARDUINO
         ///
         /// @name Console IO
         /// @{
@@ -289,30 +192,32 @@ int vm_outer() {
         /// @}
         /// @name Built-in ops
         /// @{
-        _X(DOCON,
-            ++PC;                       ///> skip opDOCON opcode
-            PUSH(GET(PC)));             ///> push cell value onto stack
         _X(DOLIT,
-            PUSH(GET(IP));              ///> push onto data stack
-            IP += CELLSZ);              ///> skip to next instruction
-        _X(DOVAR, ++PC; PUSH(PC));
+        	PUSH(GET(IP));              ///> push literal onto data stack
+            IP += CELLSZ);
+        _X(DOVAR, PUSH(IP+1));          ///> push literal addr to data stack
+                                        /// * +1 means skip EXIT byte (08)
         /// @}
         /// @name Branching ops
         /// @{
+        _X(EXECU,                       ///> ( xt -- ) execute xt
+            DEBUG(">>%x", IP);
+            RPUSH(IP);
+        	IP = (IU)top;               /// * fetch program counter
+        	POP());
         _X(ENTER,
+            PC |= BGET(IP++);           /// * fetch low-byte of PC
+            DEBUG(">>%x", IP);
             RPUSH(IP);                  ///> keep return address
-            IP = ++PC);                 ///> skip opcode opENTER, advance to next instruction
+            IP = PC);                   ///> jump to next instruction
         _X(EXIT,
+        	TAB();
             IP = rtop;
             RPOP();                     ///> pop return address
             if (IP & IRET_FLAG) {       /// * IRETURN?
                 IR = 0;                 /// * interrupt disabled
                 IP &= ~IRET_FLAG;
             });
-        _X(EXECU,                       ///> ( xt -- ) execute xt
-        	PC = (IU)top;               /// * fetch program counter
-        	POP();
-        	continue);                  /// * skip NEXT
         _X(DONEXT,
             if (rtop-- > 0) {           ///> check if loop counter > 0
                 IP = GET(IP);           ///>> branch back to FOR
@@ -367,7 +272,7 @@ int vm_outer() {
         _X(AND,   top &= *DS--);
         _X(OR,    top |= *DS--);
         _X(XOR,   top ^= *DS--);
-        _X(INV,   top = -top - 1);
+        _X(INV,   top ^= -1);
         _X(LSH,   top =  *DS-- << top);
         _X(RSH,   top =  *DS-- >> top);
         _X(ADD,   top += *DS--);
@@ -391,7 +296,7 @@ int vm_outer() {
         _X(ONEP,  top++);
         _X(ONEM,  top--);
         _X(QDUP,  if (top) *++DS = top);
-        _X(DEPTH, DU d = _depth(); PUSH(d));
+        _X(DEPTH, DU d = DEPTH(); PUSH(d));
         _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
         _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
@@ -452,12 +357,5 @@ int vm_outer() {
             U16 sz = ef_load(_data);
             LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
-
-    vm_next:
-        YIELD();                        /// * serve interrupt if any
-        PC = GET(IP);                   /// * fetch next program counter (indirect threading)
-        IP += sizeof(IU);               /// * advance to next instruction
-    } while (PC);
-
-    return (int)PC;
+    }
 }

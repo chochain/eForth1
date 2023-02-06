@@ -14,7 +14,7 @@
 #endif // ESP8266
 
 #define APP_NAME        "eForth1"
-#define MAJOR_VERSION   "v1"
+#define MAJOR_VERSION   "v2"
 #define CASE_SENSITIVE  0             /**< define case sensitivity */
 #define ASM_ONLY        0             /**< create ROM only (i.e. no debugging) */
 ///
@@ -70,11 +70,15 @@ typedef S16       DU;                 ///< data/cell unit
 ///@}
 ///
 ///@name Logical
-/// TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff
+/// TRUE cannot use 1 because NOT(ffff)==0 while NOT(1)==ffff
 /// which does not need boolean op (i.e. in C)
 /// @{
 #define TRUE             -1
 #define FALSE            0
+///@}
+///@name VM operational flags
+///@{
+#define fCOLON           0x8000       /**< flag a colon word */
 ///@}
 ///
 /// Forth VM Opcodes (for Bytecode Assembler)
@@ -83,12 +87,11 @@ typedef S16       DU;                 ///< data/cell unit
     OP(BYE),    \
     OP(QRX),    \
     OP(TXSTO),  \
-    OP(DOCON),  \
     OP(DOLIT),  \
     OP(DOVAR),  \
+    OP(EXECU),  \
     OP(ENTER),  \
     OP(EXIT),   \
-    OP(EXECU),  \
     OP(DONEXT), \
     OP(QBRAN),  \
     OP(BRAN),   \
@@ -209,7 +212,7 @@ void vm_init(
     U8 *cdata,              ///< pointer to Arduino RAM block (RAM)
     void *io_stream         ///< pointer to Stream object of Arduino
     );
-int  vm_outer();            ///< Forth outer interpreter
+void vm_outer();            ///< Forth outer interpreter
 ///@}
 ///@name eForth Assembler Functions
 ///@{

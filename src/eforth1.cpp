@@ -29,6 +29,55 @@ void _info(U8 *cdata, int sz, Stream *io) {
     LOG_H(" bytes <--auto=x", s); LOG("]");
 #endif // ARDUINO
 }
+///
+///> EEPROM interface
+///
+#if ARDUINO
+#include <EEPROM.h>
+#else  // !ARDUINO
+class MockPROM                                ///< mock EEPROM access class
+{
+    U8 _prom[FORTH_UVAR_SZ + FORTH_DIC_SZ];   ///< mock EEPROM storage
+public:
+    U8   read(U16 idx)         { return _prom[idx]; }
+    void update(U16 idx, U8 v) { _prom[idx] = v; }
+};
+MockPROM EEPROM;                              ///> fake Arduino EEPROM unit
+#endif // ARDUINO
+///
+///> EEPROM Save/Load
+///
+#define GET(d)    (*(DU*)&data[d])
+#define SET(d, v) (*(DU*)&data[d] = (v))
+
+int ef_save(U8 *data)
+{
+    U16 here = GET(sizeof(DU) * 2);
+    int sz   = here - FORTH_RAM_ADDR;
+    for (int i=0; i < sz; i++) {
+        EEPROM.update(i, data[i]);     /// * store dictionary byte-by-byte
+    }
+    return sz;
+}
+int ef_load(U8 *data)
+{
+    U16 pidx = sizeof(DU) * 2;         ///< CP addr in EEPROM (aka HERE)
+    U16 vCP  = ((U16)EEPROM.read(pidx+1)<<8) + EEPROM.read(pidx);
+    int  sz  = vCP - FORTH_RAM_ADDR;
+    if (!vCP || sz > FORTH_DIC_SZ) return 0;
+
+    IU  hidx = sizeof(DU) * 9;         /// * >IN (buffer pointer)
+    DU  vIN  = GET(hidx);              /// * keep vIN, vNTIB
+    DU  vNTIB= GET(hidx + sizeof(DU));
+
+    for (int i=0; i < sz; i++) {
+        data[i] = EEPROM.read(i);      /// * retrieve dictionary byte-by-byte
+    }
+    SET(hidx, vIN);                    /// * restore vIN, vNTIB
+    SET(hidx + sizeof(DU), vNTIB);
+
+    return sz;
+}
 
 #if ARDUINO
 extern U32 forth_rom[];                    ///< from eforth_rom.c
@@ -55,18 +104,18 @@ void ef_run()
 
 #else  // !ARDUINO
 
-static U8 _rom[FORTH_ROM_SZ] = {};         ///< fake rom to simulate run time
+static U8 _rom[FORTH_ROM_SZ] = {};            ///< fake rom to simulate run time
 ///
 ///> main to support C development debugging
 ///
 int main(int ac, char* av[]) {
-    setvbuf(stdout, NULL, _IONBF, 0);      /// * autoflush (turn STDOUT buffering off)
+    setvbuf(stdout, NULL, _IONBF, 0);         /// * autoflush (turn STDOUT buffering off)
 
     int sz = ef_assemble(_rom);
 
 #if !ASM_ONLY
     _info(_rom, sz, NULL);
-    _ram = (U8*)malloc(FORTH_RAM_SZ);      ///< forth memory block dynamic allocated
+    _ram = (U8*)malloc(FORTH_RAM_SZ);         ///< forth memory block dynamic allocated
 
     vm_init((char*)_rom, _ram, NULL);
     vm_outer();

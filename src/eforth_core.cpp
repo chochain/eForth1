@@ -119,7 +119,8 @@ void intr_timer_enable(U16 f) {
     if (f) {
         TCCR2A = _BV(WGM21);               // Set CTC mode
         TCCR2B = _BV(CS22)|_BV(CS21);      // prescaler 256 (16000000 / 256) = 62500Hz = 16us
-        OCR2A  = 249;                      // 250Hz = 4ms, (250 - 1, must < 256)
+//        OCR2A  = 249;                      // 250KHz = 4ms, (250 - 1, must < 256)
+        OCR2A  = 124;                      // 500KHz = 2ms, (125 - 1, must < 256)
         TIMSK2 |= _BV(OCIE2A);             // enable timer2 compare interrupt
     }
     else {
@@ -132,7 +133,8 @@ void intr_timer_enable(U16 f) {
 ///
 ISR(TIMER2_COMPA_vect) {
     volatile static int cnt = 0;
-    if (++cnt < 25) return;                // 25 * 4ms = 100ms
+//    if (++cnt < 25) return;                // 25 * 4ms = 100ms (allows ~4K ops, max 3200 sec)
+    if (++cnt < 5) return;                 // 5 * 2ms = 10ms (allows ~400 ops, max 320 sec)
     cnt = 0;
     for (U8 i=0, b=1; i < t_idx; i++, b<<=1) {
         if (++t_cnt[i] < t_max[i]) continue;

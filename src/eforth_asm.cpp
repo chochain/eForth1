@@ -512,7 +512,7 @@ int assemble(U8 *cdata)
                 _THEN(NOP);
             }
             _THEN(NOP);
-            _NEXT(TOR, SPACE, SPACE, CELLS, TYPE, RFROM);
+            _NEXT(TOR, SPACE, SPACE, TYPE, RFROM);
         }
         _THEN(NOP);
         _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                // restore BASE

@@ -1,0 +1,194 @@
+\hypertarget{eforth__vm_8h}{}\doxysection{src/eforth\+\_\+vm.h File Reference}
+\label{eforth__vm_8h}\index{src/eforth\_vm.h@{src/eforth\_vm.h}}
+
+
+e\+Forth Virtual Machine module header  
+
+
+{\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
+Include dependency graph for eforth\+\_\+vm.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__vm_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{eforth__vm_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespaceEfVM}{Ef\+VM}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_ad572a768450b0c645d096d7e830c25cc}{R\+A\+M\+\_\+\+F\+L\+AG}}~0xe000
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}~0x07ff
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a9d91438cfe35ddd3db827add653cf917}{I\+R\+E\+T\+\_\+\+F\+L\+AG}}~0x8000
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a1f75956c7e91b6411417071ea93f7bfe}{B\+O\+OL}}(f)~((f) ? \mbox{\hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}})
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(i)~\&\+\_\+data\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}(d,  c)~(\+\_\+data\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}{S2D}}(h,  l)~(((\mbox{\hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32}})(h)$<$$<$16) $\vert$ ((l)\&0xffff))
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a2106695e949772f765546777ef34690e}{P\+OP}}()~(top  = $\ast$DS-\/-\/)
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a55b5173e6face979deb7372dcbb643df}{R\+P\+OP}}()~(rtop = $\ast$RS++)
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a2a0ab46d7e9f1c39675adabb666df35d}{D\+T\+OP}}(d)~\{ $\ast$DS = (d)\&0xffff; top = (d)$>$$>$16; \}
+\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Tracing}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_ae2e6932feda2f28548e9f5500ff8e898}{op\+E\+N\+T\+ER}}~7     /$\ast$$\ast$ for opcode reassignment in \$N\+E\+XT $\ast$/
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}{D\+E\+B\+UG}}(s,  v)
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_ad2e226689a02d2b5f1256e7e98f03cf5}{T\+AB}}()~/$\ast$ skip $\ast$/
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8h_abf78c62d3da5e71ee2d75576561a8531}{T\+R\+A\+CE}}(op)~/$\ast$ skip $\ast$/
+\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}{Ef\+V\+M\+::\+B\+G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
+\item 
+\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{namespaceEfVM_a07e74ced8251d26cd20bce5a2c386d7a}{Ef\+V\+M\+::\+G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
+\item 
+void \mbox{\hyperlink{namespaceEfVM_a6704f4eed222b21f8754d5c4711c1a15}{Ef\+V\+M\+::\+S\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} v)
+\item 
+\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} \mbox{\hyperlink{namespaceEfVM_a42d6bbbd96179a13b2fb9b0c9d58330a}{Ef\+V\+M\+::\+D\+E\+P\+TH}} ()
+\item 
+void \mbox{\hyperlink{namespaceEfVM_ac4f69cc49b68f10383886820029f6257}{Ef\+V\+M\+::\+P\+U\+SH}} (\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} v)
+\item 
+void \mbox{\hyperlink{namespaceEfVM_acfaf9ecd06a6d4b5dc4243201efaf38e}{Ef\+V\+M\+::\+R\+P\+U\+SH}} (\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} v)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+e\+Forth Virtual Machine module header 
+
+\doxyparagraph*{e\+Forth Memory map}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{0x0000-\/0x1fff ROM (8K Flash memory)}
+\DoxyCodeLine{0x2000-\/0x24ff \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{RAM}} (2K dynamic memory)}
+\DoxyCodeLine{    0x2000-\/0x201f User Variables}
+\DoxyCodeLine{    0x2020-\/0x23ff User Dictionary}
+\DoxyCodeLine{    0x2400-\/0x247f Data/Return Stacks}
+\DoxyCodeLine{    0x2480-\/0x24ff TIB (Terminal Input Buffer)}
+\DoxyCodeLine{    0x2500        heap}
+\end{DoxyCode}
+
+
+\doxyparagraph*{Data and Return Stack}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{        S                   \mbox{\hyperlink{group__Assembler_ga85323f491b7b3ea3883bad0c91d9de17}{R}}}
+\DoxyCodeLine{        |                   |}
+\DoxyCodeLine{\mbox{\hyperlink{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}{top}} -\/> [S0, S1, S2,..., R1, R0] <-\/ \mbox{\hyperlink{namespaceEfVM_a61aea862ab3bab556736663c844366c7}{rtop}}}
+\end{DoxyCode}
+ Note\+: Dr. Ting uses U8 (0$\sim$255) for wrap-\/around control 
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{eforth__vm_8h_ad572a768450b0c645d096d7e830c25cc}\label{eforth__vm_8h_ad572a768450b0c645d096d7e830c25cc}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!RAM\_FLAG@{RAM\_FLAG}}
+\index{RAM\_FLAG@{RAM\_FLAG}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{RAM\_FLAG}{RAM\_FLAG}}
+{\footnotesize\ttfamily \#define R\+A\+M\+\_\+\+F\+L\+AG~0xe000}
+
+R\+AM ranger (0x2000$\sim$0x7fff) \mbox{\Hypertarget{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}\label{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!IDX\_MASK@{IDX\_MASK}}
+\index{IDX\_MASK@{IDX\_MASK}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{IDX\_MASK}{IDX\_MASK}}
+{\footnotesize\ttfamily \#define I\+D\+X\+\_\+\+M\+A\+SK~0x07ff}
+
+R\+AM index mask (0x0000$\sim$0x07ff) \mbox{\Hypertarget{eforth__vm_8h_a9d91438cfe35ddd3db827add653cf917}\label{eforth__vm_8h_a9d91438cfe35ddd3db827add653cf917}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!IRET\_FLAG@{IRET\_FLAG}}
+\index{IRET\_FLAG@{IRET\_FLAG}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{IRET\_FLAG}{IRET\_FLAG}}
+{\footnotesize\ttfamily \#define I\+R\+E\+T\+\_\+\+F\+L\+AG~0x8000}
+
+interrupt return flag ~\newline
+ \mbox{\Hypertarget{eforth__vm_8h_a1f75956c7e91b6411417071ea93f7bfe}\label{eforth__vm_8h_a1f75956c7e91b6411417071ea93f7bfe}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!BOOL@{BOOL}}
+\index{BOOL@{BOOL}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{BOOL}{BOOL}}
+{\footnotesize\ttfamily \#define B\+O\+OL(\begin{DoxyParamCaption}\item[{}]{f }\end{DoxyParamCaption})~((f) ? \mbox{\hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}})}
+
+\mbox{\Hypertarget{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}\label{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!RAM@{RAM}}
+\index{RAM@{RAM}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{RAM}{RAM}}
+{\footnotesize\ttfamily \#define R\+AM(\begin{DoxyParamCaption}\item[{}]{i }\end{DoxyParamCaption})~\&\+\_\+data\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}}
+
+\mbox{\Hypertarget{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}\label{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!BSET@{BSET}}
+\index{BSET@{BSET}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{BSET}{BSET}}
+{\footnotesize\ttfamily \#define B\+S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{c }\end{DoxyParamCaption})~(\+\_\+data\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))}
+
+\mbox{\Hypertarget{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}\label{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!S2D@{S2D}}
+\index{S2D@{S2D}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{S2D}{S2D}}
+{\footnotesize\ttfamily \#define S2D(\begin{DoxyParamCaption}\item[{}]{h,  }\item[{}]{l }\end{DoxyParamCaption})~(((\mbox{\hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32}})(h)$<$$<$16) $\vert$ ((l)\&0xffff))}
+
+\mbox{\Hypertarget{eforth__vm_8h_a2106695e949772f765546777ef34690e}\label{eforth__vm_8h_a2106695e949772f765546777ef34690e}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!POP@{POP}}
+\index{POP@{POP}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{POP}{POP}}
+{\footnotesize\ttfamily \#define P\+OP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(top  = $\ast$DS-\/-\/)}
+
+\mbox{\Hypertarget{eforth__vm_8h_a55b5173e6face979deb7372dcbb643df}\label{eforth__vm_8h_a55b5173e6face979deb7372dcbb643df}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!RPOP@{RPOP}}
+\index{RPOP@{RPOP}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{RPOP}{RPOP}}
+{\footnotesize\ttfamily \#define R\+P\+OP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(rtop = $\ast$RS++)}
+
+\mbox{\Hypertarget{eforth__vm_8h_a2a0ab46d7e9f1c39675adabb666df35d}\label{eforth__vm_8h_a2a0ab46d7e9f1c39675adabb666df35d}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!DTOP@{DTOP}}
+\index{DTOP@{DTOP}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{DTOP}{DTOP}}
+{\footnotesize\ttfamily \#define D\+T\+OP(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~\{ $\ast$DS = (d)\&0xffff; top = (d)$>$$>$16; \}}
+
+\mbox{\Hypertarget{eforth__vm_8h_ae2e6932feda2f28548e9f5500ff8e898}\label{eforth__vm_8h_ae2e6932feda2f28548e9f5500ff8e898}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!opENTER@{opENTER}}
+\index{opENTER@{opENTER}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{opENTER}{opENTER}}
+{\footnotesize\ttfamily \#define op\+E\+N\+T\+ER~7     /$\ast$$\ast$ for opcode reassignment in \$N\+E\+XT $\ast$/}
+
+\mbox{\Hypertarget{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}\label{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!DEBUG@{DEBUG}}
+\index{DEBUG@{DEBUG}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{DEBUG}{DEBUG}}
+{\footnotesize\ttfamily \#define D\+E\+B\+UG(\begin{DoxyParamCaption}\item[{}]{s,  }\item[{}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{eforth__vm_8h_ad2e226689a02d2b5f1256e7e98f03cf5}\label{eforth__vm_8h_ad2e226689a02d2b5f1256e7e98f03cf5}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!TAB@{TAB}}
+\index{TAB@{TAB}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{TAB}{TAB}}
+{\footnotesize\ttfamily \#define T\+AB(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~/$\ast$ skip $\ast$/}
+
+\mbox{\Hypertarget{eforth__vm_8h_abf78c62d3da5e71ee2d75576561a8531}\label{eforth__vm_8h_abf78c62d3da5e71ee2d75576561a8531}} 
+\index{eforth\_vm.h@{eforth\_vm.h}!TRACE@{TRACE}}
+\index{TRACE@{TRACE}!eforth\_vm.h@{eforth\_vm.h}}
+\doxysubsubsection{\texorpdfstring{TRACE}{TRACE}}
+{\footnotesize\ttfamily \#define T\+R\+A\+CE(\begin{DoxyParamCaption}\item[{}]{op }\end{DoxyParamCaption})~/$\ast$ skip $\ast$/}
+

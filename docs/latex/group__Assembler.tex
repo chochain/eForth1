@@ -1,0 +1,91 @@
+\hypertarget{group__Assembler}{}\doxysection{Module variables}
+\label{group__Assembler}\index{Module variables@{Module variables}}
+Collaboration diagram for Module variables\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=337pt]{group__Assembler}
+\end{center}
+\end{figure}
+\doxysubsection*{Modules}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{group__Pseudo}{macros (to handle va\+\_\+list)}}
+\begin{DoxyCompactList}\small\item\em 
+\begin{DoxyItemize}
+\item keeping functions in the header is considered a bad practice! 
+\end{DoxyItemize}\end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{e\+Forth Assembler module variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}{Ef\+Asm\+::\+PC}}
+\begin{DoxyCompactList}\small\item\em assembler program counter \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{group__Assembler_ga85323f491b7b3ea3883bad0c91d9de17}{Ef\+Asm\+::R}}
+\begin{DoxyCompactList}\small\item\em assembler return stack index \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_gac44a2258aabda459216d48b8fa99e73a}{Ef\+Asm\+::\+\_\+link}}
+\begin{DoxyCompactList}\small\item\em link to previous word \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{group__Assembler_gad509ea2c54d134a1ef2f093eb460817f}{Ef\+Asm\+::\+\_\+byte}}
+\begin{DoxyCompactList}\small\item\em assembler byte array (heap) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Compiled Address for Branching}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_ga6b8f6e7e77a210d6bfaf73bb43897580}{Ef\+Asm\+::\+D\+O\+T\+QP}}
+\begin{DoxyCompactList}\small\item\em addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}\label{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}} 
+\index{Module variables@{Module variables}!PC@{PC}}
+\index{PC@{PC}!Module variables@{Module variables}}
+\doxysubsubsection{\texorpdfstring{PC}{PC}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+PC}
+
+
+
+assembler program counter 
+
+\mbox{\Hypertarget{group__Assembler_ga85323f491b7b3ea3883bad0c91d9de17}\label{group__Assembler_ga85323f491b7b3ea3883bad0c91d9de17}} 
+\index{Module variables@{Module variables}!R@{R}}
+\index{R@{R}!Module variables@{Module variables}}
+\doxysubsubsection{\texorpdfstring{R}{R}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} Ef\+Asm\+::R}
+
+
+
+assembler return stack index 
+
+\mbox{\Hypertarget{group__Assembler_gac44a2258aabda459216d48b8fa99e73a}\label{group__Assembler_gac44a2258aabda459216d48b8fa99e73a}} 
+\index{Module variables@{Module variables}!\_link@{\_link}}
+\index{\_link@{\_link}!Module variables@{Module variables}}
+\doxysubsubsection{\texorpdfstring{\_link}{\_link}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+\_\+link}
+
+
+
+link to previous word 
+
+\mbox{\Hypertarget{group__Assembler_gad509ea2c54d134a1ef2f093eb460817f}\label{group__Assembler_gad509ea2c54d134a1ef2f093eb460817f}} 
+\index{Module variables@{Module variables}!\_byte@{\_byte}}
+\index{\_byte@{\_byte}!Module variables@{Module variables}}
+\doxysubsubsection{\texorpdfstring{\_byte}{\_byte}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ Ef\+Asm\+::\+\_\+byte}
+
+
+
+assembler byte array (heap) 
+
+\mbox{\Hypertarget{group__Assembler_ga6b8f6e7e77a210d6bfaf73bb43897580}\label{group__Assembler_ga6b8f6e7e77a210d6bfaf73bb43897580}} 
+\index{Module variables@{Module variables}!DOTQP@{DOTQP}}
+\index{DOTQP@{DOTQP}!Module variables@{Module variables}}
+\doxysubsubsection{\texorpdfstring{DOTQP}{DOTQP}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+Asm\+::\+D\+O\+T\+QP}
+
+
+
+addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq 
+
+addr of output function \+\_\+dotq 

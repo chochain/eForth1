@@ -205,7 +205,8 @@ int assemble(U8 *cdata)
         _IF(DOLIT, 0x2d, HOLD);
         _THEN(EXIT);
     }
-    IU EDIGS = _COLON("#>",     DROP, vHLD, AT, PAD, OVER, SUB, EXIT);
+    IU EDIGS = _COLON("#>",      DROP, vHLD, AT, PAD, OVER, SUB, EXIT);
+    IU STR   = _COLON("STR",     DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
     IU HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
     IU DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
     IU TOUPP = _COLON(">UPPER", DUP, DOLIT, 0x61, DOLIT, 0x7b, WITHI); { // [a-z] only?
@@ -259,16 +260,13 @@ int assemble(U8 *cdata)
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);               // LF i.e. \n actually
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
     IU STRQP = _COLON("$\"|", DOSTR, EXIT);
-       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);            // Note: DOTQP export to _dotq
-    IU DOTR  = _COLON(".R",   TOR,
-            DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,         // shown as string
-            RFROM, OVER, SUB, SPACS, TYPE, EXIT);
+       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);                        // Note: DOTQP export to _dotq
+    IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);   // shown as string
     IU UDOTR = _COLON("U.R",  TOR, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);
     IU UDOT  = _COLON("U.",   BDIGS, DIGS, EDIGS, SPACE, TYPE, EXIT);
     IU DOT   = _COLON(".",    vBASE, AT, DOLIT, 0xa, XOR); {
         _IF(UDOT, EXIT);                                            // base 10
-        _THEN(DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS,       // shown as string
-              SPACE, TYPE, EXIT);
+        _THEN(STR, SPACE, TYPE, EXIT);                              // shown as string
     }
     IU QUEST = _COLON("?", AT, DOT, EXIT);
     /// TODO: add PAGE
@@ -418,8 +416,10 @@ int assemble(U8 *cdata)
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
         _IF(CAT, DOLIT, fCMPL, AND); {               // check for compile only word
-            _IF(ABORT);
-            _ELSE(EXECU);                            // INTER0 of Dr Ting's
+            _IF(DROP); {
+                _DOTQ("compile only");               // INTER0 of Dr Ting's
+            }
+            _ELSE(EXECU);
             _THEN(EXIT);
         }
         _THEN(NUMBQ);                                // word name not found, check if it is a number
@@ -456,19 +456,19 @@ int assemble(U8 *cdata)
     IU iLITR = _IMMED("LITERAL",  DOLIT, DOLIT, CCMMA, COMMA, EXIT);      // create a literal
     IU ALLOT = _COLON("ALLOT",    vCP, PSTOR, EXIT);
     IU COMPI = _COLON("COMPILE",  RFROM, DUP, CAT, CCMMA, ONEP, TOR, EXIT);
-    IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); {      // name found?
-        _IF(CAT, DOLIT, fIMMD, AND); {                 // is immediate?
-            _IF(EXECU);                                // execute
-            _ELSE(DUP, DUP, DOLIT, FORTH_ROM_SZ, LT,   // a primitive?
-            	  SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {  // XX08 <= this might break
-                _IF(CAT, CCMMA);                       // append just the opcode
-                _ELSE(DOLIT, fCOLON, OR, COMMA);       // append colon word address with flag
+    IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); {    // name found?
+        _IF(CAT, DOLIT, fIMMD, AND); {               // is immediate?
+            _IF(EXECU);                              // execute
+            _ELSE(DUP, DUP, DOLIT, FORTH_ROM_SZ, LT, // a primitive?
+                  SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {  // XX08 <= this might break
+                _IF(CAT, CCMMA);                     // append just the opcode
+                _ELSE(DOLIT, fCOLON, OR, COMMA);     // append colon word address with flag
                 _THEN(NOP);
             }
             _THEN(EXIT);
         }
-        _THEN(NUMBQ);                                  // a number?
-        _IF(iLITR, EXIT);                              // append as a literal
+        _THEN(NUMBQ);                                // a number?
+        _IF(iLITR, EXIT);                            // append as a literal
         _THEN(ERROR);
     }
     IU UNIQU = _COLON("?UNIQUE", DUP, NAMEQ, QDUP); {
@@ -477,7 +477,7 @@ int assemble(U8 *cdata)
         }
         _THEN(DROP, EXIT);
     }
-    IU SNAME = _COLON("$,n", DUP, AT); {          // add new name field which is already build by PACK$
+    IU SNAME = _COLON("$,n", DUP, AT); {  // add new name field which is already build by PACK$
         _IF(UNIQU,
             DUP, NAMET, vCP, STORE,    DUP, vLAST, STORE,
             CELLM, vCNTX, AT, SWAP, STORE, EXIT);
@@ -487,9 +487,9 @@ int assemble(U8 *cdata)
         _IF(EXIT);
         _THEN(ERROR);
     }
-    IU RBRAC = _COLON("]", DOLIT, SCOMP, vMODE, STORE, EXIT);       // switch into compiler-mode
+    IU RBRAC = _COLON("]", DOLIT, SCOMP, vMODE, STORE, EXIT);  // switch into compiler-mode
     /// TODO: add [']
-    _IMMED("[COMPILE]",    TICK, COMMA, EXIT);                      // add word address to dictionary
+    _IMMED("[COMPILE]",    TICK, COMMA, EXIT);                 // add word address to dictionary
     _COLON(":", TOKEN, SNAME, RBRAC, EXIT);
     _IMMED(";", COMPI, EXIT, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
     ///
@@ -499,23 +499,30 @@ int assemble(U8 *cdata)
         _BEGIN(ONEM, DUP, CAT, DOLIT, 0x7f, AND, DOLIT, 0x20, LT);
         _UNTIL(EXIT);
     }
-    _COLON("DUMP", vBASE, AT, TOR, HEX_, DOLIT, 0x1f, ADD, DOLIT, 0x10, DIV); {
+    _COLON("DUMP", vBASE, AT, TOR, HEX_,                       // save BASE, make HEX
+            DOLIT, 0x1f, ADD, DOLIT, 0x10, DIV); {             // get row count
         _FOR(NOP);
-        _AFT(CR, DOLIT, 8, DDUP, OVER, DOLIT, 5, UDOTR); {
-            _FOR(DOLIT, 0x3a, EMIT);                    // dump one row
-            _AFT(DUP, AT, DOLIT, 5, UDOTR, CELLP);
+        _AFT(CR, DOLIT, 0x10, DDUP, OVER, DOLIT, 5, UDOTR); {  // dump one row
+            _FOR(DOLIT, 0x3a, EMIT);                           // :
+            _AFT(SPACE, DUP, CAT,
+                DOLIT, 0x10, EXTRC, SWAP,                      // low-nibble
+                DOLIT, 0x10, EXTRC, EMIT, DROP, EMIT,          // high-nibble
+                ONEP, RAT, DOLIT, 8, EQ); {
+                _IF(SPACE);
+                _THEN(NOP);
+            }
             _THEN(NOP);
             _NEXT(TOR, SPACE, SPACE, CELLS, TYPE, RFROM);
         }
         _THEN(NOP);
-        _NEXT(DROP, RFROM, vBASE, STORE, EXIT);         // restore BASE
+        _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                // restore BASE
     }
     _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {
         _BEGIN(AT, QDUP);
-        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,            // .ID
+        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,                   // .ID
             DUP, DOLIT, 2, ADD, vTMP, PSTOR,
             TYPE, SPACE, SPACE, CELLM,
-            vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {    // check row width
+            vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {           // check row width
             _IF(CR, DOLIT, 0, vTMP, STORE);
             _THEN(NOP);
         }
@@ -570,14 +577,16 @@ int assemble(U8 *cdata)
     ///
     ///> Comments
     ///
-    _IMMED(".(", DOLIT, 0x29, PARSE, TYPE, EXIT);  // print til hit ) i.e. 0x29
-    _IMMED("\\", DOLIT, 0xa,  WORD,  DROP, EXIT);  // skip til end of line
-    _IMMED("(",  DOLIT, 0x29, PARSE, DDROP, EXIT); // skip til )
+    _IMMED(".(", DOLIT, 0x29, PARSE, TYPE, EXIT);       // print til hit ) i.e. 0x29
+    _IMMED("\\", DOLIT, 0xa,  WORD,  DROP, EXIT);       // skip til end of line
+    _IMMED("(",  DOLIT, 0x29, PARSE, DDROP, EXIT);      // skip til )
     ///
     ///> Lexicon Bits
     ///
-    _COLON("COMPILE-ONLY", DOLIT, fCMPL, vLAST, AT, PSTOR, EXIT);   // enable COMPILE-ONLY flag
-    _COLON("IMMEDIATE",    DOLIT, fIMMD, vLAST, AT, PSTOR, EXIT);   // enable IMMEDIATE flag
+    _COLON("COMPILE-ONLY", vLAST, AT, DUP,              // enable COMPILE-ONLY flag
+        CAT, DOLIT, fCMPL, OR, SWAP, CSTOR, EXIT);
+    _COLON("IMMEDIATE",    vLAST, AT, DUP,              // enable IMMEDIATE flag
+        CAT, DOLIT, fIMMD, OR, SWAP, CSTOR, EXIT);
     ///
     ///> Arduino specific opcodes
     ///

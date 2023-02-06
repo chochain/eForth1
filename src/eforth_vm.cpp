@@ -38,6 +38,9 @@ void _init() {
     intr_reset();                     /// * reset interrupt handlers
 
     PC = IP = IR = top = 0;           ///> setup control variables
+    DS = (DU*)RAM(FORTH_STACK_ADDR - CELLSZ);
+    RS = (DU*)RAM(FORTH_STACK_TOP);
+
 #if EXE_TRACE
     tCNT = 1; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
@@ -141,8 +144,6 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     io     = (Stream *)io_stream;
     _rom   = rom;
     _data  = data;
-    DS     = (DU*)RAM(FORTH_STACK_ADDR);
-    RS     = (DU*)RAM(FORTH_STACK_TOP);
 
     _init();                    /// * resetting user variables
 }
@@ -195,6 +196,7 @@ void vm_outer() {
         	PUSH(GET(IP));              ///> push literal onto data stack
             IP += CELLSZ);
         _X(DOVAR, PUSH(IP+1));          ///> push literal addr to data stack
+                                        /// * +1 means skip EXIT byte (08)
         /// @}
         /// @name Branching ops
         /// @{
@@ -270,7 +272,7 @@ void vm_outer() {
         _X(AND,   top &= *DS--);
         _X(OR,    top |= *DS--);
         _X(XOR,   top ^= *DS--);
-        _X(INV,   top = -top - 1);
+        _X(INV,   top ^= -1);
         _X(LSH,   top =  *DS-- << top);
         _X(RSH,   top =  *DS-- >> top);
         _X(ADD,   top += *DS--);

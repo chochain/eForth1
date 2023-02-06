@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['io_254',['io',['../eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b',1,'io():&#160;eforth1.cpp'],['../namespaceEfVM.html#aa5ac1bb7ff2e93de1df7e220797fc690',1,'EfVM::io()']]],
-  ['ip_255',['IP',['../namespaceEfVM.html#a34e9492841c1a98e29286c41dcdac10b',1,'EfVM']]],
-  ['ir_256',['IR',['../namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74',1,'EfVM']]]
+  ['r_250',['R',['../group__Assembler.html#ga85323f491b7b3ea3883bad0c91d9de17',1,'EfAsm']]],
+  ['rs_251',['RS',['../namespaceEfVM.html#a44c4b6ad0dc45ad811db233793ab9ba8',1,'EfVM']]],
+  ['rtop_252',['rtop',['../namespaceEfVM.html#a61aea862ab3bab556736663c844366c7',1,'EfVM']]]
 ];

@@ -3,8 +3,8 @@
 \doxysubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum \{ \mbox{\hyperlink{group__Module_ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6}{op\+N\+OP}} = 0, 
-\mbox{\hyperlink{group__Module_ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541}{O\+P\+C\+O\+D\+ES}}
+enum \{ \mbox{\hyperlink{group__Assembler_ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6}{op\+N\+OP}} = 0, 
+\mbox{\hyperlink{group__Assembler_ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541}{O\+P\+C\+O\+D\+ES}}
  \}
 \end{DoxyCompactItemize}
 \doxysubsection*{Functions}
@@ -55,10 +55,6 @@ void \mbox{\hyperlink{group__Pseudo_ga8c4966a74388b9427ae2771419d73430}{\+\_\+el
 void \mbox{\hyperlink{group__Pseudo_ga5a0ec1a59cc273ec7db9b5a2af2779ef}{\+\_\+then}} (int len,...)
 \item 
 void \mbox{\hyperlink{group__Pseudo_gafb006746d990ab51ca27545ab004f260}{\+\_\+dotq}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seq)
-\item 
-void \mbox{\hyperlink{group__Pseudo_ga902f7d3df2665aef0f0aa00269bf932d}{\+\_\+strq}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seq)
-\item 
-void \mbox{\hyperlink{group__Pseudo_ga4499c7338bdc153d5f19127e8a3d59a7}{\+\_\+abortq}} (\mbox{\hyperlink{namespaceEfAsm_a1866848c561f07858c76dec0c2b76a78}{F\+C\+H\+AR}} $\ast$seq)
 \end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
@@ -94,8 +90,30 @@ O\+P\+C\+O\+D\+ES&\\
 \begin{quote}
 e\+Forth Macro Assembler \end{quote}
 \begin{quote}
-Kernel constants \end{quote}
+R\+OM starting address \end{quote}
 
+
+reserved for C\+O\+LD boot vector
+
+\begin{quote}
+Kernel dictionary (primitive words) \end{quote}
+
+
+T\+O\+DO\+: add U\+M+
+
+\begin{quote}
+( udl udh u -- ur uq ) unsigned double divided by a single \end{quote}
+
+
+\begin{quote}
+( u1 u2 -- ud ) unsigned double = multiply unsigned singles \end{quote}
+
+
+\begin{quote}
+( n1 n2 -- d ) double = single $\ast$ single \end{quote}
+
+
+Kernel constants
 
 \begin{quote}
 
@@ -200,26 +218,30 @@ common constants and variable spec. \end{quote}
 
 
 \begin{quote}
-Kernel dictionary (primitive words) \end{quote}
-
-
-T\+O\+DO\+: add U\+M+
-
-\begin{quote}
 Common High-\/\+Level Colon Words \end{quote}
 
+
+T\+O\+DO\+: add 2S\+W\+AP, 2O\+V\+ER, 2+, 2-\/, 2$\ast$, 2/
+
+T\+O\+DO\+: add I, J
 
 \begin{quote}
 Console Input and Common words \end{quote}
 
 
+T\+O\+DO\+: add SP@, S\+P0
+
 \begin{quote}
 Number Conversions and formatting \end{quote}
 
 
+T\+O\+DO\+: add $>$N\+U\+M\+B\+ER
+
 \begin{quote}
 Console Output \end{quote}
 
+
+T\+O\+DO\+: add P\+A\+GE
 
 \begin{quote}
 Parsing \end{quote}
@@ -229,6 +251,8 @@ Parsing \end{quote}
 Dictionary serach \end{quote}
 
 
+T\+O\+DO\+: add C\+O\+M\+P\+A\+RE
+
 \begin{quote}
 Terminal Input \end{quote}
 
@@ -236,8 +260,8 @@ Terminal Input \end{quote}
 \begin{quote}
 Text Interpreter \end{quote}
 \begin{DoxyVerb}QUERY/TIB/ACCEPT - start the interpreter loop <-------<------.
-TOKEN/PARSE - get a space delimited word                      \
-EXECUTE - attempt to look up that word in the dictionary       \
+TOKEN/PARSE - get a space delimited word                      .
+EXECUTE - attempt to look up that word in the dictionary       .
   NAME?/find - was the word found?                              ^
   |-Yes:                                                        |
   |   $INTERPRET - are we in compile mode?                      |
@@ -245,6 +269,8 @@ EXECUTE - attempt to look up that word in the dictionary       \
   |   |  \-Is the Word an Immediate word?                       |
   |   |   |-Yes:                                                |
   |   |   |    \- EXECUTE Execute the word -------------------->.
+  |   |   |     |                                               |
+  |   |   |     \- if (NAME?) EXECU else NUMBQ ---------------->.
   |   |    \-No:                                                |
   |   |        \-Compile the word into the dictionary --------->.
   |    \-No:                                                    |
@@ -254,17 +280,24 @@ EXECUTE - attempt to look up that word in the dictionary       \
       |-Yes:                                                    |
       | \-Are we in compile mode?                               |
       |  |-Yes:                                                 |
+      |  |  |                                                   |
       |  |   \-Compile a literal into the dictionary >--------->.
+      |  |                                                      |
       |   \-No:                                                 |
+      |     |                                                   |
       |      \-Push the number to the variable stack >--------->.
-       \-No:                                                    /
+       \-No:                                                   .
           \-An Error has occurred, prIU out an error message ->
 \end{DoxyVerb}
 
 
+T\+O\+DO\+: add ?S\+T\+A\+CK
+
 \begin{quote}
 Colon Compiler \end{quote}
 
+
+T\+O\+DO\+: add \mbox{[}\textquotesingle{}\mbox{]}
 
 \begin{quote}
 Debugging Tools \end{quote}
@@ -295,6 +328,8 @@ Control Structures \end{quote}
 \end{DoxyItemize}\end{quote}
 
 
+T\+O\+DO\+: add DO...L\+O\+OP, +L\+O\+OP, L\+E\+A\+VE
+
 \begin{quote}
 String Literals \end{quote}
 
@@ -302,6 +337,15 @@ String Literals \end{quote}
 \begin{quote}
 Defining Words -\/ variable, constant, and comments \end{quote}
 
+
+
+\begin{DoxyItemize}
+\item op\+D\+O\+V\+AR padded with op\+E\+X\+IT
+\end{DoxyItemize}
+
+T\+O\+DO\+: add D\+O\+ES$>$, P\+O\+S\+T\+P\+O\+NE
+
+T\+O\+DO\+: 2C\+O\+N\+S\+T\+A\+NT, 2V\+A\+R\+I\+A\+B\+LE
 
 \begin{quote}
 Comments \end{quote}
@@ -315,11 +359,15 @@ Lexicon Bits \end{quote}
 Arduino specific opcodes \end{quote}
 
 
+( -- ud ud ) get current clock (in ms)
+
+( n p -- ) set pin\+Mode(p, n=1\+:O\+U\+T\+P\+UT, n=0\+: I\+N\+P\+UT)
+
 ( h l p -- ) set map range to pin
 
 ( p -- n ) digital\+Read(p)
 
-( p n -- ) digitial\+Write(p, n=1 H\+I\+GH, n=0 L\+OW)
+( n p -- ) digitial\+Write(p, n=1 H\+I\+GH, n=0 L\+OW)
 
 ( p -- n ) read analog value from pin
 

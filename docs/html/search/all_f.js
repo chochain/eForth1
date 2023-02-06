@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['r_137',['R',['../group__Module.html#ga85323f491b7b3ea3883bad0c91d9de17',1,'EfAsm']]],
-  ['ram_138',['RAM',['../eforth__vm_8cpp.html#aaf6b91711b3d8b68c942eccd99b9d19e',1,'eforth_vm.cpp']]],
-  ['ram_5fflag_139',['RAM_FLAG',['../eforth__vm_8cpp.html#ad572a768450b0c645d096d7e830c25cc',1,'eforth_vm.cpp']]],
-  ['readme_2emd_140',['README.md',['../README_8md.html',1,'']]],
-  ['rpop_141',['RPOP',['../eforth__asm_8h.html#a55b5173e6face979deb7372dcbb643df',1,'RPOP():&#160;eforth_asm.h'],['../eforth__vm_8cpp.html#a55b5173e6face979deb7372dcbb643df',1,'RPOP():&#160;eforth_vm.cpp']]],
-  ['rpush_142',['RPUSH',['../eforth__asm_8h.html#a82363ba7a7cd1a9826fa73d03805e641',1,'RPUSH():&#160;eforth_asm.h'],['../namespaceEfVM.html#acfaf9ecd06a6d4b5dc4243201efaf38e',1,'EfVM::RPUSH()']]],
-  ['rs_143',['RS',['../namespaceEfVM.html#abf397b013c4b72715edcab1de7a6f2a1',1,'EfVM']]],
-  ['rtop_144',['rtop',['../namespaceEfVM.html#a61aea862ab3bab556736663c844366c7',1,'EfVM']]]
+  ['t_5fcnt_150',['t_cnt',['../eforth__core_8cpp.html#a470c571e758956e04c8f0a0743950f94',1,'eforth_core.cpp']]],
+  ['t_5fhit_151',['t_hit',['../eforth__core_8cpp.html#a12bb021d7b3610d123b70ba36833f8b7',1,'eforth_core.cpp']]],
+  ['t_5fidx_152',['t_idx',['../eforth__core_8cpp.html#a6c4909ce7de6ad2085e8aba035345973',1,'eforth_core.cpp']]],
+  ['t_5fmax_153',['t_max',['../eforth__core_8cpp.html#af82b7e8747490fe5fc9691d79c7b6c32',1,'eforth_core.cpp']]],
+  ['t_5fxt_154',['t_xt',['../eforth__core_8cpp.html#adef45e007330e1e83b28d4ba32a15c85',1,'eforth_core.cpp']]],
+  ['tab_155',['TAB',['../eforth__vm_8h.html#ad2e226689a02d2b5f1256e7e98f03cf5',1,'eforth_vm.h']]],
+  ['top_156',['top',['../namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169',1,'EfVM']]],
+  ['trace_157',['TRACE',['../eforth__vm_8h.html#abf78c62d3da5e71ee2d75576561a8531',1,'eforth_vm.h']]],
+  ['true_158',['TRUE',['../eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d',1,'eforth_core.h']]]
 ];

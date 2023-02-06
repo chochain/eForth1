@@ -19,7 +19,8 @@ Include dependency graph for eforth\+\_\+core.\+h\+:\nopagebreak
 \includegraphics[width=350pt]{eforth__core_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -31,7 +32,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_af0b5cfa4242ae7f98ba80fd23ef8afa9}{A\+P\+P\+\_\+\+N\+A\+ME}}~\char`\"{}e\+Forth1\char`\"{}
 \item 
-\#define \mbox{\hyperlink{eforth__core_8h_aa9e8f3bb466bb421d13913df7aeaa20c}{M\+A\+J\+O\+R\+\_\+\+V\+E\+R\+S\+I\+ON}}~\char`\"{}v1\char`\"{}
+\#define \mbox{\hyperlink{eforth__core_8h_aa9e8f3bb466bb421d13913df7aeaa20c}{M\+A\+J\+O\+R\+\_\+\+V\+E\+R\+S\+I\+ON}}~\char`\"{}v2\char`\"{}
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_a6094f5f4a8aa099faa6d80b4f020927b}{C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE}}~0
 \item 
@@ -95,11 +96,17 @@ logic and stack op macros (processor dependent)
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Logical}\par
-{\em T\+R\+UE cannot use 1 because N\+O\+T(ffffffff)==0 while N\+O\+T(1)==ffffffff which does not need boolean op (i.\+e. in C) }\begin{DoxyCompactItemize}
+{\em T\+R\+UE cannot use 1 because N\+O\+T(ffff)==0 while N\+O\+T(1)==ffff which does not need boolean op (i.\+e. in C) }\begin{DoxyCompactItemize}
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}}~-\/1
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}}~0
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ VM operational flags}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__core_8h_a7f47e1f84ff391a5ef46f3f721697665}{f\+C\+O\+L\+ON}}~0x8000
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Arduino Support Macros}\par
@@ -163,7 +170,7 @@ void \mbox{\hyperlink{eforth__core_8h_a227d4b84f416c811b8ac176743593dec}{intr\+\
 \item 
 void \mbox{\hyperlink{eforth__core_8h_aa4cce331b74c197758d0b9ada8d58002}{vm\+\_\+init}} (P\+G\+M\+\_\+P rom, \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata, void $\ast$io\+\_\+stream)
 \item 
-int \mbox{\hyperlink{eforth__core_8h_a1235c887d8bdb522e79d94afa74162c5}{vm\+\_\+outer}} ()
+void \mbox{\hyperlink{eforth__core_8h_a4bafcde45de1826f5d95260ec6143e39}{vm\+\_\+outer}} ()
 \begin{DoxyCompactList}\small\item\em Forth outer interpreter. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ e\+Forth Assembler Functions}\par
@@ -194,7 +201,7 @@ e\+Forth prototype and interface
 \index{eforth\_core.h@{eforth\_core.h}!MAJOR\_VERSION@{MAJOR\_VERSION}}
 \index{MAJOR\_VERSION@{MAJOR\_VERSION}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{MAJOR\_VERSION}{MAJOR\_VERSION}}
-{\footnotesize\ttfamily \#define M\+A\+J\+O\+R\+\_\+\+V\+E\+R\+S\+I\+ON~\char`\"{}v1\char`\"{}}
+{\footnotesize\ttfamily \#define M\+A\+J\+O\+R\+\_\+\+V\+E\+R\+S\+I\+ON~\char`\"{}v2\char`\"{}}
 
 \mbox{\Hypertarget{eforth__core_8h_a6094f5f4a8aa099faa6d80b4f020927b}\label{eforth__core_8h_a6094f5f4a8aa099faa6d80b4f020927b}} 
 \index{eforth\_core.h@{eforth\_core.h}!CASE\_SENSITIVE@{CASE\_SENSITIVE}}
@@ -333,7 +340,13 @@ total R\+AM \mbox{\Hypertarget{eforth__core_8h_a8854972678927e0868e458eab4d789a2
 \doxysubsubsection{\texorpdfstring{FALSE}{FALSE}}
 {\footnotesize\ttfamily \#define F\+A\+L\+SE~0}
 
-\mbox{\Hypertarget{eforth__core_8h_a9d8d8ad7c0601f1313a9d026757f019a}\label{eforth__core_8h_a9d8d8ad7c0601f1313a9d026757f019a}} 
+\mbox{\Hypertarget{eforth__core_8h_a7f47e1f84ff391a5ef46f3f721697665}\label{eforth__core_8h_a7f47e1f84ff391a5ef46f3f721697665}} 
+\index{eforth\_core.h@{eforth\_core.h}!fCOLON@{fCOLON}}
+\index{fCOLON@{fCOLON}!eforth\_core.h@{eforth\_core.h}}
+\doxysubsubsection{\texorpdfstring{fCOLON}{fCOLON}}
+{\footnotesize\ttfamily \#define f\+C\+O\+L\+ON~0x8000}
+
+flag a colon word \mbox{\Hypertarget{eforth__core_8h_a9d8d8ad7c0601f1313a9d026757f019a}\label{eforth__core_8h_a9d8d8ad7c0601f1313a9d026757f019a}} 
 \index{eforth\_core.h@{eforth\_core.h}!OPCODES@{OPCODES}}
 \index{OPCODES@{OPCODES}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{OPCODES}{OPCODES}}
@@ -533,11 +546,11 @@ enable/disable pin change interrupt \end{quote}
 {\em io\+\_\+stream} & pointer to Stream object of Arduino \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{eforth__core_8h_a1235c887d8bdb522e79d94afa74162c5}\label{eforth__core_8h_a1235c887d8bdb522e79d94afa74162c5}} 
+\mbox{\Hypertarget{eforth__core_8h_a4bafcde45de1826f5d95260ec6143e39}\label{eforth__core_8h_a4bafcde45de1826f5d95260ec6143e39}} 
 \index{eforth\_core.h@{eforth\_core.h}!vm\_outer@{vm\_outer}}
 \index{vm\_outer@{vm\_outer}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{vm\_outer()}{vm\_outer()}}
-{\footnotesize\ttfamily int vm\+\_\+outer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void vm\+\_\+outer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 

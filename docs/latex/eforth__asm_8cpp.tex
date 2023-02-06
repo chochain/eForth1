@@ -36,73 +36,45 @@ int \mbox{\hyperlink{eforth__asm_8cpp_a94e10412bf5e1f89d12efb94e80979c8}{ef\+\_\
 \begin{Indent}\textbf{ e\+Forth Assembler module variables}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{group__Module_gad509ea2c54d134a1ef2f093eb460817f}{Ef\+Asm\+::\+\_\+byte}}
-\begin{DoxyCompactList}\small\item\em assembler byte array (heap) \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gac44a2258aabda459216d48b8fa99e73a}{Ef\+Asm\+::\+\_\+link}}
-\begin{DoxyCompactList}\small\item\em link to previous word \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{group__Module_ga85323f491b7b3ea3883bad0c91d9de17}{Ef\+Asm\+::R}}
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}{Ef\+Asm\+::\+PC}}
+\begin{DoxyCompactList}\small\item\em assembler program counter \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{group__Assembler_ga85323f491b7b3ea3883bad0c91d9de17}{Ef\+Asm\+::R}}
 \begin{DoxyCompactList}\small\item\em assembler return stack index \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga77406fd9edef6925ff2bafc8746085eb}{Ef\+Asm\+::\+PC}}
-\begin{DoxyCompactList}\small\item\em assembler program counter \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{group__Assembler_gad509ea2c54d134a1ef2f093eb460817f}{Ef\+Asm\+::\+\_\+byte}}
+\begin{DoxyCompactList}\small\item\em assembler byte array (heap) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_gac44a2258aabda459216d48b8fa99e73a}{Ef\+Asm\+::\+\_\+link}}
+\begin{DoxyCompactList}\small\item\em link to previous word \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Compiled Address for Branching}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga441c683b38bd339236b4bd6e305750cd}{Ef\+Asm\+::\+B\+R\+AN}}
-\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga7b221cc855cf8ca6334d2c7cb5879542}{Ef\+Asm\+::\+Q\+B\+R\+AN}}
-\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010}{Ef\+Asm\+::\+D\+O\+N\+XT}}
-\begin{DoxyCompactList}\small\item\em addr of branching ops, used by branching ops \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga6b8f6e7e77a210d6bfaf73bb43897580}{Ef\+Asm\+::\+D\+O\+T\+QP}}
-\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gac31352a003705d9569ef3314d62342fb}{Ef\+Asm\+::\+S\+T\+R\+QP}}
-\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga13343dd66b80ba0cbe75877f7a6980d9}{Ef\+Asm\+::\+A\+B\+O\+R\+QP}}
-\begin{DoxyCompactList}\small\item\em addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gab44525c5e6436fa71223dfb207741699}{Ef\+Asm\+::\+T\+OR}}
-\begin{DoxyCompactList}\small\item\em addres of \char`\"{}$>$\+R\char`\"{} op, used by \+\_\+for \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gaa3dd7a4f331c954244daaddf0177f059}{Ef\+Asm\+::\+N\+OP}} = 0xffff
-\begin{DoxyCompactList}\small\item\em N\+OP set to ffff to prevent access before initialized. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_ga6b8f6e7e77a210d6bfaf73bb43897580}{Ef\+Asm\+::\+D\+O\+T\+QP}}
+\begin{DoxyCompactList}\small\item\em addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ e\+Forth Assembler module variables}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{group__Module_gad509ea2c54d134a1ef2f093eb460817f}{Ef\+Asm\+::\+\_\+byte}}
-\begin{DoxyCompactList}\small\item\em assembler byte array (heap) \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gac44a2258aabda459216d48b8fa99e73a}{Ef\+Asm\+::\+\_\+link}}
-\begin{DoxyCompactList}\small\item\em link to previous word \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{group__Module_ga85323f491b7b3ea3883bad0c91d9de17}{Ef\+Asm\+::R}}
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}{Ef\+Asm\+::\+PC}}
+\begin{DoxyCompactList}\small\item\em assembler program counter \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{group__Assembler_ga85323f491b7b3ea3883bad0c91d9de17}{Ef\+Asm\+::R}}
 \begin{DoxyCompactList}\small\item\em assembler return stack index \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga77406fd9edef6925ff2bafc8746085eb}{Ef\+Asm\+::\+PC}}
-\begin{DoxyCompactList}\small\item\em assembler program counter \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{group__Assembler_gad509ea2c54d134a1ef2f093eb460817f}{Ef\+Asm\+::\+\_\+byte}}
+\begin{DoxyCompactList}\small\item\em assembler byte array (heap) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_gac44a2258aabda459216d48b8fa99e73a}{Ef\+Asm\+::\+\_\+link}}
+\begin{DoxyCompactList}\small\item\em link to previous word \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Compiled Address for Branching}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga441c683b38bd339236b4bd6e305750cd}{Ef\+Asm\+::\+B\+R\+AN}}
-\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga7b221cc855cf8ca6334d2c7cb5879542}{Ef\+Asm\+::\+Q\+B\+R\+AN}}
-\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga86b03a1e4d3a8b4c0cdfd8d9fc8f7010}{Ef\+Asm\+::\+D\+O\+N\+XT}}
-\begin{DoxyCompactList}\small\item\em addr of branching ops, used by branching ops \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga6b8f6e7e77a210d6bfaf73bb43897580}{Ef\+Asm\+::\+D\+O\+T\+QP}}
-\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gac31352a003705d9569ef3314d62342fb}{Ef\+Asm\+::\+S\+T\+R\+QP}}
-\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_ga13343dd66b80ba0cbe75877f7a6980d9}{Ef\+Asm\+::\+A\+B\+O\+R\+QP}}
-\begin{DoxyCompactList}\small\item\em addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gab44525c5e6436fa71223dfb207741699}{Ef\+Asm\+::\+T\+OR}}
-\begin{DoxyCompactList}\small\item\em addres of \char`\"{}$>$\+R\char`\"{} op, used by \+\_\+for \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Module_gaa3dd7a4f331c954244daaddf0177f059}{Ef\+Asm\+::\+N\+OP}} = 0xffff
-\begin{DoxyCompactList}\small\item\em N\+OP set to ffff to prevent access before initialized. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_ga6b8f6e7e77a210d6bfaf73bb43897580}{Ef\+Asm\+::\+D\+O\+T\+QP}}
+\begin{DoxyCompactList}\small\item\em addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 
 
 \doxysubsection{Detailed Description}
 e\+Forth Assembler module 
 
-Forth Macro Assembler 
+Forth Macro Assembler Note\+: T\+O\+DO\+: adding Leo Brodie\textquotesingle{}s words 
 
 \doxysubsection{Macro Definition Documentation}
 \mbox{\Hypertarget{eforth__asm_8cpp_aa18a10c05357a5f4115d17f150a0a0fb}\label{eforth__asm_8cpp_aa18a10c05357a5f4115d17f150a0a0fb}} 

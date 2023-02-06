@@ -7,7 +7,7 @@
 \item 
 \#define \mbox{\hyperlink{group__Memory_gabee5cbd8a5640f4b067cdc048b4c21ca}{P\+G\+M\+C\+PY}}(len,  seq)
 \item 
-\#define \mbox{\hyperlink{group__Memory_ga49723d0c3f14a2ff23c8518ca5730fb0}{O\+P\+S\+TR}}(op,  seq)
+\#define \mbox{\hyperlink{group__Memory_gaadf5c864c0d562a2efb56cdee5f3f206}{O\+P\+S\+TR}}(ip,  seq)
 \end{DoxyCompactItemize}
 
 
@@ -26,11 +26,26 @@
 \DoxyCodeLine{    \{                            \(\backslash\)}
 \DoxyCodeLine{    va\_list argList;                            \(\backslash\)}
 \DoxyCodeLine{    va\_start(argList, n);                       \(\backslash\)}
+\DoxyCodeLine{    int lit=0;                                  \(\backslash\)}
 \DoxyCodeLine{    for (; n; n-\/-\/) \{                            \(\backslash\)}
 \DoxyCodeLine{        IU j = (\mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}})va\_arg(argList, \textcolor{keywordtype}{int});        \(\backslash\)}
-\DoxyCodeLine{        if (j==\mbox{\hyperlink{group__Module_gaa3dd7a4f331c954244daaddf0177f059}{NOP}}) \textcolor{keywordflow}{continue};                   \(\backslash\)}
-\DoxyCodeLine{        STORE(j);                               \(\backslash\)}
-\DoxyCodeLine{        DEBUG(\textcolor{stringliteral}{" \%04x"}, j);                      \(\backslash\)}
+\DoxyCodeLine{        if (lit) \{                \(\backslash\)}
+\DoxyCodeLine{            STORE(j);                           \(\backslash\)}
+\DoxyCodeLine{            lit = 0;                            \(\backslash\)}
+\DoxyCodeLine{            DEBUG(\textcolor{stringliteral}{" \%04x"}, j);                  \(\backslash\)}
+\DoxyCodeLine{            continue;                           \(\backslash\)}
+\DoxyCodeLine{        \}                                       \(\backslash\)}
+\DoxyCodeLine{        if (j < 0x80) \{    \(\backslash\)}
+\DoxyCodeLine{            lit = (j==opDOLIT);                 \(\backslash\)}
+\DoxyCodeLine{            if (j != \mbox{\hyperlink{group__Assembler_ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6}{opNOP}}) \{                   \(\backslash\)}
+\DoxyCodeLine{               BSET(\mbox{\hyperlink{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}{PC}}++, j);                   \(\backslash\)}
+\DoxyCodeLine{               DEBUG(\textcolor{stringliteral}{" \%02x"}, j);               \(\backslash\)}
+\DoxyCodeLine{            \}                                   \(\backslash\)}
+\DoxyCodeLine{        \}                                       \(\backslash\)}
+\DoxyCodeLine{        else \{                \(\backslash\)}
+\DoxyCodeLine{          STORE(j | \mbox{\hyperlink{eforth__core_8h_a7f47e1f84ff391a5ef46f3f721697665}{fCOLON}});                    \(\backslash\)}
+\DoxyCodeLine{          DEBUG(\textcolor{stringliteral}{" \%04x"}, j);                    \(\backslash\)}
+\DoxyCodeLine{        \}                                       \(\backslash\)}
 \DoxyCodeLine{    \}                                           \(\backslash\)}
 \DoxyCodeLine{    va\_end(argList);                            \(\backslash\)}
 \DoxyCodeLine{    \_rdump();                                   \(\backslash\)}
@@ -48,23 +63,24 @@
 \DoxyCodeLine{    \{                      \(\backslash\)}
 \DoxyCodeLine{    PGM\_P p = \textcolor{keyword}{reinterpret\_cast<}PGM\_P\textcolor{keyword}{>}(seq);     \(\backslash\)}
 \DoxyCodeLine{    for (\textcolor{keywordtype}{int} i=0; i < len; i++) \{               \(\backslash\)}
-\DoxyCodeLine{        BSET(\mbox{\hyperlink{group__Module_ga77406fd9edef6925ff2bafc8746085eb}{PC}}++, pgm\_read\_byte(p++));         \(\backslash\)}
+\DoxyCodeLine{        BSET(\mbox{\hyperlink{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}{PC}}++, pgm\_read\_byte(p++));         \(\backslash\)}
 \DoxyCodeLine{    \}                                           \(\backslash\)}
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-\mbox{\Hypertarget{group__Memory_ga49723d0c3f14a2ff23c8518ca5730fb0}\label{group__Memory_ga49723d0c3f14a2ff23c8518ca5730fb0}} 
+\mbox{\Hypertarget{group__Memory_gaadf5c864c0d562a2efb56cdee5f3f206}\label{group__Memory_gaadf5c864c0d562a2efb56cdee5f3f206}} 
 \index{copy@{copy}!OPSTR@{OPSTR}}
 \index{OPSTR@{OPSTR}!copy@{copy}}
 \doxysubsubsection{\texorpdfstring{OPSTR}{OPSTR}}
-{\footnotesize\ttfamily \#define O\+P\+S\+TR(\begin{DoxyParamCaption}\item[{}]{op,  }\item[{}]{seq }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \#define O\+P\+S\+TR(\begin{DoxyParamCaption}\item[{}]{ip,  }\item[{}]{seq }\end{DoxyParamCaption})}
 
 {\bfseries Value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{    \{                        \(\backslash\)}
-\DoxyCodeLine{    STORE(op);                                  \(\backslash\)}
+\DoxyCodeLine{    SET(\mbox{\hyperlink{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}{PC}}, ip | \mbox{\hyperlink{eforth__core_8h_a7f47e1f84ff391a5ef46f3f721697665}{fCOLON}});                       \(\backslash\)}
+\DoxyCodeLine{    PC += \mbox{\hyperlink{eforth__core_8h_a483d8c32764af688ede31fdc4d9707dc}{CELLSZ}};                               \(\backslash\)}
 \DoxyCodeLine{    int len = \mbox{\hyperlink{group__Pseudo_ga59af885d0e26e3c82059708948d2df37}{\_strlen}}(seq);                     \(\backslash\)}
-\DoxyCodeLine{    BSET(\mbox{\hyperlink{group__Module_ga77406fd9edef6925ff2bafc8746085eb}{PC}}++, len);                            \(\backslash\)}
+\DoxyCodeLine{    BSET(\mbox{\hyperlink{group__Assembler_ga77406fd9edef6925ff2bafc8746085eb}{PC}}++, len);                            \(\backslash\)}
 \DoxyCodeLine{    PGMCPY(len, seq);                           \(\backslash\)}
 \DoxyCodeLine{\}}
 

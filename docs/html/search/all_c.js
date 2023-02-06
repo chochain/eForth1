@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['off_5fmask_124',['OFF_MASK',['../eforth__vm_8cpp.html#ab57397937f994e7b94ffe50762a7d046',1,'eforth_vm.cpp']]],
-  ['op_125',['OP',['../eforth__asm_8h.html#ac7635cecf944d5bfcc89665c08022828',1,'OP():&#160;eforth_asm.h'],['../eforth__vm_8cpp.html#ac7635cecf944d5bfcc89665c08022828',1,'OP():&#160;eforth_vm.cpp']]],
-  ['opcodes_126',['OPCODES',['../eforth__core_8h.html#a9d8d8ad7c0601f1313a9d026757f019a',1,'OPCODES():&#160;eforth_core.h'],['../group__Module.html#ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541',1,'EfAsm::OPCODES()']]],
-  ['opnop_127',['opNOP',['../group__Module.html#ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6',1,'EfAsm']]],
-  ['opstr_128',['OPSTR',['../group__Memory.html#ga49723d0c3f14a2ff23c8518ca5730fb0',1,'eforth_asm.h']]]
+  ['p_5fhit_127',['p_hit',['../eforth__core_8cpp.html#ae259ae1b2f3e4ec198f2650a4f9f4686',1,'eforth_core.cpp']]],
+  ['p_5fxt_128',['p_xt',['../eforth__core_8cpp.html#aa67f46dd3e98d55a27e738555d5c38f8',1,'eforth_core.cpp']]],
+  ['pc_129',['PC',['../group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb',1,'EfAsm::PC()'],['../namespaceEfVM.html#a4444ce01dd126290156b6339aedb281b',1,'EfVM::PC()']]],
+  ['pgmcpy_130',['PGMCPY',['../group__Memory.html#gabee5cbd8a5640f4b067cdc048b4c21ca',1,'eforth_asm.h']]],
+  ['pop_131',['POP',['../eforth__vm_8h.html#a2106695e949772f765546777ef34690e',1,'eforth_vm.h']]],
+  ['progmem_132',['PROGMEM',['../eforth__rom_8c.html#a0babba59a58a58d5de2f517a9cd465b2',1,'eforth_rom.c']]],
+  ['push_133',['PUSH',['../namespaceEfVM.html#ac4f69cc49b68f10383886820029f6257',1,'EfVM']]]
 ];

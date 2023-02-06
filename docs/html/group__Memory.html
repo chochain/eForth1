@@ -95,8 +95,8 @@ Macros</h2></td></tr>
 <tr class="separator:ga60ef63ffe304267efee1dd841faf4751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gabee5cbd8a5640f4b067cdc048b4c21ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Memory.html#gabee5cbd8a5640f4b067cdc048b4c21ca">PGMCPY</a>(len,  seq)</td></tr>
 <tr class="separator:gabee5cbd8a5640f4b067cdc048b4c21ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga49723d0c3f14a2ff23c8518ca5730fb0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Memory.html#ga49723d0c3f14a2ff23c8518ca5730fb0">OPSTR</a>(op,  seq)</td></tr>
-<tr class="separator:ga49723d0c3f14a2ff23c8518ca5730fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaadf5c864c0d562a2efb56cdee5f3f206"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Memory.html#gaadf5c864c0d562a2efb56cdee5f3f206">OPSTR</a>(ip,  seq)</td></tr>
+<tr class="separator:gaadf5c864c0d562a2efb56cdee5f3f206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -118,11 +118,26 @@ Macros</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    {                            \</div>
 <div class="line">    va_list argList;                            \</div>
 <div class="line">    va_start(argList, n);                       \</div>
+<div class="line">    int lit=0;                                  \</div>
 <div class="line">    for (; n; n--) {                            \</div>
 <div class="line">        IU j = (<a class="code" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>)va_arg(argList, <span class="keywordtype">int</span>);        \</div>
-<div class="line">        if (j==<a class="code" href="group__Module.html#gaa3dd7a4f331c954244daaddf0177f059">NOP</a>) <span class="keywordflow">continue</span>;                   \</div>
-<div class="line">        STORE(j);                               \</div>
-<div class="line">        DEBUG(<span class="stringliteral">&quot; %04x&quot;</span>, j);                      \</div>
+<div class="line">        if (lit) {                \</div>
+<div class="line">            STORE(j);                           \</div>
+<div class="line">            lit = 0;                            \</div>
+<div class="line">            DEBUG(<span class="stringliteral">&quot; %04x&quot;</span>, j);                  \</div>
+<div class="line">            continue;                           \</div>
+<div class="line">        }                                       \</div>
+<div class="line">        if (j &lt; 0x80) {    \</div>
+<div class="line">            lit = (j==opDOLIT);                 \</div>
+<div class="line">            if (j != <a class="code" href="group__Assembler.html#ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6">opNOP</a>) {                   \</div>
+<div class="line">               BSET(<a class="code" href="group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb">PC</a>++, j);                   \</div>
+<div class="line">               DEBUG(<span class="stringliteral">&quot; %02x&quot;</span>, j);               \</div>
+<div class="line">            }                                   \</div>
+<div class="line">        }                                       \</div>
+<div class="line">        else {                \</div>
+<div class="line">          STORE(j | <a class="code" href="eforth__core_8h.html#a7f47e1f84ff391a5ef46f3f721697665">fCOLON</a>);                    \</div>
+<div class="line">          DEBUG(<span class="stringliteral">&quot; %04x&quot;</span>, j);                    \</div>
+<div class="line">        }                                       \</div>
 <div class="line">    }                                           \</div>
 <div class="line">    va_end(argList);                            \</div>
 <div class="line">    _rdump();                                   \</div>
@@ -158,14 +173,14 @@ Macros</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    {                      \</div>
 <div class="line">    PGM_P p = <span class="keyword">reinterpret_cast&lt;</span>PGM_P<span class="keyword">&gt;</span>(seq);     \</div>
 <div class="line">    for (<span class="keywordtype">int</span> i=0; i &lt; len; i++) {               \</div>
-<div class="line">        BSET(<a class="code" href="group__Module.html#ga77406fd9edef6925ff2bafc8746085eb">PC</a>++, pgm_read_byte(p++));         \</div>
+<div class="line">        BSET(<a class="code" href="group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb">PC</a>++, pgm_read_byte(p++));         \</div>
 <div class="line">    }                                           \</div>
 <div class="line">}</div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="ga49723d0c3f14a2ff23c8518ca5730fb0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga49723d0c3f14a2ff23c8518ca5730fb0">&#9670;&nbsp;</a></span>OPSTR</h2>
+<a id="gaadf5c864c0d562a2efb56cdee5f3f206"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaadf5c864c0d562a2efb56cdee5f3f206">&#9670;&nbsp;</a></span>OPSTR</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -174,7 +189,7 @@ Macros</h2></td></tr>
           <td class="memname">#define OPSTR</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">op, </td>
+          <td class="paramname">ip, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -190,9 +205,10 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">    {                        \</div>
-<div class="line">    STORE(op);                                  \</div>
+<div class="line">    SET(<a class="code" href="group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb">PC</a>, ip | <a class="code" href="eforth__core_8h.html#a7f47e1f84ff391a5ef46f3f721697665">fCOLON</a>);                       \</div>
+<div class="line">    PC += <a class="code" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>;                               \</div>
 <div class="line">    int len = <a class="code" href="group__Pseudo.html#ga59af885d0e26e3c82059708948d2df37">_strlen</a>(seq);                     \</div>
-<div class="line">    BSET(<a class="code" href="group__Module.html#ga77406fd9edef6925ff2bafc8746085eb">PC</a>++, len);                            \</div>
+<div class="line">    BSET(<a class="code" href="group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb">PC</a>++, len);                            \</div>
 <div class="line">    PGMCPY(len, seq);                           \</div>
 <div class="line">}</div>
 </div><!-- fragment -->
@@ -200,10 +216,12 @@ Macros</h2></td></tr>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="agroup__Module_html_ga77406fd9edef6925ff2bafc8746085eb"><div class="ttname"><a href="group__Module.html#ga77406fd9edef6925ff2bafc8746085eb">EfAsm::PC</a></div><div class="ttdeci">IU PC</div><div class="ttdoc">assembler program counter</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:18</div></div>
 <div class="ttc" id="aeforth__core_8h_html_a5fd90490ca5b2ceb72bf8b2c89a9634b"><div class="ttname"><a href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a></div><div class="ttdeci">U16 IU</div><div class="ttdoc">instruction/address unit (16-bit)</div><div class="ttdef"><b>Definition:</b> eforth_core.h:37</div></div>
-<div class="ttc" id="agroup__Module_html_gaa3dd7a4f331c954244daaddf0177f059"><div class="ttname"><a href="group__Module.html#gaa3dd7a4f331c954244daaddf0177f059">EfAsm::NOP</a></div><div class="ttdeci">IU NOP</div><div class="ttdoc">NOP set to ffff to prevent access before initialized.</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:25</div></div>
-<div class="ttc" id="agroup__Pseudo_html_ga59af885d0e26e3c82059708948d2df37"><div class="ttname"><a href="group__Pseudo.html#ga59af885d0e26e3c82059708948d2df37">EfAsm::_strlen</a></div><div class="ttdeci">int _strlen(FCHAR *seq)</div><div class="ttdef"><b>Definition:</b> eforth_asm.h:166</div></div>
+<div class="ttc" id="agroup__Assembler_html_ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6"><div class="ttname"><a href="group__Assembler.html#ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6">EfAsm::opNOP</a></div><div class="ttdeci">@ opNOP</div><div class="ttdoc">opcodes start at 0</div><div class="ttdef"><b>Definition:</b> eforth_asm.h:27</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a483d8c32764af688ede31fdc4d9707dc"><div class="ttname"><a href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a></div><div class="ttdeci">#define CELLSZ</div><div class="ttdef"><b>Definition:</b> eforth_core.h:44</div></div>
+<div class="ttc" id="aeforth__core_8h_html_a7f47e1f84ff391a5ef46f3f721697665"><div class="ttname"><a href="eforth__core_8h.html#a7f47e1f84ff391a5ef46f3f721697665">fCOLON</a></div><div class="ttdeci">#define fCOLON</div><div class="ttdef"><b>Definition:</b> eforth_core.h:81</div></div>
+<div class="ttc" id="agroup__Pseudo_html_ga59af885d0e26e3c82059708948d2df37"><div class="ttname"><a href="group__Pseudo.html#ga59af885d0e26e3c82059708948d2df37">EfAsm::_strlen</a></div><div class="ttdeci">int _strlen(FCHAR *seq)</div><div class="ttdef"><b>Definition:</b> eforth_asm.h:184</div></div>
+<div class="ttc" id="agroup__Assembler_html_ga77406fd9edef6925ff2bafc8746085eb"><div class="ttname"><a href="group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb">EfAsm::PC</a></div><div class="ttdeci">IU PC</div><div class="ttdoc">assembler program counter</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:16</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

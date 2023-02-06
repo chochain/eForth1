@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['label_399',['LABEL',['../ceForth__33_8cpp.html#a3f3d4317f4195d9fce64daf394202b62',1,'ceForth_33.cpp']]],
-  ['less_400',['less',['../ceForth__33_8cpp.html#aa2674bb81cdbe2dc60df980943e93385',1,'ceForth_33.cpp']]]
+  ['vm_5finit_230',['vm_init',['../eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002',1,'vm_init(PGM_P rom, U8 *cdata, void *io_stream):&#160;eforth_vm.cpp'],['../eforth__vm_8cpp.html#ab96d3e1cfedd27d24fea512540b32a98',1,'vm_init(PGM_P rom, U8 *data, void *io_stream):&#160;eforth_vm.cpp']]],
+  ['vm_5fouter_231',['vm_outer',['../eforth__core_8h.html#a4bafcde45de1826f5d95260ec6143e39',1,'eforth_core.h']]]
 ];

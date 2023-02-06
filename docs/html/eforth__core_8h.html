@@ -118,14 +118,14 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="eforth__core_8h__dep__incl.png" border="0" usemap="#src_2eforth__core_8hdep" alt=""/></div>
 <map name="src_2eforth__core_8hdep" id="src_2eforth__core_8hdep">
-<area shape="rect" title="eForth prototype and interface" alt="" coords="391,5,522,32"/>
+<area shape="rect" title="eForth prototype and interface" alt="" coords="310,5,441,32"/>
 <area shape="rect" href="eforth1_8cpp.html" title=" " alt="" coords="5,80,124,107"/>
 <area shape="rect" href="eforth__asm_8h.html" title="eForth assembler module header" alt="" coords="147,80,278,107"/>
 <area shape="rect" href="eforth__core_8cpp.html" title="eForth core controller module" alt="" coords="302,80,449,107"/>
-<area shape="rect" href="eforth__io_8cpp.html" title="eForth1 EEPROM save/load module" alt="" coords="473,80,603,107"/>
-<area shape="rect" href="eforth__rom_8c.html" title="eForth ROM (loaded in Arduino Flash Memory)" alt="" coords="627,80,755,107"/>
-<area shape="rect" href="eforth__vm_8cpp.html" title="eForth Virtual Machine module Note: indirect threading model &#45; computed label jumping replaced EfVMSu..." alt="" coords="779,80,918,107"/>
+<area shape="rect" href="eforth__rom_8c.html" title="eForth ROM (loaded in Arduino Flash Memory)" alt="" coords="473,80,601,107"/>
+<area shape="rect" href="eforth__vm_8h.html" title="eForth Virtual Machine module header" alt="" coords="625,80,749,107"/>
 <area shape="rect" href="eforth__asm_8cpp.html" title="eForth Assembler module" alt="" coords="139,155,286,181"/>
+<area shape="rect" href="eforth__vm_8cpp.html" title="eForth Virtual Machine module" alt="" coords="618,155,757,181"/>
 </map>
 </div>
 </div>
@@ -135,7 +135,7 @@ This graph shows which files directly or indirectly include this file:</div>
 Macros</h2></td></tr>
 <tr class="memitem:af0b5cfa4242ae7f98ba80fd23ef8afa9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#af0b5cfa4242ae7f98ba80fd23ef8afa9">APP_NAME</a>&#160;&#160;&#160;&quot;eForth1&quot;</td></tr>
 <tr class="separator:af0b5cfa4242ae7f98ba80fd23ef8afa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9e8f3bb466bb421d13913df7aeaa20c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#aa9e8f3bb466bb421d13913df7aeaa20c">MAJOR_VERSION</a>&#160;&#160;&#160;&quot;v1&quot;</td></tr>
+<tr class="memitem:aa9e8f3bb466bb421d13913df7aeaa20c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#aa9e8f3bb466bb421d13913df7aeaa20c">MAJOR_VERSION</a>&#160;&#160;&#160;&quot;v2&quot;</td></tr>
 <tr class="separator:aa9e8f3bb466bb421d13913df7aeaa20c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6094f5f4a8aa099faa6d80b4f020927b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a6094f5f4a8aa099faa6d80b4f020927b">CASE_SENSITIVE</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a6094f5f4a8aa099faa6d80b4f020927b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,12 +189,15 @@ Macros</h2></td></tr>
 <tr class="memitem:a2722d08eb4a77f6bb94140328d4ca3d7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a2722d08eb4a77f6bb94140328d4ca3d7">FORTH_MAX_ADDR</a>&#160;&#160;&#160;(<a class="el" href="eforth__core_8h.html#a7b21761447b5ce2df53bcd72baa34c73">FORTH_TIB_ADDR</a> + <a class="el" href="eforth__core_8h.html#ae58acffa6250f628ad15cdc182d146bc">FORTH_TIB_SZ</a>)</td></tr>
 <tr class="separator:a2722d08eb4a77f6bb94140328d4ca3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Logical</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><p>TRUE cannot use 1 because NOT(ffffffff)==0 while NOT(1)==ffffffff which does not need boolean op (i.e. in C) </p>
+<tr><td colspan="2"><div class="groupText"><p>TRUE cannot use 1 because NOT(ffff)==0 while NOT(1)==ffff which does not need boolean op (i.e. in C) </p>
 </div></td></tr>
 <tr class="memitem:aa8cecfc5c5c054d2875c03e77b7be15d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d">TRUE</a>&#160;&#160;&#160;-1</td></tr>
 <tr class="separator:aa8cecfc5c5c054d2875c03e77b7be15d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa93f0eb578d23995850d61f7d61c55c1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#aa93f0eb578d23995850d61f7d61c55c1">FALSE</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:aa93f0eb578d23995850d61f7d61c55c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">VM operational flags</div></td></tr>
+<tr class="memitem:a7f47e1f84ff391a5ef46f3f721697665"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a7f47e1f84ff391a5ef46f3f721697665">fCOLON</a>&#160;&#160;&#160;0x8000</td></tr>
+<tr class="separator:a7f47e1f84ff391a5ef46f3f721697665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Arduino Support Macros</div></td></tr>
 <tr class="memitem:a570713ca4a493fc4d2130a405f3b87ea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a570713ca4a493fc4d2130a405f3b87ea">LOG</a>(s)&#160;&#160;&#160;<a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>-&gt;print(F(s))</td></tr>
 <tr class="separator:a570713ca4a493fc4d2130a405f3b87ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,9 +261,9 @@ Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">eForth Virtual Machine Functions</div></td></tr>
 <tr class="memitem:aa4cce331b74c197758d0b9ada8d58002"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002">vm_init</a> (PGM_P rom, <a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata, void *io_stream)</td></tr>
 <tr class="separator:aa4cce331b74c197758d0b9ada8d58002"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1235c887d8bdb522e79d94afa74162c5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5">vm_outer</a> ()</td></tr>
-<tr class="memdesc:a1235c887d8bdb522e79d94afa74162c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forth outer interpreter.  <a href="eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5">More...</a><br /></td></tr>
-<tr class="separator:a1235c887d8bdb522e79d94afa74162c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bafcde45de1826f5d95260ec6143e39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a4bafcde45de1826f5d95260ec6143e39">vm_outer</a> ()</td></tr>
+<tr class="memdesc:a4bafcde45de1826f5d95260ec6143e39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forth outer interpreter.  <a href="eforth__core_8h.html#a4bafcde45de1826f5d95260ec6143e39">More...</a><br /></td></tr>
+<tr class="separator:a4bafcde45de1826f5d95260ec6143e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">eForth Assembler Functions</div></td></tr>
 <tr class="memitem:a94e10412bf5e1f89d12efb94e80979c8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8">ef_assemble</a> (<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *cdata)</td></tr>
 <tr class="separator:a94e10412bf5e1f89d12efb94e80979c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -295,7 +298,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MAJOR_VERSION&#160;&#160;&#160;&quot;v1&quot;</td>
+          <td class="memname">#define MAJOR_VERSION&#160;&#160;&#160;&quot;v2&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -611,6 +614,21 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f47e1f84ff391a5ef46f3f721697665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f47e1f84ff391a5ef46f3f721697665">&#9670;&nbsp;</a></span>fCOLON</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define fCOLON&#160;&#160;&#160;0x8000</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>flag a colon word </p>
 
 </div>
 </div>
@@ -1087,14 +1105,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1235c887d8bdb522e79d94afa74162c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1235c887d8bdb522e79d94afa74162c5">&#9670;&nbsp;</a></span>vm_outer()</h2>
+<a id="a4bafcde45de1826f5d95260ec6143e39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bafcde45de1826f5d95260ec6143e39">&#9670;&nbsp;</a></span>vm_outer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int vm_outer </td>
+          <td class="memname">void vm_outer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

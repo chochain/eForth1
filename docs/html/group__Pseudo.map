@@ -1,4 +1,4 @@
 <map id="macros (to handle va_list)" name="macros (to handle va_list)">
-<area shape="rect" id="node1" href="$group__Module.html" title=" " alt="" coords="5,13,88,38"/>
-<area shape="rect" id="node2" title="keeping functions in the header is considered a bad practice!" alt="" coords="136,5,296,45"/>
+<area shape="rect" id="node1" href="$group__Assembler.html" title=" " alt="" coords="5,13,140,38"/>
+<area shape="rect" id="node2" title="keeping functions in the header is considered a bad practice!" alt="" coords="188,5,348,45"/>
 </map>

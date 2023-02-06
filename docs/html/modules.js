@@ -1,5 +1,5 @@
 var modules =
 [
     [ "copy", "group__Memory.html", "group__Memory" ],
-    [ "variables", "group__Module.html", "group__Module" ]
+    [ "Module variables", "group__Assembler.html", "group__Assembler" ]
 ];

@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('namespaceEfAsm.html',''); initResizabl
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a5c160dc5483bdf3d9ed57addbd21ca73"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__Module.html#ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6">opNOP</a> = 0, 
-<a class="el" href="group__Module.html#ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541">OPCODES</a>
+<tr class="memitem:a5c160dc5483bdf3d9ed57addbd21ca73"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__Assembler.html#ga5c160dc5483bdf3d9ed57addbd21ca73ae2420e4b0c0ea017141da15d9d9c4ec6">opNOP</a> = 0, 
+<a class="el" href="group__Assembler.html#ga5c160dc5483bdf3d9ed57addbd21ca73a1a8ee31b1d4091a06d2c050dfc2fb541">OPCODES</a>
  }</td></tr>
 <tr class="separator:a5c160dc5483bdf3d9ed57addbd21ca73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -150,10 +150,6 @@ Functions</h2></td></tr>
 <tr class="separator:ga5a0ec1a59cc273ec7db9b5a2af2779ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafb006746d990ab51ca27545ab004f260"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#gafb006746d990ab51ca27545ab004f260">_dotq</a> (<a class="el" href="namespaceEfAsm.html#a1866848c561f07858c76dec0c2b76a78">FCHAR</a> *seq)</td></tr>
 <tr class="separator:gafb006746d990ab51ca27545ab004f260"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga902f7d3df2665aef0f0aa00269bf932d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga902f7d3df2665aef0f0aa00269bf932d">_strq</a> (<a class="el" href="namespaceEfAsm.html#a1866848c561f07858c76dec0c2b76a78">FCHAR</a> *seq)</td></tr>
-<tr class="separator:ga902f7d3df2665aef0f0aa00269bf932d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4499c7338bdc153d5f19127e8a3d59a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Pseudo.html#ga4499c7338bdc153d5f19127e8a3d59a7">_abortq</a> (<a class="el" href="namespaceEfAsm.html#a1866848c561f07858c76dec0c2b76a78">FCHAR</a> *seq)</td></tr>
-<tr class="separator:ga4499c7338bdc153d5f19127e8a3d59a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -200,8 +196,23 @@ Variables</h2></td></tr>
 <p>eForth Macro Assembler </p>
 </blockquote>
 <blockquote class="doxtable">
-<p>Kernel constants </p>
+<p>ROM starting address </p>
 </blockquote>
+<p>reserved for COLD boot vector</p>
+<blockquote class="doxtable">
+<p>Kernel dictionary (primitive words) </p>
+</blockquote>
+<p>TODO: add UM+</p>
+<blockquote class="doxtable">
+<p>( udl udh u &ndash; ur uq ) unsigned double divided by a single </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( u1 u2 &ndash; ud ) unsigned double = multiply unsigned singles </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( n1 n2 &ndash; d ) double = single * single </p>
+</blockquote>
+<p>Kernel constants</p>
 <blockquote class="doxtable">
 <ul>
 <li>'TIB console input buffer pointer </li>
@@ -276,27 +287,29 @@ Variables</h2></td></tr>
 </ul>
 </blockquote>
 <blockquote class="doxtable">
-<p>Kernel dictionary (primitive words) </p>
-</blockquote>
-<p>TODO: add UM+</p>
-<blockquote class="doxtable">
 <p>Common High-Level Colon Words </p>
 </blockquote>
+<p>TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/</p>
+<p>TODO: add I, J</p>
 <blockquote class="doxtable">
 <p>Console Input and Common words </p>
 </blockquote>
+<p>TODO: add SP@, SP0</p>
 <blockquote class="doxtable">
 <p>Number Conversions and formatting </p>
 </blockquote>
+<p>TODO: add &gt;NUMBER</p>
 <blockquote class="doxtable">
 <p>Console Output </p>
 </blockquote>
+<p>TODO: add PAGE</p>
 <blockquote class="doxtable">
 <p>Parsing </p>
 </blockquote>
 <blockquote class="doxtable">
 <p>Dictionary serach </p>
 </blockquote>
+<p>TODO: add COMPARE</p>
 <blockquote class="doxtable">
 <p>Terminal Input </p>
 </blockquote>
@@ -304,8 +317,8 @@ Variables</h2></td></tr>
 <p>Text Interpreter </p>
 </blockquote>
 <pre class="fragment">QUERY/TIB/ACCEPT - start the interpreter loop &lt;-------&lt;------.
-TOKEN/PARSE - get a space delimited word                      \
-EXECUTE - attempt to look up that word in the dictionary       \
+TOKEN/PARSE - get a space delimited word                      .
+EXECUTE - attempt to look up that word in the dictionary       .
   NAME?/find - was the word found?                              ^
   |-Yes:                                                        |
   |   $INTERPRET - are we in compile mode?                      |
@@ -313,6 +326,8 @@ EXECUTE - attempt to look up that word in the dictionary       \
   |   |  \-Is the Word an Immediate word?                       |
   |   |   |-Yes:                                                |
   |   |   |    \- EXECUTE Execute the word --------------------&gt;.
+  |   |   |     |                                               |
+  |   |   |     \- if (NAME?) EXECU else NUMBQ ----------------&gt;.
   |   |    \-No:                                                |
   |   |        \-Compile the word into the dictionary ---------&gt;.
   |    \-No:                                                    |
@@ -322,14 +337,19 @@ EXECUTE - attempt to look up that word in the dictionary       \
       |-Yes:                                                    |
       | \-Are we in compile mode?                               |
       |  |-Yes:                                                 |
+      |  |  |                                                   |
       |  |   \-Compile a literal into the dictionary &gt;---------&gt;.
+      |  |                                                      |
       |   \-No:                                                 |
+      |     |                                                   |
       |      \-Push the number to the variable stack &gt;---------&gt;.
-       \-No:                                                    /
+       \-No:                                                   .
           \-An Error has occurred, prIU out an error message -&gt;
-</pre><blockquote class="doxtable">
+</pre><p>TODO: add ?STACK</p>
+<blockquote class="doxtable">
 <p>Colon Compiler </p>
 </blockquote>
+<p>TODO: add [']</p>
 <blockquote class="doxtable">
 <p>Debugging Tools </p>
 </blockquote>
@@ -351,12 +371,18 @@ EXECUTE - attempt to look up that word in the dictionary       \
 <li>n FOR...NEXT, n FOR...(first)... f AFT...(2nd,...)...THEN...(every)...NEXT </li>
 </ul>
 </blockquote>
+<p>TODO: add DO...LOOP, +LOOP, LEAVE</p>
 <blockquote class="doxtable">
 <p>String Literals </p>
 </blockquote>
 <blockquote class="doxtable">
 <p>Defining Words - variable, constant, and comments </p>
 </blockquote>
+<ul>
+<li>opDOVAR padded with opEXIT</li>
+</ul>
+<p>TODO: add DOES&gt;, POSTPONE</p>
+<p>TODO: 2CONSTANT, 2VARIABLE</p>
 <blockquote class="doxtable">
 <p>Comments </p>
 </blockquote>
@@ -366,9 +392,11 @@ EXECUTE - attempt to look up that word in the dictionary       \
 <blockquote class="doxtable">
 <p>Arduino specific opcodes </p>
 </blockquote>
+<p>( &ndash; ud ud ) get current clock (in ms)</p>
+<p>( n p &ndash; ) set pinMode(p, n=1:OUTPUT, n=0: INPUT)</p>
 <p>( h l p &ndash; ) set map range to pin</p>
 <p>( p &ndash; n ) digitalRead(p)</p>
-<p>( p n &ndash; ) digitialWrite(p, n=1 HIGH, n=0 LOW)</p>
+<p>( n p &ndash; ) digitialWrite(p, n=1 HIGH, n=0 LOW)</p>
 <p>( p &ndash; n ) read analog value from pin</p>
 <p>( n p &ndash; ) set duty cycle % (PWM) to pin</p>
 <p>( xt n &ndash; ) on timer interrupt calls xt every n ms</p>

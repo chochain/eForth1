@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['fchar_251',['FCHAR',['../namespaceEfAsm.html#a1866848c561f07858c76dec0c2b76a78',1,'EfAsm']]],
-  ['forth_5from_252',['forth_rom',['../eforth1_8cpp.html#ab122f4898c37a0db81ea641558424375',1,'eforth_rom.c']]],
-  ['forth_5from_5fsz_253',['forth_rom_sz',['../eforth1_8cpp.html#a6fe6f33736fc0d8ed68fd74b454e00e7',1,'eforth1.cpp']]]
+  ['p_5fhit_246',['p_hit',['../eforth__core_8cpp.html#ae259ae1b2f3e4ec198f2650a4f9f4686',1,'eforth_core.cpp']]],
+  ['p_5fxt_247',['p_xt',['../eforth__core_8cpp.html#aa67f46dd3e98d55a27e738555d5c38f8',1,'eforth_core.cpp']]],
+  ['pc_248',['PC',['../group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb',1,'EfAsm::PC()'],['../namespaceEfVM.html#a4444ce01dd126290156b6339aedb281b',1,'EfVM::PC()']]],
+  ['progmem_249',['PROGMEM',['../eforth__rom_8c.html#a0babba59a58a58d5de2f517a9cd465b2',1,'eforth_rom.c']]]
 ];

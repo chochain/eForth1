@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['aborqp_246',['ABORQP',['../group__Module.html#ga13343dd66b80ba0cbe75877f7a6980d9',1,'EfAsm']]]
+  ['dotqp_238',['DOTQP',['../group__Assembler.html#ga6b8f6e7e77a210d6bfaf73bb43897580',1,'EfAsm']]],
+  ['ds_239',['DS',['../namespaceEfVM.html#a9def3ba25dadbb291ebaee373982a18c',1,'EfVM']]]
 ];

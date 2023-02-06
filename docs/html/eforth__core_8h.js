@@ -23,6 +23,7 @@ var eforth__core_8h =
     [ "FORTH_MAX_ADDR", "eforth__core_8h.html#a2722d08eb4a77f6bb94140328d4ca3d7", null ],
     [ "TRUE", "eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d", null ],
     [ "FALSE", "eforth__core_8h.html#aa93f0eb578d23995850d61f7d61c55c1", null ],
+    [ "fCOLON", "eforth__core_8h.html#a7f47e1f84ff391a5ef46f3f721697665", null ],
     [ "OPCODES", "eforth__core_8h.html#a9d8d8ad7c0601f1313a9d026757f019a", null ],
     [ "LOG", "eforth__core_8h.html#a570713ca4a493fc4d2130a405f3b87ea", null ],
     [ "LOG_C", "eforth__core_8h.html#ad1115aa0a8df497fe7c107d2ac3ab66e", null ],
@@ -46,7 +47,7 @@ var eforth__core_8h =
     [ "intr_timer_enable", "eforth__core_8h.html#a4e469b64b1feed8f578349c87ae2ef84", null ],
     [ "intr_pci_enable", "eforth__core_8h.html#a227d4b84f416c811b8ac176743593dec", null ],
     [ "vm_init", "eforth__core_8h.html#aa4cce331b74c197758d0b9ada8d58002", null ],
-    [ "vm_outer", "eforth__core_8h.html#a1235c887d8bdb522e79d94afa74162c5", null ],
+    [ "vm_outer", "eforth__core_8h.html#a4bafcde45de1826f5d95260ec6143e39", null ],
     [ "ef_assemble", "eforth__core_8h.html#a94e10412bf5e1f89d12efb94e80979c8", null ],
     [ "ef_save", "eforth__core_8h.html#a739911ef03b2d1a9bb4139a8879c03fa", null ],
     [ "ef_load", "eforth__core_8h.html#a143ec30cabab5d722b1df76883d4b4f4", null ]

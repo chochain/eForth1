@@ -19,7 +19,5 @@ var group__Pseudo =
     [ "_if", "group__Pseudo.html#gab786d49b7cbf077b6a706a308167b5ce", null ],
     [ "_else", "group__Pseudo.html#ga8c4966a74388b9427ae2771419d73430", null ],
     [ "_then", "group__Pseudo.html#ga5a0ec1a59cc273ec7db9b5a2af2779ef", null ],
-    [ "_dotq", "group__Pseudo.html#gafb006746d990ab51ca27545ab004f260", null ],
-    [ "_strq", "group__Pseudo.html#ga902f7d3df2665aef0f0aa00269bf932d", null ],
-    [ "_abortq", "group__Pseudo.html#ga4499c7338bdc153d5f19127e8a3d59a7", null ]
+    [ "_dotq", "group__Pseudo.html#gafb006746d990ab51ca27545ab004f260", null ]
 ];

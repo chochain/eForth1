@@ -517,8 +517,9 @@ int assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                // restore BASE
     }
-//#if EXE_TRACE
     /// TODO: add _CASE
+#if 1 || EXE_TRACE
+    /// Optional: Takes 207 bytes ROM space
     ///> display opcode name ( n -- )
     IU DOTOP = _COLON(".OP", vCNTX); {                         // display opcode name
         _BEGIN(AT, DUP);                                       // 0000 = end of dic
@@ -560,7 +561,7 @@ int assemble(U8 *cdata)
         }
         _REPEAT(DROP, DROP, SPACE, DOLIT, 0x3b, EMIT, EXIT);   // semi colon
     }
-//#endif // EXE_TRACE
+#endif // EXE_TRACE
     _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {       // tmp keeps width
         _BEGIN(AT, QDUP);
         _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,                   // get name length

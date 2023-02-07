@@ -137,7 +137,7 @@ int assemble(U8 *cdata)
     /// TODO: add I, J
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);  // ( dl dh n -- r q ) double div/mod by a single
     IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT); // ( n1 n2 -- r q ) single devide
-    IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);
+    IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);          // ( n n n -- q )
     IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
     IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
@@ -149,7 +149,7 @@ int assemble(U8 *cdata)
         _IF(SWAP);
         _THEN(DROP, EXIT);
     }
-    IU MIN   = _COLON("MIN",  DDUP, GT); {
+    IU MIN   = _COLON("MIN", DDUP, GT); {
         _IF(SWAP);
         _THEN(DROP, EXIT);
     }
@@ -260,8 +260,8 @@ int assemble(U8 *cdata)
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);               // LF i.e. \n actually
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
     IU STRQP = _COLON("$\"|", DOSTR, EXIT);
-       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);                        // Note: DOTQP export to _dotq
-    IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);   // shown as string
+       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);                       // Note: DOTQP export to _dotq
+    IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);  // shown as string
     IU UDOTR = _COLON("U.R",  TOR, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);
     IU UDOT  = _COLON("U.",   BDIGS, DIGS, EDIGS, SPACE, TYPE, EXIT);
     IU DOT   = _COLON(".",    vBASE, AT, DOLIT, 0xa, XOR); {
@@ -489,15 +489,26 @@ int assemble(U8 *cdata)
     }
     IU RBRAC = _COLON("]", DOLIT, SCOMP, vMODE, STORE, EXIT);  // switch into compiler-mode
     /// TODO: add [']
-    _IMMED("[COMPILE]",    TICK, COMMA, EXIT);                 // add word address to dictionary
+    _IMMED("[COMPILE]", TICK, COMMA, EXIT);                    // add word address to dictionary
     _COLON(":", TOKEN, SNAME, RBRAC, EXIT);
     _IMMED(";", COMPI, EXIT, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
     ///
     ///> Debugging Tools
     ///
-    _COLON(">NAME", NOP); {
+    IU TNAME = _COLON(">NAME", NOP); {
         _BEGIN(ONEM, DUP, CAT, DOLIT, 0x7f, AND, DOLIT, 0x20, LT);
         _UNTIL(EXIT);
+    }
+    IU DOTOP = _COLON(".OP", vCNTX); {                         // display opcode name
+        _BEGIN(AT, DUP);                                       // 0000 = end of dic
+        _WHILE(DUP, NAMET, DUP, ONEP, CAT, DOLIT, 0x8, EQ); {  // opcode words?
+            _IF(CAT, TOR, OVER, RFROM, EQ); {                  // our opcode?
+                _IF(COUNT, TYPE, DROP, EXIT);                  // print name
+                _THEN(DUP);
+            }
+            _THEN(DROP, CELLM);                                // link to prev word
+        }
+        _REPEAT(DROP, DROP, EXIT);
     }
     _COLON("DUMP", vBASE, AT, TOR, HEX_,                       // save BASE, make HEX
             DOLIT, 0x1f, ADD, DOLIT, 0x10, DIV); {             // get row count
@@ -517,12 +528,40 @@ int assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                // restore BASE
     }
-    _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {
+//#if EXE_TRACE
+    /// TODO: add _CASE
+    _COLON("SEE", TICK, CR,	DOLIT, 0x3a, EMIT, SPACE,
+           DUP, TNAME, COUNT, TYPE); {                         // show word name
+    	_BEGIN(DUP, CAT, DUP, DOLIT, EXIT, EQ, INV);           // loop until EXIT
+    	_WHILE(DUP, DOLIT, 0x80, AND); {                       // a primitive?
+            _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND,             // colon word - show name
+            	SPACE, TNAME, COUNT, TYPE);
+            _ELSE(DUP, DOLIT, DOLIT, EQ); {                    // a literal?
+                _IF(DROP, ONEP, DUP, AT, DOT);                 // show the number
+                _ELSE(DUP, DOLIT, BRAN, EQ); {                 // a bran?
+                    _IF(DROP, ONEP, DUP, AT, DOT,
+                        DOLIT, 0x6a, EMIT);
+                    _ELSE(DUP, DOLIT, QBRAN, EQ); {            // or a ?bran?
+                    	_IF(DROP, ONEP, DUP, AT, DOT,
+                            DOLIT, 0x3f, EMIT);
+                    	_ELSE(SPACE, DOTOP, ONEM);             // opcode#
+                        _THEN(NOP);
+                    }
+                	_THEN(NOP);
+                }
+                _THEN(NOP);
+            }
+            _THEN(CELLP);
+        }
+        _REPEAT(DROP, DROP, SPACE, DOLIT, 0x3b, EMIT, EXIT);   // semi colon
+    }
+//#endif // EXE_TRACE
+    _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {       // tmp keeps width
         _BEGIN(AT, QDUP);
-        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,                   // .ID
-            DUP, DOLIT, 2, ADD, vTMP, PSTOR,
-            TYPE, SPACE, SPACE, CELLM,
-            vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {           // check row width
+        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,                   // get name length
+             DUP, ONEP, ONEP, vTMP, PSTOR,                     // add to tmp
+             TYPE, SPACE, SPACE, CELLM,                        // get LFA
+             vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {          // check row width
             _IF(CR, DOLIT, 0, vTMP, STORE);
             _THEN(NOP);
         }
@@ -571,6 +610,14 @@ int assemble(U8 *cdata)
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
     IU CREAT = _COLON("CREATE", CODE, COMPI, DOVAR, COMPI, EXIT, EXIT);       /// * opDOVAR padded with opEXIT
     /// TODO: add DOES>, POSTPONE
+    /*
+: DOES>                  \ change runtime behavior to following code, para on return stack
+  R>           ( ra )    \ run time code address ra of the defining word
+  LAST @ NAME> ( ra ca ) \ code address ca of the defined word
+  1+ SWAP    ( ca+1 ra ) \ skip 1-byte call code , dovar-addr parent-body
+  OVER CELL+ -           \ compute run time code relative-offset 
+  SWAP ! ;               \ overwrite doVar to run time code relative-offset
+    */
     _COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
     _COLON("CONSTANT",CODE,  DOLIT, DOLIT, CCMMA, DOLIT, EXIT, CCMMA, COMMA, EXIT);
     /// TODO: 2CONSTANT, 2VARIABLE

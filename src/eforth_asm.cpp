@@ -517,7 +517,6 @@ int assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                // restore BASE
     }
-    /// TODO: add _CASE
 #if 1 || EXE_TRACE
     /// Optional: Takes 207 bytes ROM space
     ///> display opcode name ( n -- )
@@ -535,6 +534,7 @@ int assemble(U8 *cdata)
     ///> display address with colon delimiter ( a -- )
     IU DOTAD = _COLON(".ADDR", CR, DUP, DOT, DOLIT, 0x3a, EMIT, EXIT);
     ///> see colon word definition ( -- ;; <string> )
+    /// TODO: add _CASE
     _COLON("SEE", TICK, DOTAD); {                              // word address
         _BEGIN(DUP, CAT, DUP, DOLIT, EXIT, EQ, INV);           // loop until EXIT
         _WHILE(DUP, DOLIT, 0x80, AND); {                       // a primitive?
@@ -542,7 +542,7 @@ int assemble(U8 *cdata)
                 SPACE, TNAME, COUNT, TYPE, CELLP);
             _ELSE(DUP, DOLIT, DOLIT, EQ); {                    // a literal?
                 _IF(DROP, ONEP, DUP, AT, DOT, CELLP);          // show the number
-                _ELSE(DUP, DOLIT, BRAN, EQ); {                 // a bran?
+                _ELSE(DUP, DOLIT, BRAN, EQ); {
                     _IF(DROP, ONEP, DUP, AT, DOT,              // show jump target
                         DOLIT, 0x6a, EMIT,                     // '?'
                         CELLP, DOTAD);                         // next address
@@ -550,7 +550,13 @@ int assemble(U8 *cdata)
                         _IF(DROP, ONEP, DUP, AT, DOT,          // show jump target
                             DOLIT, 0x3f, EMIT,                 // 'j'
                             CELLP, DOTAD);                     // next address
-                        _ELSE(SPACE, DOTOP, ONEP);             // opcode#
+                        _ELSE(DUP, DOLIT, DONXT, EQ); {        // a bran or donext?
+                            _IF(DROP, ONEP, DUP, AT, DOT,      // show jump target
+                                DOLIT, 0x72, EMIT,             // 'r'
+                                CELLP, DOTAD);
+                            _ELSE(SPACE, DOTOP, ONEP);         // opcode#
+                            _THEN(NOP);
+                        }
                         _THEN(NOP);
                     }
                     _THEN(NOP);

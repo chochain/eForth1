@@ -535,31 +535,30 @@ int assemble(U8 *cdata)
     IU DOTAD = _COLON(".ADDR", CR, DUP, DOT, DOLIT, 0x3a, EMIT, EXIT);
     ///> see colon word definition ( -- ;; <string> )
     _COLON("SEE", TICK, DOTAD); {                              // word address
-    	_BEGIN(DUP, CAT, DUP, DOLIT, EXIT, EQ, INV);           // loop until EXIT
-    	_WHILE(DUP, DOLIT, 0x80, AND); {                       // a primitive?
+        _BEGIN(DUP, CAT, DUP, DOLIT, EXIT, EQ, INV);           // loop until EXIT
+        _WHILE(DUP, DOLIT, 0x80, AND); {                       // a primitive?
             _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND,             // colon word - show name
-            	SPACE, TNAME, COUNT, TYPE);
+                SPACE, TNAME, COUNT, TYPE, CELLP);
             _ELSE(DUP, DOLIT, DOLIT, EQ); {                    // a literal?
-                _IF(DROP, ONEP, DUP, AT, DOT);                 // show the number
+                _IF(DROP, ONEP, DUP, AT, DOT, CELLP);          // show the number
                 _ELSE(DUP, DOLIT, BRAN, EQ); {                 // a bran?
-                    _IF(DROP, DOTAD,
-                        ONEP, DUP, AT, DOT,
-                        DOLIT, 0x6a, EMIT);
+                    _IF(DROP, ONEP, DUP, AT, DOT,              // show jump target
+                        DOLIT, 0x6a, EMIT,                     // '?'
+                        CELLP, DOTAD);                         // next address
                     _ELSE(DUP, DOLIT, QBRAN, EQ); {            // or a ?bran?
-                    	_IF(DROP, DOTAD,
-                            ONEP, DUP, AT, DOT,
-                            DOLIT, 0x3f, EMIT);
-                    	_ELSE(SPACE, DOTOP, ONEM);             // opcode#
+                        _IF(DROP, ONEP, DUP, AT, DOT,          // show jump target
+                            DOLIT, 0x3f, EMIT,                 // 'j'
+                            CELLP, DOTAD);                     // next address
+                        _ELSE(SPACE, DOTOP, ONEP);             // opcode#
                         _THEN(NOP);
                     }
-                	_THEN(NOP);
+                    _THEN(NOP);
                 }
                 _THEN(NOP);
             }
-            _THEN(CELLP);
+            _THEN(NOP);
         }
-        _REPEAT(DROP, DOTAD, DROP,
-                SPACE, DOLIT, 0x3b, EMIT, EXIT);               // semi colon
+        _REPEAT(DROP, DROP, SPACE, DOLIT, 0x3b, EMIT, EXIT);   // semi colon
     }
 //#endif // EXE_TRACE
     _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {       // tmp keeps width

@@ -499,17 +499,6 @@ int assemble(U8 *cdata)
         _BEGIN(ONEM, DUP, CAT, DOLIT, 0x7f, AND, DOLIT, 0x20, LT);
         _UNTIL(EXIT);
     }
-    IU DOTOP = _COLON(".OP", vCNTX); {                         // display opcode name
-        _BEGIN(AT, DUP);                                       // 0000 = end of dic
-        _WHILE(DUP, NAMET, DUP, ONEP, CAT, DOLIT, 0x8, EQ); {  // opcode words?
-            _IF(CAT, TOR, OVER, RFROM, EQ); {                  // our opcode?
-                _IF(COUNT, TYPE, DROP, EXIT);                  // print name
-                _THEN(DUP);
-            }
-            _THEN(DROP, CELLM);                                // link to prev word
-        }
-        _REPEAT(DROP, DROP, EXIT);
-    }
     _COLON("DUMP", vBASE, AT, TOR, HEX_,                       // save BASE, make HEX
             DOLIT, 0x1f, ADD, DOLIT, 0x10, DIV); {             // get row count
         _FOR(NOP);
@@ -530,8 +519,22 @@ int assemble(U8 *cdata)
     }
 //#if EXE_TRACE
     /// TODO: add _CASE
-    _COLON("SEE", TICK, CR,	DOLIT, 0x3a, EMIT, SPACE,
-           DUP, TNAME, COUNT, TYPE); {                         // show word name
+    ///> display opcode name ( n -- )
+    IU DOTOP = _COLON(".OP", vCNTX); {                         // display opcode name
+        _BEGIN(AT, DUP);                                       // 0000 = end of dic
+        _WHILE(DUP, NAMET, DUP, ONEP, CAT, DOLIT, 0x8, EQ); {  // opcode words?
+            _IF(CAT, TOR, OVER, RFROM, EQ); {                  // our opcode?
+                _IF(COUNT, TYPE, DROP, EXIT);                  // print name
+                _THEN(DUP);
+            }
+            _THEN(DROP, CELLM);                                // link to prev word
+        }
+        _REPEAT(DROP, DROP, EXIT);
+    }
+    ///> display address with colon delimiter ( a -- )
+    IU DOTAD = _COLON(".ADDR", CR, DUP, DOT, DOLIT, 0x3a, EMIT, EXIT);
+    ///> see colon word definition ( -- ;; <string> )
+    _COLON("SEE", TICK, DOTAD); {                              // word address
     	_BEGIN(DUP, CAT, DUP, DOLIT, EXIT, EQ, INV);           // loop until EXIT
     	_WHILE(DUP, DOLIT, 0x80, AND); {                       // a primitive?
             _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND,             // colon word - show name
@@ -539,10 +542,12 @@ int assemble(U8 *cdata)
             _ELSE(DUP, DOLIT, DOLIT, EQ); {                    // a literal?
                 _IF(DROP, ONEP, DUP, AT, DOT);                 // show the number
                 _ELSE(DUP, DOLIT, BRAN, EQ); {                 // a bran?
-                    _IF(DROP, ONEP, DUP, AT, DOT,
+                    _IF(DROP, DOTAD,
+                        ONEP, DUP, AT, DOT,
                         DOLIT, 0x6a, EMIT);
                     _ELSE(DUP, DOLIT, QBRAN, EQ); {            // or a ?bran?
-                    	_IF(DROP, ONEP, DUP, AT, DOT,
+                    	_IF(DROP, DOTAD,
+                            ONEP, DUP, AT, DOT,
                             DOLIT, 0x3f, EMIT);
                     	_ELSE(SPACE, DOTOP, ONEM);             // opcode#
                         _THEN(NOP);
@@ -553,7 +558,8 @@ int assemble(U8 *cdata)
             }
             _THEN(CELLP);
         }
-        _REPEAT(DROP, DROP, SPACE, DOLIT, 0x3b, EMIT, EXIT);   // semi colon
+        _REPEAT(DROP, DOTAD, DROP,
+                SPACE, DOLIT, 0x3b, EMIT, EXIT);               // semi colon
     }
 //#endif // EXE_TRACE
     _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {       // tmp keeps width

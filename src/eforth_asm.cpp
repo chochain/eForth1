@@ -518,7 +518,7 @@ int assemble(U8 *cdata)
         _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                // restore BASE
     }
 #if 1 || EXE_TRACE
-    /// Optional: Takes 207 bytes ROM space
+    /// Optional: Takes 240 bytes ROM space
     ///> display opcode name ( n -- )
     IU DOTOP = _COLON(".OP", vCNTX); {                         // display opcode name
         _BEGIN(AT, DUP);                                       // 0000 = end of dic

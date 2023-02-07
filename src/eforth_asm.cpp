@@ -535,6 +535,23 @@ int assemble(U8 *cdata)
     IU DOTAD = _COLON(".ADDR", CR, DUP, DOT, DOLIT, 0x3a, EMIT, EXIT);
     ///> see colon word definition ( -- ;; <string> )
     /// TODO: add _CASE
+    /*
+    _COLON("SEE", TICK, DOTAD); {
+        _BEGIN(NOP); {
+            _CASE(DUP, CAT);
+            _OF(DOLIT, DROP, ONEP, DUP, AT, DOT, CELLP);       // show the number
+            _OF(BRAN,  DROP, ONEP, DUP, AT, DOT,               // show jump target
+                DOLIT, 0x6a, EMIT, CELLP, DOTAD);              // '?' next address
+            _OF(QBRAN, DROP, ONEP, DUP, AT, DOT,               // show jump target
+                DOLIT, 0x3f, EMIT, CELLP, DOTAD);              // 'j' next address
+            _OF(DONXT, DROP, ONEP, DUP, AT, DOT,               // DONEXT 'r' target
+                DOLIT, 0x72, EMIT, CELLP, DOTAD);
+            _DEFAULT(SPACE, DOTOP, ONEP);                      // opcode#
+            _ENDCASE(NOP);
+        }
+        _UNTIL(DROP);
+    }
+    */
     _COLON("SEE", TICK, DOTAD); {                              // word address
         _BEGIN(DUP, CAT, DUP, DOLIT, EXIT, EQ, INV);           // loop until EXIT
         _WHILE(DUP, DOLIT, 0x80, AND); {                       // a primitive?

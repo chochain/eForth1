@@ -95,10 +95,17 @@ int assemble(U8 *cdata)
     IU MAX   = _XCODE("MAX",     MAX    );
     IU MIN   = _XCODE("MIN",     MIN    );
     IU ULESS = _XCODE("U<",      ULESS  );
-    /// TODO: add UM+
+    
     IU UMMOD = _XCODE("UM/MOD",  UMMOD  );    ///> ( udl udh u -- ur uq ) unsigned double divided by a single
     IU UMSTA = _XCODE("UM*",     UMSTAR );    ///> ( u1 u2 -- ud ) unsigned double = multiply unsigned singles
     IU MSTAR = _XCODE("M*",      MSTAR  );    ///> ( n1 n2 -- d ) double = single * single
+    IU UMPLU = _XCODE("UM+",     UMPLUS );    ///> ( n1 n2 -- sum c ) add two numbers and carry flag
+    IU SSMODx = _XCODE("*/MODx",   SSMOD  );    ///> ( dl dh n -- r q ) double div/mod by a single
+    IU SMOD  = _XCODE("/MOD",    SMOD   );    ///> ( n1 n2 -- r q ) single devide
+    IU MSLAS = _XCODE("*/",      MSLAS  );    ///> ( n1 n2 n3 -- q ) multiply n1 n2 divide by n3 return quotient
+    IU S2D   = _XCODE("S>D",     S2D    );    ///> ( n -- dl dh )
+    IU D2S   = _XCODE("D>S",     D2S    );    ///> ( dl dh -- n )
+    
     IU DNEG  = _XCODE("DNEGATE", DNEG   );
     IU DADD  = _XCODE("D+",      DADD   );
     IU DSUB  = _XCODE("D-",      DSUB   );
@@ -108,7 +115,6 @@ int assemble(U8 *cdata)
     /// TODO: add I, J
     IU DSTOR = _XCODE("2!",      DSTOR  );
     IU DAT   = _XCODE("2@",      DAT    );
-    
     ///
     /// Kernel constants
     ///
@@ -128,19 +134,8 @@ int assemble(U8 *cdata)
     ///
     ///> Common High-Level Colon Words
     ///
-    IU D2S   = _COLON("D>S",   ZLT, OVER, ZLT, XOR); {
-        _IF(NEG);
-        _THEN(EXIT);
-    }
-    IU S2D   = _COLON("S>D",   DUP, ZLT); {
-        _IF(DOLIT, 0xffff);
-        _ELSE(DOLIT, 0);
-        _THEN(EXIT);
-    }
     /// TODO: add I, J
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);  // ( dl dh n -- r q ) double div/mod by a single
-    IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT); // ( n1 n2 -- r q ) single devide
-    IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);          // ( n n n -- q )
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
     ///
     ///> Console Input and Common words

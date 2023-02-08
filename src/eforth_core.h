@@ -144,6 +144,12 @@ typedef S16       DU;                 ///< data/cell unit
     OP(UMMOD),  \
     OP(UMSTAR), \
     OP(MSTAR),  \
+        OP(UMPLUS),\
+        OP(SSMOD), \
+        OP(SMOD),  \
+        OP(MSLAS), \
+        OP(S2D),   \
+        OP(D2S),   \
     OP(DNEG),   \
     OP(DADD),   \
     OP(DSUB),   \

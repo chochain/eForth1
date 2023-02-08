@@ -328,28 +328,24 @@ void vm_outer() {
         _X(MSTAR,                         /// (n1 n2 -- d) signed multiply, return double product
             S32 d = (S32)*DS * top;
             DTOP(d));
-/*        
->         _X(UMPLUS,                        /// ( n1 n2 -- sum c ) return sum of two numbers and carry flag
->            DU s = *DS;
->            *DS = s + top;
->            top = BOOL((s - top) < 0));
->         _X(SSMOD,                         /// ( dl dh n -- r q ) double div/mod by a single
->            S32 d = (S32)(*DS--) << 8;
->            d   |= *DS;
->            *DS  = (DU)(d / top);
->            top  = (DU)(d % top));
->         _X(SMOD,                          /// ( n1 n2 -- r q )
->            DU s = *DS;
->            *DS = s / top;
->            top = s % top);
->         _X(MSLAS,
->            S32 d = (S32)*DS-- * *DS--;    /// ( n1 n2 n3 -- q ) multiply n1 n2, divided by n3 return quotient
->            top = (DU)(d / top));
->         _X(S2D,   S32 d = (S32)top; DTOP(d));
->         _X(D2S,
->            DU s = *DS--;
->            top = (top < 0) ? -abs(s) : abs(s));
-> */
+        _X(UMPLUS,                        /// ( n1 n2 -- sum c ) return sum of two numbers and carry flag
+            U32 u = (U32)*DS + top;
+            DTOP(u));
+        _X(SSMOD,                         /// ( dl dh n -- r q ) double div/mod by a single
+            S32 d = (S32)*DS-- * top;
+            *DS  = (DU)(d % top);
+            top  = (DU)(d / top));
+        _X(SMOD,                          /// ( n1 n2 -- r q )
+            DU s = *DS;
+            *DS = s % top;
+            top = s / top);
+        _X(MSLAS,
+            S32 d = (S32)*DS-- * *DS--;   /// ( n1 n2 n3 -- q ) multiply n1 n2, divided by n3 return quotient
+            top = (DU)(d / top));
+        _X(S2D,   S32 d = (S32)top; DTOP(d));
+        _X(D2S,
+           DU s = *DS--;
+           top = (top < 0) ? -abs(s) : abs(s));
         /// @}
         /// @name Double precision ops
         /// @{

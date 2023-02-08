@@ -85,6 +85,7 @@ int assemble(U8 *cdata)
     IU ONEM  = _XCODE("1-",      ONEM   );
     IU QDUP  = _XCODE("?DUP",    QDUP   );
     IU DEPTH = _XCODE("DEPTH",   DEPTH  );
+    IU RP    = _XCODE("RP",      RP     );
     IU ULESS = _XCODE("U<",      ULESS  );
     /// TODO: add UM+
     IU UMMOD = _XCODE("UM/MOD",  UMMOD  );    ///> ( udl udh u -- ur uq ) unsigned double divided by a single
@@ -93,7 +94,6 @@ int assemble(U8 *cdata)
     IU DNEG  = _XCODE("DNEGATE", DNEG   );
     IU DADD  = _XCODE("D+",      DADD   );
     IU DSUB  = _XCODE("D-",      DSUB   );
-    IU RP    = _XCODE("RP",      RP     );
     ///
     /// Kernel constants
     ///

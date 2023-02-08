@@ -297,6 +297,9 @@ void vm_outer() {
         _X(ONEM,  top--);
         _X(QDUP,  if (top) *++DS = top);
         _X(DEPTH, DU d = DEPTH(); PUSH(d));
+        _X(RP,
+            DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
+            PUSH(r));
         _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
         _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
@@ -341,9 +344,6 @@ void vm_outer() {
         _X(PCISR, intr_add_pci(top, *DS);   POP(); POP());
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
-        _X(RP,
-            DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
-            PUSH(r));
 #if EXE_TRACE
         _X(TRC,  tCNT = top; POP());
 #else

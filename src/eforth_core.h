@@ -131,6 +131,7 @@ typedef S16       DU;                 ///< data/cell unit
     OP(ONEM),   \
     OP(QDUP),   \
     OP(DEPTH),  \
+    OP(RP),     \
     OP(ULESS),  \
     OP(UMMOD),  \
     OP(UMSTAR), \
@@ -149,7 +150,6 @@ typedef S16       DU;                 ///< data/cell unit
     OP(PCISR),  \
     OP(TMRE),   \
     OP(PCIE),   \
-    OP(RP),     \
     OP(TRC),    \
     OP(SAVE),   \
     OP(LOAD)

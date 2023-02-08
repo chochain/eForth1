@@ -132,6 +132,11 @@ typedef S16       DU;                 ///< data/cell unit
     OP(QDUP),   \
     OP(DEPTH),  \
     OP(RP),     \
+        OP(BL),    \
+        OP(CELL),  \
+        OP(CELLP), \
+        OP(CELLM), \
+        OP(CELLS), \
     OP(ULESS),  \
     OP(UMMOD),  \
     OP(UMSTAR), \
@@ -140,19 +145,19 @@ typedef S16       DU;                 ///< data/cell unit
     OP(DADD),   \
     OP(DSUB),   \
     OP(CLK),    \
-    OP(PIN),    \
-    OP(MAP),    \
-    OP(IN),     \
-    OP(OUT),    \
-    OP(AIN),    \
-    OP(PWM),    \
-    OP(TMISR),  \
-    OP(PCISR),  \
-    OP(TMRE),   \
-    OP(PCIE),   \
-    OP(TRC),    \
-    OP(SAVE),   \
-    OP(LOAD)
+        OP(PIN),   \
+        OP(MAP),   \
+        OP(IN),    \
+        OP(OUT),   \
+        OP(AIN),   \
+        OP(PWM),   \
+        OP(TMISR), \
+        OP(PCISR), \
+        OP(TMRE),  \
+        OP(PCIE),  \
+        OP(TRC),   \
+        OP(SAVE),  \
+        OP(LOAD)
 //
 // eForth function prototypes
 //

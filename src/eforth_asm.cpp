@@ -86,6 +86,11 @@ int assemble(U8 *cdata)
     IU QDUP  = _XCODE("?DUP",    QDUP   );
     IU DEPTH = _XCODE("DEPTH",   DEPTH  );
     IU RP    = _XCODE("RP",      RP     );
+    IU BLANK = _XCODE("BL",      BL     );
+    IU CELL  = _XCODE("CELL",    CELL   );
+    IU CELLP = _XCODE("CELL+",   CELLP  );
+    IU CELLM = _XCODE("CELL-",   CELLM  );
+    IU CELLS = _XCODE("CELLS",   CELLS  );
     IU ULESS = _XCODE("U<",      ULESS  );
     /// TODO: add UM+
     IU UMMOD = _XCODE("UM/MOD",  UMMOD  );    ///> ( udl udh u -- ur uq ) unsigned double divided by a single
@@ -111,16 +116,8 @@ int assemble(U8 *cdata)
     IU vNTIB = _CODE("#TIB",    CST(ua,10));  ///> * #TIB number of character received in TIB
     IU vTMP  = _CODE("tmp",     CST(ua,11));  ///> * tmp storage (alternative to return stack)
     ///
-    ///> common constants and variable spec.
-    ///
-    IU BLANK = _CODE("BL",      CST(0x20,  0));  ///> * BL blank
-    IU CELL  = _CODE("CELL",    CST(CELLSZ,0));  ///> * CELL cell size
-    ///
     ///> Common High-Level Colon Words
     ///
-    IU CELLP = _COLON("CELL+", CELL, ADD, EXIT);
-    IU CELLM = _COLON("CELL-", CELL, SUB, EXIT);
-    IU CELLS = _COLON("CELLS", CELL, MUL, EXIT);
     // Dr. Ting's alternate opcodes
     IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);

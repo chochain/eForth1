@@ -300,6 +300,11 @@ void vm_outer() {
         _X(RP,
             DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
             PUSH(r));
+        _X(BL,    PUSH(0x20));
+        _X(CELL,  PUSH(CELLSZ));
+        _X(CELLP, top += CELLSZ);
+        _X(CELLM, top -= CELLSZ);
+        _X(CELLS, top *= CELLSZ);
         _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
         _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product

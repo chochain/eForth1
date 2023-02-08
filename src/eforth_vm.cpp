@@ -309,6 +309,17 @@ void vm_outer() {
         _X(CELLP, top += CELLSZ);
         _X(CELLM, top -= CELLSZ);
         _X(CELLS, top *= CELLSZ);
+        _X(ABS,   top  = abs(top));
+        _X(MAX,   DU s = *DS--; if (s > top) top = s);
+        _X(MIN,   DU s = *DS--; if (s < top) top = s);
+ /*
+>         _X(WITHIN,                        /// ( u ul uh -- f ) 3rd item is between first 2 on stack
+>            DU ul = *DS--;
+>            DU u  = *DS--;
+>            top = BOOL(u > ul && u < top));
+>         _X(TOUPP, if (top >= 0x61 && top <= 0x7b) top &= 0x5f);
+>         _X(COUNT, PUSH(IP); PUSH(BGET(IP+1)));
+> */
         _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
         _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
@@ -317,6 +328,28 @@ void vm_outer() {
         _X(MSTAR,                         /// (n1 n2 -- d) signed multiply, return double product
             S32 d = (S32)*DS * top;
             DTOP(d));
+/*        
+>         _X(UMPLUS,                        /// ( n1 n2 -- sum c ) return sum of two numbers and carry flag
+>            DU s = *DS;
+>            *DS = s + top;
+>            top = BOOL((s - top) < 0));
+>         _X(SSMOD,                         /// ( dl dh n -- r q ) double div/mod by a single
+>            S32 d = (S32)(*DS--) << 8;
+>            d   |= *DS;
+>            *DS  = (DU)(d / top);
+>            top  = (DU)(d % top));
+>         _X(SMOD,                          /// ( n1 n2 -- r q )
+>            DU s = *DS;
+>            *DS = s / top;
+>            top = s % top);
+>         _X(MSLAS,
+>            S32 d = (S32)*DS-- * *DS--;    /// ( n1 n2 n3 -- q ) multiply n1 n2, divided by n3 return quotient
+>            top = (DU)(d / top));
+>         _X(S2D,   S32 d = (S32)top; DTOP(d));
+>         _X(D2S,
+>            DU s = *DS--;
+>            top = (top < 0) ? -abs(s) : abs(s));
+> */
         /// @}
         /// @name Double precision ops
         /// @{
@@ -331,6 +364,19 @@ void vm_outer() {
             S32 d0 = S2D(top, *DS);
             S32 d1 = S2D(*(DS-1), *(DS-2));
             DS -= 2; DTOP(d1 - d0));
+/*        
+>         _X(DDUP,  DU v = *DS; PUSH(v); v = *DS; PUSH(v));
+>         _X(DDROP, POP(); POP());
+>         /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
+>         /// TODO: add I, J
+>         _X(DSTOR,
+>            SET(top + CELLSZ, *DS--);
+>            SET(top, *DS--);
+>            POP());
+>         _X(DAT,
+>            *(++DS) = (DU)GET(top);
+>            top     = (DU)GET(top + CELLSZ));
+*/
         /// @}
         /// @name Arduino specific ops
         /// @{

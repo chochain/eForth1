@@ -91,6 +91,9 @@ int assemble(U8 *cdata)
     IU CELLP = _XCODE("CELL+",   CELLP  );
     IU CELLM = _XCODE("CELL-",   CELLM  );
     IU CELLS = _XCODE("CELLS",   CELLS  );
+    IU ABS   = _XCODE("ABS",     ABS    );
+    IU MAX   = _XCODE("MAX",     MAX    );
+    IU MIN   = _XCODE("MIN",     MIN    );
     IU ULESS = _XCODE("U<",      ULESS  );
     /// TODO: add UM+
     IU UMMOD = _XCODE("UM/MOD",  UMMOD  );    ///> ( udl udh u -- ur uq ) unsigned double divided by a single
@@ -138,18 +141,6 @@ int assemble(U8 *cdata)
     IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
     IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
-    IU ABS   = _COLON("ABS", DUP, ZLT); {
-        _IF(NEG);
-        _THEN(EXIT);
-    }
-    IU MAX   = _COLON("MAX", DDUP, LT); {
-        _IF(SWAP);
-        _THEN(DROP, EXIT);
-    }
-    IU MIN   = _COLON("MIN", DDUP, GT); {
-        _IF(SWAP);
-        _THEN(DROP, EXIT);
-    }
     ///
     ///> Console Input and Common words
     ///

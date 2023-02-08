@@ -219,6 +219,7 @@ void vm_outer() {
                 IP &= ~IRET_FLAG;
             });
         _X(DONEXT,
+            TAB();
             if (rtop-- > 0) {           ///> check if loop counter > 0
                 IP = GET(IP);           ///>> branch back to FOR
             }
@@ -227,10 +228,13 @@ void vm_outer() {
                 RPOP();                 ///>> pop off return stack
             });
         _X(QBRAN,
+            TAB();
             if (top) IP += CELLSZ;      ///> next instruction, or
             else     IP = GET(IP);      ///> fetch branching target address
             POP());
-        _X(BRAN,  IP = GET(IP));        ///> fetch branching target address
+        _X(BRAN,                        ///> fetch branching target address
+            TAB();
+            IP = GET(IP));
         /// @}
         /// @name Memory Storage ops
         /// @{

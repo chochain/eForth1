@@ -312,14 +312,12 @@ void vm_outer() {
         _X(ABS,   top  = abs(top));
         _X(MAX,   DU s = *DS--; if (s > top) top = s);
         _X(MIN,   DU s = *DS--; if (s < top) top = s);
- /*
->         _X(WITHIN,                        /// ( u ul uh -- f ) 3rd item is between first 2 on stack
->            DU ul = *DS--;
->            DU u  = *DS--;
->            top = BOOL(u > ul && u < top));
->         _X(TOUPP, if (top >= 0x61 && top <= 0x7b) top &= 0x5f);
->         _X(COUNT, PUSH(IP); PUSH(BGET(IP+1)));
-> */
+        _X(WITHIN,                        /// ( u ul uh -- f ) 3rd item is within [ul, uh)
+            DU ul = *DS--;
+            DU u  = *DS--;
+            top = BOOL((U16)(u - ul) < (U16)(top - ul)));
+        _X(TOUPP, if (top >= 0x61 && top <= 0x7b) top &= 0x5f);
+        _X(COUNT, *++DS = top + 1; top = BGET(top));
         _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
         _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product

@@ -137,6 +137,9 @@ typedef S16       DU;                 ///< data/cell unit
         OP(CELLP), \
         OP(CELLM), \
         OP(CELLS), \
+        OP(ABS),   \
+        OP(MAX),   \
+        OP(MIN),   \
     OP(ULESS),  \
     OP(UMMOD),  \
     OP(UMSTAR), \

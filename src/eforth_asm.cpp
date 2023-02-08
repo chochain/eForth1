@@ -102,6 +102,13 @@ int assemble(U8 *cdata)
     IU DNEG  = _XCODE("DNEGATE", DNEG   );
     IU DADD  = _XCODE("D+",      DADD   );
     IU DSUB  = _XCODE("D-",      DSUB   );
+    IU DDUP  = _XCODE("2DUP",    DDUP   );
+    IU DDROP = _XCODE("2DROP",   DDROP  );
+    /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
+    /// TODO: add I, J
+    IU DSTOR = _XCODE("2!",      DSTOR  );
+    IU DAT   = _XCODE("2@",      DAT    );
+    
     ///
     /// Kernel constants
     ///
@@ -121,10 +128,6 @@ int assemble(U8 *cdata)
     ///
     ///> Common High-Level Colon Words
     ///
-    // Dr. Ting's alternate opcodes
-    IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
-    IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
-    /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
     IU D2S   = _COLON("D>S",   ZLT, OVER, ZLT, XOR); {
         _IF(NEG);
         _THEN(EXIT);
@@ -138,8 +141,6 @@ int assemble(U8 *cdata)
     IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);  // ( dl dh n -- r q ) double div/mod by a single
     IU SMOD  = _COLON("/MOD", DDUP, DIV, TOR, MOD, RFROM, EXIT); // ( n1 n2 -- r q ) single devide
     IU MSLAS = _COLON("*/",   SSMOD, SWAP, DROP, EXIT);          // ( n n n -- q )
-    IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
-    IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
     IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
     ///
     ///> Console Input and Common words

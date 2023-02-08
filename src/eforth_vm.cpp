@@ -364,19 +364,17 @@ void vm_outer() {
             S32 d0 = S2D(top, *DS);
             S32 d1 = S2D(*(DS-1), *(DS-2));
             DS -= 2; DTOP(d1 - d0));
-/*        
->         _X(DDUP,  DU v = *DS; PUSH(v); v = *DS; PUSH(v));
->         _X(DDROP, POP(); POP());
->         /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
->         /// TODO: add I, J
->         _X(DSTOR,
->            SET(top + CELLSZ, *DS--);
->            SET(top, *DS--);
->            POP());
->         _X(DAT,
->            *(++DS) = (DU)GET(top);
->            top     = (DU)GET(top + CELLSZ));
-*/
+        _X(DDUP,  DU v = *DS; PUSH(v); v = *DS; PUSH(v));
+        _X(DDROP, POP(); POP());
+        /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
+        /// TODO: add I, J
+        _X(DSTOR,
+           SET(top + CELLSZ, *DS--);
+           SET(top, *DS--);
+           POP());
+        _X(DAT,
+           *(++DS) = (DU)GET(top);
+           top     = (DU)GET(top + CELLSZ));
         /// @}
         /// @name Arduino specific ops
         /// @{

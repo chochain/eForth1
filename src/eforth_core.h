@@ -147,7 +147,11 @@ typedef S16       DU;                 ///< data/cell unit
     OP(DNEG),   \
     OP(DADD),   \
     OP(DSUB),   \
-    OP(CLK),    \
+        OP(DDUP),  \
+        OP(DDROP), \
+        OP(DSTOR), \
+        OP(DAT),   \
+        OP(CLK),   \
         OP(PIN),   \
         OP(MAP),   \
         OP(IN),    \

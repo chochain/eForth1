@@ -39,8 +39,8 @@ int assemble(U8 *cdata)
     ///
     IU NOP   = _XCODE("NOP",     NOP    );
     IU BYE   = _XCODE("BYE",     BYE    );
-    IU QRX   = _XCODE("?RX",     QRX    );
-    IU TXSTO = _XCODE("TX!",     TXSTO  );
+    IU QKEY  = _XCODE("?KEY",    QRX    );
+    IU EMIT  = _XCODE("EMIT",    TXSTO  );
     IU DOLIT = _XCODE("DOLIT",   DOLIT  );
     IU DOVAR = _XCODE("DOVAR",   DOVAR  );
     IU ENTER = _XCODE("ENTER",   ENTER  );  // aka doLIST
@@ -138,7 +138,6 @@ int assemble(U8 *cdata)
     ///
     ///> Console Input and Common words
     ///
-    IU QKEY  = _COLON("?KEY",  QRX, EXIT);
     IU KEY   = _COLON("KEY",   NOP); {
         _BEGIN(QKEY);
         _UNTIL(EXIT);
@@ -216,7 +215,6 @@ int assemble(U8 *cdata)
     ///
     ///> Console Output
     ///
-    IU EMIT  = _COLON("EMIT",  TXSTO, EXIT);
     IU SPACE = _COLON("SPACE", BLANK, EMIT, EXIT);
     IU CHARS = _COLON("CHARS", SWAP, DOLIT, 0, MAX); {
         _FOR(NOP);

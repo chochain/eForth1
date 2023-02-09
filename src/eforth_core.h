@@ -132,34 +132,14 @@ typedef S16       DU;                 ///< data/cell unit
     OP(QDUP),   \
     OP(DEPTH),  \
     OP(RP),     \
-        OP(BL),    \
-        OP(CELL),  \
-        OP(CELLP), \
-        OP(CELLM), \
-        OP(CELLS), \
-        OP(ABS),   \
-        OP(MAX),   \
-        OP(MIN),   \
-        OP(WITHIN),\
-        OP(TOUPP), \
-        OP(COUNT), \
     OP(ULESS),  \
     OP(UMMOD),  \
     OP(UMSTAR), \
     OP(MSTAR),  \
-        OP(UMPLUS),\
-        OP(SSMOD), \
-        OP(SMOD),  \
-        OP(MSLAS), \
-        OP(S2D),   \
-        OP(D2S),   \
+    OP(UMPLUS), \
     OP(DNEG),   \
     OP(DADD),   \
-    OP(DSUB),   \
-        OP(DDUP),  \
-        OP(DDROP), \
-        OP(DSTOR), \
-        OP(DAT)
+    OP(DSUB)
 //
 // eForth function prototypes
 //

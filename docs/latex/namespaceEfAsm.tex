@@ -99,7 +99,9 @@ reserved for C\+O\+LD boot vector
 Kernel dictionary (primitive words) \end{quote}
 
 
-T\+O\+DO\+: add U\+M+
+\begin{quote}
+( u ul uh -- f ) check 3rd item within \mbox{[}ul uh) \end{quote}
+
 
 \begin{quote}
 ( udl udh u -- ur uq ) unsigned double divided by a single \end{quote}
@@ -112,6 +114,32 @@ T\+O\+DO\+: add U\+M+
 \begin{quote}
 ( n1 n2 -- d ) double = single $\ast$ single \end{quote}
 
+
+\begin{quote}
+( n1 n2 -- sum c ) add two numbers and carry flag \end{quote}
+
+
+\begin{quote}
+( n1 n2 n -- r q ) multiply n1 n2 div/mod by a single \end{quote}
+
+
+\begin{quote}
+( n1 n2 -- r q ) single devide \end{quote}
+
+
+\begin{quote}
+( n1 n2 n3 -- q ) multiply n1 n2 divide by n3 return quotient \end{quote}
+
+
+\begin{quote}
+( n -- dl dh ) \end{quote}
+
+
+\begin{quote}
+( dl dh -- n ) \end{quote}
+
+
+T\+O\+DO\+: add 2S\+W\+AP, 2O\+V\+ER, 2+, 2-\/, 2$\ast$, 2/ T\+O\+DO\+: add I, J
 
 Kernel constants
 
@@ -200,32 +228,6 @@ Kernel constants
 
 
 \begin{quote}
-common constants and variable spec. \end{quote}
-
-
-\begin{quote}
-
-\begin{DoxyItemize}
-\item BL blank 
-\end{DoxyItemize}\end{quote}
-
-
-\begin{quote}
-
-\begin{DoxyItemize}
-\item C\+E\+LL cell size 
-\end{DoxyItemize}\end{quote}
-
-
-\begin{quote}
-Common High-\/\+Level Colon Words \end{quote}
-
-
-T\+O\+DO\+: add 2S\+W\+AP, 2O\+V\+ER, 2+, 2-\/, 2$\ast$, 2/
-
-T\+O\+DO\+: add I, J
-
-\begin{quote}
 Console Input and Common words \end{quote}
 
 
@@ -302,6 +304,18 @@ T\+O\+DO\+: add \mbox{[}\textquotesingle{}\mbox{]}
 \begin{quote}
 Debugging Tools \end{quote}
 
+
+Optional\+: Takes 240 bytes R\+OM space \begin{quote}
+display opcode name ( n -- ) \end{quote}
+
+
+\begin{quote}
+display address with colon delimiter ( a -- ) \end{quote}
+
+
+\begin{quote}
+see colon word definition ( -- ;; $<$string$>$ ) \end{quote}
+T\+O\+DO\+: add \+\_\+\+C\+A\+SE
 
 \begin{quote}
 Control Structures \end{quote}

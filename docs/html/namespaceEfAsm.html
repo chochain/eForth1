@@ -202,7 +202,9 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>Kernel dictionary (primitive words) </p>
 </blockquote>
-<p>TODO: add UM+</p>
+<blockquote class="doxtable">
+<p>( u ul uh &ndash; f ) check 3rd item within [ul uh) </p>
+</blockquote>
 <blockquote class="doxtable">
 <p>( udl udh u &ndash; ur uq ) unsigned double divided by a single </p>
 </blockquote>
@@ -212,6 +214,25 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>( n1 n2 &ndash; d ) double = single * single </p>
 </blockquote>
+<blockquote class="doxtable">
+<p>( n1 n2 &ndash; sum c ) add two numbers and carry flag </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( n1 n2 n &ndash; r q ) multiply n1 n2 div/mod by a single </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( n1 n2 &ndash; r q ) single devide </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( n1 n2 n3 &ndash; q ) multiply n1 n2 divide by n3 return quotient </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( n &ndash; dl dh ) </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( dl dh &ndash; n ) </p>
+</blockquote>
+<p>TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/ TODO: add I, J</p>
 <p>Kernel constants</p>
 <blockquote class="doxtable">
 <ul>
@@ -274,24 +295,6 @@ Variables</h2></td></tr>
 </ul>
 </blockquote>
 <blockquote class="doxtable">
-<p>common constants and variable spec. </p>
-</blockquote>
-<blockquote class="doxtable">
-<ul>
-<li>BL blank </li>
-</ul>
-</blockquote>
-<blockquote class="doxtable">
-<ul>
-<li>CELL cell size </li>
-</ul>
-</blockquote>
-<blockquote class="doxtable">
-<p>Common High-Level Colon Words </p>
-</blockquote>
-<p>TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/</p>
-<p>TODO: add I, J</p>
-<blockquote class="doxtable">
 <p>Console Input and Common words </p>
 </blockquote>
 <p>TODO: add SP@, SP0</p>
@@ -353,6 +356,16 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <blockquote class="doxtable">
 <p>Debugging Tools </p>
 </blockquote>
+<p>Optional: Takes 240 bytes ROM space </p><blockquote class="doxtable">
+<p>display opcode name ( n &ndash; ) </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>display address with colon delimiter ( a &ndash; ) </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>see colon word definition ( &ndash; ;; &lt;string&gt; ) </p>
+</blockquote>
+<p>TODO: add _CASE</p>
 <blockquote class="doxtable">
 <p>Control Structures </p>
 </blockquote>

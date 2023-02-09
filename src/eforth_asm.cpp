@@ -86,39 +86,14 @@ int assemble(U8 *cdata)
     IU QDUP  = _XCODE("?DUP",    QDUP   );
     IU DEPTH = _XCODE("DEPTH",   DEPTH  );
     IU RP    = _XCODE("RP",      RP     );
-    IU BLANK = _XCODE("BL",      BL     );
-    IU CELL  = _XCODE("CELL",    CELL   );
-    IU CELLP = _XCODE("CELL+",   CELLP  );
-    IU CELLM = _XCODE("CELL-",   CELLM  );
-    IU CELLS = _XCODE("CELLS",   CELLS  );
-    IU ABS   = _XCODE("ABS",     ABS    );
-    IU MAX   = _XCODE("MAX",     MAX    );
-    IU MIN   = _XCODE("MIN",     MIN    );
-    IU WITHI = _XCODE("WITHIN",  WITHIN );    ///> ( u ul uh -- f ) check 3rd item within [ul uh)
-    
-    IU TOUPP = _XCODE(">UPPER",  TOUPP  );
-    IU COUNT = _XCODE("COUNT",   COUNT  );
     IU ULESS = _XCODE("U<",      ULESS  );
-    
     IU UMMOD = _XCODE("UM/MOD",  UMMOD  );    ///> ( udl udh u -- ur uq ) unsigned double divided by a single
     IU UMSTA = _XCODE("UM*",     UMSTAR );    ///> ( u1 u2 -- ud ) unsigned double = multiply unsigned singles
     IU MSTAR = _XCODE("M*",      MSTAR  );    ///> ( n1 n2 -- d ) double = single * single
     IU UMPLU = _XCODE("UM+",     UMPLUS );    ///> ( n1 n2 -- sum c ) add two numbers and carry flag
-    IU SSMOD = _XCODE("*/MOD",   SSMOD  );    ///> ( n1 n2 n -- r q ) multiply n1 n2 div/mod by a single
-    IU SMOD  = _XCODE("/MOD",    SMOD   );    ///> ( n1 n2 -- r q ) single devide
-    IU MSLAS = _XCODE("*/",      MSLAS  );    ///> ( n1 n2 n3 -- q ) multiply n1 n2 divide by n3 return quotient
-    
-    IU S2D   = _XCODE("S>D",     S2D    );    ///> ( n -- dl dh )
-    IU D2S   = _XCODE("D>S",     D2S    );    ///> ( dl dh -- n )
     IU DNEG  = _XCODE("DNEGATE", DNEG   );
     IU DADD  = _XCODE("D+",      DADD   );
     IU DSUB  = _XCODE("D-",      DSUB   );
-    IU DDUP  = _XCODE("2DUP",    DDUP   );
-    IU DDROP = _XCODE("2DROP",   DDROP  );
-    /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
-    /// TODO: add I, J
-    IU DSTOR = _XCODE("2!",      DSTOR  );
-    IU DAT   = _XCODE("2@",      DAT    );
     ///
     /// Kernel constants
     ///
@@ -135,6 +110,47 @@ int assemble(U8 *cdata)
     IU vIN   = _CODE(">IN",     CST(ua,9));   ///> * >IN  interpreter pointer to next char
     IU vNTIB = _CODE("#TIB",    CST(ua,10));  ///> * #TIB number of character received in TIB
     IU vTMP  = _CODE("tmp",     CST(ua,11));  ///> * tmp storage (alternative to return stack)
+    ///> common constants and variable spec.
+    ///
+    IU BLANK = _CODE("BL",      CST(0x20,  0));  ///> * BL blank
+    IU CELL  = _CODE("CELL",    CST(CELLSZ,0));  ///> * CELL cell size
+    ///
+    ///> Common High-Level Colon Words
+    ///
+    IU CELLP = _COLON("CELL+", CELL, ADD, EXIT);
+    IU CELLM = _COLON("CELL-", CELL, SUB, EXIT);
+    IU CELLS = _COLON("CELLS", CELL, MUL, EXIT);
+    /// Dr. Ting's alternate opcodes
+    IU DDUP  = _COLON("2DUP",  OVER, OVER, EXIT);
+    IU DDROP = _COLON("2DROP", DROP, DROP, EXIT);
+    /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
+    IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);   // ( dl dh n -- r q ) double div/mod by a single
+    IU SMOD  = _COLON("/MOD",  DDUP, DIV, TOR, MOD, RFROM, EXIT); // ( n1 n2 -- r q ) single devide
+    IU MSLAS = _COLON("*/",    SSMOD, SWAP, DROP, EXIT);
+    IU D2S   = _COLON("D>S",   ZLT, OVER, ZLT, XOR); {
+        _IF(NEG);
+        _THEN(EXIT);
+    }
+    IU S2D   = _COLON("S>D",   DUP, ZLT); {
+        _IF(DOLIT, 0xffff);
+        _ELSE(DOLIT, 0);
+        _THEN(EXIT);
+    }
+    IU DSTOR = _COLON("2!",   DUP, TOR, CELL, ADD, STORE, RFROM, STORE, EXIT);
+    IU DAT   = _COLON("2@",   DUP, TOR, AT, RFROM, CELL, ADD, AT, EXIT);
+    IU COUNT = _COLON("COUNT", DUP,  ONEP, SWAP, CAT, EXIT);
+    IU ABS   = _COLON("ABS", DUP, ZLT); {
+        _IF(NEG);
+        _THEN(EXIT);
+    }
+    IU MAX   = _COLON("MAX", DDUP, LT); {
+        _IF(SWAP);
+        _THEN(DROP, EXIT);
+    }
+    IU MIN   = _COLON("MIN", DDUP, GT); {
+        _IF(SWAP);
+        _THEN(DROP, EXIT);
+    }
     ///
     ///> Console Input and Common words
     ///
@@ -142,6 +158,7 @@ int assemble(U8 *cdata)
         _BEGIN(QKEY);
         _UNTIL(EXIT);
     }
+    IU WITHI = _COLON("WITHIN",OVER, SUB, TOR, SUB, RFROM, ULESS, EXIT);
     IU TCHAR = _COLON(">CHAR", DOLIT, 0x7f, AND, DUP, DOLIT, 0x7f, BLANK, WITHI); {
         _IF(DROP, DOLIT, 0x5f);
         _THEN(EXIT);
@@ -189,6 +206,10 @@ int assemble(U8 *cdata)
     IU STR   = _COLON("STR",     DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
     IU HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
     IU DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
+    IU TOUPP = _COLON(">UPPER", DUP, DOLIT, 0x61, DOLIT, 0x7b, WITHI); { // [a-z] only?
+        _IF(DOLIT, 0x5f, AND);
+        _THEN(EXIT);
+    }
     IU DIGTQ = _COLON("DIGIT?", TOR, TOUPP, DOLIT, 0x30, SUB, DOLIT, 9, OVER, LT); {
         _IF(DOLIT, 7, SUB, DUP, DOLIT, 10, LT, OR);           // handle hex number
         _THEN(DUP, RFROM, ULESS, EXIT);                       // handle base > 10

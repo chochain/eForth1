@@ -219,6 +219,7 @@ void vm_outer() {
                 IP &= ~IRET_FLAG;
             });
         _X(DONEXT,
+            TAB();
             if (rtop-- > 0) {           ///> check if loop counter > 0
                 IP = GET(IP);           ///>> branch back to FOR
             }
@@ -227,10 +228,13 @@ void vm_outer() {
                 RPOP();                 ///>> pop off return stack
             });
         _X(QBRAN,
+            TAB();
             if (top) IP += CELLSZ;      ///> next instruction, or
             else     IP = GET(IP);      ///> fetch branching target address
             POP());
-        _X(BRAN,  IP = GET(IP));        ///> fetch branching target address
+        _X(BRAN,                        ///> fetch branching target address
+            TAB();
+            IP = GET(IP));
         /// @}
         /// @name Memory Storage ops
         /// @{
@@ -297,6 +301,23 @@ void vm_outer() {
         _X(ONEM,  top--);
         _X(QDUP,  if (top) *++DS = top);
         _X(DEPTH, DU d = DEPTH(); PUSH(d));
+        _X(RP,
+            DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
+            PUSH(r));
+        _X(BL,    PUSH(0x20));
+        _X(CELL,  PUSH(CELLSZ));
+        _X(CELLP, top += CELLSZ);
+        _X(CELLM, top -= CELLSZ);
+        _X(CELLS, top *= CELLSZ);
+        _X(ABS,   top  = abs(top));
+        _X(MAX,   DU s = *DS--; if (s > top) top = s);
+        _X(MIN,   DU s = *DS--; if (s < top) top = s);
+        _X(WITHIN,                        /// ( u ul uh -- f ) 3rd item is within [ul, uh)
+            DU ul = *DS--;
+            DU u  = *DS--;
+            top = BOOL((U16)(u - ul) < (U16)(top - ul)));
+        _X(TOUPP, if (top >= 0x61 && top <= 0x7b) top &= 0x5f);
+        _X(COUNT, *++DS = top + 1; top = BGET(top));
         _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
         _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
@@ -305,6 +326,24 @@ void vm_outer() {
         _X(MSTAR,                         /// (n1 n2 -- d) signed multiply, return double product
             S32 d = (S32)*DS * top;
             DTOP(d));
+        _X(UMPLUS,                        /// ( n1 n2 -- sum c ) return sum of two numbers and carry flag
+            U32 u = (U32)*DS + top;
+            DTOP(u));
+        _X(SSMOD,                         /// ( dl dh n -- r q ) double div/mod by a single
+            S32 d = (S32)*DS * *(DS - 1);
+            *--DS = (DU)(d % top);
+            top   = (DU)(d / top));
+        _X(SMOD,                          /// ( n1 n2 -- r q )
+            DU s = *DS;
+            *DS = s % top;
+            top = s / top);
+        _X(MSLAS,
+            S32 d = (S32)*DS-- * *DS--;   /// ( n1 n2 n3 -- q ) multiply n1 n2, divided by n3 return quotient
+            top = (DU)(d / top));
+        _X(S2D,   S32 d = (S32)top; DTOP(d));
+        _X(D2S,
+           DU s = *DS--;
+           top = (top < 0) ? -abs(s) : abs(s));
         /// @}
         /// @name Double precision ops
         /// @{
@@ -319,6 +358,17 @@ void vm_outer() {
             S32 d0 = S2D(top, *DS);
             S32 d1 = S2D(*(DS-1), *(DS-2));
             DS -= 2; DTOP(d1 - d0));
+        _X(DDUP,  DU v = *DS; PUSH(v); v = *DS; PUSH(v));
+        _X(DDROP, POP(); POP());
+        /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
+        /// TODO: add I, J
+        _X(DSTOR,
+           SET(top + CELLSZ, *DS--);
+           SET(top, *DS--);
+           POP());
+        _X(DAT,
+           *(++DS) = (DU)GET(top);
+           top     = (DU)GET(top + CELLSZ));
         /// @}
         /// @name Arduino specific ops
         /// @{
@@ -341,9 +391,6 @@ void vm_outer() {
         _X(PCISR, intr_add_pci(top, *DS);   POP(); POP());
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
-        _X(RP,
-            DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
-            PUSH(r));
 #if EXE_TRACE
         _X(TRC,  tCNT = top; POP());
 #else

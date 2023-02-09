@@ -330,9 +330,9 @@ void vm_outer() {
             U32 u = (U32)*DS + top;
             DTOP(u));
         _X(SSMOD,                         /// ( dl dh n -- r q ) double div/mod by a single
-            S32 d = (S32)*DS-- * top;
-            *DS  = (DU)(d % top);
-            top  = (DU)(d / top));
+            S32 d = (S32)*DS * *(DS - 1);
+            *--DS = (DU)(d % top);
+            top   = (DU)(d / top));
         _X(SMOD,                          /// ( n1 n2 -- r q )
             DU s = *DS;
             *DS = s % top;

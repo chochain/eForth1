@@ -104,7 +104,7 @@ int assemble(U8 *cdata)
     IU UMSTA = _XCODE("UM*",     UMSTAR );    ///> ( u1 u2 -- ud ) unsigned double = multiply unsigned singles
     IU MSTAR = _XCODE("M*",      MSTAR  );    ///> ( n1 n2 -- d ) double = single * single
     IU UMPLU = _XCODE("UM+",     UMPLUS );    ///> ( n1 n2 -- sum c ) add two numbers and carry flag
-    IU SSMODx = _XCODE("*/MODx",   SSMOD  );    ///> ( dl dh n -- r q ) double div/mod by a single
+    IU SSMOD = _XCODE("*/MOD",   SSMOD  );    ///> ( n1 n2 n -- r q ) multiply n1 n2 div/mod by a single
     IU SMOD  = _XCODE("/MOD",    SMOD   );    ///> ( n1 n2 -- r q ) single devide
     IU MSLAS = _XCODE("*/",      MSLAS  );    ///> ( n1 n2 n3 -- q ) multiply n1 n2 divide by n3 return quotient
     
@@ -135,11 +135,6 @@ int assemble(U8 *cdata)
     IU vIN   = _CODE(">IN",     CST(ua,9));   ///> * >IN  interpreter pointer to next char
     IU vNTIB = _CODE("#TIB",    CST(ua,10));  ///> * #TIB number of character received in TIB
     IU vTMP  = _CODE("tmp",     CST(ua,11));  ///> * tmp storage (alternative to return stack)
-    ///
-    ///> Common High-Level Colon Words
-    ///
-    /// TODO: add I, J
-    IU SSMOD = _COLON("*/MOD", TOR, MSTAR, RFROM, UMMOD, EXIT);  // ( dl dh n -- r q ) double div/mod by a single
     ///
     ///> Console Input and Common words
     ///

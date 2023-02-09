@@ -639,27 +639,6 @@ int assemble(U8 *cdata)
     _COLON("IMMEDIATE",    vLAST, AT, DUP,              // enable IMMEDIATE flag
         CAT, DOLIT, fIMMD, OR, SWAP, CSTOR, EXIT);
     ///
-    ///> Arduino specific opcodes
-    ///
-    IU CLK     = _XCODE("CLOCK",    CLK  ); ///  ( -- ud ud ) get current clock (in ms)
-    IU PINMODE = _XCODE("PINMODE",  PIN  ); ///  ( n p -- )   set pinMode(p, n=1:OUTPUT, n=0: INPUT)
-    IU MAP     = _XCODE("MAP",      MAP  ); ///  ( h l p -- ) set map range to pin
-    IU IN      = _XCODE("IN",       IN   ); ///  ( p -- n )   digitalRead(p)
-    IU OUT     = _XCODE("OUT",      OUT  ); ///  ( n p -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
-    IU AIN     = _XCODE("AIN",      AIN  ); ///  ( p -- n )   read analog value from pin
-    IU PWM     = _XCODE("PWM",      PWM  ); ///  ( n p -- )   set duty cycle % (PWM) to pin
-    IU TMISR   = _XCODE("TMISR",    TMISR); ///  ( xt n -- )  on timer interrupt calls xt every n ms
-    IU PCISR   = _XCODE("PCISR",    PCISR); ///  ( xt p -- )  on pin change interrupt calls xt
-    IU TIMER   = _XCODE("TIMER",    TMRE ); ///  ( f -- )     enable/disable timer interrupt
-    IU PCINT   = _XCODE("PCINT",    PCIE ); ///  ( f -- )     enable/disable pin change interrupt
-    IU TRACE   = _XCODE("TRACE",    TRC  ); ///  ( f -- )     enable/disable debug tracing
-    IU SAVE    = _XCODE("SAVE",     SAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
-    IU LOAD    = _XCODE("LOAD",     LOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
-    _COLON("DELAY", S2D, CLK, DADD, vTMP, DSTOR); {
-        _BEGIN(vTMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
-        _UNTIL(EXIT);
-    }
-    ///
     ///> Cold Start address (End of dictionary)
     ///
     int last  = PC + CELLSZ;                // name field of last word

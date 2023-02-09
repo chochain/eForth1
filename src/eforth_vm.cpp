@@ -370,39 +370,5 @@ void vm_outer() {
            *(++DS) = (DU)GET(top);
            top     = (DU)GET(top + CELLSZ));
         /// @}
-        /// @name Arduino specific ops
-        /// @{
-        _X(CLK,
-            U32 t = millis();
-            *++DS = top; DS++;            /// * allocate 2-cells for clock ticks
-            DTOP(t));
-        _X(PIN,
-            pinMode(top, *DS ? OUTPUT : INPUT);
-            POP(); POP());
-        _X(MAP,
-            U16 tmp = map(top, *(DS-3), *(DS-2), *(DS-1), *DS);
-            DS -= 4;
-            top = tmp);
-        _X(IN,    top = digitalRead(top));
-        _X(OUT,   digitalWrite(top, *DS);   POP(); POP());
-        _X(AIN,   top = analogRead(top));
-        _X(PWM,   analogWrite(top, *DS);    POP(); POP());
-        _X(TMISR, intr_add_timer(top, *DS); POP(); POP());
-        _X(PCISR, intr_add_pci(top, *DS);   POP(); POP());
-        _X(TMRE,  intr_timer_enable(top);   POP());
-        _X(PCIE,  intr_pci_enable(top);     POP());
-#if EXE_TRACE
-        _X(TRC,  tCNT = top; POP());
-#else
-        _X(TRC,  POP());
-#endif // EXE_TRACE
-        _X(SAVE,
-            U16 sz = ef_save(_data);
-            LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
-        );
-        _X(LOAD,
-            U16 sz = ef_load(_data);
-            LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
-        );
     }
 }

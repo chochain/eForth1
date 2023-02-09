@@ -159,21 +159,7 @@ typedef S16       DU;                 ///< data/cell unit
         OP(DDUP),  \
         OP(DDROP), \
         OP(DSTOR), \
-        OP(DAT),   \
-        OP(CLK),   \
-        OP(PIN),   \
-        OP(MAP),   \
-        OP(IN),    \
-        OP(OUT),   \
-        OP(AIN),   \
-        OP(PWM),   \
-        OP(TMISR), \
-        OP(PCISR), \
-        OP(TMRE),  \
-        OP(PCIE),  \
-        OP(TRC),   \
-        OP(SAVE),  \
-        OP(LOAD)
+        OP(DAT)
 //
 // eForth function prototypes
 //

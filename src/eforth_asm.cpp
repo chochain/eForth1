@@ -655,6 +655,7 @@ int assemble(U8 *cdata)
     IU TRACE   = _XCODE("TRACE",    TRC  ); ///  ( f -- )     enable/disable debug tracing
     IU SAVE    = _XCODE("SAVE",     SAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
     IU LOAD    = _XCODE("LOAD",     LOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
+    IU CALL    = _XCODE("CALL",     CALL ); ///  ( n -- )     call a C-function vector
     _COLON("DELAY", S2D, CLK, DADD, vTMP, DSTOR); {
         _BEGIN(vTMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
         _UNTIL(EXIT);

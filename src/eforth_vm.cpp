@@ -37,7 +37,7 @@ U8    *_data;                     ///< RAM, memory block for user define diction
 void _init() {
     intr_reset();                     /// * reset interrupt handlers
 
-    PC = IP = IR = top = 0;           ///> setup control variables
+    IR = top = 0;                     ///> setup control variables
     DS = (DU*)RAM(FORTH_STACK_ADDR - CELLSZ);
     RS = (DU*)RAM(FORTH_STACK_TOP);
 
@@ -58,6 +58,8 @@ void _init() {
     SET(p,   FORTH_TIB_ADDR);         /// * set 'TIB pointer
     SET(p+2, 10);                     /// * set BASE to 10
     SET(p+4, FORTH_DIC_ADDR);         /// * top of dictionary
+
+    IP = GET(0) & ~fCOLON;            ///> fetch cold boot vector
     ///
     /// display init prompt
     ///
@@ -148,6 +150,32 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     _init();                    /// * resetting user variables
 }
 ///
+///> C interface implementation
+///  TODO: build formal C callstack construct
+///
+void _ccall() {
+    IU  adr = (CFUNC_SLOT_ADDR & IDX_MASK) + top * sizeof(CFP);
+    CFP fp  = *((CFP*)&_data[adr]);   ///> fetch C function pointer
+    POP();                            ///> pop off TOS
+    fp();                             ///> call C function
+}
+
+void vm_cfunc(int n, CFP fp) {
+	IU adr = (CFUNC_SLOT_ADDR & IDX_MASK) + n * sizeof(CFP);
+    *((CFP*)&_data[adr]) = fp;        ///> store C function pointer
+    LOG_V(", fp[", n); LOG_H("]=", (uintptr_t)fp);
+}
+
+void vm_push(int v) {           /// proxy to VM
+	PUSH(v);
+}
+
+int vm_pop() {
+    int t = (int)top;
+	POP();
+    return t;
+}
+///
 /// eForth virtual machine outer interpreter (single-step) execution unit
 /// @return
 ///   0 - exit
@@ -163,8 +191,6 @@ void vm_outer() {
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
-    IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
-
     while (1) {
         YIELD();                        /// * serve interrupt if any
         U8  op = BGET(IP++);
@@ -404,5 +430,6 @@ void vm_outer() {
             U16 sz = ef_load(_data);
             LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
+        _X(CALL, _ccall());                /// * call C function
     }
 }

@@ -11,6 +11,7 @@
 * Has 16-bit cells and stacks.
 * Can read/write Arduino pins.
 * Supports Arduino Timer and Pin Change Interrupts.
+* Has C API to interface with user defined functions in .ino.
 * Can save/load app to/from EEPROM.
 * Can be embeded with other Arduino applications.
 * Become Turnkey system booting from saved EEPROM.

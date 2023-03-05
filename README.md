@@ -17,7 +17,7 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
 * Has 16-bit cells and stacks.
 * Can read/write Arduino pins.
 * Supports Arduino Timer and Pin Change Interrupts.
-* Has C API to call user C functions written in .ino.
+* Has C API to interface with user defined functions written in .ino.
 * Can save/load app to/from EEPROM.
 * Can be embeded with other Arduino applications.
 * Become Turnkey system booting from saved EEPROM.
@@ -67,22 +67,22 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 
 ### Different from Dr. Ting's
   * Instead of direct GPIO port manipulation with byte read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... for familiarity to the IDE platform.
-  * eForth1 supports multi-tasking through interrupts. It provides a fixed frequency of 0.1Hz using Timer2. You assign mulply of 0.1 second as ISR repetition trigger period. For example 50 means every 5 seconds. Timer1 is left free for Servo or other libraries.
-  * On this 16-bit system, CLOCK will return a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D-.
+  * eForth1 supports multi-tasking through interrupts. It provides a fixed frequency at 0.01Hz using Timer2. You assign mulply of 10ms as ISR repetition trigger period. For example 500 means every 5 seconds. Timer1 is left free for Servo or other libraries.
+  * On this 16-bit system, CLOCK will return a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D>S, S>D.
   * DELAY takes a 16-bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, DELAY does not interfer with interrupts (see demos below).
 
-### Demos
-  * LED blinker (assume you have a blue LED on pin 6)
+### Demos, and verify yourself at [this Wokwi project](https://wokwi.com/projects/356793878308297729)
+  * LED blinker (assume you have a blue LED on pin 6, and set for OUTPUT)
     <pre>
-    > : toggle 6 in 1 xor 6 out ;⏎           \ create a word to toggle the blue LED
-    > : blink for toggle 500 delay next ;⏎   \ create a word to blink (i.e. 500ms delay)
+    > : blue 6 in 1 xor 6 out ;⏎             \ create a word to toggle the blue LED
+    > : blink for blue 500 delay next ;⏎     \ create a word to blink (i.e. 500ms delay)
     > 9 blink⏎                               \ run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
     </pre>  
 
-  * Timer Interrupt (a red LED on pin 5)
+  * Timer Interrupt Service Routine (a red LED on pin 5, and set for OUTPUT)
     <pre>
-    > : red_isr 5 in 1 xor 5 out ;⏎          \ create an interrupt service routine (just a regular word)
-    > ' red_isr 2 tmisr⏎                     \ make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
+    > : red 5 in 1 xor 5 out ;⏎              \ create an interrupt service routine (just a regular word)
+    > ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (20 x 10 microseconds)
     > 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>
@@ -99,6 +99,8 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > zz⏎                                    \ benchmark the 1000x1000 cycles
     > 24299 0 ok>                            \ 24299ms =~ 24us/cycle (with ISR running in the background)
     </pre>
+
+  * Drives 8 Servos [at this Wokwi project](https://wokwi.com/projects/356793878308297729)
 
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.
@@ -124,5 +126,7 @@ To understand the philosophy of FORTH, excellent online e-books are here free fo
 * [ceForth_33.doc - original documentation](https://chochain.github.io/eForth1/ref/ceForth_33.doc)
 * [ceForth_33.cpp - source code in C](https://chochain.github.io/eForth1/ref/ceForth_33.cpp)
 * [eforth_328.ino - Arduino IDE teaser by Dr. Ting](https://chochain.github.io/eForth1/ref/eforth_328.ino)
-* [eForth for STM8 - for even smaller apps](https://github.com/TG9541/stm8ef) and [STM8 Programming](https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8)
-* [ESP32Forth for ESP32 - for larger/fancier apps](https://github.com/Esp32forth)
+
+### For Projects - small and large
+* A tiny 8-bit sytem [eForth for STM8](https://github.com/TG9541/stm8ef) and [STM8 Programming](https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8)
+* A system with WiFi, and fancy stuffs [ESP32Forth for ESP32](https://github.com/Esp32forth)

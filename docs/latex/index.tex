@@ -19,7 +19,7 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
 \item Has 16-\/bit cells and stacks.
 \item Can read/write Arduino pins.
 \item Supports Arduino Timer and Pin Change Interrupts.
-\item Has C A\+PI to call user C functions written in .ino.
+\item Has C A\+PI to interface with user defined functions written in .ino.
 \item Can save/load app to/from E\+E\+P\+R\+OM.
 \item Can be embeded with other Arduino applications.
 \item Become Turnkey system booting from saved E\+E\+P\+R\+OM.
@@ -87,26 +87,26 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 
 \begin{DoxyItemize}
 \item Instead of direct G\+P\+IO port manipulation with byte read/write, e\+Forth1 calls Arduino library functions i.\+g. P\+I\+N\+M\+O\+DE = pin\+Mode, IN = digital\+Read, O\+UT = digital\+Write, ... for familiarity to the I\+DE platform.
-\item e\+Forth1 supports multi-\/tasking through interrupts. It provides a fixed frequency of 0.\+1\+Hz using Timer2. You assign mulply of 0.\+1 second as I\+SR repetition trigger period. For example 50 means every 5 seconds. Timer1 is left free for Servo or other libraries.
-\item On this 16-\/bit system, C\+L\+O\+CK will return a double number (i.\+e. 32-\/bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.\+e. using D\+N\+E\+G\+A\+TE, D+, or D-\/.
+\item e\+Forth1 supports multi-\/tasking through interrupts. It provides a fixed frequency at 0.\+01\+Hz using Timer2. You assign mulply of 10ms as I\+SR repetition trigger period. For example 500 means every 5 seconds. Timer1 is left free for Servo or other libraries.
+\item On this 16-\/bit system, C\+L\+O\+CK will return a double number (i.\+e. 32-\/bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.\+e. using D\+N\+E\+G\+A\+TE, D+, or D-\/ and the conversion words D$>$S, S$>$D.
 \item D\+E\+L\+AY takes a 16-\/bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, D\+E\+L\+AY does not interfer with interrupts (see demos below).
 \end{DoxyItemize}
 
-\doxysubsection*{Demos}
+\doxysubsection*{Demos, and verify yourself at \href{https://wokwi.com/projects/356793878308297729}{\texttt{ this Wokwi project}}}
 
 
 \begin{DoxyItemize}
-\item L\+ED blinker (assume you have a blue L\+ED on pin 6) 
+\item L\+ED blinker (assume you have a blue L\+ED on pin 6, and set for O\+U\+T\+P\+UT) 
 \begin{DoxyPre}
-    > : toggle 6 in 1 xor 6 out ;⏎           \textbackslash{} create a word to toggle the blue LED
-    > : blink for toggle 500 delay next ;⏎   \textbackslash{} create a word to blink (i.e. 500ms delay)
+    > : blue 6 in 1 xor 6 out ;⏎             \textbackslash{} create a word to toggle the blue LED
+    > : blink for blue 500 delay next ;⏎     \textbackslash{} create a word to blink (i.e. 500ms delay)
     > 9 blink⏎                               \textbackslash{} run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
     \end{DoxyPre}
 
-\item Timer Interrupt (a red L\+ED on pin 5) 
+\item Timer Interrupt Service Routine (a red L\+ED on pin 5, and set for O\+U\+T\+P\+UT) 
 \begin{DoxyPre}
-    > : red\_isr 5 in 1 xor 5 out ;⏎          \textbackslash{} create an interrupt service routine (just a regular word)
-    > ' red\_isr 2 tmisr⏎                     \textbackslash{} make the ISR ticked every 0.2 seconds (2 x 0.1 seconds)
+    > : red 5 in 1 xor 5 out ;⏎              \textbackslash{} create an interrupt service routine (just a regular word)
+    > ' red 20 tmisr⏎                        \textbackslash{} make the ISR ticked every 0.2 seconds (20 x 10 microseconds)
     > 1 timer⏎                               \textbackslash{} enable timer, now you should see red LED blinking continuously
     > 19 blink⏎                              \textbackslash{} let's have them both blink (blue LED 10 times) 
     \end{DoxyPre}
@@ -122,9 +122,10 @@ $\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$\vert$$\vert$
     > 24299 0 ok>                            \textbackslash{} 24299ms =\string~ 24us/cycle (with ISR running in the background)
     \end{DoxyPre}
 
+\item Drives 8 Servos \href{https://wokwi.com/projects/356793878308297729}{\texttt{ at this Wokwi project}}
 \end{DoxyItemize}
 
-\#\doxysection*{To Learn More About Forth?}
+\doxysubsection*{To Learn More About Forth?}
 
 If your programming language exposure has been with C, Java, or even Python so far, F\+O\+R\+TH is quite {\bfseries{different}}. Quote Nick\+: {\itshape \char`\"{}\+It\textquotesingle{}s no functional or object oriented, it doesn\textquotesingle{}t have type-\/checking, and it basically has zero syntax\char`\"{}}. No syntax? So, anyway, before you dive right into the deep-\/end, here\textquotesingle{}s a good online materials.
 \begin{DoxyItemize}
@@ -163,6 +164,12 @@ change them to -\/O3 for speed, -\/Os (default) for smallest size, -\/O2 for som
 \item \href{https://chochain.github.io/eForth1/ref/ceForth_33.doc}{\texttt{ ce\+Forth\+\_\+33.\+doc -\/ original documentation}}
 \item \href{https://chochain.github.io/eForth1/ref/ceForth_33.cpp}{\texttt{ ce\+Forth\+\_\+33.\+cpp -\/ source code in C}}
 \item \href{https://chochain.github.io/eForth1/ref/eforth_328.ino}{\texttt{ eforth\+\_\+328.\+ino -\/ Arduino I\+DE teaser by Dr. Ting}}
-\item \href{https://github.com/TG9541/stm8ef}{\texttt{ e\+Forth for S\+T\+M8 -\/ for even smaller apps}} and \href{https://github.com/TG9541/stm8ef/wiki/STM8S-Programming\#flashing-the-stm8}{\texttt{ S\+T\+M8 Programming}}
-\item \href{https://github.com/Esp32forth}{\texttt{ E\+S\+P32\+Forth for E\+S\+P32 -\/ for larger/fancier apps}} 
+\end{DoxyItemize}
+
+\doxysubsection*{For Projects -\/ small and large}
+
+
+\begin{DoxyItemize}
+\item A tiny 8-\/bit sytem \href{https://github.com/TG9541/stm8ef}{\texttt{ e\+Forth for S\+T\+M8}} and \href{https://github.com/TG9541/stm8ef/wiki/STM8S-Programming\#flashing-the-stm8}{\texttt{ S\+T\+M8 Programming}}
+\item A system with Wi\+Fi, and fancy stuffs \href{https://github.com/Esp32forth}{\texttt{ E\+S\+P32\+Forth for E\+S\+P32}} 
 \end{DoxyItemize}

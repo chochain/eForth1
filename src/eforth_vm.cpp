@@ -37,7 +37,7 @@ U8    *_data;                     ///< RAM, memory block for user define diction
 void _init() {
     intr_reset();                     /// * reset interrupt handlers
 
-    PC = IP = IR = top = 0;           ///> setup control variables
+    IR = top = 0;                     ///> setup control variables
     DS = (DU*)RAM(FORTH_STACK_ADDR - CELLSZ);
     RS = (DU*)RAM(FORTH_STACK_TOP);
 
@@ -58,6 +58,8 @@ void _init() {
     SET(p,   FORTH_TIB_ADDR);         /// * set 'TIB pointer
     SET(p+2, 10);                     /// * set BASE to 10
     SET(p+4, FORTH_DIC_ADDR);         /// * top of dictionary
+
+    IP = GET(0) & ~fCOLON;            ///> fetch cold boot vector
     ///
     /// display init prompt
     ///
@@ -146,6 +148,32 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
     _data  = data;
 
     _init();                    /// * resetting user variables
+}
+///
+///> C interface implementation
+///  TODO: build formal C callstack construct
+///
+void _ccall() {
+    IU  adr = (CFUNC_SLOT_ADDR & IDX_MASK) + top * sizeof(CFP);
+    CFP fp  = *((CFP*)&_data[adr]);   ///> fetch C function pointer
+    POP();                            ///> pop off TOS
+    fp();                             ///> call C function
+}
+
+void vm_cfunc(int n, CFP fp) {
+	IU adr = (CFUNC_SLOT_ADDR & IDX_MASK) + n * sizeof(CFP);
+    *((CFP*)&_data[adr]) = fp;        ///> store C function pointer
+    LOG_V(", fp[", n); LOG_H("]=", (uintptr_t)fp);
+}
+
+void vm_push(int v) {           /// proxy to VM
+	PUSH(v);
+}
+
+int vm_pop() {
+    int t = (int)top;
+	POP();
+    return t;
 }
 ///
 /// eForth virtual machine outer interpreter (single-step) execution unit
@@ -340,7 +368,7 @@ void vm_outer() {
         _X(MSLAS,
             S32 d = (S32)*DS-- * *DS--;   /// ( n1 n2 n3 -- q ) multiply n1 n2, divided by n3 return quotient
             top = (DU)(d / top));
-        _X(S2D,   S32 d = (S32)top; DTOP(d));
+        _X(S2D,   S32 d = (S32)top; DS++; DTOP(d));
         _X(D2S,
            DU s = *DS--;
            top = (top < 0) ? -abs(s) : abs(s));
@@ -374,11 +402,11 @@ void vm_outer() {
         /// @{
         _X(CLK,
             U32 t = millis();
-            *++DS = top; DS++;            /// * allocate 2-cells for clock ticks
+            *++DS = top; DS++;                 /// * allocate 2-cells for clock ticks
             DTOP(t));
         _X(PIN,
-            pinMode(top, *DS ? OUTPUT : INPUT);
-            POP(); POP());
+            pinMode(top, *DS-- ? OUTPUT : INPUT);
+            POP());
         _X(MAP,
             U16 tmp = map(top, *(DS-3), *(DS-2), *(DS-1), *DS);
             DS -= 4;
@@ -404,5 +432,6 @@ void vm_outer() {
             U16 sz = ef_load(_data);
             LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
+        _X(CALL, _ccall());                /// * call C function
     }
 }

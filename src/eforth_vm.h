@@ -63,8 +63,8 @@ U16 GET(U16 d) {
 }
 #define BSET(d, c)     (_data[(d)&IDX_MASK]=(U8)(c))
 void SET(U16 d, U16 v) {
-	_data[(d)&IDX_MASK]   = v>>8;
-	_data[(d+1)&IDX_MASK] = v&0xff;
+	BSET(d,   v>>8);
+	BSET(d+1, v&0xff);
 }
 #define S2D(h, l) (((S32)(h)<<16) | ((l)&0xffff))
 ///

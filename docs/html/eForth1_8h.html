@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('eForth1_8h.html',''); initResizable();
 
 <div class="header">
   <div class="summary">
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">eForth1.h File Reference</div>  </div>
@@ -103,14 +104,119 @@ Include dependency graph for eForth1.h:</div>
 </div>
 <p><a href="eForth1_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a2d422d478f77fc6c4aa3c9538683829d"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a>) ()</td></tr>
+<tr class="separator:a2d422d478f77fc6c4aa3c9538683829d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#ac274d9a96db09bfc7ec4635be50d3aa5">vm_cfunc</a> (int n, <a class="el" href="eForth1_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a> fp)</td></tr>
+<tr class="memdesc:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><blockquote class="doxtable">
+<p>function pointer </p>
+</blockquote>
+ <a href="eForth1_8h.html#ac274d9a96db09bfc7ec4635be50d3aa5">More...</a><br /></td></tr>
+<tr class="separator:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35fceadcc39370dc87d3be5608979925"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#a35fceadcc39370dc87d3be5608979925">vm_push</a> (int v)</td></tr>
+<tr class="memdesc:a35fceadcc39370dc87d3be5608979925"><td class="mdescLeft">&#160;</td><td class="mdescRight">push value onto VM data stack  <a href="eForth1_8h.html#a35fceadcc39370dc87d3be5608979925">More...</a><br /></td></tr>
+<tr class="separator:a35fceadcc39370dc87d3be5608979925"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14b4544b998f4659f54969f571c58d8f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#a14b4544b998f4659f54969f571c58d8f">vm_pop</a> ()</td></tr>
+<tr class="memdesc:a14b4544b998f4659f54969f571c58d8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">pop TOS off VM data stack  <a href="eForth1_8h.html#a14b4544b998f4659f54969f571c58d8f">More...</a><br /></td></tr>
+<tr class="separator:a14b4544b998f4659f54969f571c58d8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3be4743e748619321c1a4f95928e8de1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#a3be4743e748619321c1a4f95928e8de1">ef_setup</a> (Stream &amp;io_stream=Serial)</td></tr>
 <tr class="separator:a3be4743e748619321c1a4f95928e8de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fb0d84284dc4203d4a4e4dbe8e07b29"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#a1fb0d84284dc4203d4a4e4dbe8e07b29">ef_run</a> ()</td></tr>
 <tr class="separator:a1fb0d84284dc4203d4a4e4dbe8e07b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a2d422d478f77fc6c4aa3c9538683829d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d422d478f77fc6c4aa3c9538683829d">&#9670;&nbsp;</a></span>CFP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* CFP) ()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ac274d9a96db09bfc7ec4635be50d3aa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac274d9a96db09bfc7ec4635be50d3aa5">&#9670;&nbsp;</a></span>vm_cfunc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vm_cfunc </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="eForth1_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a>&#160;</td>
+          <td class="paramname"><em>fp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><blockquote class="doxtable">
+<p>function pointer </p>
+</blockquote>
+</p>
+<p>assign C interface (in slot n) </p>
+
+</div>
+</div>
+<a id="a35fceadcc39370dc87d3be5608979925"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35fceadcc39370dc87d3be5608979925">&#9670;&nbsp;</a></span>vm_push()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vm_push </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>push value onto VM data stack </p>
+
+</div>
+</div>
+<a id="a14b4544b998f4659f54969f571c58d8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14b4544b998f4659f54969f571c58d8f">&#9670;&nbsp;</a></span>vm_pop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int vm_pop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>pop TOS off VM data stack </p>
+
+</div>
+</div>
 <a id="a3be4743e748619321c1a4f95928e8de1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3be4743e748619321c1a4f95928e8de1">&#9670;&nbsp;</a></span>ef_setup()</h2>
 

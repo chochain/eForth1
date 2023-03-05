@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['iu_260',['IU',['../eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b',1,'eforth_core.h']]]
+  ['du_267',['DU',['../eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a',1,'eforth_core.h']]]
 ];

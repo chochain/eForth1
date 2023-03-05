@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['u16_264',['U16',['../eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f',1,'eforth_core.h']]],
-  ['u32_265',['U32',['../eforth__core_8h.html#a696390429f2f3b644bde8d0322a24124',1,'eforth_core.h']]],
-  ['u8_266',['U8',['../eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73',1,'eforth_core.h']]]
+  ['s16_269',['S16',['../eforth__core_8h.html#a6d241ad21a823c90d4835380787db5d4',1,'eforth_core.h']]],
+  ['s32_270',['S32',['../eforth__core_8h.html#a39c786017723555afb9e8b85accec0de',1,'eforth_core.h']]],
+  ['s8_271',['S8',['../eforth__core_8h.html#af1475a0bb1962ef08dd1f78bd5dba87a',1,'eforth_core.h']]]
 ];

@@ -150,12 +150,14 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <h2>Demos</h2>
 <ul>
-<li>LED blinker (assume you have a blue LED on pin 6, and set for OUTPUT, or try this at <a href="https://wokwi.com/projects/356793878308297729" target="_blank">[this Wokwi project]</a>) <pre>
+<li>LED blinker (assume you have a blue LED on pin 6, or try this at <a href="https://wokwi.com/projects/356793878308297729" target="_blank">[this Wokwi project]</a>) <pre>
+    &gt; 1 6 pinmode⏎                           \ set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
     &gt; : blue 6 in 1 xor 6 out ;⏎             \ create a word to toggle the blue LED
     &gt; : blink for blue 500 delay next ;⏎     \ create a word to blink (i.e. 500ms delay)
     &gt; 9 blink⏎                               \ run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
     </pre></li>
-<li><p class="startli">Timer Interrupt Service Routine (a red LED on pin 5, and set for OUTPUT) </p><pre>
+<li><p class="startli">Timer Interrupt Service Routine (a red LED on pin 5) </p><pre>
+    &gt; 1 5 pinmode⏎                           \ set pin 5 for OUTPUT
     &gt; : red 5 in 1 xor 5 out ;⏎              \ create an interrupt service routine (just a regular word)
     &gt; ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (20 x 10 microseconds)
     &gt; 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
@@ -171,7 +173,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
     &gt; : yy 999 for xx next ;⏎                \ create the outer loop
     &gt; : zz clock dnegate yy clock d+ ;⏎      \ CLOCK returns a double value
     &gt; zz⏎                                    \ benchmark the 1000x1000 cycles
-    &gt; 24299 0 ok&gt;                            \ 24299ms =~ 24us/cycle (with ISR running in the background)
+    &gt; 22048 0 ok&gt;                            \ 22048ms =~ 22us/cycle (with one blinking ISR running in the background)
     </pre></li>
 </ul>
 <p>#</p><h1>To Learn More About Forth?</h1>

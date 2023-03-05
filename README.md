@@ -72,15 +72,17 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
   * DELAY takes a 16-bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, DELAY does not interfer with interrupts (see demos below).
 
 ### Demos
-  * LED blinker (assume you have a blue LED on pin 6, and set for OUTPUT, or try this at <a href="https://wokwi.com/projects/356793878308297729" target="_blank">[this Wokwi project]</a>)
+  * LED blinker (assume you have a blue LED on pin 6, or try this at <a href="https://wokwi.com/projects/356793878308297729" target="_blank">[this Wokwi project]</a>)
     <pre>
+    > 1 6 pinmode⏎                           \ set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
     > : blue 6 in 1 xor 6 out ;⏎             \ create a word to toggle the blue LED
     > : blink for blue 500 delay next ;⏎     \ create a word to blink (i.e. 500ms delay)
     > 9 blink⏎                               \ run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
     </pre>  
 
-  * Timer Interrupt Service Routine (a red LED on pin 5, and set for OUTPUT)
+  * Timer Interrupt Service Routine (a red LED on pin 5)
     <pre>
+    > 1 5 pinmode⏎                           \ set pin 5 for OUTPUT
     > : red 5 in 1 xor 5 out ;⏎              \ create an interrupt service routine (just a regular word)
     > ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (20 x 10 microseconds)
     > 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
@@ -100,7 +102,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > : yy 999 for xx next ;⏎                \ create the outer loop
     > : zz clock dnegate yy clock d+ ;⏎      \ CLOCK returns a double value
     > zz⏎                                    \ benchmark the 1000x1000 cycles
-    > 24299 0 ok>                            \ 24299ms =~ 24us/cycle (with ISR running in the background)
+    > 22048 0 ok>                            \ 22048ms =~ 22us/cycle (with one blinking ISR running in the background)
     </pre>
 
 ### To Learn More About Forth?

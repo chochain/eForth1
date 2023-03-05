@@ -96,15 +96,17 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 
 
 \begin{DoxyItemize}
-\item L\+ED blinker (assume you have a blue L\+ED on pin 6, and set for O\+U\+T\+P\+UT, or try this at \href{https://wokwi.com/projects/356793878308297729}{\texttt{ \mbox{[}this Wokwi project\mbox{]}}}) 
+\item L\+ED blinker (assume you have a blue L\+ED on pin 6, or try this at \href{https://wokwi.com/projects/356793878308297729}{\texttt{ \mbox{[}this Wokwi project\mbox{]}}}) 
 \begin{DoxyPre}
+    > 1 6 pinmode⏎                           \textbackslash{} set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
     > : blue 6 in 1 xor 6 out ;⏎             \textbackslash{} create a word to toggle the blue LED
     > : blink for blue 500 delay next ;⏎     \textbackslash{} create a word to blink (i.e. 500ms delay)
     > 9 blink⏎                               \textbackslash{} run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
     \end{DoxyPre}
 
-\item Timer Interrupt Service Routine (a red L\+ED on pin 5, and set for O\+U\+T\+P\+UT) 
+\item Timer Interrupt Service Routine (a red L\+ED on pin 5) 
 \begin{DoxyPre}
+    > 1 5 pinmode⏎                           \textbackslash{} set pin 5 for OUTPUT
     > : red 5 in 1 xor 5 out ;⏎              \textbackslash{} create an interrupt service routine (just a regular word)
     > ' red 20 tmisr⏎                        \textbackslash{} make the ISR ticked every 0.2 seconds (20 x 10 microseconds)
     > 1 timer⏎                               \textbackslash{} enable timer, now you should see red LED blinking continuously
@@ -126,7 +128,7 @@ $\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$\vert$$\vert$
     > : yy 999 for xx next ;⏎                \textbackslash{} create the outer loop
     > : zz clock dnegate yy clock d+ ;⏎      \textbackslash{} CLOCK returns a double value
     > zz⏎                                    \textbackslash{} benchmark the 1000x1000 cycles
-    > 24299 0 ok>                            \textbackslash{} 24299ms =\string~ 24us/cycle (with ISR running in the background)
+    > 22048 0 ok>                            \textbackslash{} 22048ms =\string~ 22us/cycle (with one blinking ISR running in the background)
     \end{DoxyPre}
 
 \end{DoxyItemize}

@@ -16,7 +16,8 @@ I enjoy the beauty of working on something small and simple, so decided to pick 
 * A .ino file that can be openned in Arduino IDE and load/run directly onto Arduino.
 * Has 16-bit cells and stacks.
 * Can read/write Arduino pins.
-* Supports Arduino Interrupts.
+* Supports Arduino Timer and Pin Change Interrupts.
+* Has C API to call user C functions written in .ino.
 * Can save/load app to/from EEPROM.
 * Can be embeded with other Arduino applications.
 * Become Turnkey system booting from saved EEPROM.

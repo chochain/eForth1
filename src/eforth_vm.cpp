@@ -191,6 +191,8 @@ void vm_outer() {
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
+    IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
+
     while (1) {
         YIELD();                        /// * serve interrupt if any
         U8  op = BGET(IP++);
@@ -366,7 +368,7 @@ void vm_outer() {
         _X(MSLAS,
             S32 d = (S32)*DS-- * *DS--;   /// ( n1 n2 n3 -- q ) multiply n1 n2, divided by n3 return quotient
             top = (DU)(d / top));
-        _X(S2D,   S32 d = (S32)top; DTOP(d));
+        _X(S2D,   S32 d = (S32)top; DS++; DTOP(d));
         _X(D2S,
            DU s = *DS--;
            top = (top < 0) ? -abs(s) : abs(s));
@@ -400,11 +402,11 @@ void vm_outer() {
         /// @{
         _X(CLK,
             U32 t = millis();
-            *++DS = top; DS++;            /// * allocate 2-cells for clock ticks
+            *++DS = top; DS++;                 /// * allocate 2-cells for clock ticks
             DTOP(t));
         _X(PIN,
-            pinMode(top, *DS ? OUTPUT : INPUT);
-            POP(); POP());
+            pinMode(top, *DS-- ? OUTPUT : INPUT);
+            POP());
         _X(MAP,
             U16 tmp = map(top, *(DS-3), *(DS-2), *(DS-1), *DS);
             DS -= 4;

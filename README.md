@@ -2,7 +2,7 @@
 
 ||
 |:--:|
-|You can have a full fledged FORTH on Arduino UNO now.<br/>Install directly from Arduino IDE Library Manager.<br/>Compile, Load, and Run|
+|You can have a full fledged FORTH on Arduino UNO now.<br/>Install directly from Arduino IDE Library Manager.<br/>Compile, Load, and **Interact!**|
 
 ### What is it?
 
@@ -10,7 +10,7 @@
 * A .ino file that can be openned in Arduino IDE and load/run directly onto Arduino.
 * Has 16-bit cells and stacks.
 * Can read/write Arduino pins.
-* Supports Arduino Interrupts.
+* Supports Arduino Timer and Pin Change Interrupts.
 * Can save/load app to/from EEPROM.
 * Can be embeded with other Arduino applications.
 * Become Turnkey system booting from saved EEPROM.

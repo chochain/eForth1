@@ -156,6 +156,20 @@ Functions</h2></td></tr>
 <tr class="separator:a04b479eed7bc0fa0b9c8600f47c04cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab96d3e1cfedd27d24fea512540b32a98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#ab96d3e1cfedd27d24fea512540b32a98">vm_init</a> (PGM_P rom, <a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *data, void *io_stream)</td></tr>
 <tr class="separator:ab96d3e1cfedd27d24fea512540b32a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8523598e2c601507492ae113056d7ef4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a8523598e2c601507492ae113056d7ef4">_ccall</a> ()</td></tr>
+<tr class="separator:a8523598e2c601507492ae113056d7ef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#ac274d9a96db09bfc7ec4635be50d3aa5">vm_cfunc</a> (int n, <a class="el" href="eforth__core_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a> fp)</td></tr>
+<tr class="memdesc:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><blockquote class="doxtable">
+<p>function pointer </p>
+</blockquote>
+ <a href="eforth__vm_8cpp.html#ac274d9a96db09bfc7ec4635be50d3aa5">More...</a><br /></td></tr>
+<tr class="separator:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35fceadcc39370dc87d3be5608979925"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a35fceadcc39370dc87d3be5608979925">vm_push</a> (int v)</td></tr>
+<tr class="memdesc:a35fceadcc39370dc87d3be5608979925"><td class="mdescLeft">&#160;</td><td class="mdescRight">push value onto VM data stack  <a href="eforth__vm_8cpp.html#a35fceadcc39370dc87d3be5608979925">More...</a><br /></td></tr>
+<tr class="separator:a35fceadcc39370dc87d3be5608979925"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14b4544b998f4659f54969f571c58d8f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a14b4544b998f4659f54969f571c58d8f">vm_pop</a> ()</td></tr>
+<tr class="memdesc:a14b4544b998f4659f54969f571c58d8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">pop TOS off VM data stack  <a href="eforth__vm_8cpp.html#a14b4544b998f4659f54969f571c58d8f">More...</a><br /></td></tr>
+<tr class="separator:a14b4544b998f4659f54969f571c58d8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -347,11 +361,118 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a8523598e2c601507492ae113056d7ef4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8523598e2c601507492ae113056d7ef4">&#9670;&nbsp;</a></span>_ccall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void _ccall </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<blockquote class="doxtable">
+<p>C interface implementation </p>
+</blockquote>
+<p>TODO: build formal C callstack construct </p>
+<blockquote class="doxtable">
+<p>fetch C function pointer </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>pop off TOS </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>call C function </p>
+</blockquote>
+
+</div>
+</div>
+<a id="ac274d9a96db09bfc7ec4635be50d3aa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac274d9a96db09bfc7ec4635be50d3aa5">&#9670;&nbsp;</a></span>vm_cfunc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vm_cfunc </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="eforth__core_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a>&#160;</td>
+          <td class="paramname"><em>fp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><blockquote class="doxtable">
+<p>function pointer </p>
+</blockquote>
+</p>
+<p>assign C interface (in slot n) </p>
+<blockquote class="doxtable">
+<p>store C function pointer </p>
+</blockquote>
+
+</div>
+</div>
+<a id="a35fceadcc39370dc87d3be5608979925"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35fceadcc39370dc87d3be5608979925">&#9670;&nbsp;</a></span>vm_push()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vm_push </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>push value onto VM data stack </p>
+<p>proxy to VM</p>
+
+</div>
+</div>
+<a id="a14b4544b998f4659f54969f571c58d8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14b4544b998f4659f54969f571c58d8f">&#9670;&nbsp;</a></span>vm_pop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int vm_pop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>pop TOS off VM data stack </p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespaceEfVM_html_ad6bf1128d9ffa5007021ecabed123c74"><div class="ttname"><a href="namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74">EfVM::IR</a></div><div class="ttdeci">IU IR</div><div class="ttdoc">interrupt service routine</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:24</div></div>
-<div class="ttc" id="anamespaceEfVM_html_a09d628000e6b3bb7306a3bc9c3299efe"><div class="ttname"><a href="namespaceEfVM.html#a09d628000e6b3bb7306a3bc9c3299efe">EfVM::_yield_cnt</a></div><div class="ttdeci">int _yield_cnt</div><div class="ttdoc">interrupt service throttle counter</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:78</div></div>
-<div class="ttc" id="aeforth__vm_8cpp_html_afc09b15fce90b9e00aa7277e7edd5c4e"><div class="ttname"><a href="eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e">YIELD_PERIOD</a></div><div class="ttdeci">#define YIELD_PERIOD</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:79</div></div>
+<div class="ttc" id="anamespaceEfVM_html_a09d628000e6b3bb7306a3bc9c3299efe"><div class="ttname"><a href="namespaceEfVM.html#a09d628000e6b3bb7306a3bc9c3299efe">EfVM::_yield_cnt</a></div><div class="ttdeci">int _yield_cnt</div><div class="ttdoc">interrupt service throttle counter</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:80</div></div>
+<div class="ttc" id="aeforth__vm_8cpp_html_afc09b15fce90b9e00aa7277e7edd5c4e"><div class="ttname"><a href="eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e">YIELD_PERIOD</a></div><div class="ttdeci">#define YIELD_PERIOD</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:81</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

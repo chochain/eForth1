@@ -9,6 +9,14 @@ Include dependency graph for e\+Forth1.\+h\+:\nopagebreak
 \includegraphics[width=210pt]{eForth1_8h__incl}
 \end{center}
 \end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=169pt]{eForth1_8h__dep__incl}
+\end{center}
+\end{figure}
 \doxysubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
@@ -17,7 +25,7 @@ typedef void($\ast$ \mbox{\hyperlink{eForth1_8h_a2d422d478f77fc6c4aa3c9538683829
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{eForth1_8h_ac274d9a96db09bfc7ec4635be50d3aa5}{vm\+\_\+cfunc}} (int n, \mbox{\hyperlink{eForth1_8h_a2d422d478f77fc6c4aa3c9538683829d}{C\+FP}} fp)
+void \mbox{\hyperlink{eForth1_8h_ac274d9a96db09bfc7ec4635be50d3aa5}{vm\+\_\+cfunc}} (int n, \mbox{\hyperlink{eforth__core_8h_a2d422d478f77fc6c4aa3c9538683829d}{C\+FP}} fp)
 \begin{DoxyCompactList}\small\item\em \begin{quote}
 function pointer \end{quote}
 \end{DoxyCompactList}\item 
@@ -45,7 +53,7 @@ void \mbox{\hyperlink{eForth1_8h_a1fb0d84284dc4203d4a4e4dbe8e07b29}{ef\+\_\+run}
 \index{eForth1.h@{eForth1.h}!vm\_cfunc@{vm\_cfunc}}
 \index{vm\_cfunc@{vm\_cfunc}!eForth1.h@{eForth1.h}}
 \doxysubsubsection{\texorpdfstring{vm\_cfunc()}{vm\_cfunc()}}
-{\footnotesize\ttfamily void vm\+\_\+cfunc (\begin{DoxyParamCaption}\item[{int}]{n,  }\item[{\mbox{\hyperlink{eForth1_8h_a2d422d478f77fc6c4aa3c9538683829d}{C\+FP}}}]{fp }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void vm\+\_\+cfunc (\begin{DoxyParamCaption}\item[{int}]{n,  }\item[{\mbox{\hyperlink{eforth__core_8h_a2d422d478f77fc6c4aa3c9538683829d}{C\+FP}}}]{fp }\end{DoxyParamCaption})}
 
 
 
@@ -53,7 +61,9 @@ void \mbox{\hyperlink{eForth1_8h_a1fb0d84284dc4203d4a4e4dbe8e07b29}{ef\+\_\+run}
 function pointer \end{quote}
 
 
-assign C interface (in slot n) \mbox{\Hypertarget{eForth1_8h_a35fceadcc39370dc87d3be5608979925}\label{eForth1_8h_a35fceadcc39370dc87d3be5608979925}} 
+assign C interface (in slot n) \begin{quote}
+store C function pointer \end{quote}
+\mbox{\Hypertarget{eForth1_8h_a35fceadcc39370dc87d3be5608979925}\label{eForth1_8h_a35fceadcc39370dc87d3be5608979925}} 
 \index{eForth1.h@{eForth1.h}!vm\_push@{vm\_push}}
 \index{vm\_push@{vm\_push}!eForth1.h@{eForth1.h}}
 \doxysubsubsection{\texorpdfstring{vm\_push()}{vm\_push()}}
@@ -63,7 +73,7 @@ assign C interface (in slot n) \mbox{\Hypertarget{eForth1_8h_a35fceadcc39370dc87
 
 push value onto VM data stack 
 
-\mbox{\Hypertarget{eForth1_8h_a14b4544b998f4659f54969f571c58d8f}\label{eForth1_8h_a14b4544b998f4659f54969f571c58d8f}} 
+proxy to VM\mbox{\Hypertarget{eForth1_8h_a14b4544b998f4659f54969f571c58d8f}\label{eForth1_8h_a14b4544b998f4659f54969f571c58d8f}} 
 \index{eForth1.h@{eForth1.h}!vm\_pop@{vm\_pop}}
 \index{vm\_pop@{vm\_pop}!eForth1.h@{eForth1.h}}
 \doxysubsubsection{\texorpdfstring{vm\_pop()}{vm\_pop()}}

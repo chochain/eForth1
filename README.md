@@ -93,7 +93,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     |:--|:--|
     |@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
 
-  * Drives 8 Servos at <a href="https://wokwi.com/projects/356793878308297729" target="_blank">[this Wokwi project]</a>
+  * Drives 8 Servos at <a href="https://wokwi.com/projects/356866133593965569" target="_blank">[this Wokwi project]</a>
 
 ### Benchmark
   * Classic 1 million cycles

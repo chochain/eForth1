@@ -84,7 +84,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     <pre>
     > 1 5 pinmode⏎                           \ set pin 5 for OUTPUT
     > : red 5 in 1 xor 5 out ;⏎              \ create an interrupt service routine (just a regular word)
-    > ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (20 x 10 microseconds)
+    > ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (= 20 x 10ms)
     > 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>

@@ -415,8 +415,8 @@ void vm_outer() {
         _X(OUT,   digitalWrite(top, *DS);   POP(); POP());
         _X(AIN,   top = analogRead(top));
         _X(PWM,   analogWrite(top, *DS);    POP(); POP());
-        _X(TMISR, intr_add_timer(top, *DS); POP(); POP());
-        _X(PCISR, intr_add_pci(top, *DS);   POP(); POP());
+        _X(TMISR, intr_add_tmisr(top, *DS); POP(); POP());
+        _X(PCISR, intr_add_pcisr(top, *DS); POP(); POP());
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
 #if EXE_TRACE

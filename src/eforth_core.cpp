@@ -66,7 +66,7 @@ IU intr_service() {
 ///
 ///> add timer interrupt service routine
 ///
-void intr_add_timer(U16 hz10, U16 xt) {
+void intr_add_tmisr(U16 hz10, U16 xt) {
     if (xt==0 || t_idx > 7) return; // range check
 
     CLI();
@@ -80,7 +80,7 @@ void intr_add_timer(U16 hz10, U16 xt) {
 ///
 ///> add pin change interrupt service routine
 ///
-void intr_add_pci(U16 p, U16 xt) {
+void intr_add_pcisr(U16 p, U16 xt) {
     if (xt==0) return;              // range check
     CLI();
     if (p < 8)       {

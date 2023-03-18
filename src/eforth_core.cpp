@@ -148,8 +148,8 @@ ISR(PCINT2_vect) { p_hit |= 4; }
 
 #else // !ARDUINO
 
-void intr_add_pci(U16 p, U16 xt) {}        // mocked functions for x86
-void intr_pci_enable(U16 f)      {}
+void intr_add_pcisr(U16 p, U16 xt) {}        // mocked functions for x86
+void intr_pci_enable(U16 f)        {}
 void intr_timer_enable(U16 f) {
     tmr_on = f;
 }

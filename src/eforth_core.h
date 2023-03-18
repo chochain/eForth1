@@ -227,8 +227,8 @@ typedef const char          *PGM_P;
 void intr_reset();          ///< reset interrupts
 U16  intr_hits();
 IU   intr_service();
-void intr_add_timer(U16 hz10, IU xt);
-void intr_add_pci(U16 pin, IU xt);
+void intr_add_tmisr(U16 hz10, IU xt);
+void intr_add_pcisr(U16 pin, IU xt);
 void intr_timer_enable(U16 f);
 void intr_pci_enable(U16 f);
 ///@}

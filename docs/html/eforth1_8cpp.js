@@ -5,7 +5,7 @@ var eforth1_8cpp =
     [ "_info", "eforth1_8cpp.html#ae543ced12a200d5ee866e7bb41186757", null ],
     [ "ef_save", "eforth1_8cpp.html#a739911ef03b2d1a9bb4139a8879c03fa", null ],
     [ "ef_load", "eforth1_8cpp.html#a143ec30cabab5d722b1df76883d4b4f4", null ],
-    [ "ef_setup", "eforth1_8cpp.html#a3be4743e748619321c1a4f95928e8de1", null ],
+    [ "ef_setup", "eforth1_8cpp.html#aaa322a7cd3f9173185b22bc07b8d3216", null ],
     [ "ef_run", "eforth1_8cpp.html#a1fb0d84284dc4203d4a4e4dbe8e07b29", null ],
     [ "_ram", "eforth1_8cpp.html#a05c7bc09ead4e68622fbbeb7b8d1ecdf", null ],
     [ "forth_rom", "eforth1_8cpp.html#ab122f4898c37a0db81ea641558424375", null ],

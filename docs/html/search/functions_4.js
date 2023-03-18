@@ -4,5 +4,5 @@ var searchData=
   ['ef_5fload_222',['ef_load',['../eforth1_8cpp.html#a143ec30cabab5d722b1df76883d4b4f4',1,'ef_load(U8 *data):&#160;eforth1.cpp'],['../eforth__core_8h.html#a143ec30cabab5d722b1df76883d4b4f4',1,'ef_load(U8 *data):&#160;eforth1.cpp']]],
   ['ef_5frun_223',['ef_run',['../eforth1_8cpp.html#a1fb0d84284dc4203d4a4e4dbe8e07b29',1,'ef_run():&#160;eforth1.cpp'],['../eForth1_8h.html#a1fb0d84284dc4203d4a4e4dbe8e07b29',1,'ef_run():&#160;eforth1.cpp']]],
   ['ef_5fsave_224',['ef_save',['../eforth1_8cpp.html#a739911ef03b2d1a9bb4139a8879c03fa',1,'ef_save(U8 *data):&#160;eforth1.cpp'],['../eforth__core_8h.html#a739911ef03b2d1a9bb4139a8879c03fa',1,'ef_save(U8 *data):&#160;eforth1.cpp']]],
-  ['ef_5fsetup_225',['ef_setup',['../eforth1_8cpp.html#a3be4743e748619321c1a4f95928e8de1',1,'ef_setup(Stream &amp;io_stream=Serial):&#160;eforth1.cpp'],['../eForth1_8h.html#a3be4743e748619321c1a4f95928e8de1',1,'ef_setup(Stream &amp;io_stream=Serial):&#160;eforth1.cpp']]]
+  ['ef_5fsetup_225',['ef_setup',['../eforth1_8cpp.html#aaa322a7cd3f9173185b22bc07b8d3216',1,'ef_setup(Stream &amp;io_stream):&#160;eforth1.cpp'],['../eForth1_8h.html#a3be4743e748619321c1a4f95928e8de1',1,'ef_setup(Stream &amp;io_stream=Serial):&#160;eforth1.cpp']]]
 ];

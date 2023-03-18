@@ -86,14 +86,14 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">eForth1 - eForth for Arduino UNO </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>In 2011, Dr. Chen-Hanson Ting created <a href="https://chochain.github.io/eForth1/ref/328eForth.pdf" target="_blank">[328eForth]</a> to run Forth on Arduino UNO. Wrote in his ceForth_33 document, the creator of eForth, and one of the inspiring figures of Forth community noted: </p><blockquote class="doxtable">
-<p><em>In 2011, I was attracted to Arduino Uno Kit and ported eForth to it as 328eForth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino IDE...I extended Forth dictionary in the RAM memory. It worked. However, you had only 1.5KB of RAM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.</em> </p>
-</blockquote>
-<p>Before Dr. Ting conceded his fight with cancer in May, 2022, I've spent the last 11 months working with him expanding the concept of "Forth without Forth" - a new eForth model - he called. Traditionally, Forth is built with a set of core words in low-level assembly language and establish the rest of words with high-level Forth scripts which get boot-strapped on start-up time. With the proliferation of modern languages, build Forth without using Forth, he reasoned that Forth built entirely in high-level languages can not only greatly simplify the virtual machine, taking advantage of modern languages and operating system, but also encourage portability and optimization. In a few months, we completed new batch of eForths in Javascript, Java, C++, ported them to Windows, ESP32, which Dr. Ting presented his video on November, 2021 to <a href="https://www.youtube.com/watch?v=bb5vi9kR1tE&amp;t=827s" target="_blank">[Sillicon Valley Forth Interest Group]</a>. Later, we focused on SystemVerilog's edition with Don &amp; Demitri's CORE-I FPGA project of <a href="https://www.facebook.com/groups/1304548976637542" target="_blank">[AI &amp; Robotics Group]</a> til his eventual departure.</p>
-<p>In Dr. Ting's own word: </p><blockquote class="doxtable">
+<div class="textblock"><p><b>Dr. Chen-Hanson Ting</b>, the creator of <b>eForth</b> and one of the inspiring figures of Forth community, wrote: </p><blockquote class="doxtable">
 <p><em>In all these years, I have thought that the eForth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.</em> </p>
 </blockquote>
-<p>I enjoy the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model and have fun with it. However, to make it useful, there are a few things that I need to overcome first i.e. make macro assembler C-coder friendly, remove dependency on extra bootloader programmer, add EEPROM save/load, and support interrupts. So, here we go!</p>
+<p>In 2011, Dr. Ting created <a href="https://chochain.github.io/eForth1/ref/328eForth.pdf" target="_blank">*328eForth*</a> to run Forth on Arduino UNO and wrote in his ceForth_33 document: </p><blockquote class="doxtable">
+<p><em>I was attracted to Arduino Uno Kit and ported eForth to it as 328eForth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino IDE...I extended Forth dictionary in the RAM memory. It worked. However, you had only 1.5KB of RAM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.</em> </p>
+</blockquote>
+<p>Before Dr. Ting conceded his fight with cancer in May, 2022, I've spent the last 11 months working with him expanding the concept of **"Forth without Forth"** - a new eForth model - he called. Traditionally, Forth is built with a set of core words in low-level assembly language and establish the rest of words with high-level Forth scripts which get boot-strapped on start-up time. Nowadays, build Forth without using Forth, he reasoned that Forth built entirely in high-level languages, specifically in C, can not only greatly simplify the virtual machine, utilizing operating system, but also encourage portability and optimization. Taking the concept forward, we completed new batch of eForths in Javascript, Java, C++, ported them to Windows, ESP32 in just a few months. Dr. Ting presented a video on November, 2021 to <a href="https://www.youtube.com/watch?v=bb5vi9kR1tE&amp;t=827s" target="_blank">*Sillicon Valley Forth Interest Group*</a>. Later, we fancied creating a hardware version eForth with SystemVerilog and joint venture with Don &amp; Demitri's CORE-I FPGA project of <a href="https://www.facebook.com/groups/1304548976637542" target="_blank">*AI &amp; Robotics Group*</a> til Dr. Ting's eventual departure. The project is still active now.</p>
+<p>Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model and have fun with it. Since his <em>328eForth</em> was a teaser only, to move it forward, there are a few major things I need to make changes to Dr. Ting's implementation i.g. make C-coder friendly macro assembler, remove dependency on extra bootloader programmer, add EEPROM save/load, and support interrupts, ... So, here we go!</p>
 <h2>What is eForth1?</h2>
 <ul>
 <li>An eForth for Arduino UNO/Nano implemented in C.</li>
@@ -150,7 +150,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <h2>Demos</h2>
 <ul>
-<li>LED blinker (assume you have a blue LED on pin 6, or try this at <a href="https://wokwi.com/projects/356793878308297729" target="_blank">[this Wokwi project]</a>) <pre>
+<li>LED blinker (assume you have a blue LED on pin 6, or try <a href="https://wokwi.com/projects/356793878308297729" target="_blank">*this Wokwi project*</a>) <pre>
     &gt; 1 6 pinmode⏎                           \ set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
     &gt; : blue 6 in 1 xor 6 out ;⏎             \ create a word to toggle the blue LED
     &gt; : blink for blue 500 delay next ;⏎     \ create a word to blink (i.e. 500ms delay)
@@ -159,12 +159,12 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><p class="startli">Timer Interrupt Service Routine (a red LED on pin 5) </p><pre>
     &gt; 1 5 pinmode⏎                           \ set pin 5 for OUTPUT
     &gt; : red 5 in 1 xor 5 out ;⏎              \ create an interrupt service routine (just a regular word)
-    &gt; ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (20 x 10 microseconds)
+    &gt; ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (= 20 x 10ms)
     &gt; 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
     &gt; 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre><p class="startli">||| |:&ndash;|:&ndash;| | <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> | <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> |</p>
 </li>
-<li>Drives 8 Servos at <a href="https://wokwi.com/projects/356793878308297729" target="_blank">[this Wokwi project]</a></li>
+<li>Drives 8 Servos at <a href="https://wokwi.com/projects/356866133593965569" target="_blank">*this Wokwi project*</a></li>
 </ul>
 <h2>Benchmark</h2>
 <ul>
@@ -173,24 +173,24 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
     &gt; : yy 999 for xx next ;⏎                \ create the outer loop
     &gt; : zz clock dnegate yy clock d+ ;⏎      \ CLOCK returns a double value
     &gt; zz⏎                                    \ benchmark the 1000x1000 cycles
-    &gt; 22048 0 ok&gt;                            \ 22048ms =~ 22us/cycle (with one blinking ISR running in the background)
+    &gt; 24495 0 ok&gt;                            \ 24495ms =~ 24.5us/cycle (with one blinking ISR running in the background)
     </pre></li>
 </ul>
 <p>#</p><h1>To Learn More About Forth?</h1>
 <p>If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite <b>different</b>. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.</p><ul>
 <li>Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary. <blockquote class="doxtable">
-<p><a href="https://skilldrick.github.io/easyforth/#introduction" target="_blank">Easy Forth Tutorial by Nick Morgan</a> with a <a href="https://wiki.forth-ev.de/lib/exe/fetch.php/en:projects:a-start-with-forth:05_easy_forth_v16_a5_withexp_comments.pdf?fbclid=IwAR0sHmgiDtnMRuQtJdVkhl9bmiitpgcjs4ZlIDVtlxrssMOmLBv0vesvmKQ" target="_blank">[Writeup]</a> by Juergen Pintaske. </p>
+<p><a href="https://skilldrick.github.io/easyforth/#introduction" target="_blank">*Easy Forth Tutorial by Nick Morgan*</a> with a <a href="https://wiki.forth-ev.de/lib/exe/fetch.php/en:projects:a-start-with-forth:05_easy_forth_v16_a5_withexp_comments.pdf?fbclid=IwAR0sHmgiDtnMRuQtJdVkhl9bmiitpgcjs4ZlIDVtlxrssMOmLBv0vesvmKQ" target="_blank">*Writeup*</a> by Juergen Pintaske. </p>
 </blockquote>
 </li>
 </ul>
 <p>To understand the philosophy of FORTH, excellent online e-books are here free for you.</p><ul>
 <li>Timeless classic for the history, paths, and thoughts behind FORTH language. <blockquote class="doxtable">
-<p><a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br  />
- <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a> </p>
+<p><a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">*Starting Forth by Leo Brodie*</a><br  />
+ <a href="http://thinking-forth.sourceforge.net" target="_blank">*Thinking Forth by Leo Brodie*</a> </p>
 </blockquote>
 </li>
 </ul>
-<h2>Performance Tuning</h2>
+<h2>Performance Tuning (~15% faster)</h2>
 <ul>
 <li>Check your Arduino IDE installed directory, say <em>C:\Users\myname\AppData\Local\Arduino...</em> on Windows or <em>/home/myname/Arduino/...</em> on Linux,</li>
 <li>Find the directory <em>hardware -&gt; arduino -&gt; avr</em>,</li>
@@ -202,17 +202,17 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <h2>References to Dr. Ting's Original</h2>
 <ul>
-<li><a href="https://chochain.github.io/eForth1/ref/1013_eForthAndZen.pdf">eForth and Zen</a></li>
-<li><a href="https://chochain.github.io/eForth1/ref/The_Arduino_controlled_by_eForth.pdf">The Arduino controlled by eForth</a></li>
-<li><a href="https://github.com/DRuffer/328eforth">328eForth mod for coinForth by D. Ruffer</a></li>
-<li><a href="https://chochain.github.io/eForth1/ref/ceForth_33.doc">ceForth_33.doc - original documentation</a></li>
-<li><a href="https://chochain.github.io/eForth1/ref/ceForth_33.cpp">ceForth_33.cpp - source code in C</a></li>
-<li><a href="https://chochain.github.io/eForth1/ref/eforth_328.ino">eforth_328.ino - Arduino IDE teaser by Dr. Ting</a></li>
+<li><a href="https://chochain.github.io/eForth1/ref/1013_eForthAndZen.pdf"><em>eForth and Zen</em></a></li>
+<li><a href="https://chochain.github.io/eForth1/ref/The_Arduino_controlled_by_eForth.pdf"><em>The Arduino controlled by eForth</em></a></li>
+<li><a href="https://github.com/DRuffer/328eforth"><em>328eForth mod for coinForth by D. Ruffer</em></a></li>
+<li><a href="https://chochain.github.io/eForth1/ref/ceForth_33.doc"><em>ceForth_33.doc - original documentation</em></a></li>
+<li><a href="https://chochain.github.io/eForth1/ref/ceForth_33.cpp"><em>ceForth_33.cpp - source code in C</em></a></li>
+<li><a href="https://chochain.github.io/eForth1/ref/eforth_328.ino"><em>eforth_328.ino - Arduino IDE teaser by Dr. Ting</em></a></li>
 </ul>
 <h2>For Projects small and large</h2>
 <ul>
-<li>A tiny 8-bit sytem at <a href="https://github.com/TG9541/stm8ef">eForth for STM8</a> or <a href="https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8">STM8 Programming</a></li>
-<li>A system with WiFi, and fancy stuffs at <a href="https://esp32forth.appspot.com/ESP32forth.html">Esp32forth</a> or its <a href="https://github.com/Esp32forth">GitHub site</a> </li>
+<li>A tiny 8-bit sytem at <a href="https://github.com/TG9541/stm8ef"><em>eForth for STM8</em></a> or <a href="https://github.com/TG9541/stm8ef/wiki/STM8S-Programming#flashing-the-stm8"><em>STM8 Programming</em></a></li>
+<li>A system with WiFi, and fancy stuffs at <a href="https://esp32forth.appspot.com/ESP32forth.html"><em>Esp32forth</em></a> or its <a href="https://github.com/Esp32forth"><em>GitHub site</em></a> </li>
 </ul>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->

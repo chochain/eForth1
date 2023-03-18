@@ -257,10 +257,10 @@ Functions</h2></td></tr>
 <tr class="separator:a93c9ba339402353230060b417633ccd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c97726ffb62839e8c6fe399f6ed83f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a2c97726ffb62839e8c6fe399f6ed83f3">intr_service</a> ()</td></tr>
 <tr class="separator:a2c97726ffb62839e8c6fe399f6ed83f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a940ef1ceaa397087cc42f0eb63a041a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a940ef1ceaa397087cc42f0eb63a041a3">intr_add_timer</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> hz10, <a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt)</td></tr>
-<tr class="separator:a940ef1ceaa397087cc42f0eb63a041a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fa8e2bc9434c475082cfc60db195fce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a5fa8e2bc9434c475082cfc60db195fce">intr_add_pci</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> pin, <a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt)</td></tr>
-<tr class="separator:a5fa8e2bc9434c475082cfc60db195fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4d2ef4952d18eca3bbaa35751745265"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ac4d2ef4952d18eca3bbaa35751745265">intr_add_tmisr</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> hz10, <a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt)</td></tr>
+<tr class="separator:ac4d2ef4952d18eca3bbaa35751745265"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2beac691734412a59b782af798e4d636"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a2beac691734412a59b782af798e4d636">intr_add_pcisr</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> pin, <a class="el" href="eforth__core_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a> xt)</td></tr>
+<tr class="separator:a2beac691734412a59b782af798e4d636"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e469b64b1feed8f578349c87ae2ef84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a4e469b64b1feed8f578349c87ae2ef84">intr_timer_enable</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f)</td></tr>
 <tr class="separator:a4e469b64b1feed8f578349c87ae2ef84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a227d4b84f416c811b8ac176743593dec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a227d4b84f416c811b8ac176743593dec">intr_pci_enable</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> f)</td></tr>
@@ -1012,14 +1012,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a940ef1ceaa397087cc42f0eb63a041a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a940ef1ceaa397087cc42f0eb63a041a3">&#9670;&nbsp;</a></span>intr_add_timer()</h2>
+<a id="ac4d2ef4952d18eca3bbaa35751745265"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4d2ef4952d18eca3bbaa35751745265">&#9670;&nbsp;</a></span>intr_add_tmisr()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void intr_add_timer </td>
+          <td class="memname">void intr_add_tmisr </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td>
           <td class="paramname"><em>hz10</em>, </td>
@@ -1043,14 +1043,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5fa8e2bc9434c475082cfc60db195fce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5fa8e2bc9434c475082cfc60db195fce">&#9670;&nbsp;</a></span>intr_add_pci()</h2>
+<a id="a2beac691734412a59b782af798e4d636"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2beac691734412a59b782af798e4d636">&#9670;&nbsp;</a></span>intr_add_pcisr()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void intr_add_pci </td>
+          <td class="memname">void intr_add_pcisr </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td>
           <td class="paramname"><em>p</em>, </td>

@@ -1,14 +1,14 @@
-In 2011, Dr. Chen-\/\+Hanson Ting created \href{https://chochain.github.io/eForth1/ref/328eForth.pdf}{\texttt{ \mbox{[}328e\+Forth\mbox{]}}} to run Forth on Arduino U\+NO. Wrote in his ce\+Forth\+\_\+33 document, the creator of e\+Forth, and one of the inspiring figures of Forth community noted\+: \begin{quote}
-{\itshape In 2011, I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. However, you had only 1.\+5\+KB of R\+AM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
-
-
-Before Dr. Ting conceded his fight with cancer in May, 2022, I\textquotesingle{}ve spent the last 11 months working with him expanding the concept of \char`\"{}\+Forth without Forth\char`\"{} -\/ a new e\+Forth model -\/ he called. Traditionally, Forth is built with a set of core words in low-\/level assembly language and establish the rest of words with high-\/level Forth scripts which get boot-\/strapped on start-\/up time. With the proliferation of modern languages, build Forth without using Forth, he reasoned that Forth built entirely in high-\/level languages can not only greatly simplify the virtual machine, taking advantage of modern languages and operating system, but also encourage portability and optimization. In a few months, we completed new batch of e\+Forths in Javascript, Java, C++, ported them to Windows, E\+S\+P32, which Dr. Ting presented his video on November, 2021 to \href{https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s}{\texttt{ \mbox{[}Sillicon Valley Forth Interest Group\mbox{]}}}. Later, we focused on System\+Verilog\textquotesingle{}s edition with Don \& Demitri\textquotesingle{}s C\+O\+R\+E-\/I F\+P\+GA project of \href{https://www.facebook.com/groups/1304548976637542}{\texttt{ \mbox{[}AI \& Robotics Group\mbox{]}}} til his eventual departure.
-
-In Dr. Ting\textquotesingle{}s own word\+: \begin{quote}
+{\bfseries{Dr. Chen-\/\+Hanson Ting}}, the creator of {\bfseries{e\+Forth}} and one of the inspiring figures of Forth community, wrote\+: \begin{quote}
 {\itshape In all these years, I have thought that the e\+Forth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.} \end{quote}
 
 
-I enjoy the beauty of working on something small and simple, so decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model and have fun with it. However, to make it useful, there are a few things that I need to overcome first i.\+e. make macro assembler C-\/coder friendly, remove dependency on extra bootloader programmer, add E\+E\+P\+R\+OM save/load, and support interrupts. So, here we go!
+In 2011, Dr. Ting created \href{https://chochain.github.io/eForth1/ref/328eForth.pdf}{\texttt{ $\ast$328e\+Forth$\ast$}} to run Forth on Arduino U\+NO and wrote in his ce\+Forth\+\_\+33 document\+: \begin{quote}
+{\itshape I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. However, you had only 1.\+5\+KB of R\+AM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
+
+
+Before Dr. Ting conceded his fight with cancer in May, 2022, I\textquotesingle{}ve spent the last 11 months working with him expanding the concept of $\ast$$\ast$\char`\"{}\+Forth without Forth\char`\"{}$\ast$$\ast$ -\/ a new e\+Forth model -\/ he called. Traditionally, Forth is built with a set of core words in low-\/level assembly language and establish the rest of words with high-\/level Forth scripts which get boot-\/strapped on start-\/up time. Nowadays, build Forth without using Forth, he reasoned that Forth built entirely in high-\/level languages, specifically in C, can not only greatly simplify the virtual machine, utilizing operating system, but also encourage portability and optimization. Taking the concept forward, we completed new batch of e\+Forths in Javascript, Java, C++, ported them to Windows, E\+S\+P32 in just a few months. Dr. Ting presented a video on November, 2021 to \href{https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s}{\texttt{ $\ast$\+Sillicon Valley Forth Interest Group$\ast$}}. Later, we fancied creating a hardware version e\+Forth with System\+Verilog and joint venture with Don \& Demitri\textquotesingle{}s C\+O\+R\+E-\/I F\+P\+GA project of \href{https://www.facebook.com/groups/1304548976637542}{\texttt{ $\ast$\+AI \& Robotics Group$\ast$}} til Dr. Ting\textquotesingle{}s eventual departure. The project is still active now.
+
+Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model and have fun with it. Since his {\itshape 328e\+Forth} was a teaser only, to move it forward, there are a few major things I need to make changes to Dr. Ting\textquotesingle{}s implementation i.\+g. make C-\/coder friendly macro assembler, remove dependency on extra bootloader programmer, add E\+E\+P\+R\+OM save/load, and support interrupts, ... So, here we go!
 
 \doxysubsection*{What is e\+Forth1?}
 
@@ -96,7 +96,7 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 
 
 \begin{DoxyItemize}
-\item L\+ED blinker (assume you have a blue L\+ED on pin 6, or try this at \href{https://wokwi.com/projects/356793878308297729}{\texttt{ \mbox{[}this Wokwi project\mbox{]}}}) 
+\item L\+ED blinker (assume you have a blue L\+ED on pin 6, or try \href{https://wokwi.com/projects/356793878308297729}{\texttt{ $\ast$this Wokwi project$\ast$}}) 
 \begin{DoxyPre}
     > 1 6 pinmode⏎                           \textbackslash{} set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
     > : blue 6 in 1 xor 6 out ;⏎             \textbackslash{} create a word to toggle the blue LED
@@ -108,14 +108,14 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 \begin{DoxyPre}
     > 1 5 pinmode⏎                           \textbackslash{} set pin 5 for OUTPUT
     > : red 5 in 1 xor 5 out ;⏎              \textbackslash{} create an interrupt service routine (just a regular word)
-    > ' red 20 tmisr⏎                        \textbackslash{} make the ISR ticked every 0.2 seconds (20 x 10 microseconds)
+    > ' red 20 tmisr⏎                        \textbackslash{} make the ISR ticked every 0.2 seconds (= 20 x 10ms)
     > 1 timer⏎                               \textbackslash{} enable timer, now you should see red LED blinking continuously
     > 19 blink⏎                              \textbackslash{} let's have them both blink (blue LED 10 times) 
     \end{DoxyPre}
 
 
 $\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$\vert$$\vert$
-\item Drives 8 Servos at \href{https://wokwi.com/projects/356793878308297729}{\texttt{ \mbox{[}this Wokwi project\mbox{]}}}
+\item Drives 8 Servos at \href{https://wokwi.com/projects/356866133593965569}{\texttt{ $\ast$this Wokwi project$\ast$}}
 \end{DoxyItemize}
 
 \doxysubsection*{Benchmark}
@@ -128,7 +128,7 @@ $\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$\vert$$\vert$
     > : yy 999 for xx next ;⏎                \textbackslash{} create the outer loop
     > : zz clock dnegate yy clock d+ ;⏎      \textbackslash{} CLOCK returns a double value
     > zz⏎                                    \textbackslash{} benchmark the 1000x1000 cycles
-    > 22048 0 ok>                            \textbackslash{} 22048ms =\string~ 22us/cycle (with one blinking ISR running in the background)
+    > 24495 0 ok>                            \textbackslash{} 24495ms =\string~ 24.5us/cycle (with one blinking ISR running in the background)
     \end{DoxyPre}
 
 \end{DoxyItemize}
@@ -138,19 +138,19 @@ $\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$\vert$$\vert$
 If your programming language exposure has been with C, Java, or even Python so far, F\+O\+R\+TH is quite {\bfseries{different}}. Quote Nick\+: {\itshape \char`\"{}\+It\textquotesingle{}s no functional or object oriented, it doesn\textquotesingle{}t have type-\/checking, and it basically has zero syntax\char`\"{}}. No syntax? So, anyway, before you dive right into the deep-\/end, here\textquotesingle{}s a good online materials.
 \begin{DoxyItemize}
 \item Interactive tutorial for F\+O\+R\+TH primer. It teaches you how F\+O\+R\+TH fundamentally works such as the numbers, the stack, and the dictionary. \begin{quote}
-\href{https://skilldrick.github.io/easyforth/\#introduction}{\texttt{ Easy Forth Tutorial by Nick Morgan}} with a \href{https://wiki.forth-ev.de/lib/exe/fetch.php/en:projects:a-start-with-forth:05_easy_forth_v16_a5_withexp_comments.pdf?fbclid=IwAR0sHmgiDtnMRuQtJdVkhl9bmiitpgcjs4ZlIDVtlxrssMOmLBv0vesvmKQ}{\texttt{ \mbox{[}Writeup\mbox{]}}} by Juergen Pintaske. \end{quote}
+\href{https://skilldrick.github.io/easyforth/\#introduction}{\texttt{ $\ast$\+Easy Forth Tutorial by Nick Morgan$\ast$}} with a \href{https://wiki.forth-ev.de/lib/exe/fetch.php/en:projects:a-start-with-forth:05_easy_forth_v16_a5_withexp_comments.pdf?fbclid=IwAR0sHmgiDtnMRuQtJdVkhl9bmiitpgcjs4ZlIDVtlxrssMOmLBv0vesvmKQ}{\texttt{ $\ast$\+Writeup$\ast$}} by Juergen Pintaske. \end{quote}
 
 \end{DoxyItemize}
 
 To understand the philosophy of F\+O\+R\+TH, excellent online e-\/books are here free for you.
 \begin{DoxyItemize}
 \item Timeless classic for the history, paths, and thoughts behind F\+O\+R\+TH language. \begin{quote}
-\href{http://home.iae.nl/users/mhx/sf.html}{\texttt{ Starting Forth by Leo Brodie}}~\newline
- \href{http://thinking-forth.sourceforge.net}{\texttt{ Thinking Forth by Leo Brodie}} \end{quote}
+\href{http://home.iae.nl/users/mhx/sf.html}{\texttt{ $\ast$\+Starting Forth by Leo Brodie$\ast$}}~\newline
+ \href{http://thinking-forth.sourceforge.net}{\texttt{ $\ast$\+Thinking Forth by Leo Brodie$\ast$}} \end{quote}
 
 \end{DoxyItemize}
 
-\doxysubsection*{Performance Tuning}
+\doxysubsection*{Performance Tuning ($\sim$15\% faster)}
 
 
 \begin{DoxyItemize}
@@ -166,18 +166,18 @@ change them to -\/O3 for speed, -\/Os (default) for smallest size, -\/O2 for som
 
 
 \begin{DoxyItemize}
-\item \href{https://chochain.github.io/eForth1/ref/1013_eForthAndZen.pdf}{\texttt{ e\+Forth and Zen}}
-\item \href{https://chochain.github.io/eForth1/ref/The_Arduino_controlled_by_eForth.pdf}{\texttt{ The Arduino controlled by e\+Forth}}
-\item \href{https://github.com/DRuffer/328eforth}{\texttt{ 328e\+Forth mod for coin\+Forth by D. Ruffer}}
-\item \href{https://chochain.github.io/eForth1/ref/ceForth_33.doc}{\texttt{ ce\+Forth\+\_\+33.\+doc -\/ original documentation}}
-\item \href{https://chochain.github.io/eForth1/ref/ceForth_33.cpp}{\texttt{ ce\+Forth\+\_\+33.\+cpp -\/ source code in C}}
-\item \href{https://chochain.github.io/eForth1/ref/eforth_328.ino}{\texttt{ eforth\+\_\+328.\+ino -\/ Arduino I\+DE teaser by Dr. Ting}}
+\item \href{https://chochain.github.io/eForth1/ref/1013_eForthAndZen.pdf}{\texttt{ {\itshape e\+Forth and Zen}}}
+\item \href{https://chochain.github.io/eForth1/ref/The_Arduino_controlled_by_eForth.pdf}{\texttt{ {\itshape The Arduino controlled by e\+Forth}}}
+\item \href{https://github.com/DRuffer/328eforth}{\texttt{ {\itshape 328e\+Forth mod for coin\+Forth by D. Ruffer}}}
+\item \href{https://chochain.github.io/eForth1/ref/ceForth_33.doc}{\texttt{ {\itshape ce\+Forth\+\_\+33.\+doc -\/ original documentation}}}
+\item \href{https://chochain.github.io/eForth1/ref/ceForth_33.cpp}{\texttt{ {\itshape ce\+Forth\+\_\+33.\+cpp -\/ source code in C}}}
+\item \href{https://chochain.github.io/eForth1/ref/eforth_328.ino}{\texttt{ {\itshape eforth\+\_\+328.\+ino -\/ Arduino I\+DE teaser by Dr. Ting}}}
 \end{DoxyItemize}
 
 \doxysubsection*{For Projects small and large}
 
 
 \begin{DoxyItemize}
-\item A tiny 8-\/bit sytem at \href{https://github.com/TG9541/stm8ef}{\texttt{ e\+Forth for S\+T\+M8}} or \href{https://github.com/TG9541/stm8ef/wiki/STM8S-Programming\#flashing-the-stm8}{\texttt{ S\+T\+M8 Programming}}
-\item A system with Wi\+Fi, and fancy stuffs at \href{https://esp32forth.appspot.com/ESP32forth.html}{\texttt{ Esp32forth}} or its \href{https://github.com/Esp32forth}{\texttt{ Git\+Hub site}} 
+\item A tiny 8-\/bit sytem at \href{https://github.com/TG9541/stm8ef}{\texttt{ {\itshape e\+Forth for S\+T\+M8}}} or \href{https://github.com/TG9541/stm8ef/wiki/STM8S-Programming\#flashing-the-stm8}{\texttt{ {\itshape S\+T\+M8 Programming}}}
+\item A system with Wi\+Fi, and fancy stuffs at \href{https://esp32forth.appspot.com/ESP32forth.html}{\texttt{ {\itshape Esp32forth}}} or its \href{https://github.com/Esp32forth}{\texttt{ {\itshape Git\+Hub site}}} 
 \end{DoxyItemize}

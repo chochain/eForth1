@@ -88,7 +88,7 @@ extern U32 forth_rom_sz;                   ///< actual size of ROM
 ///> setup (called by Arduino setup)
 ///
 static Stream *io;
-void ef_setup(Stream &io_stream=Serial)
+void ef_setup(Stream &io_stream)
 {
 	io   = &io_stream;
     _ram = (U8*)malloc(FORTH_RAM_SZ);     ///< dynamically allocated

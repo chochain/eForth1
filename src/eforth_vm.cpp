@@ -90,11 +90,11 @@ int _yield_cnt = 0;          ///< interrupt service throttle counter
 void _qrx()                  ///> ( -- c ) fetch a char from console
 {
 #if ARDUINO
-    int rst = io->read();             ///> fetch from IO stream
+    int rst = io->read();        ///> fetch from IO stream
     if (rst > 0) PUSH((DU)rst);
     PUSH(BOOL(rst >= 0));
 #else
-    PUSH((DU)getchar());              /// * Note: blocking, i.e. no interrupt support
+    PUSH((DU)getchar());         /// * Note: blocking, i.e. no interrupt support
     PUSH(TRUE);
 #endif
 }

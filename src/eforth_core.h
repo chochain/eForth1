@@ -43,16 +43,15 @@ typedef void (*CFP)();                ///< function pointer
 ///@attention reassemble ROM needed if FORTH_TIB_SZ or FORTH_PAD_SZ changed
 ///@{
 #define CELLSZ           2            /**< 16-bit cell size                    */
+#define CFUNC_MAX        8            /**< size C function pointer slots (8)   */
 #define FORTH_ROM_SZ     0x2000       /**< size of ROM (for pre-defined words) */
 #define FORTH_UVAR_SZ    0x20         /**< size of Forth user variables        */
-#define CFUNC_SLOT_SZ    0x10         /**< size C function pointer slots (8)   */
-#define FORTH_DIC_SZ     0x3d0        /**< size of dictionary space            */
+#define FORTH_DIC_SZ     0x3e0        /**< size of dictionary space            */
 #define FORTH_STACK_SZ   0x80         /**< size of data/return stack           */
 #define FORTH_TIB_SZ     0x80         /**< size of terminal input buffer       */
 #define FORTH_RAM_SZ     ( \
-        FORTH_UVAR_SZ + CFUNC_SLOT_SZ + \
-        FORTH_DIC_SZ + FORTH_STACK_SZ + \
-        FORTH_TIB_SZ)                 /**< total RAM allocated                 */
+        FORTH_UVAR_SZ + FORTH_DIC_SZ + \
+        FORTH_STACK_SZ + FORTH_TIB_SZ)      /**< total RAM allocated           */
 ///@}
 ///
 ///> note:
@@ -66,8 +65,7 @@ typedef void (*CFP)();                ///< function pointer
 #define FORTH_BOOT_ADDR  0x0000
 #define FORTH_RAM_ADDR   FORTH_ROM_SZ
 #define FORTH_UVAR_ADDR  FORTH_RAM_ADDR
-#define CFUNC_SLOT_ADDR  (FORTH_UVAR_ADDR + FORTH_UVAR_SZ)
-#define FORTH_DIC_ADDR   (CFUNC_SLOT_ADDR + CFUNC_SLOT_SZ)
+#define FORTH_DIC_ADDR   (FORTH_UVAR_ADDR + FORTH_UVAR_SZ)
 #define FORTH_STACK_ADDR (FORTH_DIC_ADDR  + FORTH_DIC_SZ)
 #define FORTH_STACK_TOP  (FORTH_STACK_ADDR + FORTH_STACK_SZ)
 #define FORTH_TIB_ADDR   (FORTH_STACK_TOP)
@@ -229,7 +227,7 @@ typedef const char          *PGM_P;
 void intr_reset();          ///< reset interrupts
 U16  intr_hits();
 IU   intr_service();
-void intr_add_tmisr(U16 hz10, IU xt);
+void intr_add_tmisr(U16 i, U16 ms, IU xt);
 void intr_add_pcisr(U16 pin, IU xt);
 void intr_timer_enable(U16 f);
 void intr_pci_enable(U16 f);

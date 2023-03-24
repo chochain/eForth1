@@ -115,10 +115,21 @@ int assemble(U8 *cdata)
     IU DSUB  = _XCODE("D-",      DSUB   );
     IU DDUP  = _XCODE("2DUP",    DDUP   );
     IU DDROP = _XCODE("2DROP",   DDROP  );
-    /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
-    /// TODO: add I, J
     IU DSTOR = _XCODE("2!",      DSTOR  );
     IU DAT   = _XCODE("2@",      DAT    );
+    ///
+    /// extended words
+    ///
+    _COLON("2SWAP", ROT, TOR, ROT, RFROM, EXIT);
+    _COLON("2OVER", DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
+    _COLON("2+",    DOLIT, 2, ADD, EXIT);
+    _COLON("2-",    DOLIT, 2, SUB, EXIT);
+    _COLON("2*",    DOLIT, 1, LSH, EXIT);
+    _COLON("2/",    DOLIT, 1, RSH, EXIT);
+    _XCODE("I",     RAT );
+    ///  (TODO: add J)
+    _XCODE("SP@",   SPAT);                    ///> address of stack pointer
+    _XCODE("S0",    S0  );                    ///> base of data stack (fixed instead of user var)
     ///
     /// Kernel constants
     ///
@@ -149,7 +160,6 @@ int assemble(U8 *cdata)
     IU HERE  = _COLON("HERE",  vCP, AT, EXIT);                // top of dictionary
     IU PAD   = _COLON("PAD",   DOLIT, FORTH_MAX_ADDR, EXIT);  // use tail of TIB for output
     IU TIB   = _COLON("TIB",   vTTIB, AT, EXIT);
-    /// TODO: add SP@, SP0
     IU CMOVE = _COLON("CMOVE", NOP); {
         _FOR(NOP);
         _AFT(OVER, CAT, OVER, CSTOR, TOR, ONEP, RFROM, ONEP);
@@ -530,30 +540,31 @@ int assemble(U8 *cdata)
     _COLON("SEE", TICK, DOTAD); {                              // word address
         _BEGIN(DUP, CAT, DUP, DOLIT, EXIT, EQ, INV);           // loop until EXIT
         _WHILE(DUP, DOLIT, 0x80, AND); {                       // a primitive?
+            /* poorman' CASE */
             _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND,             // colon word - show name
                 SPACE, TNAME, COUNT, TYPE, CELLP);
             _ELSE(DUP, DOLIT, DOLIT, EQ); {                    // a literal?
-                _IF(DROP, ONEP, DUP, AT, DOT, CELLP);          // show the number
-                _ELSE(DUP, DOLIT, BRAN, EQ); {
-                    _IF(DROP, ONEP, DUP, AT, DOT,              // show jump target
-                        DOLIT, 0x6a, EMIT,                     // '?'
-                        CELLP, DOTAD);                         // next address
-                    _ELSE(DUP, DOLIT, QBRAN, EQ); {            // or a ?bran?
-                        _IF(DROP, ONEP, DUP, AT, DOT,          // show jump target
-                            DOLIT, 0x3f, EMIT,                 // 'j'
-                            CELLP, DOTAD);                     // next address
-                        _ELSE(DUP, DOLIT, DONXT, EQ); {        // a bran or donext?
-                            _IF(DROP, ONEP, DUP, AT, DOT,      // show jump target
-                                DOLIT, 0x72, EMIT,             // 'r'
-                                CELLP, DOTAD);
-                            _ELSE(SPACE, DOTOP, ONEP);         // opcode#
-                            _THEN(NOP);
-                        }
-                        _THEN(NOP);
-                    }
-                    _THEN(NOP);
-                }
-                _THEN(NOP);
+            _IF(DROP, ONEP, DUP, AT, DOT, CELLP);              // show the number
+            _ELSE(DUP, DOLIT, BRAN, EQ); {
+            _IF(DROP, ONEP, DUP, AT, DOT,                      // show jump target
+                DOLIT, 0x6a, EMIT,                             // '?'
+                CELLP, DOTAD);                                 // next address
+            _ELSE(DUP, DOLIT, QBRAN, EQ); {                    // or a ?bran?
+            _IF(DROP, ONEP, DUP, AT, DOT,                      // show jump target
+                DOLIT, 0x3f, EMIT,                             // 'j'
+                CELLP, DOTAD);                                 // next address
+            _ELSE(DUP, DOLIT, DONXT, EQ); {                    // a bran or donext?
+            _IF(DROP, ONEP, DUP, AT, DOT,                      // show jump target
+                DOLIT, 0x72, EMIT,                             // 'r'
+                CELLP, DOTAD);
+            _ELSE(SPACE, DOTOP, ONEP);                         // opcode#
+            _THEN(NOP);
+            }
+            _THEN(NOP);
+            }
+            _THEN(NOP);
+            }
+            _THEN(NOP);
             }
             _THEN(NOP);
         }
@@ -612,7 +623,8 @@ int assemble(U8 *cdata)
     ///> Defining Words - variable, constant, and comments
     ///
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
-    IU CREAT = _COLON("CREATE", CODE, COMPI, DOVAR, COMPI, EXIT, EXIT);       /// * opDOVAR padded with opEXIT
+    IU CREAT = _COLON("CREATE", CODE,
+          DOLIT, DOVAR, CCMMA, DOLIT, EXIT, CCMMA, EXIT);
     /// TODO: add DOES>, POSTPONE
     /*
 : DOES>                  \ change runtime behavior to following code, para on return stack
@@ -622,9 +634,16 @@ int assemble(U8 *cdata)
   OVER CELL+ -           \ compute run time code relative-offset 
   SWAP ! ;               \ overwrite doVar to run time code relative-offset
     */
-    _COLON("VARIABLE",CREAT, DOLIT, 0, COMMA, EXIT);
-    _COLON("CONSTANT",CODE,  DOLIT, DOLIT, CCMMA, DOLIT, EXIT, CCMMA, COMMA, EXIT);
-    /// TODO: 2CONSTANT, 2VARIABLE
+    _COLON("VARIABLE",  CREAT, DOLIT, 0, COMMA, EXIT);
+    _COLON("CONSTANT",  CODE,                           /// * CC: Dr. Ting hardcoded here
+           DOLIT, DOLIT, CCMMA, HERE, DOLIT, 4, ADD, COMMA,
+           DOLIT, AT, CCMMA, DOLIT, EXIT, CCMMA,
+           COMMA, EXIT);
+    _COLON("2VARIABLE", CREAT, DOLIT, 0, DUP, COMMA, COMMA, EXIT);
+    _COLON("2CONSTANT", CODE,
+           DOLIT,  DOLIT, CCMMA, HERE, DOLIT, 4, ADD, COMMA,
+           DOLIT, DAT, CCMMA, DOLIT, EXIT, CCMMA,
+           SWAP, COMMA, COMMA, EXIT);
     ///
     ///> Comments
     ///

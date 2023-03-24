@@ -165,6 +165,8 @@ typedef void (*CFP)();                ///< function pointer
         OP(DDROP), \
         OP(DSTOR), \
         OP(DAT),   \
+        OP(SPAT),  \
+        OP(S0),    \
         OP(CLK),   \
         OP(PIN),   \
         OP(MAP),   \

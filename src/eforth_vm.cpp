@@ -26,6 +26,7 @@ IU  IR;                           ///< interrupt service routine
 ///@name Memory Management Unit
 ///@{
 PGM_P _rom;                       ///< ROM, Forth word stored in Arduino Flash Memory
+CFP   _fp[CFUNC_MAX];             ///> store C function pointer
 U8    *_data;                     ///< RAM, memory block for user define dictionary
 ///@}
 //
@@ -154,19 +155,17 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 ///  TODO: build formal C callstack construct
 ///
 void _ccall() {
-    IU  adr = (CFUNC_SLOT_ADDR & IDX_MASK) + top * sizeof(CFP);
-    CFP fp  = *((CFP*)&_data[adr]);   ///> fetch C function pointer
+    CFP fp  = _fp[top];               ///> fetch C function pointer
     POP();                            ///> pop off TOS
     fp();                             ///> call C function
 }
 
 void vm_cfunc(int n, CFP fp) {
-	IU adr = (CFUNC_SLOT_ADDR & IDX_MASK) + n * sizeof(CFP);
-    *((CFP*)&_data[adr]) = fp;        ///> store C function pointer
+	_fp[n] = fp;
     LOG_V(", fp[", n); LOG_H("]=", (uintptr_t)fp);
 }
 
-void vm_push(int v) {           /// proxy to VM
+void vm_push(int v) {                 /// proxy to VM
 	PUSH(v);
 }
 
@@ -416,11 +415,11 @@ void vm_outer() {
             DS -= 4;
             top = tmp);
         _X(IN,    top = digitalRead(top));
-        _X(OUT,   digitalWrite(top, *DS);   POP(); POP());
+        _X(OUT,   digitalWrite(top, *DS);   DS--; POP());
         _X(AIN,   top = analogRead(top));
-        _X(PWM,   analogWrite(top, *DS);    POP(); POP());
-        _X(TMISR, intr_add_tmisr(top, *DS); POP(); POP());
-        _X(PCISR, intr_add_pcisr(top, *DS); POP(); POP());
+        _X(PWM,   analogWrite(top, *DS);    DS--; POP());
+        _X(TMISR, intr_add_tmisr(top, *DS, *(DS-1)); DS-=2; POP());
+        _X(PCISR, intr_add_pcisr(top, *DS); DS--; POP());
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
 #if EXE_TRACE

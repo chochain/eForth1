@@ -397,6 +397,10 @@ void vm_outer() {
         _X(DAT,
            *(++DS) = (DU)GET(top);
            top     = (DU)GET(top + CELLSZ));
+        _X(SPAT,
+            DU r = (U8*)DS - (U8*)RAM(FORTH_STACK_ADDR);
+            PUSH(FORTH_STACK_ADDR + r));
+        _X(S0, PUSH(FORTH_STACK_ADDR));      /// fixed, instead of a user variable
         /// @}
         /// @name Arduino specific ops
         /// @{

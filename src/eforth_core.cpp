@@ -3,7 +3,7 @@
  * @brief eForth core controller module
  */
 #include "eforth_core.h"
-///
+//
 /// interrupt handlers
 ///
 U8  t_idx  { 0 };                 ///< timer ISR index
@@ -20,6 +20,8 @@ void intr_reset() {
     intr_pci_enable(false);
     CLI();
     t_idx = t_hit = p_hit = 0;
+    for (int i=0; i < 8; i++) t_xt[i] = 0;
+    for (int i=0; i < 3; i++) p_xt[i] = 0;
     SEI();
 }
 U16 _intr() {
@@ -45,16 +47,20 @@ void _fake_intr(U16 hits)
 }
 #endif // ARDUINO
 
+#define ISR_PERIOD 100                             // skip before check ISR flag
+
 IU intr_service() {
-    static U16 hits = 0;
+    static U16 hits = 0, n = 0;
 
     _fake_intr(hits);                              // on x86 platform
 
+    if (!hits && ++n < ISR_PERIOD) return 0;       // skip for performance
+    n = 0;
     if (!hits) hits = _intr();                     // cache hits
     if (hits) {                                    // serve fairly
         U8 hx = hits & 0xff;
         for (int i=0, t=1; hx && i<t_idx; i++, t<<=1, hx>>=1) {
-            if (hits & t) {    hits &= ~t; return t_xt[i]; }
+            if (hits & t) { hits &= ~t; return t_xt[i]; }
         }
         hx = hits >> 8;
         for (int i=0, t=0x100; hx && i<3; i++, t<<=1, hx>>=1) {
@@ -66,14 +72,14 @@ IU intr_service() {
 ///
 ///> add timer interrupt service routine
 ///
-void intr_add_tmisr(U16 hz10, U16 xt) {
-    if (xt==0 || t_idx > 7) return; // range check
+void intr_add_tmisr(U16 i, U16 ms, U16 xt) {
+    if (xt==0 || i > 7) return; // range check
 
     CLI();
-    t_xt[t_idx]  = xt;              // ISR xt
-    t_cnt[t_idx] = 0;               // init counter
-    t_max[t_idx] = hz10;            // period (in 0.1s)
-    t_idx++;
+    t_xt[i]  = xt;              // ISR xt
+    t_cnt[i] = 0;               // init counter
+    t_max[i] = ms;              // period (in ms)
+    if (i > t_idx) t_idx = i + 1;
     SEI();
 }
 #if ARDUINO
@@ -118,8 +124,8 @@ void intr_timer_enable(U16 f) {
     TCCR2A = TCCR2B = TCNT2 = 0;           // reset counter
     if (f) {
         TCCR2A = _BV(WGM21);               // Set CTC mode
-        TCCR2B = _BV(CS22)|_BV(CS21);      // prescaler 256 (16000000 / 256) = 62500Hz = 16us
-//        OCR2A  = 249;                      // 250KHz = 4ms, (250 - 1, must < 256)
+        TCCR2B = _BV(CS22);                // prescaler 64 (16MHz / 64) = 250KHz => 4us period
+        OCR2A  = 249;                      // 250x4us = 1ms, (250 - 1, must < 256)
         OCR2A  = 124;                      // 500KHz = 2ms, (125 - 1, must < 256)
         TIMSK2 |= _BV(OCIE2A);             // enable timer2 compare interrupt
     }
@@ -132,12 +138,8 @@ void intr_timer_enable(U16 f) {
 ///> Arduino interrupt service routines
 ///
 ISR(TIMER2_COMPA_vect) {
-    volatile static int cnt = 0;
-//    if (++cnt < 25) return;                // 25 * 4ms = 100ms (allows ~4K ops, max 3200 sec)
-    if (++cnt < 5) return;                 // 5 * 2ms = 10ms (allows ~400 ops, max 320 sec)
-    cnt = 0;
     for (U8 i=0, b=1; i < t_idx; i++, b<<=1) {
-        if (++t_cnt[i] < t_max[i]) continue;
+        if (!t_xt[i] || (++t_cnt[i] < t_max[i])) continue;
         t_hit    |= b;
         t_cnt[i]  = 0;
     }

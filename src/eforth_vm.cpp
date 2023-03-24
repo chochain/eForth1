@@ -126,6 +126,27 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned double divided by 
     *DS   = (DU)(m % d);    ///> remainder
     top   = (DU)(m / d);    ///> quotient
 }
+
+void _out(U16 p, U16 v)
+{
+#if ARDUINO
+    switch (p & 0x300) {
+    case 0x100:            // PORTD (0~7)
+        DDRD  = DDRD | (p & 0xfc);  /// * mask out RX,TX
+        PORTD = (U8)(v & p) | (PORTD & ~p);
+        break;
+    case 0x200:            // PORTB (8~13)
+        DDRB  = DDRB | (p & 0xff);
+        PORTB = (U8)(v & p) | (PORTB & ~p);
+        break;
+    case 0x300:            // PORTC (A0~A6)
+        DDRC  = DDRC | (p & 0xff);
+        PORTC = (U8)(v & p) | (PORTC & ~p);
+        break;
+    default: digitalWrite(p, v);
+    }
+#endif  // ARDUINO
+}
 ///@}
 }; // namespace EfVM
 ///
@@ -415,7 +436,7 @@ void vm_outer() {
             DS -= 4;
             top = tmp);
         _X(IN,    top = digitalRead(top));
-        _X(OUT,   digitalWrite(top, *DS);   DS--; POP());
+        _X(OUT,   _out(top, *DS);   DS--; POP());
         _X(AIN,   top = analogRead(top));
         _X(PWM,   analogWrite(top, *DS);    DS--; POP());
         _X(TMISR, intr_add_tmisr(top, *DS, *(DS-1)); DS-=2; POP());

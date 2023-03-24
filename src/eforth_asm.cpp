@@ -113,15 +113,15 @@ int assemble(U8 *cdata)
     IU DNEG  = _XCODE("DNEGATE", DNEG   );
     IU DADD  = _XCODE("D+",      DADD   );
     IU DSUB  = _XCODE("D-",      DSUB   );
-    IU DDUP  = _XCODE("2DUP",    DDUP   );
-    IU DDROP = _XCODE("2DROP",   DDROP  );
     IU DSTOR = _XCODE("2!",      DSTOR  );
     IU DAT   = _XCODE("2@",      DAT    );
+    IU DDUP  = _XCODE("2DUP",    DDUP   );
+    IU DDROP = _XCODE("2DROP",   DDROP  );
+    _COLON("2SWAP", ROT, TOR, ROT, RFROM, EXIT);
+    _COLON("2OVER", DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
     ///
     /// extended words
     ///
-    _COLON("2SWAP", ROT, TOR, ROT, RFROM, EXIT);
-    _COLON("2OVER", DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
     _COLON("2+",    DOLIT, 2, ADD, EXIT);
     _COLON("2-",    DOLIT, 2, SUB, EXIT);
     _COLON("2*",    DOLIT, 1, LSH, EXIT);

@@ -165,6 +165,10 @@ typedef void (*CFP)();                ///< function pointer
         OP(DAT),   \
         OP(SPAT),  \
         OP(S0),    \
+        OP(TRC),   \
+        OP(SAVE),  \
+        OP(LOAD),  \
+        OP(CALL),  \
         OP(CLK),   \
         OP(PIN),   \
         OP(MAP),   \
@@ -175,11 +179,7 @@ typedef void (*CFP)();                ///< function pointer
         OP(TMISR), \
         OP(PCISR), \
         OP(TMRE),  \
-        OP(PCIE),  \
-        OP(TRC),   \
-        OP(SAVE),  \
-        OP(LOAD),  \
-        OP(CALL)
+        OP(PCIE)
 //
 // eForth function prototypes
 //
@@ -236,17 +236,18 @@ void intr_pci_enable(U16 f);
 ///@{
 void vm_init(
     PGM_P rom,              ///< pointer to Arduino flash memory block (ROM)
-    U8 *cdata,              ///< pointer to Arduino RAM block (RAM)
-    void *io_stream         ///< pointer to Stream object of Arduino
+    U8    *ram,             ///< pointer to Arduino RAM block (RAM)
+    void  *io_stream,       ///< pointer to Stream object of Arduino
+	const char *code        ///< embeded Forth code
     );
 void vm_outer();            ///< Forth outer interpreter
 ///@}
 ///@name eForth Assembler Functions
 ///@{
 int  ef_assemble(
-    U8 *cdata               ///< pointer to Arduino memory block where assembled data will be populated
+    U8 *ram                 ///< pointer to Arduino memory block where assembled data will be populated
     );
-int  ef_save(U8 *data);     ///< save user variables and dictionary to EEPROM
-int  ef_load(U8 *data);     ///< load user variables and dictionary from EEPROM
+int  ef_save(U8 *ram);      ///< save user variables and dictionary to EEPROM
+int  ef_load(U8 *ram);      ///< load user variables and dictionary from EEPROM
 ///@}
 #endif // __EFORTH_CORE_H

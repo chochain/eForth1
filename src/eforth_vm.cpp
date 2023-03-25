@@ -80,7 +80,7 @@ void _yield()                ///> yield to interrupt service
     }
 }
 int _yield_cnt = 0;          ///< interrupt service throttle counter
-#define YIELD_PERIOD    100
+#define YIELD_PERIOD 50
 #define YIELD()                               \
     if (!IR && ++_yield_cnt > YIELD_PERIOD) { \
         _yield_cnt = 0;                       \
@@ -220,7 +220,7 @@ void vm_outer() {
     IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
     while (1) {
-        YIELD();                        /// * serve interrupt if any
+        YIELD();                        /// * yield to interrupt services
         U8  op = BGET(IP++);
         if (op & 0x80) {
         	PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
@@ -234,9 +234,9 @@ void vm_outer() {
         ///
         _X(NOP,   {});
 #if ARDUINO
-        _X(BYE,   _init());            /// * reset
+        _X(BYE,   _init());             /// * reset
 #else // !ARDUINO
-        _X(BYE,   break);              /// quit
+        _X(BYE,   break);               /// quit
 #endif // ARDUINO
         ///
         /// @name Console IO
@@ -440,7 +440,8 @@ void vm_outer() {
             U16 sz = ef_load(_ram);
             LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
-        _X(CALL, _ccall());                  /// * call C function
+        _X(CALL,
+        	_ccall());                       /// * call C function
         _X(CLK,
             U32 t = millis();
             *++DS = top; DS++;               /// * allocate 2-cells for clock ticks

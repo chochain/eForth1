@@ -40,15 +40,11 @@ void _fake_intr(U16 hits)
 }
 #endif // ARDUINO
 
-#define ISR_PERIOD 50                              // skip 50ms before check ISR flag
-
 IU intr_service() {
-    volatile static U16 hits = 0, n = 0;
+    volatile static U16 hits = 0;
 
     _fake_intr(hits);                              // on x86 platform
 
-    if (!hits && ++n < ISR_PERIOD) return 0;       // skip for performance
-    n = 0;
     CLI();
     if (!hits) {
         hits = (p_hit << 8) | t_hit;               // capture interrupt flags

@@ -26,8 +26,9 @@ IU  IR;                           ///< interrupt service routine
 ///@name Memory Management Unit
 ///@{
 PGM_P _rom;                       ///< ROM, Forth word stored in Arduino Flash Memory
+U8    *_ram;                      ///< RAM, memory block for user define dictionary
+U8    *_pre;                      ///< Pre-built/embedded Forth code
 CFP   _fp[CFUNC_MAX];             ///> store C function pointer
-U8    *_data;                     ///< RAM, memory block for user define dictionary
 ///@}
 //
 // Forth Virtual Machine primitive functions
@@ -90,12 +91,16 @@ int _yield_cnt = 0;          ///< interrupt service throttle counter
 ///
 void _qrx()                  ///> ( -- c ) fetch a char from console
 {
+    static char *p = (char*)_pre;
 #if ARDUINO
-    int rst = io->read();        ///> fetch from IO stream
-    if (rst > 0) PUSH((DU)rst);
+    char c   = p ? pgm_read_byte(p) : 0;
+    DU   rst = (DU)(c ? (p++, c) : io->read());        ///> fetch from IO stream
+    if (rst > 0) PUSH(rst);
     PUSH(BOOL(rst >= 0));
 #else
-    PUSH((DU)getchar());         /// * Note: blocking, i.e. no interrupt support
+    char c   = p ? *p : 0;
+    DU   rst = (DU)(c ? (p++, c) : getchar());
+    PUSH(rst);               /// * Note: blocking, i.e. no interrupt support
     PUSH(TRUE);
 #endif
 }
@@ -164,10 +169,11 @@ void _out(U16 p, U16 v)
 ///
 using namespace EfVM;
 
-void vm_init(PGM_P rom, U8 *data, void *io_stream) {
-    io     = (Stream *)io_stream;
-    _rom   = rom;
-    _data  = data;
+void vm_init(PGM_P rom, U8 *ram, void *io_stream, const char *code) {
+    io    = (Stream *)io_stream;
+    _rom  = rom;
+    _ram  = ram;
+    _pre  = (U8*)code;
 
     _init();                    /// * resetting user variables
 }
@@ -421,13 +427,27 @@ void vm_outer() {
             DU r = (U8*)DS - (U8*)RAM(FORTH_STACK_ADDR);
             PUSH(FORTH_STACK_ADDR + r));
         _X(S0, PUSH(FORTH_STACK_ADDR));      /// fixed, instead of a user variable
+#if EXE_TRACE
+        _X(TRC,  tCNT = top; POP());
+#else
+        _X(TRC,  POP());
+#endif // EXE_TRACE
+        _X(SAVE,
+            U16 sz = ef_save(_ram);
+            LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
+        );
+        _X(LOAD,
+            U16 sz = ef_load(_ram);
+            LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
+        );
+        _X(CALL, _ccall());                  /// * call C function
+        _X(CLK,
+            U32 t = millis();
+            *++DS = top; DS++;               /// * allocate 2-cells for clock ticks
+            DTOP(t));
         /// @}
         /// @name Arduino specific ops
         /// @{
-        _X(CLK,
-            U32 t = millis();
-            *++DS = top; DS++;                 /// * allocate 2-cells for clock ticks
-            DTOP(t));
         _X(PIN,
             pinMode(top, *DS-- ? OUTPUT : INPUT);
             POP());
@@ -443,19 +463,5 @@ void vm_outer() {
         _X(PCISR, intr_add_pcisr(top, *DS); DS--; POP());
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
-#if EXE_TRACE
-        _X(TRC,  tCNT = top; POP());
-#else
-        _X(TRC,  POP());
-#endif // EXE_TRACE
-        _X(SAVE,
-            U16 sz = ef_save(_data);
-            LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
-        );
-        _X(LOAD,
-            U16 sz = ef_load(_data);
-            LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
-        );
-        _X(CALL, _ccall());                /// * call C function
     }
 }

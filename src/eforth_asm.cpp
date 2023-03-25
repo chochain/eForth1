@@ -130,6 +130,10 @@ int assemble(U8 *cdata)
     ///  (TODO: add J)
     _XCODE("SP@",   SPAT);                    ///> address of stack pointer
     _XCODE("S0",    S0  );                    ///> base of data stack (fixed instead of user var)
+    _XCODE("TRACE", TRC  );                   ///  ( f -- )     enable/disable debug tracing
+    _XCODE("SAVE",  SAVE );                   ///  ( -- )       save user variables and dictionary to EEPROM
+    _XCODE("LOAD",  LOAD );                   ///  ( -- )       restore user variables and dictionary from EERPROM
+    _XCODE("CALL",  CALL );                   ///  ( n -- )     call a C-function vector
     ///
     /// Kernel constants
     ///
@@ -660,7 +664,6 @@ int assemble(U8 *cdata)
     ///
     ///> Arduino specific opcodes
     ///
-    IU CLK     = _XCODE("CLOCK",    CLK  ); ///  ( -- ud ud ) get current clock (in ms)
     IU PINMODE = _XCODE("PINMODE",  PIN  ); ///  ( n p -- )   set pinMode(p, n=1:OUTPUT, n=0: INPUT)
     IU MAP     = _XCODE("MAP",      MAP  ); ///  ( h l p -- ) set map range to pin
     IU IN      = _XCODE("IN",       IN   ); ///  ( p -- n )   digitalRead(p)
@@ -671,10 +674,7 @@ int assemble(U8 *cdata)
     IU PCISR   = _XCODE("PCISR",    PCISR); ///  ( xt p -- )  on pin change interrupt calls xt
     IU TIMER   = _XCODE("TIMER",    TMRE ); ///  ( f -- )     enable/disable timer interrupt
     IU PCINT   = _XCODE("PCINT",    PCIE ); ///  ( f -- )     enable/disable pin change interrupt
-    IU TRACE   = _XCODE("TRACE",    TRC  ); ///  ( f -- )     enable/disable debug tracing
-    IU SAVE    = _XCODE("SAVE",     SAVE ); ///  ( -- )       save user variables and dictionary to EEPROM
-    IU LOAD    = _XCODE("LOAD",     LOAD ); ///  ( -- )       restore user variables and dictionary from EERPROM
-    IU CALL    = _XCODE("CALL",     CALL ); ///  ( n -- )     call a C-function vector
+    IU CLK     = _XCODE("CLOCK",    CLK  ); ///  ( -- ud ud ) get current clock (in ms)
     _COLON("DELAY", S2D, CLK, DADD, vTMP, DSTOR); {
         _BEGIN(vTMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
         _UNTIL(EXIT);

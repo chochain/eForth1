@@ -66,9 +66,12 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
   * > <img src="https://chochain.github.io/eForth1/images/eforth1_words_snip.png" width=400>
 
 ### Different from Dr. Ting's
+  * Instead of original 32-bit, CELL is 16-bit, opcodes are 8-bit bytecode primitives.
+  * To save space, primitives are compiled as bytecode and composite words are flagged address pointer.
+  * For speed, use direct threading model with computed jump instead of original subroutine threaded,
   * Instead of direct GPIO port manipulation with byte read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... for familiarity to the IDE platform.
-  * eForth1 supports multi-tasking through interrupts. It provides a base frequency at 0.01Hz using Timer2. You assign mulply of 10ms as ISR repetition trigger period. For example 500 means 500 x 10ms = every 5 seconds. Timer1 is left free for Servo or other libraries.
-  * On this 16-bit system, CLOCK will return a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D>S, S>D.
+  * eForth1 supports multi-tasking through interrupts. It provides a base tick at 1ms using Timer2. You assign mulply of 1ms as ISR repetition trigger period. For example 500 means triggered every 500ms. There are 8 timer interrupt handler slots are provided. Timer1 is left free for Servo or other libraries.
+  * On this 16-bit system, CLOCK still returns a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D>S, S>D.
   * DELAY takes a 16-bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, DELAY does not interfer with interrupts (see demos below).
 
 ### Demos
@@ -84,7 +87,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     <pre>
     > 1 5 pinmode⏎                           \ set pin 5 for OUTPUT
     > : red 5 in 1 xor 5 out ;⏎              \ create an interrupt service routine (just a regular word)
-    > ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (= 20 x 10ms)
+    > ' red 200 0 tmisr⏎                     \ make the ISR ticked every 0.2 seconds (= 200ms)
     > 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>

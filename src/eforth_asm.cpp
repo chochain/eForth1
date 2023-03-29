@@ -631,7 +631,7 @@ int assemble(U8 *cdata)
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
     IU CREAT = _COLON("CREATE", CODE, COMPI, opDOVAR, COMPI, opEXIT, EXIT);
     IU DOES  = _COLON("DOES>",                          ///> change runtime behavior to following code
-           RFROM, HERE, vLAST, AT, NAMET, DUP, TOR, SUB, ONEP,  /// ( ra ca ) para on return stack, offset to defining word
+           RFROM, HERE, vLAST, AT, NAMET, DUP, TOR, SUB, ONEM,  /// ( ra ca ) para on return stack, offset to defining word
            DOLIT, opDOES, RAT, CSTOR, RFROM, ONEP, CSTOR,
            COMPI, opBRAN, COMMA, COMPI, opEXIT, EXIT);  /// * the last opEXIT is not needed but nicer
     /// TODO: add POSTPONE

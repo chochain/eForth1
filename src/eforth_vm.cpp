@@ -221,7 +221,7 @@ void vm_outer() {
 
     while (1) {
         YIELD();                        /// * yield to interrupt services
-        U8  op = BGET(IP++);
+        U8  op = BGET(IP++);            /// * NEXT in Forth's context
         if (op & 0x80) {
         	PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
         	op = opENTER;
@@ -272,6 +272,9 @@ void vm_outer() {
                 IR = 0;                 /// * interrupt disabled
                 IP &= ~IRET_FLAG;
             });
+        _X(DOES,
+           PUSH(IP+1);                  /// * +1 means skip the offset byte
+           IP += BGET(IP));             /// * skip offset bytes, to does> code
         _X(DONEXT,
             TAB();
             if (rtop-- > 0) {           ///> check if loop counter > 0

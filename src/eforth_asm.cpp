@@ -549,30 +549,34 @@ int assemble(U8 *cdata)
             /* poorman' CASE */
             _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND,             // colon word - show name
                 SPACE, TNAME, COUNT, TYPE, CELLP);
-            _ELSE(DUP, DOLIT, DOLIT, EQ); {                    // a literal?
+            _ELSE(DUP, DOLIT, opDOLIT, EQ); {                  // a literal?
             _IF(DROP, ONEP, DUP, AT, DOT, CELLP);              // show the number
-            _ELSE(DUP, DOLIT, BRAN, EQ); {
+            _ELSE(DUP, DOLIT, opBRAN, EQ); {
             _IF(DROP, ONEP, DUP, AT, DOT,                      // show jump target
                 DOLIT, 0x6a, EMIT,                             // '?'
                 CELLP, DOTAD);                                 // next address
-            _ELSE(DUP, DOLIT, QBRAN, EQ); {                    // or a ?bran?
+            _ELSE(DUP, DOLIT, opQBRAN, EQ); {                  // or a ?bran?
             _IF(DROP, ONEP, DUP, AT, DOT,                      // show jump target
                 DOLIT, 0x3f, EMIT,                             // 'j'
                 CELLP, DOTAD);                                 // next address
-            _ELSE(DUP, DOLIT, DONXT, EQ); {                    // a bran or donext?
+            _ELSE(DUP, DOLIT, opDONEXT, EQ); {                 // a bran or donext?
             _IF(DROP, ONEP, DUP, AT, DOT,                      // show jump target
                 DOLIT, 0x72, EMIT,                             // 'r'
                 CELLP, DOTAD);
+            _ELSE(DUP, DOLIT, opDOES, EQ); {
+            _IF(DROP, ONEP, ONEP, DUP, AT, DOT, CELLP);
             _ELSE(SPACE, DOTOP, ONEP);                         // opcode#
-            _THEN(NOP);
+            _THEN(NOP);   // DOES
             }
-            _THEN(NOP);
+            _THEN(NOP);   // DONEXT
             }
-            _THEN(NOP);
+            _THEN(NOP);   // QBRAN
             }
-            _THEN(NOP);
+            _THEN(NOP);   // BRAN
             }
-            _THEN(NOP);
+            _THEN(NOP);   // DOLIT
+            }
+            _THEN(NOP);   // Primitives
         }
         _REPEAT(DROP, DROP, SPACE, DOLIT, 0x3b, EMIT, EXIT);   // semi colon
     }

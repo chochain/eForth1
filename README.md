@@ -67,28 +67,28 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 
 ### Different from Dr. Ting's
   * Instead of original 32-bit, CELL is 16-bit, opcodes are 8-bit bytecode primitives.
-  * To save space, primitives are compiled as bytecode and composite words are flagged address pointer.
+  * To save space, primitives are compiled as bytecode and composite words are flagged address pointers.
   * For speed, use direct threading model with computed jump instead of original subroutine threaded,
   * Instead of direct GPIO port manipulation with byte read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... for familiarity to the IDE platform.
-  * eForth1 supports multi-tasking through interrupts. It provides a base tick at 1ms using Timer2. You assign mulply of 1ms as ISR repetition trigger period. For example 500 means triggered every 500ms. There are 8 timer interrupt handler slots are provided. Timer1 is left free for Servo or other libraries.
+  * Multi-tasking supported through interrupts. A base tick of 1ms precision using Timer2 i.e. one assigns mulply of 1ms as ISR repetition trigger period. For example 500 means triggered every 500ms and there are 8 timer interrupt handler slots provided. Timer1 is left free for Servo or other libraries.
   * On this 16-bit system, CLOCK still returns a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D>S, S>D.
   * DELAY takes a 16-bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, DELAY does not interfer with interrupts (see demos below).
 
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6, or try <a href="https://wokwi.com/projects/356793878308297729" target="_blank">*this Wokwi project*</a>)
     <pre>
-    > 1 6 pinmode⏎                           \ set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
-    > : blue 6 in 1 xor 6 out ;⏎             \ create a word to toggle the blue LED
-    > : blink for blue 500 delay next ;⏎     \ create a word to blink (i.e. 500ms delay)
+    > 1 6 PINMODE⏎                           \ set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
+    > : blue 6 IN 1 XOR 6 OUT ;⏎             \ create a word to toggle the blue LED
+    > : blink FOR blue 500 DELAY NEXT ;⏎     \ create a word to blink (i.e. 500ms delay)
     > 9 blink⏎                               \ run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
     </pre>  
 
   * Timer Interrupt Service Routine (a red LED on pin 5)
     <pre>
-    > 1 5 pinmode⏎                           \ set pin 5 for OUTPUT
-    > : red 5 in 1 xor 5 out ;⏎              \ create an interrupt service routine (just a regular word)
-    > ' red 200 0 tmisr⏎                     \ make the ISR ticked every 0.2 seconds (= 200ms)
-    > 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
+    > 1 5 PINMODE⏎                           \ set pin 5 for OUTPUT
+    > : red 5 IN 1 XOR 5 OUT ;⏎              \ create an interrupt service routine (just a regular word)
+    > ' red 200 0 TMISR⏎                     \ make the ISR ticked every 0.2 seconds (= 200ms)
+    > 1 TIMER⏎                               \ enable timer, now you should see red LED blinking continuously
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>
     

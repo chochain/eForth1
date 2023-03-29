@@ -637,15 +637,15 @@ int assemble(U8 *cdata)
     IU DOES  = _COLON("DOES>",                          ///> change runtime behavior to following code
            RFROM, HERE, vLAST, AT, NAMET, DUP, TOR, SUB, ONEM,  /// ( ra ca ) para on return stack, offset to defining word
            DOLIT, opDOES, RAT, CSTOR, RFROM, ONEP, CSTOR,
-           COMPI, opBRAN, COMMA, COMPI, opEXIT, EXIT);  /// * the last opEXIT is not needed but nicer
+           COMPI, opBRAN, COMMA, COMPI, opEXIT, EXIT);          /// * the last opEXIT is not needed but nicer
     /// TODO: add POSTPONE
     _COLON("VARIABLE",  CREAT, DOLIT, 0, COMMA, EXIT);
-    _COLON("CONSTANT",  CODE,                           /// * CC: Dr. Ting hardcoded here
-           COMPI, opDOLIT, HERE, DOLIT, 4, ADD, COMMA,  /// * calculate addr of constant
+    _COLON("CONSTANT",  CODE,                                   /// * CC: Dr. Ting hardcoded here
+           DOLIT, opDOLIT, CCMMA, HERE, DOLIT, 4, ADD, COMMA,   /// * calculate addr of constant
            COMPI, opAT, COMPI, opEXIT, COMMA, EXIT);
     _COLON("2VARIABLE", CREAT, DOLIT, 0, DUP, COMMA, COMMA, EXIT);
     _COLON("2CONSTANT", CODE,
-           COMPI, opDOLIT, HERE, DOLIT, 4, ADD, COMMA,
+           DOLIT, opDOLIT, CCMMA, HERE, DOLIT, 4, ADD, COMMA,
            COMPI, opDAT, COMPI, opEXIT, SWAP, COMMA, COMMA, EXIT);
     ///
     ///> Comments

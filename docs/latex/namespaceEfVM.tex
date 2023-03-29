@@ -4,7 +4,9 @@
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{namespaceEfVM_aaaa9f256ad4e73f2885577923fa23447}{\+\_\+init}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em \begin{quote}
+store C function pointer \end{quote}
+\end{DoxyCompactList}\item 
 void \mbox{\hyperlink{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}{\+\_\+yield}} ()
 \begin{DoxyCompactList}\small\item\em \begin{quote}
 yield to interrupt service \end{quote}
@@ -19,6 +21,8 @@ void \mbox{\hyperlink{namespaceEfVM_ad93fbce2cb609c605aa8df2355c8e16b}{\+\_\+txs
 \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{namespaceEfVM_a04b479eed7bc0fa0b9c8600f47c04cba}{\+\_\+ummod}} ()
 \begin{DoxyCompactList}\small\item\em (udl udh u -- ur uq) unsigned double divided by a single \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceEfVM_a015b593d5fa03ddd62e929786fe5ea8e}{\+\_\+out}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} p, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} v)
+\item 
 \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}{B\+G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
 \item 
 \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{namespaceEfVM_a07e74ced8251d26cd20bce5a2c386d7a}{G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
@@ -46,6 +50,12 @@ int \mbox{\hyperlink{namespaceEfVM_a09d628000e6b3bb7306a3bc9c3299efe}{\+\_\+yiel
 \index{\_init@{\_init}!EfVM@{EfVM}}
 \doxysubsubsection{\texorpdfstring{\_init()}{\_init()}}
 {\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\begin{quote}
+store C function pointer \end{quote}
+
 
 virtual machine initializer 
 \begin{DoxyItemize}
@@ -141,7 +151,16 @@ remainder \end{quote}
 
 \begin{quote}
 quotient \end{quote}
-\mbox{\Hypertarget{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}\label{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}} 
+\mbox{\Hypertarget{namespaceEfVM_a015b593d5fa03ddd62e929786fe5ea8e}\label{namespaceEfVM_a015b593d5fa03ddd62e929786fe5ea8e}} 
+\index{EfVM@{EfVM}!\_out@{\_out}}
+\index{\_out@{\_out}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{\_out()}{\_out()}}
+{\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+out (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{p,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{v }\end{DoxyParamCaption})}
+
+
+\begin{DoxyItemize}
+\item mask out RX,TX
+\end{DoxyItemize}\mbox{\Hypertarget{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}\label{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}} 
 \index{EfVM@{EfVM}!BGET@{BGET}}
 \index{BGET@{BGET}!EfVM@{EfVM}}
 \doxysubsubsection{\texorpdfstring{BGET()}{BGET()}}
@@ -266,15 +285,31 @@ interrupt service routine
 
 R\+OM, Forth word stored in Arduino Flash Memory. 
 
-\mbox{\Hypertarget{namespaceEfVM_a9f60f81681173bda3e807653f946a6f0}\label{namespaceEfVM_a9f60f81681173bda3e807653f946a6f0}} 
-\index{EfVM@{EfVM}!\_data@{\_data}}
-\index{\_data@{\_data}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{\_data}{\_data}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ Ef\+V\+M\+::\+\_\+data}
+\mbox{\Hypertarget{namespaceEfVM_a5aee8e42a1af9c470bbb7e4ed5a54f5d}\label{namespaceEfVM_a5aee8e42a1af9c470bbb7e4ed5a54f5d}} 
+\index{EfVM@{EfVM}!\_ram@{\_ram}}
+\index{\_ram@{\_ram}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{\_ram}{\_ram}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ Ef\+V\+M\+::\+\_\+ram}
 
 
 
 R\+AM, memory block for user define dictionary. 
+
+\mbox{\Hypertarget{namespaceEfVM_abfd3e15e27907da33aaeb9d1ede21f16}\label{namespaceEfVM_abfd3e15e27907da33aaeb9d1ede21f16}} 
+\index{EfVM@{EfVM}!\_pre@{\_pre}}
+\index{\_pre@{\_pre}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{\_pre}{\_pre}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$ Ef\+V\+M\+::\+\_\+pre}
+
+
+
+Pre-\/built/embedded Forth code. 
+
+\mbox{\Hypertarget{namespaceEfVM_a6e85eb10cf4c1d4b1ccc6028d17c79ed}\label{namespaceEfVM_a6e85eb10cf4c1d4b1ccc6028d17c79ed}} 
+\index{EfVM@{EfVM}!\_fp@{\_fp}}
+\index{\_fp@{\_fp}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{\_fp}{\_fp}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a2d422d478f77fc6c4aa3c9538683829d}{C\+FP}} Ef\+V\+M\+::\+\_\+fp\mbox{[}\mbox{\hyperlink{eforth__core_8h_a64cd413675fa1692404160ae9def373d}{C\+F\+U\+N\+C\+\_\+\+M\+AX}}\mbox{]}}
 
 \mbox{\Hypertarget{namespaceEfVM_a09d628000e6b3bb7306a3bc9c3299efe}\label{namespaceEfVM_a09d628000e6b3bb7306a3bc9c3299efe}} 
 \index{EfVM@{EfVM}!\_yield\_cnt@{\_yield\_cnt}}

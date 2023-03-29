@@ -137,9 +137,9 @@ Macros</h2></td></tr>
 <tr class="separator:a9d91438cfe35ddd3db827add653cf917"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f75956c7e91b6411417071ea93f7bfe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a1f75956c7e91b6411417071ea93f7bfe">BOOL</a>(f)&#160;&#160;&#160;((f) ? <a class="el" href="eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d">TRUE</a> : <a class="el" href="eforth__core_8h.html#aa93f0eb578d23995850d61f7d61c55c1">FALSE</a>)</td></tr>
 <tr class="separator:a1f75956c7e91b6411417071ea93f7bfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf6b91711b3d8b68c942eccd99b9d19e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(i)&#160;&#160;&#160;&amp;_data[(i) - <a class="el" href="eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad">FORTH_RAM_ADDR</a>]</td></tr>
+<tr class="memitem:aaf6b91711b3d8b68c942eccd99b9d19e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(i)&#160;&#160;&#160;&amp;_ram[(i) - <a class="el" href="eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad">FORTH_RAM_ADDR</a>]</td></tr>
 <tr class="separator:aaf6b91711b3d8b68c942eccd99b9d19e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(d,  c)&#160;&#160;&#160;(_data[(d)&amp;<a class="el" href="eforth__vm_8h.html#a6d325ff479ff96b8129435d7bbd85aa7">IDX_MASK</a>]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
+<tr class="memitem:a77270f01b515a878ec2853760cb20dfa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a77270f01b515a878ec2853760cb20dfa">BSET</a>(d,  c)&#160;&#160;&#160;(_ram[(d)&amp;<a class="el" href="eforth__vm_8h.html#a6d325ff479ff96b8129435d7bbd85aa7">IDX_MASK</a>]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
 <tr class="separator:a77270f01b515a878ec2853760cb20dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35a26ccdccc5949a9553ce8547b3814c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a35a26ccdccc5949a9553ce8547b3814c">S2D</a>(h,  l)&#160;&#160;&#160;(((<a class="el" href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">S32</a>)(h)&lt;&lt;16) | ((l)&amp;0xffff))</td></tr>
 <tr class="separator:a35a26ccdccc5949a9553ce8547b3814c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -265,7 +265,7 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">i</td><td>)</td>
-          <td>&#160;&#160;&#160;&amp;_data[(i) - <a class="el" href="eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad">FORTH_RAM_ADDR</a>]</td>
+          <td>&#160;&#160;&#160;&amp;_ram[(i) - <a class="el" href="eforth__core_8h.html#a5f9cc7e4245085a5ddabcbcd07635aad">FORTH_RAM_ADDR</a>]</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -293,7 +293,7 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(_data[(d)&amp;<a class="el" href="eforth__vm_8h.html#a6d325ff479ff96b8129435d7bbd85aa7">IDX_MASK</a>]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td>
+          <td></td><td>&#160;&#160;&#160;(_ram[(d)&amp;<a class="el" href="eforth__vm_8h.html#a6d325ff479ff96b8129435d7bbd85aa7">IDX_MASK</a>]=(<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td>
         </tr>
       </table>
 </div><div class="memdoc">

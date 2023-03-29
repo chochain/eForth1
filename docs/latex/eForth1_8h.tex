@@ -32,7 +32,7 @@ void \mbox{\hyperlink{eForth1_8h_a35fceadcc39370dc87d3be5608979925}{vm\+\_\+push
 \begin{DoxyCompactList}\small\item\em push value onto VM data stack \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{eForth1_8h_a14b4544b998f4659f54969f571c58d8f}{vm\+\_\+pop}} ()
 \begin{DoxyCompactList}\small\item\em pop T\+OS off VM data stack \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{eForth1_8h_a3be4743e748619321c1a4f95928e8de1}{ef\+\_\+setup}} (Stream \&io\+\_\+stream=Serial)
+void \mbox{\hyperlink{eForth1_8h_a9b017e1d7c9c60e3958ea145a89c8512}{ef\+\_\+setup}} (const char $\ast$code=0, Stream \&io\+\_\+stream=Serial)
 \item 
 void \mbox{\hyperlink{eForth1_8h_a1fb0d84284dc4203d4a4e4dbe8e07b29}{ef\+\_\+run}} ()
 \end{DoxyCompactItemize}
@@ -60,9 +60,7 @@ void \mbox{\hyperlink{eForth1_8h_a1fb0d84284dc4203d4a4e4dbe8e07b29}{ef\+\_\+run}
 function pointer \end{quote}
 
 
-assign C interface (in slot n) \begin{quote}
-store C function pointer \end{quote}
-\mbox{\Hypertarget{eForth1_8h_a35fceadcc39370dc87d3be5608979925}\label{eForth1_8h_a35fceadcc39370dc87d3be5608979925}} 
+assign C interface (in slot n) \mbox{\Hypertarget{eForth1_8h_a35fceadcc39370dc87d3be5608979925}\label{eForth1_8h_a35fceadcc39370dc87d3be5608979925}} 
 \index{eForth1.h@{eForth1.h}!vm\_push@{vm\_push}}
 \index{vm\_push@{vm\_push}!eForth1.h@{eForth1.h}}
 \doxysubsubsection{\texorpdfstring{vm\_push()}{vm\_push()}}
@@ -82,13 +80,15 @@ proxy to VM\mbox{\Hypertarget{eForth1_8h_a14b4544b998f4659f54969f571c58d8f}\labe
 
 pop T\+OS off VM data stack 
 
-\mbox{\Hypertarget{eForth1_8h_a3be4743e748619321c1a4f95928e8de1}\label{eForth1_8h_a3be4743e748619321c1a4f95928e8de1}} 
+\mbox{\Hypertarget{eForth1_8h_a9b017e1d7c9c60e3958ea145a89c8512}\label{eForth1_8h_a9b017e1d7c9c60e3958ea145a89c8512}} 
 \index{eForth1.h@{eForth1.h}!ef\_setup@{ef\_setup}}
 \index{ef\_setup@{ef\_setup}!eForth1.h@{eForth1.h}}
 \doxysubsubsection{\texorpdfstring{ef\_setup()}{ef\_setup()}}
-{\footnotesize\ttfamily void ef\+\_\+setup (\begin{DoxyParamCaption}\item[{Stream \&}]{io\+\_\+stream = {\ttfamily Serial} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void ef\+\_\+setup (\begin{DoxyParamCaption}\item[{const char $\ast$}]{code,  }\item[{Stream \&}]{io\+\_\+stream }\end{DoxyParamCaption})}
 
-$<$ dynamically allocated\mbox{\Hypertarget{eForth1_8h_a1fb0d84284dc4203d4a4e4dbe8e07b29}\label{eForth1_8h_a1fb0d84284dc4203d4a4e4dbe8e07b29}} 
+\begin{quote}
+setup (called by Arduino setup) \end{quote}
+$<$ dynamically allocated (to prevent I\+DE complaint)\mbox{\Hypertarget{eForth1_8h_a1fb0d84284dc4203d4a4e4dbe8e07b29}\label{eForth1_8h_a1fb0d84284dc4203d4a4e4dbe8e07b29}} 
 \index{eForth1.h@{eForth1.h}!ef\_run@{ef\_run}}
 \index{ef\_run@{ef\_run}!eForth1.h@{eForth1.h}}
 \doxysubsubsection{\texorpdfstring{ef\_run()}{ef\_run()}}

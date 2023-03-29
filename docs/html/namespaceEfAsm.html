@@ -232,7 +232,18 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>( dl dh &ndash; n ) </p>
 </blockquote>
-<p>TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/ TODO: add I, J</p>
+<p>extended words</p>
+<p>(TODO: add J)</p>
+<blockquote class="doxtable">
+<p>address of stack pointer </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>base of data stack (fixed instead of user var) </p>
+</blockquote>
+<p>( f &ndash; ) enable/disable debug tracing</p>
+<p>( &ndash; ) save user variables and dictionary to EEPROM</p>
+<p>( &ndash; ) restore user variables and dictionary from EERPROM</p>
+<p>( n &ndash; ) call a C-function vector</p>
 <p>Kernel constants</p>
 <blockquote class="doxtable">
 <ul>
@@ -297,7 +308,6 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>Console Input and Common words </p>
 </blockquote>
-<p>TODO: add SP@, SP0</p>
 <blockquote class="doxtable">
 <p>Number Conversions and formatting </p>
 </blockquote>
@@ -391,11 +401,18 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <blockquote class="doxtable">
 <p>Defining Words - variable, constant, and comments </p>
 </blockquote>
+<blockquote class="doxtable">
+<p>change runtime behavior to following code </p>
+</blockquote>
+<p>( ra ca ) para on return stack, offset to defining word</p>
 <ul>
-<li>opDOVAR padded with opEXIT</li>
+<li>the last opEXIT is not needed but nicer</li>
 </ul>
-<p>TODO: add DOES&gt;, POSTPONE</p>
-<p>TODO: 2CONSTANT, 2VARIABLE</p>
+<p>TODO: add POSTPONE</p>
+<ul>
+<li>CC: Dr. Ting hardcoded here</li>
+<li>calculate addr of constant</li>
+</ul>
 <blockquote class="doxtable">
 <p>Comments </p>
 </blockquote>
@@ -405,7 +422,6 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <blockquote class="doxtable">
 <p>Arduino specific opcodes </p>
 </blockquote>
-<p>( &ndash; ud ud ) get current clock (in ms)</p>
 <p>( n p &ndash; ) set pinMode(p, n=1:OUTPUT, n=0: INPUT)</p>
 <p>( h l p &ndash; ) set map range to pin</p>
 <p>( p &ndash; n ) digitalRead(p)</p>
@@ -416,10 +432,7 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <p>( xt p &ndash; ) on pin change interrupt calls xt</p>
 <p>( f &ndash; ) enable/disable timer interrupt</p>
 <p>( f &ndash; ) enable/disable pin change interrupt</p>
-<p>( f &ndash; ) enable/disable debug tracing</p>
-<p>( &ndash; ) save user variables and dictionary to EEPROM</p>
-<p>( &ndash; ) restore user variables and dictionary from EERPROM</p>
-<p>( n &ndash; ) call a C-function vector</p>
+<p>( &ndash; ud ud ) get current clock (in ms)</p>
 <blockquote class="doxtable">
 <p>Cold Start address (End of dictionary) </p>
 </blockquote>

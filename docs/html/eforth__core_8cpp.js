@@ -2,9 +2,8 @@ var eforth__core_8cpp =
 [
     [ "_fake_intr", "eforth__core_8cpp.html#ac1200c4eb34e01fd0cfb9f578d8caa27", null ],
     [ "intr_reset", "eforth__core_8cpp.html#a0132f57c344961e9ff4037dd06b06948", null ],
-    [ "_intr", "eforth__core_8cpp.html#a21626f172ce1b4f8877e828ae49944c2", null ],
     [ "intr_service", "eforth__core_8cpp.html#a2c97726ffb62839e8c6fe399f6ed83f3", null ],
-    [ "intr_add_tmisr", "eforth__core_8cpp.html#a352c6c4f171741c465a6988e2df74797", null ],
+    [ "intr_add_tmisr", "eforth__core_8cpp.html#a63e8faf82073ab2cfd3b134ca8b3a3ec", null ],
     [ "intr_add_pcisr", "eforth__core_8cpp.html#a1d1b696983374fd66c45f6132c919fe3", null ],
     [ "intr_pci_enable", "eforth__core_8cpp.html#a227d4b84f416c811b8ac176743593dec", null ],
     [ "intr_timer_enable", "eforth__core_8cpp.html#a4e469b64b1feed8f578349c87ae2ef84", null ],

@@ -13,32 +13,32 @@ Include dependency graph for eforth1.\+cpp\+:\nopagebreak
 \doxysubsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\#define \mbox{\hyperlink{eforth1_8cpp_a8c15257f5a5277bb64afcbe594bea146}{G\+ET}}(d)~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&data\mbox{[}d\mbox{]})
+\#define \mbox{\hyperlink{eforth1_8cpp_a8c15257f5a5277bb64afcbe594bea146}{G\+ET}}(d)~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}}\mbox{[}d\mbox{]})
 \item 
-\#define \mbox{\hyperlink{eforth1_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}{S\+ET}}(d,  v)~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&data\mbox{[}d\mbox{]} = (v))
+\#define \mbox{\hyperlink{eforth1_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}{S\+ET}}(d,  v)~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}}\mbox{[}d\mbox{]} = (v))
 \end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{eforth1_8cpp_ae543ced12a200d5ee866e7bb41186757}{\+\_\+info}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$cdata, int sz, Stream $\ast$\mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}})
+void \mbox{\hyperlink{eforth1_8cpp_aad641047965521b86d4e35831b922760}{\+\_\+stat}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}}, int sz, Stream $\ast$\mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}})
 \item 
-int \mbox{\hyperlink{eforth1_8cpp_a739911ef03b2d1a9bb4139a8879c03fa}{ef\+\_\+save}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$data)
+int \mbox{\hyperlink{eforth1_8cpp_a109acb528bfa0dfdd5b63f39f4a66702}{ef\+\_\+save}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}})
 \begin{DoxyCompactList}\small\item\em save user variables and dictionary to E\+E\+P\+R\+OM \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{eforth1_8cpp_a143ec30cabab5d722b1df76883d4b4f4}{ef\+\_\+load}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$data)
+int \mbox{\hyperlink{eforth1_8cpp_a60c4be2ec5406c9cf0ff6885f9bc116f}{ef\+\_\+load}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}})
 \begin{DoxyCompactList}\small\item\em load user variables and dictionary from E\+E\+P\+R\+OM \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{eforth1_8cpp_aaa322a7cd3f9173185b22bc07b8d3216}{ef\+\_\+setup}} (Stream \&io\+\_\+stream)
+void \mbox{\hyperlink{eforth1_8cpp_a59f97abd902440824c60452e68eb390c}{ef\+\_\+setup}} (const char $\ast$code, Stream \&io\+\_\+stream)
 \item 
 void \mbox{\hyperlink{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}{ef\+\_\+run}} ()
 \end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-static \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{eforth1_8cpp_a05c7bc09ead4e68622fbbeb7b8d1ecdf}{\+\_\+ram}}
-\begin{DoxyCompactList}\small\item\em forth memory block dynamic allocated \end{DoxyCompactList}\item 
 \mbox{\hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}} \mbox{\hyperlink{eforth1_8cpp_ab122f4898c37a0db81ea641558424375}{forth\+\_\+rom}} \mbox{[}$\,$\mbox{]}
 \begin{DoxyCompactList}\small\item\em from \mbox{\hyperlink{eforth__rom_8c}{eforth\+\_\+rom.\+c}} \end{DoxyCompactList}\item 
 \mbox{\hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}} \mbox{\hyperlink{eforth1_8cpp_a6fe6f33736fc0d8ed68fd74b454e00e7}{forth\+\_\+rom\+\_\+sz}}
-\item 
+\begin{DoxyCompactList}\small\item\em actual size of R\+OM \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}}
+\begin{DoxyCompactList}\small\item\em forth memory block dynamic allocated \end{DoxyCompactList}\item 
 static Stream $\ast$ \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}{io}}
 \end{DoxyCompactItemize}
 
@@ -48,7 +48,7 @@ static Stream $\ast$ \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06
 \index{eforth1.cpp@{eforth1.cpp}!GET@{GET}}
 \index{GET@{GET}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{GET}{GET}}
-{\footnotesize\ttfamily \#define G\+ET(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&data\mbox{[}d\mbox{]})}
+{\footnotesize\ttfamily \#define G\+ET(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}}\mbox{[}d\mbox{]})}
 
 \begin{quote}
 E\+E\+P\+R\+OM interface \end{quote}
@@ -58,22 +58,24 @@ E\+E\+P\+R\+OM Save/\+Load \end{quote}
 \index{eforth1.cpp@{eforth1.cpp}!SET@{SET}}
 \index{SET@{SET}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{SET}{SET}}
-{\footnotesize\ttfamily \#define S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{v }\end{DoxyParamCaption})~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&data\mbox{[}d\mbox{]} = (v))}
+{\footnotesize\ttfamily \#define S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{v }\end{DoxyParamCaption})~($\ast$(\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}}\mbox{[}d\mbox{]} = (v))}
 
 
 
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{eforth1_8cpp_ae543ced12a200d5ee866e7bb41186757}\label{eforth1_8cpp_ae543ced12a200d5ee866e7bb41186757}} 
-\index{eforth1.cpp@{eforth1.cpp}!\_info@{\_info}}
-\index{\_info@{\_info}!eforth1.cpp@{eforth1.cpp}}
-\doxysubsubsection{\texorpdfstring{\_info()}{\_info()}}
-{\footnotesize\ttfamily void \+\_\+info (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{cdata,  }\item[{int}]{sz,  }\item[{Stream $\ast$}]{io }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{eforth1_8cpp_aad641047965521b86d4e35831b922760}\label{eforth1_8cpp_aad641047965521b86d4e35831b922760}} 
+\index{eforth1.cpp@{eforth1.cpp}!\_stat@{\_stat}}
+\index{\_stat@{\_stat}!eforth1.cpp@{eforth1.cpp}}
+\doxysubsubsection{\texorpdfstring{\_stat()}{\_stat()}}
+{\footnotesize\ttfamily void \+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{ram,  }\item[{int}]{sz,  }\item[{Stream $\ast$}]{io }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{eforth1_8cpp_a739911ef03b2d1a9bb4139a8879c03fa}\label{eforth1_8cpp_a739911ef03b2d1a9bb4139a8879c03fa}} 
+\begin{quote}
+display e\+Forth system information \end{quote}
+\mbox{\Hypertarget{eforth1_8cpp_a109acb528bfa0dfdd5b63f39f4a66702}\label{eforth1_8cpp_a109acb528bfa0dfdd5b63f39f4a66702}} 
 \index{eforth1.cpp@{eforth1.cpp}!ef\_save@{ef\_save}}
 \index{ef\_save@{ef\_save}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{ef\_save()}{ef\_save()}}
-{\footnotesize\ttfamily int ef\+\_\+save (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{data }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int ef\+\_\+save (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{ram }\end{DoxyParamCaption})}
 
 
 
@@ -82,11 +84,11 @@ save user variables and dictionary to E\+E\+P\+R\+OM
 
 \begin{DoxyItemize}
 \item store dictionary byte-\/by-\/byte
-\end{DoxyItemize}\mbox{\Hypertarget{eforth1_8cpp_a143ec30cabab5d722b1df76883d4b4f4}\label{eforth1_8cpp_a143ec30cabab5d722b1df76883d4b4f4}} 
+\end{DoxyItemize}\mbox{\Hypertarget{eforth1_8cpp_a60c4be2ec5406c9cf0ff6885f9bc116f}\label{eforth1_8cpp_a60c4be2ec5406c9cf0ff6885f9bc116f}} 
 \index{eforth1.cpp@{eforth1.cpp}!ef\_load@{ef\_load}}
 \index{ef\_load@{ef\_load}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{ef\_load()}{ef\_load()}}
-{\footnotesize\ttfamily int ef\+\_\+load (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{data }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int ef\+\_\+load (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{ram }\end{DoxyParamCaption})}
 
 
 
@@ -100,13 +102,15 @@ $<$ CP addr in E\+E\+P\+R\+OM (aka H\+E\+RE)
 \item keep v\+IN, v\+N\+T\+IB
 \item retrieve dictionary byte-\/by-\/byte
 \item restore v\+IN, v\+N\+T\+IB
-\end{DoxyItemize}\mbox{\Hypertarget{eforth1_8cpp_aaa322a7cd3f9173185b22bc07b8d3216}\label{eforth1_8cpp_aaa322a7cd3f9173185b22bc07b8d3216}} 
+\end{DoxyItemize}\mbox{\Hypertarget{eforth1_8cpp_a59f97abd902440824c60452e68eb390c}\label{eforth1_8cpp_a59f97abd902440824c60452e68eb390c}} 
 \index{eforth1.cpp@{eforth1.cpp}!ef\_setup@{ef\_setup}}
 \index{ef\_setup@{ef\_setup}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{ef\_setup()}{ef\_setup()}}
-{\footnotesize\ttfamily void ef\+\_\+setup (\begin{DoxyParamCaption}\item[{Stream \&}]{io\+\_\+stream }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void ef\+\_\+setup (\begin{DoxyParamCaption}\item[{const char $\ast$}]{code,  }\item[{Stream \&}]{io\+\_\+stream }\end{DoxyParamCaption})}
 
-$<$ dynamically allocated\mbox{\Hypertarget{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}\label{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}} 
+\begin{quote}
+setup (called by Arduino setup) \end{quote}
+$<$ dynamically allocated (to prevent I\+DE complaint)\mbox{\Hypertarget{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}\label{eforth1_8cpp_a1fb0d84284dc4203d4a4e4dbe8e07b29}} 
 \index{eforth1.cpp@{eforth1.cpp}!ef\_run@{ef\_run}}
 \index{ef\_run@{ef\_run}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{ef\_run()}{ef\_run()}}
@@ -117,18 +121,6 @@ VM outer interpreter proxy \end{quote}
 
 
 \doxysubsection{Variable Documentation}
-\mbox{\Hypertarget{eforth1_8cpp_a05c7bc09ead4e68622fbbeb7b8d1ecdf}\label{eforth1_8cpp_a05c7bc09ead4e68622fbbeb7b8d1ecdf}} 
-\index{eforth1.cpp@{eforth1.cpp}!\_ram@{\_ram}}
-\index{\_ram@{\_ram}!eforth1.cpp@{eforth1.cpp}}
-\doxysubsubsection{\texorpdfstring{\_ram}{\_ram}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$ \+\_\+ram\hspace{0.3cm}{\ttfamily [static]}}
-
-
-
-forth memory block dynamic allocated 
-
-\begin{quote}
-display e\+Forth system information \end{quote}
 \mbox{\Hypertarget{eforth1_8cpp_ab122f4898c37a0db81ea641558424375}\label{eforth1_8cpp_ab122f4898c37a0db81ea641558424375}} 
 \index{eforth1.cpp@{eforth1.cpp}!forth\_rom@{forth\_rom}}
 \index{forth\_rom@{forth\_rom}!eforth1.cpp@{eforth1.cpp}}
@@ -145,11 +137,24 @@ from \mbox{\hyperlink{eforth__rom_8c}{eforth\+\_\+rom.\+c}}
 \doxysubsubsection{\texorpdfstring{forth\_rom\_sz}{forth\_rom\_sz}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a696390429f2f3b644bde8d0322a24124}{U32}} forth\+\_\+rom\+\_\+sz}
 
-actual size of R\+OM \mbox{\Hypertarget{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}\label{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}} 
+
+
+actual size of R\+OM 
+
+\mbox{\Hypertarget{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}\label{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}} 
+\index{eforth1.cpp@{eforth1.cpp}!ram@{ram}}
+\index{ram@{ram}!eforth1.cpp@{eforth1.cpp}}
+\doxysubsubsection{\texorpdfstring{ram}{ram}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$ ram\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+forth memory block dynamic allocated 
+
+\mbox{\Hypertarget{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}\label{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06399b}} 
 \index{eforth1.cpp@{eforth1.cpp}!io@{io}}
 \index{io@{io}!eforth1.cpp@{eforth1.cpp}}
 \doxysubsubsection{\texorpdfstring{io}{io}}
 {\footnotesize\ttfamily Stream$\ast$ io\hspace{0.3cm}{\ttfamily [static]}}
 
-\begin{quote}
-setup (called by Arduino setup) \end{quote}
+IO stream (Serial Monitor) 

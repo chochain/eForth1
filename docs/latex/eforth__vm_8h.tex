@@ -36,9 +36,9 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 \#define \mbox{\hyperlink{eforth__vm_8h_a1f75956c7e91b6411417071ea93f7bfe}{B\+O\+OL}}(f)~((f) ? \mbox{\hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}})
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(i)~\&\+\_\+data\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}
+\#define \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(i)~\&\+\_\+ram\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}(d,  c)~(\+\_\+data\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))
+\#define \mbox{\hyperlink{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}(d,  c)~(\+\_\+ram\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))
 \item 
 \#define \mbox{\hyperlink{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}{S2D}}(h,  l)~(((\mbox{\hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32}})(h)$<$$<$16) $\vert$ ((l)\&0xffff))
 \item 
@@ -134,13 +134,13 @@ interrupt return flag ~\newline
 \index{eforth\_vm.h@{eforth\_vm.h}!RAM@{RAM}}
 \index{RAM@{RAM}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{RAM}{RAM}}
-{\footnotesize\ttfamily \#define R\+AM(\begin{DoxyParamCaption}\item[{}]{i }\end{DoxyParamCaption})~\&\+\_\+data\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}}
+{\footnotesize\ttfamily \#define R\+AM(\begin{DoxyParamCaption}\item[{}]{i }\end{DoxyParamCaption})~\&\+\_\+ram\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}}
 
 \mbox{\Hypertarget{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}\label{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!BSET@{BSET}}
 \index{BSET@{BSET}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{BSET}{BSET}}
-{\footnotesize\ttfamily \#define B\+S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{c }\end{DoxyParamCaption})~(\+\_\+data\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))}
+{\footnotesize\ttfamily \#define B\+S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{c }\end{DoxyParamCaption})~(\+\_\+ram\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))}
 
 \mbox{\Hypertarget{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}\label{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!S2D@{S2D}}

@@ -139,7 +139,25 @@ Kernel dictionary (primitive words) \end{quote}
 ( dl dh -- n ) \end{quote}
 
 
-T\+O\+DO\+: add 2S\+W\+AP, 2O\+V\+ER, 2+, 2-\/, 2$\ast$, 2/ T\+O\+DO\+: add I, J
+extended words
+
+(T\+O\+DO\+: add J)
+
+\begin{quote}
+address of stack pointer \end{quote}
+
+
+\begin{quote}
+base of data stack (fixed instead of user var) \end{quote}
+
+
+( f -- ) enable/disable debug tracing
+
+( -- ) save user variables and dictionary to E\+E\+P\+R\+OM
+
+( -- ) restore user variables and dictionary from E\+E\+R\+P\+R\+OM
+
+( n -- ) call a C-\/function vector
 
 Kernel constants
 
@@ -230,8 +248,6 @@ Kernel constants
 \begin{quote}
 Console Input and Common words \end{quote}
 
-
-T\+O\+DO\+: add SP@, S\+P0
 
 \begin{quote}
 Number Conversions and formatting \end{quote}
@@ -352,14 +368,24 @@ String Literals \end{quote}
 Defining Words -\/ variable, constant, and comments \end{quote}
 
 
+\begin{quote}
+change runtime behavior to following code \end{quote}
+
+
+( ra ca ) para on return stack, offset to defining word
+
 
 \begin{DoxyItemize}
-\item op\+D\+O\+V\+AR padded with op\+E\+X\+IT
+\item the last op\+E\+X\+IT is not needed but nicer
 \end{DoxyItemize}
 
-T\+O\+DO\+: add D\+O\+ES$>$, P\+O\+S\+T\+P\+O\+NE
+T\+O\+DO\+: add P\+O\+S\+T\+P\+O\+NE
 
-T\+O\+DO\+: 2C\+O\+N\+S\+T\+A\+NT, 2V\+A\+R\+I\+A\+B\+LE
+
+\begin{DoxyItemize}
+\item CC\+: Dr. Ting hardcoded here
+\item calculate addr of constant
+\end{DoxyItemize}
 
 \begin{quote}
 Comments \end{quote}
@@ -372,8 +398,6 @@ Lexicon Bits \end{quote}
 \begin{quote}
 Arduino specific opcodes \end{quote}
 
-
-( -- ud ud ) get current clock (in ms)
 
 ( n p -- ) set pin\+Mode(p, n=1\+:O\+U\+T\+P\+UT, n=0\+: I\+N\+P\+UT)
 
@@ -395,13 +419,7 @@ Arduino specific opcodes \end{quote}
 
 ( f -- ) enable/disable pin change interrupt
 
-( f -- ) enable/disable debug tracing
-
-( -- ) save user variables and dictionary to E\+E\+P\+R\+OM
-
-( -- ) restore user variables and dictionary from E\+E\+R\+P\+R\+OM
-
-( n -- ) call a C-\/function vector
+( -- ud ud ) get current clock (in ms)
 
 \begin{quote}
 Cold Start address (End of dictionary) \end{quote}

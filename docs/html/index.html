@@ -143,24 +143,27 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <h2>Different from Dr. Ting's</h2>
 <ul>
+<li>Instead of original 32-bit, CELL is 16-bit, opcodes are 8-bit bytecode primitives.</li>
+<li>To save space, primitives are compiled as bytecode and composite words are flagged address pointers.</li>
+<li>For speed, use direct threading model with computed jump instead of original subroutine threaded,</li>
 <li>Instead of direct GPIO port manipulation with byte read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... for familiarity to the IDE platform.</li>
-<li>eForth1 supports multi-tasking through interrupts. It provides a base frequency at 0.01Hz using Timer2. You assign mulply of 10ms as ISR repetition trigger period. For example 500 means 500 x 10ms = every 5 seconds. Timer1 is left free for Servo or other libraries.</li>
-<li>On this 16-bit system, CLOCK will return a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D&gt;S, S&gt;D.</li>
+<li>Multi-tasking supported through interrupts. A base tick of 1ms precision using Timer2 i.e. one assigns mulply of 1ms as ISR repetition trigger period. For example 500 means triggered every 500ms and there are 8 timer interrupt handler slots provided. Timer1 is left free for Servo or other libraries.</li>
+<li>On this 16-bit system, CLOCK still returns a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D&gt;S, S&gt;D.</li>
 <li>DELAY takes a 16-bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, DELAY does not interfer with interrupts (see demos below).</li>
 </ul>
 <h2>Demos</h2>
 <ul>
 <li>LED blinker (assume you have a blue LED on pin 6, or try <a href="https://wokwi.com/projects/356793878308297729" target="_blank">*this Wokwi project*</a>) <pre>
-    &gt; 1 6 pinmode⏎                           \ set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
-    &gt; : blue 6 in 1 xor 6 out ;⏎             \ create a word to toggle the blue LED
-    &gt; : blink for blue 500 delay next ;⏎     \ create a word to blink (i.e. 500ms delay)
+    &gt; 1 6 PINMODE⏎                           \ set pin 6 for OUTPUT, i.e. pinMode(6, OUTPUT=1)
+    &gt; : blue 6 IN 1 XOR 6 OUT ;⏎             \ create a word to toggle the blue LED
+    &gt; : blink FOR blue 500 DELAY NEXT ;⏎     \ create a word to blink (i.e. 500ms delay)
     &gt; 9 blink⏎                               \ run 10 cycles (i.e. 9,8,7,...,2,1,0 to on/off 5 times)
     </pre></li>
 <li><p class="startli">Timer Interrupt Service Routine (a red LED on pin 5) </p><pre>
-    &gt; 1 5 pinmode⏎                           \ set pin 5 for OUTPUT
-    &gt; : red 5 in 1 xor 5 out ;⏎              \ create an interrupt service routine (just a regular word)
-    &gt; ' red 20 tmisr⏎                        \ make the ISR ticked every 0.2 seconds (= 20 x 10ms)
-    &gt; 1 timer⏎                               \ enable timer, now you should see red LED blinking continuously
+    &gt; 1 5 PINMODE⏎                           \ set pin 5 for OUTPUT
+    &gt; : red 5 IN 1 XOR 5 OUT ;⏎              \ create an interrupt service routine (just a regular word)
+    &gt; ' red 200 0 TMISR⏎                     \ make the ISR ticked every 0.2 seconds (= 200ms)
+    &gt; 1 TIMER⏎                               \ enable timer, now you should see red LED blinking continuously
     &gt; 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre><p class="startli">||| |:&ndash;|:&ndash;| | <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> | <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> |</p>
 </li>

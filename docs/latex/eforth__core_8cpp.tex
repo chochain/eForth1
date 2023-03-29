@@ -23,11 +23,9 @@ Include dependency graph for eforth\+\_\+core.\+cpp\+:\nopagebreak
 \item 
 void \mbox{\hyperlink{eforth__core_8cpp_a0132f57c344961e9ff4037dd06b06948}{intr\+\_\+reset}} ()
 \begin{DoxyCompactList}\small\item\em reset interrupts \end{DoxyCompactList}\item 
-\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{eforth__core_8cpp_a21626f172ce1b4f8877e828ae49944c2}{\+\_\+intr}} ()
-\item 
 \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{eforth__core_8cpp_a2c97726ffb62839e8c6fe399f6ed83f3}{intr\+\_\+service}} ()
 \item 
-void \mbox{\hyperlink{eforth__core_8cpp_a352c6c4f171741c465a6988e2df74797}{intr\+\_\+add\+\_\+tmisr}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} hz10, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} xt)
+void \mbox{\hyperlink{eforth__core_8cpp_a63e8faf82073ab2cfd3b134ca8b3a3ec}{intr\+\_\+add\+\_\+tmisr}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} i, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} ms, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} xt)
 \item 
 void \mbox{\hyperlink{eforth__core_8cpp_a1d1b696983374fd66c45f6132c919fe3}{intr\+\_\+add\+\_\+pcisr}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} p, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} xt)
 \item 
@@ -89,23 +87,17 @@ service interrupt routines \end{quote}
 
 reset interrupts 
 
-\mbox{\Hypertarget{eforth__core_8cpp_a21626f172ce1b4f8877e828ae49944c2}\label{eforth__core_8cpp_a21626f172ce1b4f8877e828ae49944c2}} 
-\index{eforth\_core.cpp@{eforth\_core.cpp}!\_intr@{\_intr}}
-\index{\_intr@{\_intr}!eforth\_core.cpp@{eforth\_core.cpp}}
-\doxysubsubsection{\texorpdfstring{\_intr()}{\_intr()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \+\_\+intr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
 \mbox{\Hypertarget{eforth__core_8cpp_a2c97726ffb62839e8c6fe399f6ed83f3}\label{eforth__core_8cpp_a2c97726ffb62839e8c6fe399f6ed83f3}} 
 \index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_service@{intr\_service}}
 \index{intr\_service@{intr\_service}!eforth\_core.cpp@{eforth\_core.cpp}}
 \doxysubsubsection{\texorpdfstring{intr\_service()}{intr\_service()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} intr\+\_\+service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{eforth__core_8cpp_a352c6c4f171741c465a6988e2df74797}\label{eforth__core_8cpp_a352c6c4f171741c465a6988e2df74797}} 
+\mbox{\Hypertarget{eforth__core_8cpp_a63e8faf82073ab2cfd3b134ca8b3a3ec}\label{eforth__core_8cpp_a63e8faf82073ab2cfd3b134ca8b3a3ec}} 
 \index{eforth\_core.cpp@{eforth\_core.cpp}!intr\_add\_tmisr@{intr\_add\_tmisr}}
 \index{intr\_add\_tmisr@{intr\_add\_tmisr}!eforth\_core.cpp@{eforth\_core.cpp}}
 \doxysubsubsection{\texorpdfstring{intr\_add\_tmisr()}{intr\_add\_tmisr()}}
-{\footnotesize\ttfamily void intr\+\_\+add\+\_\+tmisr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{hz10,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{xt }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void intr\+\_\+add\+\_\+tmisr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{i,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{ms,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{xt }\end{DoxyParamCaption})}
 
 \begin{quote}
 add timer interrupt service routine \end{quote}

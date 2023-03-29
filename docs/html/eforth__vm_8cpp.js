@@ -9,7 +9,8 @@ var eforth__vm_8cpp =
     [ "_qrx", "eforth__vm_8cpp.html#a2afadbdf0e72c8707edfebe583a5dfa6", null ],
     [ "_txsto", "eforth__vm_8cpp.html#ad93fbce2cb609c605aa8df2355c8e16b", null ],
     [ "_ummod", "eforth__vm_8cpp.html#a04b479eed7bc0fa0b9c8600f47c04cba", null ],
-    [ "vm_init", "eforth__vm_8cpp.html#ab96d3e1cfedd27d24fea512540b32a98", null ],
+    [ "_out", "eforth__vm_8cpp.html#a015b593d5fa03ddd62e929786fe5ea8e", null ],
+    [ "vm_init", "eforth__vm_8cpp.html#a2dfaa0bea7ac318a0d0c5a5dfa252ca3", null ],
     [ "_ccall", "eforth__vm_8cpp.html#a8523598e2c601507492ae113056d7ef4", null ],
     [ "vm_cfunc", "eforth__vm_8cpp.html#ac274d9a96db09bfc7ec4635be50d3aa5", null ],
     [ "vm_push", "eforth__vm_8cpp.html#a35fceadcc39370dc87d3be5608979925", null ],
@@ -23,6 +24,8 @@ var eforth__vm_8cpp =
     [ "rtop", "eforth__vm_8cpp.html#a61aea862ab3bab556736663c844366c7", null ],
     [ "IR", "eforth__vm_8cpp.html#ad6bf1128d9ffa5007021ecabed123c74", null ],
     [ "_rom", "eforth__vm_8cpp.html#a84f1ef51c831a00617756c690faa7194", null ],
-    [ "_data", "eforth__vm_8cpp.html#a9f60f81681173bda3e807653f946a6f0", null ],
+    [ "_ram", "eforth__vm_8cpp.html#a5aee8e42a1af9c470bbb7e4ed5a54f5d", null ],
+    [ "_pre", "eforth__vm_8cpp.html#abfd3e15e27907da33aaeb9d1ede21f16", null ],
+    [ "_fp", "eforth__vm_8cpp.html#a6e85eb10cf4c1d4b1ccc6028d17c79ed", null ],
     [ "_yield_cnt", "eforth__vm_8cpp.html#a09d628000e6b3bb7306a3bc9c3299efe", null ]
 ];

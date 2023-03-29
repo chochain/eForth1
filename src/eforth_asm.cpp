@@ -203,16 +203,18 @@ int assemble(U8 *cdata)
     IU STR   = _COLON("STR",     DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
     IU HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
     IU DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
-    IU DIGTQ = _COLON("DIGIT?", TOR, TOUPP, DOLIT, 0x30, SUB, DOLIT, 9, OVER, LT); {
+    IU DIGTQ = _COLON("DIGIT?",
+         TOR, TOUPP, DOLIT, 0x30, SUB, DOLIT, 9, OVER, LT); {
         _IF(DOLIT, 7, SUB, DUP, DOLIT, 10, LT, OR);           // handle hex number
         _THEN(DUP, RFROM, ULESS, EXIT);                       // handle base > 10
     }
     /// TODO: add >NUMBER
-    IU NUMBQ = _COLON("NUMBER?", vBASE, AT, TOR, DOLIT, 0, OVER, COUNT,
-                      OVER, CAT, DOLIT, 0x24, EQ); {          // leading with $ (i.e. 0x24)
+    IU NUMBQ = _COLON("NUMBER?",
+        vBASE, AT, TOR, DOLIT, 0, OVER, COUNT,
+        OVER, CAT, DOLIT, 0x24, EQ); {                        // leading with $ (i.e. 0x24)
         _IF(HEX_, SWAP, ONEP, SWAP, ONEM);
         _THEN(OVER, CAT, DOLIT, 0x2d, EQ,                     // handle negative sign (i.e. 0x2d)
-              TOR, SWAP, RAT, SUB, SWAP, RAT, ADD, QDUP);
+             TOR, SWAP, RAT, SUB, SWAP, RAT, ADD, QDUP);
         _IF(ONEM); {
             // a FOR..WHILE..NEXT..ELSE..THEN construct =~ for {..break..}
             _FOR(DUP, TOR, CAT, vBASE, AT, DIGTQ);
@@ -312,8 +314,8 @@ int assemble(U8 *cdata)
         _NEXT(DDROP, DOLIT, FALSE, EXIT);                       // SAME!
     }
     /// TODO: add COMPARE
-    IU FIND = _COLON("FIND", SWAP, DUP, CAT, vTMP, STORE,       // ( a va -- cfa nfa, a F ) keep length in tmp
-                     DUP, AT, TOR, CELLP, SWAP); {              // fetch 1st cell
+    IU FIND = _COLON("FIND",                                    // ( a va -- cfa nfa, a F ) keep length in tmp
+        SWAP, DUP, CAT, vTMP, STORE, DUP, AT, TOR, CELLP, SWAP); { // fetch 1st cell
         _BEGIN(AT, DUP); {                                      // 0000 = end of dic
 #if CASE_SENSITIVE
             _IF(DUP, AT, DOLIT, 0x3fff, AND, RAT, XOR); {       // compare 2-byte
@@ -628,21 +630,14 @@ int assemble(U8 *cdata)
     ///
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
     IU CREAT = _COLON("CREATE", CODE, COMPI, opDOVAR, COMPI, opEXIT, EXIT);
-    /// TODO: add DOES>, POSTPONE
-    /*
-: DOES>                  \ change runtime behavior to following code, para on return stack
-  R>           ( ra )    \ run time code address ra of the defining word
-  LAST @ NAME> ( ra ca ) \ code address ca of the defined word
-  1+ SWAP      ( ca+1 ra ) \ skip 1-byte call code , dovar-addr parent-body
-  1+ SWAP ! ;              \ overwrite doVar to run time code relative-offset
-    */
-    IU DOES = _COLON("DOES>",
-           RFROM, HERE, vLAST, AT, NAMET, DUP, TOR, SUB,
-           DOLIT, 0xFF, RAT, CSTOR, RFROM, ONEP, CSTOR,
-           COMPI, opBRAN, COMMA, EXIT);
+    IU DOES  = _COLON("DOES>",                          ///> change runtime behavior to following code
+           RFROM, HERE, vLAST, AT, NAMET, DUP, TOR, SUB, ONEP,  /// ( ra ca ) para on return stack, offset to defining word
+           DOLIT, opDOES, RAT, CSTOR, RFROM, ONEP, CSTOR,
+           COMPI, opBRAN, COMMA, COMPI, opEXIT, EXIT);  /// * the last opEXIT is not needed but nicer
+    /// TODO: add POSTPONE
     _COLON("VARIABLE",  CREAT, DOLIT, 0, COMMA, EXIT);
     _COLON("CONSTANT",  CODE,                           /// * CC: Dr. Ting hardcoded here
-           COMPI, opDOLIT, HERE, DOLIT, 4, ADD, COMMA,/// * calculate addr of constant
+           COMPI, opDOLIT, HERE, DOLIT, 4, ADD, COMMA,  /// * calculate addr of constant
            COMPI, opAT, COMPI, opEXIT, COMMA, EXIT);
     _COLON("2VARIABLE", CREAT, DOLIT, 0, DUP, COMMA, COMMA, EXIT);
     _COLON("2CONSTANT", CODE,

@@ -11,7 +11,7 @@ int  vm_pop();                    ///< pop TOS off VM data stack
 #include <Arduino.h>
 #include <time.h>
 
-void ef_setup(Stream &io_stream=Serial);
+void ef_setup(const char *code=0, Stream &io_stream=Serial);
 void ef_run();
 #endif // ARDUINO
 

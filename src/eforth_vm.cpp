@@ -26,7 +26,9 @@ IU  IR;                           ///< interrupt service routine
 ///@name Memory Management Unit
 ///@{
 PGM_P _rom;                       ///< ROM, Forth word stored in Arduino Flash Memory
-U8    *_data;                     ///< RAM, memory block for user define dictionary
+U8    *_ram;                      ///< RAM, memory block for user define dictionary
+U8    *_pre;                      ///< Pre-built/embedded Forth code
+CFP   _fp[CFUNC_MAX];             ///> store C function pointer
 ///@}
 //
 // Forth Virtual Machine primitive functions
@@ -78,7 +80,7 @@ void _yield()                ///> yield to interrupt service
     }
 }
 int _yield_cnt = 0;          ///< interrupt service throttle counter
-#define YIELD_PERIOD    100
+#define YIELD_PERIOD 50
 #define YIELD()                               \
     if (!IR && ++_yield_cnt > YIELD_PERIOD) { \
         _yield_cnt = 0;                       \
@@ -89,12 +91,16 @@ int _yield_cnt = 0;          ///< interrupt service throttle counter
 ///
 void _qrx()                  ///> ( -- c ) fetch a char from console
 {
+    static char *p = (char*)_pre;
 #if ARDUINO
-    int rst = io->read();        ///> fetch from IO stream
-    if (rst > 0) PUSH((DU)rst);
+    char c   = p ? pgm_read_byte(p) : 0;
+    DU   rst = (DU)(c ? (p++, c) : io->read());        ///> fetch from IO stream
+    if (rst > 0) PUSH(rst);
     PUSH(BOOL(rst >= 0));
 #else
-    PUSH((DU)getchar());         /// * Note: blocking, i.e. no interrupt support
+    char c   = p ? *p : 0;
+    DU   rst = (DU)(c ? (p++, c) : getchar());
+    PUSH(rst);               /// * Note: blocking, i.e. no interrupt support
     PUSH(TRUE);
 #endif
 }
@@ -125,6 +131,27 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned double divided by 
     *DS   = (DU)(m % d);    ///> remainder
     top   = (DU)(m / d);    ///> quotient
 }
+
+void _out(U16 p, U16 v)
+{
+#if ARDUINO
+    switch (p & 0x300) {
+    case 0x100:            // PORTD (0~7)
+        DDRD  = DDRD | (p & 0xfc);  /// * mask out RX,TX
+        PORTD = (U8)(v & p) | (PORTD & ~p);
+        break;
+    case 0x200:            // PORTB (8~13)
+        DDRB  = DDRB | (p & 0xff);
+        PORTB = (U8)(v & p) | (PORTB & ~p);
+        break;
+    case 0x300:            // PORTC (A0~A6)
+        DDRC  = DDRC | (p & 0xff);
+        PORTC = (U8)(v & p) | (PORTC & ~p);
+        break;
+    default: digitalWrite(p, v);
+    }
+#endif  // ARDUINO
+}
 ///@}
 }; // namespace EfVM
 ///
@@ -142,10 +169,11 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned double divided by 
 ///
 using namespace EfVM;
 
-void vm_init(PGM_P rom, U8 *data, void *io_stream) {
-    io     = (Stream *)io_stream;
-    _rom   = rom;
-    _data  = data;
+void vm_init(PGM_P rom, U8 *ram, void *io_stream, const char *code) {
+    io    = (Stream *)io_stream;
+    _rom  = rom;
+    _ram  = ram;
+    _pre  = (U8*)code;
 
     _init();                    /// * resetting user variables
 }
@@ -154,19 +182,17 @@ void vm_init(PGM_P rom, U8 *data, void *io_stream) {
 ///  TODO: build formal C callstack construct
 ///
 void _ccall() {
-    IU  adr = (CFUNC_SLOT_ADDR & IDX_MASK) + top * sizeof(CFP);
-    CFP fp  = *((CFP*)&_data[adr]);   ///> fetch C function pointer
+    CFP fp  = _fp[top];               ///> fetch C function pointer
     POP();                            ///> pop off TOS
     fp();                             ///> call C function
 }
 
 void vm_cfunc(int n, CFP fp) {
-	IU adr = (CFUNC_SLOT_ADDR & IDX_MASK) + n * sizeof(CFP);
-    *((CFP*)&_data[adr]) = fp;        ///> store C function pointer
+	_fp[n] = fp;
     LOG_V(", fp[", n); LOG_H("]=", (uintptr_t)fp);
 }
 
-void vm_push(int v) {           /// proxy to VM
+void vm_push(int v) {                 /// proxy to VM
 	PUSH(v);
 }
 
@@ -194,9 +220,9 @@ void vm_outer() {
     IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
     while (1) {
-        YIELD();                        /// * serve interrupt if any
-        U8  op = BGET(IP++);
-        if (op & 0x80) {
+        YIELD();                        /// * yield to interrupt services
+        U8  op = BGET(IP++);            /// * NEXT in Forth's context
+        if (op & 0x80) {                /// * COLON word?
         	PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
         	op = opENTER;
         }
@@ -208,9 +234,10 @@ void vm_outer() {
         ///
         _X(NOP,   {});
 #if ARDUINO
-        _X(BYE,   _init());            /// * reset
+        _X(BYE,   _init());             /// * reset
 #else // !ARDUINO
-        _X(BYE,   break);              /// quit
+        _X(BYE,   break);               /// quit
+//        _X(BYE,   continue);            /// break point for debugging
 #endif // ARDUINO
         ///
         /// @name Console IO
@@ -246,6 +273,9 @@ void vm_outer() {
                 IR = 0;                 /// * interrupt disabled
                 IP &= ~IRET_FLAG;
             });
+        _X(DOES,
+           PUSH(IP+1);                  /// * +1 means skip the offset byte
+           IP += BGET(IP));             /// * skip offset bytes, to does> code
         _X(DONEXT,
             TAB();
             if (rtop-- > 0) {           ///> check if loop counter > 0
@@ -397,13 +427,32 @@ void vm_outer() {
         _X(DAT,
            *(++DS) = (DU)GET(top);
            top     = (DU)GET(top + CELLSZ));
+        _X(SPAT,
+            DU r = (U8*)DS - (U8*)RAM(FORTH_STACK_ADDR);
+            PUSH(FORTH_STACK_ADDR + r));
+        _X(S0, PUSH(FORTH_STACK_ADDR));      /// fixed, instead of a user variable
+#if EXE_TRACE
+        _X(TRC,  tCNT = top; POP());
+#else
+        _X(TRC,  POP());
+#endif // EXE_TRACE
+        _X(SAVE,
+            U16 sz = ef_save(_ram);
+            LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
+        );
+        _X(LOAD,
+            U16 sz = ef_load(_ram);
+            LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
+        );
+        _X(CALL,
+        	_ccall());                       /// * call C function
+        _X(CLK,
+            U32 t = millis();
+            *++DS = top; DS++;               /// * allocate 2-cells for clock ticks
+            DTOP(t));
         /// @}
         /// @name Arduino specific ops
         /// @{
-        _X(CLK,
-            U32 t = millis();
-            *++DS = top; DS++;                 /// * allocate 2-cells for clock ticks
-            DTOP(t));
         _X(PIN,
             pinMode(top, *DS-- ? OUTPUT : INPUT);
             POP());
@@ -412,26 +461,12 @@ void vm_outer() {
             DS -= 4;
             top = tmp);
         _X(IN,    top = digitalRead(top));
-        _X(OUT,   digitalWrite(top, *DS);   POP(); POP());
+        _X(OUT,   _out(top, *DS);   DS--; POP());
         _X(AIN,   top = analogRead(top));
-        _X(PWM,   analogWrite(top, *DS);    POP(); POP());
-        _X(TMISR, intr_add_tmisr(top, *DS); POP(); POP());
-        _X(PCISR, intr_add_pcisr(top, *DS); POP(); POP());
+        _X(PWM,   analogWrite(top, *DS);    DS--; POP());
+        _X(TMISR, intr_add_tmisr(top, *DS, *(DS-1)); DS-=2; POP());
+        _X(PCISR, intr_add_pcisr(top, *DS); DS--; POP());
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
-#if EXE_TRACE
-        _X(TRC,  tCNT = top; POP());
-#else
-        _X(TRC,  POP());
-#endif // EXE_TRACE
-        _X(SAVE,
-            U16 sz = ef_save(_data);
-            LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
-        );
-        _X(LOAD,
-            U16 sz = ef_load(_data);
-            LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
-        );
-        _X(CALL, _ccall());                /// * call C function
     }
 }

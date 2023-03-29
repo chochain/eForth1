@@ -222,7 +222,7 @@ void vm_outer() {
     while (1) {
         YIELD();                        /// * yield to interrupt services
         U8  op = BGET(IP++);            /// * NEXT in Forth's context
-        if (op & 0x80) {
+        if (op & 0x80) {                /// * COLON word?
         	PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
         	op = opENTER;
         }
@@ -237,6 +237,7 @@ void vm_outer() {
         _X(BYE,   _init());             /// * reset
 #else // !ARDUINO
         _X(BYE,   break);               /// quit
+//        _X(BYE,   continue);            /// break point for debugging
 #endif // ARDUINO
         ///
         /// @name Console IO

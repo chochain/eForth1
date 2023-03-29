@@ -14,7 +14,7 @@
 #include <eForth1.h>
 
 PROGMEM const char code[] =
-": ini 11 FOR 1 I 2 + PINMODE NEXT ; ini FORGET ini\n" // set pin 2~13 to OUTPUT
+": ini 11 FOR 1 I 2+ PINMODE NEXT ; ini FORGET ini\n"  // set pin 2~13 to OUTPUT
 "VARIABLE x\n"                                         // x keeps 7-seg pin patterns of 0~9
 "$F360 x ! $B5F4 , $66D6 , $D770 , $F776 ,\n"
 "VARIABLE d $3834 d ! $2C1C ,\n"                       // d keeps digit control pin patterns
@@ -26,7 +26,7 @@ PROGMEM const char code[] =
 ": dsp n @ 1+ 3 AND DUP n ! 7s ;\n"                    // ( -- ) increment n (3 max) and display 
 "' dsp 5 0 TMISR\n"                                    // timer interrupt to update display every 5ms
 "VARIABLE cnt 0 cnt !\n"                               // cnt is a counter we want it value on display
-": c++ cnt @ 1 + DUP cnt ! ?v ;\n"                     // ( -- ) increment the counter and cache patterns
+": c++ cnt @ 1+ DUP 9999 > IF DROP 0 THEN DUP cnt ! ?v ;\n"  // ( -- ) increment the counter and cache patterns
 "' c++ 1000 1 TMISR\n"                                 // timer interrupt to update c every second
 ;
 

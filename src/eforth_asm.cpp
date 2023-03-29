@@ -442,8 +442,8 @@ int assemble(U8 *cdata)
     ///
     IU COMMA = _COLON(",",  HERE, DUP, CELLP, vCP, STORE, STORE, EXIT);   // store a byte
     IU CCMMA = _COLON("C,", HERE, DUP, ONEP,  vCP, STORE, CSTOR, EXIT);   // store a word
-    IU iLITR = _IMMED("LITERAL",  DOLIT, DOLIT, CCMMA, COMMA, EXIT);      // create a literal
     IU ALLOT = _COLON("ALLOT",    vCP, PSTOR, EXIT);
+    IU iLITR = _IMMED("LITERAL",  DOLIT, opDOLIT, CCMMA, COMMA, EXIT);    // create a literal
     IU COMPI = _COLON("COMPILE",  RFROM, DUP, CAT, CCMMA, ONEP, TOR, EXIT);
     IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); {    // name found?
         _IF(CAT, DOLIT, fIMMD, AND); {               // is immediate?
@@ -480,7 +480,7 @@ int assemble(U8 *cdata)
     /// TODO: add [']
     _IMMED("[COMPILE]", TICK, COMMA, EXIT);                    // add word address to dictionary
     _COLON(":", TOKEN, SNAME, RBRAC, EXIT);
-    _IMMED(";", COMPI, EXIT, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
+    _IMMED(";", COMPI, opEXIT, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
     ///
     ///> Debugging Tools
     ///
@@ -595,14 +595,14 @@ int assemble(U8 *cdata)
     ///
     ///> * BEGIN...AGAIN, BEGIN... f UNTIL, BEGIN...(once)...f WHILE...(loop)...REPEAT
     ///
-    IU iAHEAD = _IMMED("AHEAD", COMPI, BRAN, HERE, DOLIT, 0, COMMA, EXIT);
-    IU iAGAIN = _IMMED("AGAIN", COMPI, BRAN, COMMA, EXIT);
+    IU iAHEAD = _IMMED("AHEAD", COMPI, opBRAN, HERE, DOLIT, 0, COMMA, EXIT);
+    IU iAGAIN = _IMMED("AGAIN", COMPI, opBRAN, COMMA, EXIT);
     _IMMED("BEGIN", HERE, EXIT);
-    _IMMED("UNTIL", COMPI, QBRAN, EXIT);
+    _IMMED("UNTIL", COMPI, opQBRAN, EXIT);
     ///
     ///> * f IF...THEN, f IF...ELSE...THEN
     ///
-    IU iIF    = _IMMED("IF",   COMPI, QBRAN, HERE, DOLIT, 0, COMMA, EXIT);
+    IU iIF    = _IMMED("IF",   COMPI, opQBRAN, HERE, DOLIT, 0, COMMA, EXIT);
     IU iTHEN  = _IMMED("THEN", HERE, SWAP, STORE, EXIT);
     _IMMED("ELSE",  iAHEAD, SWAP, iTHEN, EXIT);
     _IMMED("WHILE", iIF, SWAP, EXIT);
@@ -613,9 +613,9 @@ int assemble(U8 *cdata)
     ///
     /// TODO: add DO...LOOP, +LOOP, LEAVE
     ///
-    _IMMED("FOR",   COMPI, TOR, HERE, EXIT);
+    _IMMED("FOR",   COMPI, opTOR, HERE, EXIT);
     _IMMED("AFT",   DROP, iAHEAD, HERE, SWAP, EXIT);
-    _IMMED("NEXT",  COMPI, DONXT, COMMA, EXIT);
+    _IMMED("NEXT",  COMPI, opDONEXT, COMMA, EXIT);
     ///
     ///> String Literals
     ///
@@ -627,27 +627,27 @@ int assemble(U8 *cdata)
     ///> Defining Words - variable, constant, and comments
     ///
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
-    IU CREAT = _COLON("CREATE", CODE,
-          DOLIT, DOVAR, CCMMA, DOLIT, EXIT, CCMMA, EXIT);
+    IU CREAT = _COLON("CREATE", CODE, COMPI, opDOVAR, COMPI, opEXIT, EXIT);
     /// TODO: add DOES>, POSTPONE
     /*
 : DOES>                  \ change runtime behavior to following code, para on return stack
   R>           ( ra )    \ run time code address ra of the defining word
   LAST @ NAME> ( ra ca ) \ code address ca of the defined word
-  1+ SWAP    ( ca+1 ra ) \ skip 1-byte call code , dovar-addr parent-body
-  OVER CELL+ -           \ compute run time code relative-offset 
-  SWAP ! ;               \ overwrite doVar to run time code relative-offset
+  1+ SWAP      ( ca+1 ra ) \ skip 1-byte call code , dovar-addr parent-body
+  1+ SWAP ! ;              \ overwrite doVar to run time code relative-offset
     */
+    IU DOES = _COLON("DOES>",
+           RFROM, HERE, vLAST, AT, NAMET, DUP, TOR, SUB,
+           DOLIT, 0xFF, RAT, CSTOR, RFROM, ONEP, CSTOR,
+           COMPI, opBRAN, COMMA, EXIT);
     _COLON("VARIABLE",  CREAT, DOLIT, 0, COMMA, EXIT);
     _COLON("CONSTANT",  CODE,                           /// * CC: Dr. Ting hardcoded here
-           DOLIT, DOLIT, CCMMA, HERE, DOLIT, 4, ADD, COMMA,
-           DOLIT, AT, CCMMA, DOLIT, EXIT, CCMMA,
-           COMMA, EXIT);
+           COMPI, opDOLIT, HERE, DOLIT, 4, ADD, COMMA,/// * calculate addr of constant
+           COMPI, opAT, COMPI, opEXIT, COMMA, EXIT);
     _COLON("2VARIABLE", CREAT, DOLIT, 0, DUP, COMMA, COMMA, EXIT);
     _COLON("2CONSTANT", CODE,
-           DOLIT,  DOLIT, CCMMA, HERE, DOLIT, 4, ADD, COMMA,
-           DOLIT, DAT, CCMMA, DOLIT, EXIT, CCMMA,
-           SWAP, COMMA, COMMA, EXIT);
+           COMPI, opDOLIT, HERE, DOLIT, 4, ADD, COMMA,
+           COMPI, opDAT, COMPI, opEXIT, SWAP, COMMA, COMMA, EXIT);
     ///
     ///> Comments
     ///

@@ -95,6 +95,7 @@ typedef void (*CFP)();                ///< function pointer
     OP(EXECU),  \
     OP(ENTER),  \
     OP(EXIT),   \
+    OP(DOES),   \
     OP(DONEXT), \
     OP(QBRAN),  \
     OP(BRAN),   \

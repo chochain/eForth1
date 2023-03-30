@@ -16,7 +16,7 @@
 #define APP_NAME        "eForth1"
 #define MAJOR_VERSION   "v2"
 #define CASE_SENSITIVE  0             /**< define case sensitivity */
-#define COMPUTED_JUMP   0             /**< VM uses computed jump (~5% faster but use extra 180 bytes RAM) */
+#define COMPUTED_JUMP   0             /**< VM uses computed jump (~15% faster but use extra 180 bytes RAM) */
 #define ASM_ONLY        0             /**< create ROM only (i.e. no debugging) */
 ///
 ///@name Debug Tracing Flags

@@ -210,7 +210,7 @@ void vm_outer() {
     /// Note:
     ///   computed label jumps
     ///      + overall 15% faster than subroutine calls
-    ///      + but uses extra 180 bytes of RAM (avr-gcc does not put vt in PROGMEM)
+    ///      + but uses extra 180 bytes of RAM (avr-gcc failed to put vt in PROGMEM)
     ///      + the 'continue' in _X() macro behaves as $NEXT
     ///
     #define OP(name)     &&L_##name      /** redefined for label address */

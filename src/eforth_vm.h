@@ -87,10 +87,10 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-#define opDOLIT 4
-#define opEXEC  6
-#define opENTER 7
-#define opEXIT  8
+#define opEXIT  1
+#define opENTER 2
+#define opDOLIT 6
+#define opEXEC  8
 
 #define DEBUG(s,v)  printf((s),(v))
 void TAB() {
@@ -121,9 +121,7 @@ void TRACE(U8 op)
     LOG("_");
     /// special opcode handlers for DOLIT, ENTER, EXIT
     switch (op) {
-    case opDOLIT: LOG_H("$", GET(IP)); LOG(" "); break;
     case opEXIT:  LOG(";");  --tTAB;             break;
-    case opEXEC: pc = top; /** no break */
     case opENTER:                                 /// * display word name
     	for (--pc; (BGET(pc) & 0x7f)>0x20; pc--); /// * retract pointer to word name (ASCII range: 0x21~0x7f)
     	int len = BGET(pc++) & 0x1f;              /// Forth allows 31 char max
@@ -132,11 +130,12 @@ void TRACE(U8 op)
     	}
     	LOG(" :");
         break;
+    case opDOLIT: LOG_H("$", GET(IP)); LOG(" "); break;
+    case opEXEC: pc = top; /** no break */
     }
 }
 #else
     
-#define opENTER 7     /** for opcode reassignment in $NEXT */
 #define DEBUG(s,v)
 #define TAB()         /* skip */
 #define TRACE(op)     /* skip */

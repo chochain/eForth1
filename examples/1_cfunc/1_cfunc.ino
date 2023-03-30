@@ -1,3 +1,14 @@
+///
+/// @file
+/// @brief - your eForth can interact with user defined functions
+/// shown in Wokwi project https://wokwi.com/projects/356793878308297729
+///
+/// Enter the following Forth code into Serial Monitor input
+///  : flip 0 call ;                   \ toggle built-in LED
+///  : p13on 13 1 call ;               \ turn built-in LED on
+///  : p13?  13 2 call ;               \ read pin 13 
+///  p13?
+///
 #include <eForth1.h>
 
 void led_flip() {                      /// ( -- ) no input
@@ -20,10 +31,6 @@ void setup()
     Serial.begin(115200);
     while (!Serial);                   // wait for serial port to connect
 
-    for (int i=0; i<8; i++) {
-        int p = (i < 4 ? 4 : 16) + i;
-        pinMode(p, OUTPUT);            // 4,5,6,7,16,17,18,19
-    }
     ef_setup();
     
     vm_cfunc(0, led_flip);

@@ -138,18 +138,18 @@ int assemble(U8 *cdata)
     /// Kernel constants
     ///
     IU ua    = FORTH_UVAR_ADDR;
-    IU vTTIB = _CODE("'TIB",    CST(ua,0));   ///> * 'TIB console input buffer pointer
-    IU vBASE = _CODE("BASE",    CST(ua,1));   ///> * BASE current radix for numeric ops
-    IU vCP   = _CODE("CP",      CST(ua,2));   ///> * CP,  top of dictionary, same as HERE
-    IU vCNTX = _CODE("CONTEXT", CST(ua,3));   ///> * CONTEXT name field of last word
-    IU vLAST = _CODE("LAST",    CST(ua,4));   ///> * LAST, same as CONTEXT
-    IU vMODE = _CODE("'MODE",   CST(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
-    IU vTABRT= _CODE("'ABORT",  CST(ua,6));   ///> * ABORT exception rescue handler (QUIT)
-    IU vHLD  = _CODE("HLD",     CST(ua,7));   ///> * HLD  char pointer to output buffer
-    IU vSPAN = _CODE("SPAN",    CST(ua,8));   ///> * SPAN number of character accepted
-    IU vIN   = _CODE(">IN",     CST(ua,9));   ///> * >IN  interpreter pointer to next char
-    IU vNTIB = _CODE("#TIB",    CST(ua,10));  ///> * #TIB number of character received in TIB
-    IU vTMP  = _CODE("tmp",     CST(ua,11));  ///> * tmp storage (alternative to return stack)
+    IU vTTIB = _CODE("'TIB",    VAL(ua,0));   ///> * 'TIB console input buffer pointer
+    IU vBASE = _CODE("BASE",    VAL(ua,1));   ///> * BASE current radix for numeric ops
+    IU vCP   = _CODE("CP",      VAL(ua,2));   ///> * CP,  top of dictionary, same as HERE
+    IU vCNTX = _CODE("CONTEXT", VAL(ua,3));   ///> * CONTEXT name field of last word
+    IU vLAST = _CODE("LAST",    VAL(ua,4));   ///> * LAST, same as CONTEXT
+    IU vMODE = _CODE("'MODE",   VAL(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
+    IU vTABRT= _CODE("'ABORT",  VAL(ua,6));   ///> * ABORT exception rescue handler (QUIT)
+    IU vHLD  = _CODE("HLD",     VAL(ua,7));   ///> * HLD  char pointer to output buffer
+    IU vSPAN = _CODE("SPAN",    VAL(ua,8));   ///> * SPAN number of character accepted
+    IU vIN   = _CODE(">IN",     VAL(ua,9));   ///> * >IN  interpreter pointer to next char
+    IU vNTIB = _CODE("#TIB",    VAL(ua,10));  ///> * #TIB number of character received in TIB
+    IU vTMP  = _CODE("tmp",     VAL(ua,11));  ///> * tmp storage (alternative to return stack)
     ///
     ///> Console Input and Common words
     ///

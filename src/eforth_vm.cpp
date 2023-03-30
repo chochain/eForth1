@@ -125,7 +125,7 @@ void _txsto()                ///> (c -- ) send a char to console
 ///@}
 void _ummod()               /// (udl udh u -- ur uq) unsigned double divided by a single
 {
-    U32 d = (U32)top;       ///> CC: auto variable uses C stack 
+    U32 d = (U32)top;       ///> CC: auto variable uses C stack
     U32 m = ((U32)*DS<<16) + (U16)*(DS-1);
     POP();
     *DS   = (DU)(m % d);    ///> remainder
@@ -188,56 +188,82 @@ void _ccall() {
 }
 
 void vm_cfunc(int n, CFP fp) {
-	_fp[n] = fp;
+    _fp[n] = fp;
     LOG_V(", fp[", n); LOG_H("]=", (uintptr_t)fp);
 }
 
 void vm_push(int v) {                 /// proxy to VM
-	PUSH(v);
+    PUSH(v);
 }
 
 int vm_pop() {
     int t = (int)top;
-	POP();
+    POP();
     return t;
 }
 ///
 /// eForth virtual machine outer interpreter (single-step) execution unit
 /// @return
 ///   0 - exit
-/// Note:
-///   vm_outer - computed label jumps (25% faster than subroutine calls)
-///   continue in _X() macro behaves as $NEXT
-///
-#define OP(name)    &&L_##name          /** redefined for label address     */
-#define _X(n, code) L_##n: { DEBUG("%s",#n); code; continue; }
-
 void vm_outer() {
-    const void* vt[] PROGMEM = {        ///< computed label lookup table
+#if COMPUTED_JUMP
+    /// Note:
+    ///   computed label jumps
+    ///      + overall 15% faster than subroutine calls
+    ///      + but uses extra 180 bytes of RAM (avr-gcc does not put vt in PROGMEM)
+    ///      + the 'continue' in _X() macro behaves as $NEXT
+    ///
+    #define OP(name)     &&L_##name      /** redefined for label address */
+    #define _X(n, code)  L_##n: { DEBUG("%s",#n); code; continue; }
+    #define DISPATCH(op) goto *vt[op];
+    #define opENTER      2              /** hardcoded for ENTER */
+    const void* PROGMEM vt[] = {        ///< computed label lookup table
         &&L_NOP,                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
+#else // !COMPUTED_JUMP
+    #define OP(name)     op##name
+    #define _X(n, code)  case op##n: { DEBUG("%s",#n); code; break; }
+    #define DISPATCH(op) switch(op)
+    enum {
+        opNOP = 0,                      ///< opcodes start at 0
+        OPCODES
+    };
+#endif // COMPUTED_JUMP
+
     IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
     while (1) {
         YIELD();                        /// * yield to interrupt services
-        U8  op = BGET(IP++);            /// * NEXT in Forth's context
+        U8 op = BGET(IP++);             /// * NEXT in Forth's context
         if (op & 0x80) {                /// * COLON word?
-        	PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
-        	op = opENTER;
+            PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
+            op = opENTER;
         }
         TRACE(op);
 
-        goto *vt[op];                   ///> jump to computed label
+        DISPATCH(op) {
         ///
         /// the following part is in assembly for most of Forth implementations
         ///
         _X(NOP,   {});
+        _X(EXIT,
+            TAB();
+            IP = rtop;
+            RPOP();                     ///> pop return address
+            if (IP & IRET_FLAG) {       /// * IRETURN?
+                IR = 0;                 /// * interrupt disabled
+                IP &= ~IRET_FLAG;
+            });
+        _X(ENTER,
+            PC |= BGET(IP++);           /// * fetch low-byte of PC
+            DEBUG(">>%x", IP);
+            RPUSH(IP);                  ///> keep return address
+            IP = PC);                   ///> jump to next instruction
 #if ARDUINO
         _X(BYE,   _init());             /// * reset
 #else // !ARDUINO
-        _X(BYE,   break);               /// quit
-//        _X(BYE,   continue);            /// break point for debugging
+        _X(BYE,   return);              /// * quit
 #endif // ARDUINO
         ///
         /// @name Console IO
@@ -248,7 +274,7 @@ void vm_outer() {
         /// @name Built-in ops
         /// @{
         _X(DOLIT,
-        	PUSH(GET(IP));              ///> push literal onto data stack
+            PUSH(GET(IP));              ///> push literal onto data stack
             IP += CELLSZ);
         _X(DOVAR, PUSH(IP+1));          ///> push literal addr to data stack
                                         /// * +1 means skip EXIT byte (08)
@@ -258,21 +284,8 @@ void vm_outer() {
         _X(EXECU,                       ///> ( xt -- ) execute xt
             DEBUG(">>%x", IP);
             RPUSH(IP);
-        	IP = (IU)top;               /// * fetch program counter
-        	POP());
-        _X(ENTER,
-            PC |= BGET(IP++);           /// * fetch low-byte of PC
-            DEBUG(">>%x", IP);
-            RPUSH(IP);                  ///> keep return address
-            IP = PC);                   ///> jump to next instruction
-        _X(EXIT,
-        	TAB();
-            IP = rtop;
-            RPOP();                     ///> pop return address
-            if (IP & IRET_FLAG) {       /// * IRETURN?
-                IR = 0;                 /// * interrupt disabled
-                IP &= ~IRET_FLAG;
-            });
+            IP = (IU)top;               /// * fetch program counter
+            POP());
         _X(DOES,
            PUSH(IP+1);                  /// * +1 means skip the offset byte
            IP += BGET(IP));             /// * skip offset bytes, to does> code
@@ -364,9 +377,6 @@ void vm_outer() {
             PUSH(r));
         _X(BL,    PUSH(0x20));
         _X(CELL,  PUSH(CELLSZ));
-        _X(CELLP, top += CELLSZ);
-        _X(CELLM, top -= CELLSZ);
-        _X(CELLS, top *= CELLSZ);
         _X(ABS,   top  = abs(top));
         _X(MAX,   DU s = *DS--; if (s > top) top = s);
         _X(MIN,   DU s = *DS--; if (s < top) top = s);
@@ -416,10 +426,8 @@ void vm_outer() {
             S32 d0 = S2D(top, *DS);
             S32 d1 = S2D(*(DS-1), *(DS-2));
             DS -= 2; DTOP(d1 - d0));
-        _X(DDUP,  DU v = *DS; PUSH(v); v = *DS; PUSH(v));
-        _X(DDROP, POP(); POP());
-        /// TODO: add 2SWAP, 2OVER, 2+, 2-, 2*, 2/
-        /// TODO: add I, J
+        /// TODO: add J
+        /*
         _X(DSTOR,
            SET(top + CELLSZ, *DS--);
            SET(top, *DS--);
@@ -427,10 +435,11 @@ void vm_outer() {
         _X(DAT,
            *(++DS) = (DU)GET(top);
            top     = (DU)GET(top + CELLSZ));
+        */
         _X(SPAT,
             DU r = (U8*)DS - (U8*)RAM(FORTH_STACK_ADDR);
             PUSH(FORTH_STACK_ADDR + r));
-        _X(S0, PUSH(FORTH_STACK_ADDR));      /// fixed, instead of a user variable
+//        _X(S0, PUSH(FORTH_STACK_ADDR));      /// fixed, instead of a user variable
 #if EXE_TRACE
         _X(TRC,  tCNT = top; POP());
 #else
@@ -445,7 +454,7 @@ void vm_outer() {
             LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
         _X(CALL,
-        	_ccall());                       /// * call C function
+            _ccall());                       /// * call C function
         _X(CLK,
             U32 t = millis();
             *++DS = top; DS++;               /// * allocate 2-cells for clock ticks
@@ -468,5 +477,6 @@ void vm_outer() {
         _X(PCISR, intr_add_pcisr(top, *DS); DS--; POP());
         _X(TMRE,  intr_timer_enable(top);   POP());
         _X(PCIE,  intr_pci_enable(top);     POP());
+        }
     }
 }

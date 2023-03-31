@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.0</span>
+   &#160;<span id="projectnumber">v2.2</span>
    </div>
   </td>
  </tr>
@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <ul>
 <li>Instead of original 32-bit, CELL is 16-bit, opcodes are 8-bit bytecode primitives.</li>
 <li>To save space, primitives are compiled as bytecode and composite words are flagged address pointers.</li>
-<li>For speed, use direct threading model with computed jump instead of original subroutine threaded,</li>
+<li>For speed, use direct threading model instead of original subroutine threaded,</li>
 <li>Instead of direct GPIO port manipulation with byte read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... for familiarity to the IDE platform.</li>
 <li>Multi-tasking supported through interrupts. A base tick of 1ms precision using Timer2 i.e. one assigns mulply of 1ms as ISR repetition trigger period. For example 500 means triggered every 500ms and there are 8 timer interrupt handler slots provided. Timer1 is left free for Servo or other libraries.</li>
 <li>On this 16-bit system, CLOCK still returns a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D&gt;S, S&gt;D.</li>
@@ -172,11 +172,11 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <h2>Benchmark</h2>
 <ul>
 <li>Classic 1 million cycles <pre>
-    &gt; : xx 999 for 34 drop next ;⏎           \ inner loop (put 34 on stack then drop it)
-    &gt; : yy 999 for xx next ;⏎                \ create the outer loop
-    &gt; : zz clock dnegate yy clock d+ ;⏎      \ CLOCK returns a double value
-    &gt; zz⏎                                    \ benchmark the 1000x1000 cycles
-    &gt; 24495 0 ok&gt;                            \ 24495ms =~ 24.5us/cycle (with one blinking ISR running in the background)
+    &gt; : inner 999 FOR 34 DROP NEXT ;⏎          \ inner loop (put 34 on stack then drop it)
+    &gt; : outer 999 FOR inner NEXT ;⏎            \ create the outer loop
+    &gt; : bench CLOCK DNEGATE outer CLOCK D+ ;⏎  \ CLOCK returns a double value
+    &gt; zz⏎                                      \ benchmark the 1000x1000 cycles
+    &gt; 25492 0 ok&gt;                              \ 25492ms =~ 25.5us/cycle (with one blinking ISR running in the background)
     </pre></li>
 </ul>
 <p>#</p><h1>To Learn More About Forth?</h1>

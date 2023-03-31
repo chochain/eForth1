@@ -35,6 +35,8 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_a6094f5f4a8aa099faa6d80b4f020927b}{C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE}}~0
 \item 
+\#define \mbox{\hyperlink{eforth__core_8h_ae1af8ef125fabb6ee8f56a40ad9243f7}{C\+O\+M\+P\+U\+T\+E\+D\+\_\+\+J\+U\+MP}}~0
+\item 
 \#define \mbox{\hyperlink{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}{A\+S\+M\+\_\+\+O\+N\+LY}}~0
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_a9d8d8ad7c0601f1313a9d026757f019a}{O\+P\+C\+O\+D\+ES}}
@@ -212,7 +214,13 @@ e\+Forth prototype and interface
 \doxysubsubsection{\texorpdfstring{CASE\_SENSITIVE}{CASE\_SENSITIVE}}
 {\footnotesize\ttfamily \#define C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE~0}
 
-define case sensitivity \mbox{\Hypertarget{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}\label{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}} 
+define case sensitivity \mbox{\Hypertarget{eforth__core_8h_ae1af8ef125fabb6ee8f56a40ad9243f7}\label{eforth__core_8h_ae1af8ef125fabb6ee8f56a40ad9243f7}} 
+\index{eforth\_core.h@{eforth\_core.h}!COMPUTED\_JUMP@{COMPUTED\_JUMP}}
+\index{COMPUTED\_JUMP@{COMPUTED\_JUMP}!eforth\_core.h@{eforth\_core.h}}
+\doxysubsubsection{\texorpdfstring{COMPUTED\_JUMP}{COMPUTED\_JUMP}}
+{\footnotesize\ttfamily \#define C\+O\+M\+P\+U\+T\+E\+D\+\_\+\+J\+U\+MP~0}
+
+VM uses computed jump ($\sim$15\% faster but use extra 180 bytes R\+AM) \mbox{\Hypertarget{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}\label{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}} 
 \index{eforth\_core.h@{eforth\_core.h}!ASM\_ONLY@{ASM\_ONLY}}
 \index{ASM\_ONLY@{ASM\_ONLY}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{ASM\_ONLY}{ASM\_ONLY}}

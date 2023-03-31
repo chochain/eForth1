@@ -35,7 +35,7 @@ var eforth__asm_8h =
     [ "RPOP", "eforth__asm_8h.html#a55b5173e6face979deb7372dcbb643df", null ],
     [ "VL", "eforth__asm_8h.html#a3b1701d44f7b15525bc7b3c0a8f637e1", null ],
     [ "VH", "eforth__asm_8h.html#aca2bbb288661206e28c0488766c22f15", null ],
-    [ "CST", "eforth__asm_8h.html#ad3dbeeb17d5b39f57172caaa3a0afcce", null ],
+    [ "VAL", "eforth__asm_8h.html#a718c4b8645c2287c20bb4a796363b2a0", null ],
     [ "CELLCPY", "group__Memory.html#ga60ef63ffe304267efee1dd841faf4751", null ],
     [ "PGMCPY", "group__Memory.html#gabee5cbd8a5640f4b067cdc048b4c21ca", null ],
     [ "OPSTR", "group__Memory.html#gaadf5c864c0d562a2efb56cdee5f3f206", null ],

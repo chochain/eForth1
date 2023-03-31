@@ -10,7 +10,6 @@ var eforth__vm_8h =
     [ "POP", "eforth__vm_8h.html#a2106695e949772f765546777ef34690e", null ],
     [ "RPOP", "eforth__vm_8h.html#a55b5173e6face979deb7372dcbb643df", null ],
     [ "DTOP", "eforth__vm_8h.html#a2a0ab46d7e9f1c39675adabb666df35d", null ],
-    [ "opENTER", "eforth__vm_8h.html#ae2e6932feda2f28548e9f5500ff8e898", null ],
     [ "DEBUG", "eforth__vm_8h.html#a3254550e1d6d185f6b3e69b2d6468343", null ],
     [ "TAB", "eforth__vm_8h.html#ad2e226689a02d2b5f1256e7e98f03cf5", null ],
     [ "TRACE", "eforth__vm_8h.html#abf78c62d3da5e71ee2d75576561a8531", null ],

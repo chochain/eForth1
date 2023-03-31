@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.0</span>
+   &#160;<span id="projectnumber">v2.2</span>
    </div>
   </td>
  </tr>
@@ -124,10 +124,12 @@ Macros</h2></td></tr>
 <tr class="separator:afc09b15fce90b9e00aa7277e7edd5c4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab225fd437247be81c502ebd3b4857465"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#ab225fd437247be81c502ebd3b4857465">YIELD</a>()</td></tr>
 <tr class="separator:ab225fd437247be81c502ebd3b4857465"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7635cecf944d5bfcc89665c08022828"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#ac7635cecf944d5bfcc89665c08022828">OP</a>(name)&#160;&#160;&#160;&amp;&amp;L_##name          /** redefined for label address     */</td></tr>
+<tr class="memitem:ac7635cecf944d5bfcc89665c08022828"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#ac7635cecf944d5bfcc89665c08022828">OP</a>(name)&#160;&#160;&#160;op##name</td></tr>
 <tr class="separator:ac7635cecf944d5bfcc89665c08022828"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a694d28437d830c2e82367a5b56ae5163"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a694d28437d830c2e82367a5b56ae5163">_X</a>(n,  code)&#160;&#160;&#160;L_##n: { <a class="el" href="eforth__vm_8h.html#a3254550e1d6d185f6b3e69b2d6468343">DEBUG</a>(&quot;%s&quot;,#n); code; continue; }</td></tr>
+<tr class="memitem:a694d28437d830c2e82367a5b56ae5163"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a694d28437d830c2e82367a5b56ae5163">_X</a>(n,  code)&#160;&#160;&#160;case op##n: { <a class="el" href="eforth__vm_8h.html#a3254550e1d6d185f6b3e69b2d6468343">DEBUG</a>(&quot;%s&quot;,#n); code; break; }</td></tr>
 <tr class="separator:a694d28437d830c2e82367a5b56ae5163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99cca8c766bbb673859637a1cf1f1150"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8cpp.html#a99cca8c766bbb673859637a1cf1f1150">DISPATCH</a>(op)&#160;&#160;&#160;switch(op)</td></tr>
+<tr class="separator:a99cca8c766bbb673859637a1cf1f1150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -303,11 +305,10 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">name</td><td>)</td>
-          <td>&#160;&#160;&#160;&amp;&amp;L_##name          /** redefined for label address     */</td>
+          <td>&#160;&#160;&#160;op##name</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>eForth virtual machine outer interpreter (single-step) execution unit </p><dl class="section return"><dt>Returns</dt><dd>0 - exit Note: vm_outer - computed label jumps (25% faster than subroutine calls) continue in <a class="el" href="eforth__vm_8cpp.html#a694d28437d830c2e82367a5b56ae5163">_X()</a> macro behaves as $NEXT </dd></dl>
 
 </div>
 </div>
@@ -332,7 +333,25 @@ Variables</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;L_##n: { <a class="el" href="eforth__vm_8h.html#a3254550e1d6d185f6b3e69b2d6468343">DEBUG</a>(&quot;%s&quot;,#n); code; continue; }</td>
+          <td></td><td>&#160;&#160;&#160;case op##n: { <a class="el" href="eforth__vm_8h.html#a3254550e1d6d185f6b3e69b2d6468343">DEBUG</a>(&quot;%s&quot;,#n); code; break; }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a99cca8c766bbb673859637a1cf1f1150"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99cca8c766bbb673859637a1cf1f1150">&#9670;&nbsp;</a></span>DISPATCH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DISPATCH</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">op</td><td>)</td>
+          <td>&#160;&#160;&#160;switch(op)</td>
         </tr>
       </table>
 </div><div class="memdoc">

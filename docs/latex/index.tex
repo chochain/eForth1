@@ -88,7 +88,7 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 \begin{DoxyItemize}
 \item Instead of original 32-\/bit, C\+E\+LL is 16-\/bit, opcodes are 8-\/bit bytecode primitives.
 \item To save space, primitives are compiled as bytecode and composite words are flagged address pointers.
-\item For speed, use direct threading model with computed jump instead of original subroutine threaded,
+\item For speed, use direct threading model instead of original subroutine threaded,
 \item Instead of direct G\+P\+IO port manipulation with byte read/write, e\+Forth1 calls Arduino library functions i.\+g. P\+I\+N\+M\+O\+DE = pin\+Mode, IN = digital\+Read, O\+UT = digital\+Write, ... for familiarity to the I\+DE platform.
 \item Multi-\/tasking supported through interrupts. A base tick of 1ms precision using Timer2 i.\+e. one assigns mulply of 1ms as I\+SR repetition trigger period. For example 500 means triggered every 500ms and there are 8 timer interrupt handler slots provided. Timer1 is left free for Servo or other libraries.
 \item On this 16-\/bit system, C\+L\+O\+CK still returns a double number (i.\+e. 32-\/bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.\+e. using D\+N\+E\+G\+A\+TE, D+, or D-\/ and the conversion words D$>$S, S$>$D.
@@ -127,11 +127,11 @@ $\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$\vert$$\vert$
 \begin{DoxyItemize}
 \item Classic 1 million cycles 
 \begin{DoxyPre}
-    > : xx 999 for 34 drop next ;⏎           \textbackslash{} inner loop (put 34 on stack then drop it)
-    > : yy 999 for xx next ;⏎                \textbackslash{} create the outer loop
-    > : zz clock dnegate yy clock d+ ;⏎      \textbackslash{} CLOCK returns a double value
-    > zz⏎                                    \textbackslash{} benchmark the 1000x1000 cycles
-    > 24495 0 ok>                            \textbackslash{} 24495ms =\string~ 24.5us/cycle (with one blinking ISR running in the background)
+    > : inner 999 FOR 34 DROP NEXT ;⏎          \textbackslash{} inner loop (put 34 on stack then drop it)
+    > : outer 999 FOR inner NEXT ;⏎            \textbackslash{} create the outer loop
+    > : bench CLOCK DNEGATE outer CLOCK D+ ;⏎  \textbackslash{} CLOCK returns a double value
+    > zz⏎                                      \textbackslash{} benchmark the 1000x1000 cycles
+    > 25492 0 ok>                              \textbackslash{} 25492ms =\string~ 25.5us/cycle (with one blinking ISR running in the background)
     \end{DoxyPre}
 
 \end{DoxyItemize}

@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.0</span>
+   &#160;<span id="projectnumber">v2.2</span>
    </div>
   </td>
  </tr>
@@ -211,8 +211,8 @@ Macros</h2></td></tr>
 <tr class="separator:a3b1701d44f7b15525bc7b3c0a8f637e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca2bbb288661206e28c0488766c22f15"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#aca2bbb288661206e28c0488766c22f15">VH</a>(a,  i)&#160;&#160;&#160;(((<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)(a)+<a class="el" href="eforth__core_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>*(i))&gt;&gt;8)</td></tr>
 <tr class="separator:aca2bbb288661206e28c0488766c22f15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3dbeeb17d5b39f57172caaa3a0afcce"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#ad3dbeeb17d5b39f57172caaa3a0afcce">CST</a>(a,  i)&#160;&#160;&#160;opDOLIT,<a class="el" href="eforth__asm_8h.html#aca2bbb288661206e28c0488766c22f15">VH</a>(a,i),<a class="el" href="eforth__asm_8h.html#a3b1701d44f7b15525bc7b3c0a8f637e1">VL</a>(a,i),opEXIT</td></tr>
-<tr class="separator:ad3dbeeb17d5b39f57172caaa3a0afcce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a718c4b8645c2287c20bb4a796363b2a0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a718c4b8645c2287c20bb4a796363b2a0">VAL</a>(a,  i)&#160;&#160;&#160;opDOLIT,<a class="el" href="eforth__asm_8h.html#aca2bbb288661206e28c0488766c22f15">VH</a>(a,i),<a class="el" href="eforth__asm_8h.html#a3b1701d44f7b15525bc7b3c0a8f637e1">VL</a>(a,i),opEXIT</td></tr>
+<tr class="separator:a718c4b8645c2287c20bb4a796363b2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -1391,14 +1391,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ad3dbeeb17d5b39f57172caaa3a0afcce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad3dbeeb17d5b39f57172caaa3a0afcce">&#9670;&nbsp;</a></span>CST</h2>
+<a id="a718c4b8645c2287c20bb4a796363b2a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a718c4b8645c2287c20bb4a796363b2a0">&#9670;&nbsp;</a></span>VAL</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define CST</td>
+          <td class="memname">#define VAL</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">a, </td>

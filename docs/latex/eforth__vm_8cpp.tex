@@ -25,9 +25,11 @@ Include dependency graph for eforth\+\_\+vm.\+cpp\+:\nopagebreak
 \item 
 \#define \mbox{\hyperlink{eforth__vm_8cpp_ab225fd437247be81c502ebd3b4857465}{Y\+I\+E\+LD}}()
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8cpp_ac7635cecf944d5bfcc89665c08022828}{OP}}(name)~\&\&L\+\_\+\#\#name          /$\ast$$\ast$ redefined for label address     $\ast$/
+\#define \mbox{\hyperlink{eforth__vm_8cpp_ac7635cecf944d5bfcc89665c08022828}{OP}}(name)~op\#\#name
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8cpp_a694d28437d830c2e82367a5b56ae5163}{\+\_\+X}}(n,  code)~L\+\_\+\#\#n\+: \{ \mbox{\hyperlink{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}{D\+E\+B\+UG}}(\char`\"{}\%s\char`\"{},\#n); code; continue; \}
+\#define \mbox{\hyperlink{eforth__vm_8cpp_a694d28437d830c2e82367a5b56ae5163}{\+\_\+X}}(n,  code)~case op\#\#n\+: \{ \mbox{\hyperlink{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}{D\+E\+B\+UG}}(\char`\"{}\%s\char`\"{},\#n); code; break; \}
+\item 
+\#define \mbox{\hyperlink{eforth__vm_8cpp_a99cca8c766bbb673859637a1cf1f1150}{D\+I\+S\+P\+A\+T\+CH}}(op)~switch(op)
 \end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
@@ -163,16 +165,19 @@ Revision Note\+: Threading model evolution 202212 Ef\+V\+M\+Sub module -\/ vtabl
 \index{eforth\_vm.cpp@{eforth\_vm.cpp}!OP@{OP}}
 \index{OP@{OP}!eforth\_vm.cpp@{eforth\_vm.cpp}}
 \doxysubsubsection{\texorpdfstring{OP}{OP}}
-{\footnotesize\ttfamily \#define OP(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})~\&\&L\+\_\+\#\#name          /$\ast$$\ast$ redefined for label address     $\ast$/}
+{\footnotesize\ttfamily \#define OP(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})~op\#\#name}
 
-e\+Forth virtual machine outer interpreter (single-\/step) execution unit \begin{DoxyReturn}{Returns}
-0 -\/ exit Note\+: vm\+\_\+outer -\/ computed label jumps (25\% faster than subroutine calls) continue in \mbox{\hyperlink{eforth__vm_8cpp_a694d28437d830c2e82367a5b56ae5163}{\+\_\+\+X()}} macro behaves as \$\+N\+E\+XT 
-\end{DoxyReturn}
 \mbox{\Hypertarget{eforth__vm_8cpp_a694d28437d830c2e82367a5b56ae5163}\label{eforth__vm_8cpp_a694d28437d830c2e82367a5b56ae5163}} 
 \index{eforth\_vm.cpp@{eforth\_vm.cpp}!\_X@{\_X}}
 \index{\_X@{\_X}!eforth\_vm.cpp@{eforth\_vm.cpp}}
 \doxysubsubsection{\texorpdfstring{\_X}{\_X}}
-{\footnotesize\ttfamily \#define \+\_\+X(\begin{DoxyParamCaption}\item[{}]{n,  }\item[{}]{code }\end{DoxyParamCaption})~L\+\_\+\#\#n\+: \{ \mbox{\hyperlink{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}{D\+E\+B\+UG}}(\char`\"{}\%s\char`\"{},\#n); code; continue; \}}
+{\footnotesize\ttfamily \#define \+\_\+X(\begin{DoxyParamCaption}\item[{}]{n,  }\item[{}]{code }\end{DoxyParamCaption})~case op\#\#n\+: \{ \mbox{\hyperlink{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}{D\+E\+B\+UG}}(\char`\"{}\%s\char`\"{},\#n); code; break; \}}
+
+\mbox{\Hypertarget{eforth__vm_8cpp_a99cca8c766bbb673859637a1cf1f1150}\label{eforth__vm_8cpp_a99cca8c766bbb673859637a1cf1f1150}} 
+\index{eforth\_vm.cpp@{eforth\_vm.cpp}!DISPATCH@{DISPATCH}}
+\index{DISPATCH@{DISPATCH}!eforth\_vm.cpp@{eforth\_vm.cpp}}
+\doxysubsubsection{\texorpdfstring{DISPATCH}{DISPATCH}}
+{\footnotesize\ttfamily \#define D\+I\+S\+P\+A\+T\+CH(\begin{DoxyParamCaption}\item[{}]{op }\end{DoxyParamCaption})~switch(op)}
 
 
 

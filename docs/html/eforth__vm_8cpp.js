@@ -4,6 +4,7 @@ var eforth__vm_8cpp =
     [ "YIELD", "eforth__vm_8cpp.html#ab225fd437247be81c502ebd3b4857465", null ],
     [ "OP", "eforth__vm_8cpp.html#ac7635cecf944d5bfcc89665c08022828", null ],
     [ "_X", "eforth__vm_8cpp.html#a694d28437d830c2e82367a5b56ae5163", null ],
+    [ "DISPATCH", "eforth__vm_8cpp.html#a99cca8c766bbb673859637a1cf1f1150", null ],
     [ "_init", "eforth__vm_8cpp.html#aaaa9f256ad4e73f2885577923fa23447", null ],
     [ "_yield", "eforth__vm_8cpp.html#a1149487a9866fbd91d4ccaf57eab9ea6", null ],
     [ "_qrx", "eforth__vm_8cpp.html#a2afadbdf0e72c8707edfebe583a5dfa6", null ],

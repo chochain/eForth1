@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.0</span>
+   &#160;<span id="projectnumber">v2.2</span>
    </div>
   </td>
  </tr>
@@ -139,6 +139,8 @@ Macros</h2></td></tr>
 <tr class="separator:aa9e8f3bb466bb421d13913df7aeaa20c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6094f5f4a8aa099faa6d80b4f020927b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a6094f5f4a8aa099faa6d80b4f020927b">CASE_SENSITIVE</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a6094f5f4a8aa099faa6d80b4f020927b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1af8ef125fabb6ee8f56a40ad9243f7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ae1af8ef125fabb6ee8f56a40ad9243f7">COMPUTED_JUMP</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:ae1af8ef125fabb6ee8f56a40ad9243f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6bc65df3ece8101857357cbecc60d19"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#ae6bc65df3ece8101857357cbecc60d19">ASM_ONLY</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:ae6bc65df3ece8101857357cbecc60d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d8d8ad7c0601f1313a9d026757f019a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__core_8h.html#a9d8d8ad7c0601f1313a9d026757f019a">OPCODES</a></td></tr>
@@ -322,6 +324,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>define case sensitivity </p>
+
+</div>
+</div>
+<a id="ae1af8ef125fabb6ee8f56a40ad9243f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1af8ef125fabb6ee8f56a40ad9243f7">&#9670;&nbsp;</a></span>COMPUTED_JUMP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define COMPUTED_JUMP&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>VM uses computed jump (~15% faster but use extra 180 bytes RAM) </p>
 
 </div>
 </div>
@@ -1252,8 +1269,8 @@ Functions</h2></td></tr>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aeforth__core_8h_html_ae58acffa6250f628ad15cdc182d146bc"><div class="ttname"><a href="eforth__core_8h.html#ae58acffa6250f628ad15cdc182d146bc">FORTH_TIB_SZ</a></div><div class="ttdeci">#define FORTH_TIB_SZ</div><div class="ttdef"><b>Definition:</b> eforth_core.h:51</div></div>
-<div class="ttc" id="aeforth__core_8h_html_aff92e9d3a1f1b8f50e5f99f48e415b9a"><div class="ttname"><a href="eforth__core_8h.html#aff92e9d3a1f1b8f50e5f99f48e415b9a">FORTH_DIC_SZ</a></div><div class="ttdeci">#define FORTH_DIC_SZ</div><div class="ttdef"><b>Definition:</b> eforth_core.h:49</div></div>
+<div class="ttc" id="aeforth__core_8h_html_ae58acffa6250f628ad15cdc182d146bc"><div class="ttname"><a href="eforth__core_8h.html#ae58acffa6250f628ad15cdc182d146bc">FORTH_TIB_SZ</a></div><div class="ttdeci">#define FORTH_TIB_SZ</div><div class="ttdef"><b>Definition:</b> eforth_core.h:52</div></div>
+<div class="ttc" id="aeforth__core_8h_html_aff92e9d3a1f1b8f50e5f99f48e415b9a"><div class="ttname"><a href="eforth__core_8h.html#aff92e9d3a1f1b8f50e5f99f48e415b9a">FORTH_DIC_SZ</a></div><div class="ttdeci">#define FORTH_DIC_SZ</div><div class="ttdef"><b>Definition:</b> eforth_core.h:50</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

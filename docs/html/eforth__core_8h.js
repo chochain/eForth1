@@ -3,6 +3,7 @@ var eforth__core_8h =
     [ "APP_NAME", "eforth__core_8h.html#af0b5cfa4242ae7f98ba80fd23ef8afa9", null ],
     [ "MAJOR_VERSION", "eforth__core_8h.html#aa9e8f3bb466bb421d13913df7aeaa20c", null ],
     [ "CASE_SENSITIVE", "eforth__core_8h.html#a6094f5f4a8aa099faa6d80b4f020927b", null ],
+    [ "COMPUTED_JUMP", "eforth__core_8h.html#ae1af8ef125fabb6ee8f56a40ad9243f7", null ],
     [ "ASM_ONLY", "eforth__core_8h.html#ae6bc65df3ece8101857357cbecc60d19", null ],
     [ "ASM_TRACE", "eforth__core_8h.html#afd97bab563464ed479ba96d704adf0bc", null ],
     [ "EXE_TRACE", "eforth__core_8h.html#a4e7ebf605b9379a385139d145f5b1fc5", null ],

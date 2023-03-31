@@ -10,8 +10,6 @@
 #include "eforth_vm.h"
 
 namespace EfVM {
-
-static Stream *io;
 ///
 ///@name VM Registers
 ///@{
@@ -30,9 +28,13 @@ U8    *_ram;                      ///< RAM, memory block for user define diction
 U8    *_pre;                      ///< Pre-built/embedded Forth code
 CFP   _fp[CFUNC_MAX];             ///> store C function pointer
 ///@}
-//
-// Forth Virtual Machine primitive functions
-//
+///@name IO Streaming interface
+///@{
+Stream *io;
+///@}
+///
+///> Forth Virtual Machine primitive functions
+///
 ///
 /// virtual machine initializer
 ///
@@ -226,7 +228,7 @@ void vm_outer() {
     #define _X(n, code)  case op##n: { DEBUG("%s",#n); code; break; }
     #define DISPATCH(op) switch(op)
     enum {
-        opNOP = 0,                      ///< opcodes start at 0
+        OP(NOP) = 0,                    ///< opcodes start at 0
         OPCODES
     };
 #endif // COMPUTED_JUMP

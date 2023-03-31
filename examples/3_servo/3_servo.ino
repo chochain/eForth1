@@ -2,29 +2,25 @@
 /// @file
 /// @brief - eForth1 servo demo
 ///
-/// from Wokwi: https://wokwi.com/projects/356866133593965569 , enter the following
-/// Example1:
-///   ok> : sync 7 for dup r@ 0 call next drop ;  \ sync 8 servos
-///   ok> : rnd clock drop abs 180 mod ;          \ randomize servo angle
-///   ok> : sweep rnd sync ;                      \ 8 servos in action
-///   ok> : ' sweep 50 tmisr                      \ make sweep as ISR at 500ms
-///   ok> : 1 timer                               \ timer on
-///
-/// Example2:
-///   ok> variable w 7 cells allot
-///   ok> : xx ( -- ) 7 for r@ dup 1 + 10 * swap cells w + ! next ; xx
-///   ok> : w@ ( n -- c w ) 90 swap cells w + @ ;
-///   ok> : ang= ( ph n -- ) swap over w@ rot 1 call swap 0 call ;
-///   ok> variable x
-///   ok> : step 7 for dup r@ ang= next drop ;
-///   ok> : swing x @ dup 1+ x ! step ;
-///   ok> ' swing 10 tmisr
-///   ok> 1 timer
+/// show also in Wokwi: https://wokwi.com/projects/356866133593965569
+/// In the Serial Monitor input bar, enter the following
+///   1 timer     \ enable timer interrupt
 ///
 #include <Servo.h>
 #include <eForth1.h>
 
 Servo sv[8];
+
+PROGMEM const char code[] =
+"variable w 7 cells allot\n"
+": xx ( -- ) 7 for r@ dup 1 + 10 * swap cells w + ! next ; xx\n"
+": w@ ( n -- c w ) 90 swap cells w + @ ;\n"
+": ang= ( ph n -- ) swap over w@ rot 1 call swap 0 call ;\n"
+"variable x\n"
+": step 7 for dup r@ ang= next drop ;\n"
+": swing x @ dup 1+ x ! step ;\n"
+"' swing 100 0 tmisr\n"
+;
 
 void servo() {
     int p = vm_pop();         ///> servo id
@@ -52,7 +48,8 @@ void setup() {
         sv[i].attach(4 + i);           ///> setup servos on pin 4,5,6,..,10,11
     }
 
-    ef_setup();                        ///> create eForth1 instance
+    ef_setup(code);                    ///> create eForth1 instance
+    
     vm_cfunc(0, servo);                ///> register servo function
     vm_cfunc(1, pos);                  ///> register pos function
 }

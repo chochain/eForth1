@@ -103,7 +103,7 @@ typedef const char                FCHAR;
 #define RPOP()      ((U16)GET(FORTH_ROM_SZ - (R ? R-- : R)*CELLSZ))
 #define VL(a, i)    (((U16)(a)+CELLSZ*(i))&0xff)
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
-#define CST(a, i)   opDOLIT,VH(a,i),VL(a,i),opEXIT
+#define VAL(a, i)   opDOLIT,VH(a,i),VL(a,i),opEXIT
 ///@}
 ///@defgroup Memory copy
 ///@{

@@ -38,13 +38,13 @@ int assemble(U8 *cdata)
     ///> Kernel dictionary (primitive words)
     ///
     IU NOP   = _XCODE("NOP",     NOP    );
+    IU EXIT  = _XCODE("EXIT",    EXIT   );
+    IU ENTER = _XCODE("ENTER",   ENTER  );  // aka doLIST
     IU BYE   = _XCODE("BYE",     BYE    );
     IU QKEY  = _XCODE("?KEY",    QRX    );
     IU EMIT  = _XCODE("EMIT",    TXSTO  );
     IU DOLIT = _XCODE("DOLIT",   DOLIT  );
     IU DOVAR = _XCODE("DOVAR",   DOVAR  );
-    IU ENTER = _XCODE("ENTER",   ENTER  );  // aka doLIST
-    IU EXIT  = _XCODE("EXIT",    EXIT   );
     IU QBRAN = _XCODE("QBRANCH", QBRAN  );
     IU BRAN  = _XCODE("BRANCH",  BRAN   );
     IU DONXT = _XCODE("DONEXT",  DONEXT );
@@ -88,9 +88,6 @@ int assemble(U8 *cdata)
     IU RP    = _XCODE("RP",      RP     );
     IU BLANK = _XCODE("BL",      BL     );
     IU CELL  = _XCODE("CELL",    CELL   );
-    IU CELLP = _XCODE("CELL+",   CELLP  );
-    IU CELLM = _XCODE("CELL-",   CELLM  );
-    IU CELLS = _XCODE("CELLS",   CELLS  );
     IU ABS   = _XCODE("ABS",     ABS    );
     IU MAX   = _XCODE("MAX",     MAX    );
     IU MIN   = _XCODE("MIN",     MIN    );
@@ -113,23 +110,26 @@ int assemble(U8 *cdata)
     IU DNEG  = _XCODE("DNEGATE", DNEG   );
     IU DADD  = _XCODE("D+",      DADD   );
     IU DSUB  = _XCODE("D-",      DSUB   );
-    IU DSTOR = _XCODE("2!",      DSTOR  );
-    IU DAT   = _XCODE("2@",      DAT    );
-    IU DDUP  = _XCODE("2DUP",    DDUP   );
-    IU DDROP = _XCODE("2DROP",   DDROP  );
-    _COLON("2SWAP", ROT, TOR, ROT, RFROM, EXIT);
-    _COLON("2OVER", DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
+    IU DSTOR = _COLON("2!",      DUP, TOR, DOLIT, CELLSZ, ADD, STORE, RFROM, STORE, EXIT);
+    IU DAT   = _COLON("2@",      DUP, TOR, AT, RFROM, DOLIT, CELLSZ, ADD, AT, EXIT);
+    IU DDUP  = _COLON("2DUP",    OVER, OVER, EXIT);
+    IU DDROP = _COLON("2DROP",   DROP, DROP, EXIT);
+    IU DSWAP = _COLON("2SWAP",   ROT, TOR, ROT, RFROM, EXIT);
+    IU DOVER = _COLON("2OVER",   DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
     ///
     /// extended words
     ///
+    IU CELLP = _COLON("CELL+", CELL, ADD, EXIT);
+    IU CELLM = _COLON("CELL-", CELL, SUB, EXIT);
+    _COLON("CELLS", CELL, MUL, EXIT);
     _COLON("2+",    DOLIT, 2, ADD, EXIT);
     _COLON("2-",    DOLIT, 2, SUB, EXIT);
     _COLON("2*",    DOLIT, 1, LSH, EXIT);
     _COLON("2/",    DOLIT, 1, RSH, EXIT);
+    _COLON("S0",    DOLIT, FORTH_STACK_ADDR, EXIT);   ///> base of data stack (fixed instead of user var)
+    _XCODE("SP@",   SPAT);                    ///> address of stack pointer
     _XCODE("I",     RAT );
     ///  (TODO: add J)
-    _XCODE("SP@",   SPAT);                    ///> address of stack pointer
-    _XCODE("S0",    S0  );                    ///> base of data stack (fixed instead of user var)
     _XCODE("TRACE", TRC  );                   ///  ( f -- )     enable/disable debug tracing
     _XCODE("SAVE",  SAVE );                   ///  ( -- )       save user variables and dictionary to EEPROM
     _XCODE("LOAD",  LOAD );                   ///  ( -- )       restore user variables and dictionary from EERPROM
@@ -138,18 +138,18 @@ int assemble(U8 *cdata)
     /// Kernel constants
     ///
     IU ua    = FORTH_UVAR_ADDR;
-    IU vTTIB = _CODE("'TIB",    CST(ua,0));   ///> * 'TIB console input buffer pointer
-    IU vBASE = _CODE("BASE",    CST(ua,1));   ///> * BASE current radix for numeric ops
-    IU vCP   = _CODE("CP",      CST(ua,2));   ///> * CP,  top of dictionary, same as HERE
-    IU vCNTX = _CODE("CONTEXT", CST(ua,3));   ///> * CONTEXT name field of last word
-    IU vLAST = _CODE("LAST",    CST(ua,4));   ///> * LAST, same as CONTEXT
-    IU vMODE = _CODE("'MODE",   CST(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
-    IU vTABRT= _CODE("'ABORT",  CST(ua,6));   ///> * ABORT exception rescue handler (QUIT)
-    IU vHLD  = _CODE("HLD",     CST(ua,7));   ///> * HLD  char pointer to output buffer
-    IU vSPAN = _CODE("SPAN",    CST(ua,8));   ///> * SPAN number of character accepted
-    IU vIN   = _CODE(">IN",     CST(ua,9));   ///> * >IN  interpreter pointer to next char
-    IU vNTIB = _CODE("#TIB",    CST(ua,10));  ///> * #TIB number of character received in TIB
-    IU vTMP  = _CODE("tmp",     CST(ua,11));  ///> * tmp storage (alternative to return stack)
+    IU vTTIB = _CODE("'TIB",    VAL(ua,0));   ///> * 'TIB console input buffer pointer
+    IU vBASE = _CODE("BASE",    VAL(ua,1));   ///> * BASE current radix for numeric ops
+    IU vCP   = _CODE("CP",      VAL(ua,2));   ///> * CP,  top of dictionary, same as HERE
+    IU vCNTX = _CODE("CONTEXT", VAL(ua,3));   ///> * CONTEXT name field of last word
+    IU vLAST = _CODE("LAST",    VAL(ua,4));   ///> * LAST, same as CONTEXT
+    IU vMODE = _CODE("'MODE",   VAL(ua,5));   ///> * 'MODE ('TEVAL - interpreter or compiler)
+    IU vTABRT= _CODE("'ABORT",  VAL(ua,6));   ///> * ABORT exception rescue handler (QUIT)
+    IU vHLD  = _CODE("HLD",     VAL(ua,7));   ///> * HLD  char pointer to output buffer
+    IU vSPAN = _CODE("SPAN",    VAL(ua,8));   ///> * SPAN number of character accepted
+    IU vIN   = _CODE(">IN",     VAL(ua,9));   ///> * >IN  interpreter pointer to next char
+    IU vNTIB = _CODE("#TIB",    VAL(ua,10));  ///> * #TIB number of character received in TIB
+    IU vTMP  = _CODE("tmp",     VAL(ua,11));  ///> * tmp storage (alternative to return stack)
     ///
     ///> Console Input and Common words
     ///
@@ -646,7 +646,7 @@ int assemble(U8 *cdata)
     _COLON("2VARIABLE", CREAT, DOLIT, 0, DUP, COMMA, COMMA, EXIT);
     _COLON("2CONSTANT", CODE,
            DOLIT, opDOLIT, CCMMA, HERE, DOLIT, 4, ADD, COMMA,
-           COMPI, opDAT, COMPI, opEXIT, SWAP, COMMA, COMMA, EXIT);
+           DAT, COMPI, opEXIT, SWAP, COMMA, COMMA, EXIT);
     ///
     ///> Comments
     ///

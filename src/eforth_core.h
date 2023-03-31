@@ -16,6 +16,7 @@
 #define APP_NAME        "eForth1"
 #define MAJOR_VERSION   "v2"
 #define CASE_SENSITIVE  0             /**< define case sensitivity */
+#define COMPUTED_JUMP   0             /**< VM uses computed jump (~15% faster but use extra 180 bytes RAM) */
 #define ASM_ONLY        0             /**< create ROM only (i.e. no debugging) */
 ///
 ///@name Debug Tracing Flags
@@ -87,14 +88,14 @@ typedef void (*CFP)();                ///< function pointer
 /// Forth VM Opcodes (for Bytecode Assembler)
 ///
 #define OPCODES \
+	OP(EXIT),   \
+	OP(ENTER),  \
     OP(BYE),    \
     OP(QRX),    \
     OP(TXSTO),  \
     OP(DOLIT),  \
     OP(DOVAR),  \
     OP(EXECU),  \
-    OP(ENTER),  \
-    OP(EXIT),   \
     OP(DOES),   \
     OP(DONEXT), \
     OP(QBRAN),  \
@@ -138,9 +139,6 @@ typedef void (*CFP)();                ///< function pointer
     OP(RP),     \
         OP(BL),    \
         OP(CELL),  \
-        OP(CELLP), \
-        OP(CELLM), \
-        OP(CELLS), \
         OP(ABS),   \
         OP(MAX),   \
         OP(MIN),   \
@@ -160,12 +158,7 @@ typedef void (*CFP)();                ///< function pointer
     OP(DNEG),   \
     OP(DADD),   \
     OP(DSUB),   \
-        OP(DDUP),  \
-        OP(DDROP), \
-        OP(DSTOR), \
-        OP(DAT),   \
         OP(SPAT),  \
-        OP(S0),    \
         OP(TRC),   \
         OP(SAVE),  \
         OP(LOAD),  \

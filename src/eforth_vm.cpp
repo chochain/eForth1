@@ -213,12 +213,12 @@ void vm_outer() {
     ///      + but uses extra 180 bytes of RAM (avr-gcc failed to put vt in PROGMEM)
     ///      + the 'continue' in _X() macro behaves as $NEXT
     ///
-    #define OP(name)     &&L_##name      /** redefined for label address */
+    #define OP(name)     &&L_##name
     #define _X(n, code)  L_##n: { DEBUG("%s",#n); code; continue; }
     #define DISPATCH(op) goto *vt[op];
     #define opENTER      2              /** hardcoded for ENTER */
-    const void* PROGMEM vt[] = {        ///< computed label lookup table
-        &&L_NOP,                        ///< opcode 0
+    PROGMEM const void *vt[100] = {     ///< computed label lookup table
+        OP(NOP),                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
 #else // !COMPUTED_JUMP
@@ -230,7 +230,6 @@ void vm_outer() {
         OPCODES
     };
 #endif // COMPUTED_JUMP
-
     IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
     while (1) {

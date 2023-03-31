@@ -68,7 +68,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 ### Different from Dr. Ting's
   * Instead of original 32-bit, CELL is 16-bit, opcodes are 8-bit bytecode primitives.
   * To save space, primitives are compiled as bytecode and composite words are flagged address pointers.
-  * For speed, use direct threading model with computed jump instead of original subroutine threaded,
+  * For speed, use direct threading model instead of original subroutine threaded,
   * Instead of direct GPIO port manipulation with byte read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... for familiarity to the IDE platform.
   * Multi-tasking supported through interrupts. A base tick of 1ms precision using Timer2 i.e. one assigns mulply of 1ms as ISR repetition trigger period. For example 500 means triggered every 500ms and there are 8 timer interrupt handler slots provided. Timer1 is left free for Servo or other libraries.
   * On this 16-bit system, CLOCK still returns a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D>S, S>D.
@@ -101,11 +101,11 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 ### Benchmark
   * Classic 1 million cycles
     <pre>
-    > : xx 999 for 34 drop next ;⏎           \ inner loop (put 34 on stack then drop it)
-    > : yy 999 for xx next ;⏎                \ create the outer loop
-    > : zz clock dnegate yy clock d+ ;⏎      \ CLOCK returns a double value
-    > zz⏎                                    \ benchmark the 1000x1000 cycles
-    > 24495 0 ok>                            \ 24495ms =~ 24.5us/cycle (with one blinking ISR running in the background)
+    > : inner 999 FOR 34 DROP NEXT ;⏎          \ inner loop (put 34 on stack then drop it)
+    > : outer 999 FOR inner NEXT ;⏎            \ create the outer loop
+    > : bench CLOCK DNEGATE outer CLOCK D+ ;⏎  \ CLOCK returns a double value
+    > zz⏎                                      \ benchmark the 1000x1000 cycles
+    > 25492 0 ok>                              \ 25492ms =~ 25.5us/cycle (with one blinking ISR running in the background)
     </pre>
 
 ### To Learn More About Forth?

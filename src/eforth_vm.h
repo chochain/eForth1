@@ -39,8 +39,12 @@ extern DU  rtop;                  ///< cached loop counter on return stack
 ///@}
 ///@name MMU
 ///@{
-extern PGM_P _rom;                ///< ROM, Forth word stored in Arduino Flash Memory
-extern U8    *_ram;               ///< RAM, memory block for user define dictionary
+extern PGM_P  _rom;               ///< ROM, Forth word stored in Arduino Flash Memory
+extern U8     *_ram;              ///< RAM, memory block for user define dictionary
+///@}
+///@name IO Stream interface
+///@{
+extern Stream *io;
 ///@}
 #define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
 #define IDX_MASK       0x07ff     /**< RAM index mask  (0x0000~0x07ff) */
@@ -87,10 +91,10 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-#define opEXIT  1
-#define opENTER 2
-#define opDOLIT 6
-#define opEXEC  8
+int constexpr opEXIT  = 1;
+int constexpr opENTER = 2;
+int constexpr opDOLIT = 6;
+int constexpr opEXEC  = 8;
 
 #define DEBUG(s,v)  printf((s),(v))
 void TAB() {
@@ -121,7 +125,9 @@ void TRACE(U8 op)
     LOG("_");
     /// special opcode handlers for DOLIT, ENTER, EXIT
     switch (op) {
+    case opDOLIT: LOG_H("$", GET(IP)); LOG(" "); break;
     case opEXIT:  LOG(";");  --tTAB;             break;
+    case opEXEC: pc = top; /** no break */
     case opENTER:                                 /// * display word name
     	for (--pc; (BGET(pc) & 0x7f)>0x20; pc--); /// * retract pointer to word name (ASCII range: 0x21~0x7f)
     	int len = BGET(pc++) & 0x1f;              /// Forth allows 31 char max
@@ -130,8 +136,6 @@ void TRACE(U8 op)
     	}
     	LOG(" :");
         break;
-    case opDOLIT: LOG_H("$", GET(IP)); LOG(" "); break;
-    case opEXEC: pc = top; /** no break */
     }
 }
 #else

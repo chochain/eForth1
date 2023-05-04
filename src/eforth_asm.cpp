@@ -37,83 +37,83 @@ int assemble(U8 *cdata)
     ///
     ///> Kernel dictionary (primitive words)
     ///
-    IU NOP   = _XCODE("NOP",     NOP    );
-    IU EXIT  = _XCODE("EXIT",    EXIT   );
-    IU ENTER = _XCODE("ENTER",   ENTER  );  // aka doLIST
-    IU BYE   = _XCODE("BYE",     BYE    );
-    IU QKEY  = _XCODE("?KEY",    QRX    );
-    IU EMIT  = _XCODE("EMIT",    TXSTO  );
-    IU DOLIT = _XCODE("DOLIT",   DOLIT  );
-    IU DOVAR = _XCODE("DOVAR",   DOVAR  );
-    IU QBRAN = _XCODE("QBRANCH", QBRAN  );
-    IU BRAN  = _XCODE("BRANCH",  BRAN   );
-    IU DONXT = _XCODE("DONEXT",  DONEXT );
-    IU EXECU = _XCODE("EXECUTE", EXECU  );
-    IU STORE = _XCODE("!",       STORE  );
-    IU PSTOR = _XCODE("+!",      PSTOR  );
-    IU AT    = _XCODE("@",       AT     );
-    IU CSTOR = _XCODE("C!",      CSTOR  );
-    IU CAT   = _XCODE("C@",      CAT    );
-    IU RFROM = _XCODE("R>",      RFROM  );
-    IU RAT   = _XCODE("R@",      RAT    );
-    IU TOR   = _XCODE(">R",      TOR    );
-    IU DROP  = _XCODE("DROP",    DROP   );
-    IU DUP   = _XCODE("DUP",     DUP    );
-    IU SWAP  = _XCODE("SWAP",    SWAP   );
-    IU OVER  = _XCODE("OVER",    OVER   );
-    IU ROT   = _XCODE("ROT",     ROT    );
-    IU PICK  = _XCODE("PICK",    PICK   );
-    IU AND   = _XCODE("AND",     AND    );
-    IU OR    = _XCODE("OR",      OR     );
-    IU XOR   = _XCODE("XOR",     XOR    );
-    IU INV   = _XCODE("INVERT",  INV    );
-    IU LSH   = _XCODE("LSHIFT",  LSH    );
-    IU RSH   = _XCODE("RSHIFT",  RSH    );
-    IU ADD   = _XCODE("+",       ADD    );
-    IU SUB   = _XCODE("-",       SUB    );
-    IU MUL   = _XCODE("*",       MUL    );
-    IU DIV   = _XCODE("/",       DIV    );
-    IU MOD   = _XCODE("MOD",     MOD    );
-    IU NEG   = _XCODE("NEGATE",  NEG    );
-    IU GT    = _XCODE(">",       GT     );
-    IU EQ    = _XCODE("=",       EQ     );
-    IU LT    = _XCODE("<",       LT     );
-    IU ZGT   = _XCODE("0>",      ZGT    );
-    IU ZEQ   = _XCODE("0=",      ZEQ    );
-    IU ZLT   = _XCODE("0<",      ZLT    );
-    IU ONEP  = _XCODE("1+",      ONEP   );
-    IU ONEM  = _XCODE("1-",      ONEM   );
-    IU QDUP  = _XCODE("?DUP",    QDUP   );
-    IU DEPTH = _XCODE("DEPTH",   DEPTH  );
-    IU RP    = _XCODE("RP",      RP     );
-    IU BLANK = _XCODE("BL",      BL     );
-    IU CELL  = _XCODE("CELL",    CELL   );
-    IU ABS   = _XCODE("ABS",     ABS    );
-    IU MAX   = _XCODE("MAX",     MAX    );
-    IU MIN   = _XCODE("MIN",     MIN    );
-    IU WITHI = _XCODE("WITHIN",  WITHIN );    ///> ( u ul uh -- f ) check 3rd item within [ul uh)
+    IU NOP   = _PRIM("NOP",     NOP    );
+    IU EXIT  = _PRIM("EXIT",    EXIT   );
+    IU ENTER = _PRIM("ENTER",   ENTER  );  // aka doLIST
+    IU BYE   = _PRIM("BYE",     BYE    );
+    IU QKEY  = _PRIM("?KEY",    QRX    );
+    IU EMIT  = _PRIM("EMIT",    TXSTO  );
+    IU DOLIT = _PRIM("DOLIT",   DOLIT  );
+    IU DOVAR = _PRIM("DOVAR",   DOVAR  );
+    IU QBRAN = _PRIM("QBRANCH", QBRAN  );
+    IU BRAN  = _PRIM("BRANCH",  BRAN   );
+    IU DONXT = _PRIM("DONEXT",  DONEXT );
+    IU EXECU = _PRIM("EXECUTE", EXECU  );
+    IU STORE = _PRIM("!",       STORE  );
+    IU PSTOR = _PRIM("+!",      PSTOR  );
+    IU AT    = _PRIM("@",       AT     );
+    IU CSTOR = _PRIM("C!",      CSTOR  );
+    IU CAT   = _PRIM("C@",      CAT    );
+    IU RFROM = _PRIM("R>",      RFROM  );
+    IU RAT   = _PRIM("R@",      RAT    );
+    IU TOR   = _PRIM(">R",      TOR    );
+    IU DROP  = _PRIM("DROP",    DROP   );
+    IU DUP   = _PRIM("DUP",     DUP    );
+    IU SWAP  = _PRIM("SWAP",    SWAP   );
+    IU OVER  = _PRIM("OVER",    OVER   );
+    IU ROT   = _PRIM("ROT",     ROT    );
+    IU PICK  = _PRIM("PICK",    PICK   );
+    IU AND   = _PRIM("AND",     AND    );
+    IU OR    = _PRIM("OR",      OR     );
+    IU XOR   = _PRIM("XOR",     XOR    );
+    IU INV   = _PRIM("INVERT",  INV    );
+    IU LSH   = _PRIM("LSHIFT",  LSH    );
+    IU RSH   = _PRIM("RSHIFT",  RSH    );
+    IU ADD   = _PRIM("+",       ADD    );
+    IU SUB   = _PRIM("-",       SUB    );
+    IU MUL   = _PRIM("*",       MUL    );
+    IU DIV   = _PRIM("/",       DIV    );
+    IU MOD   = _PRIM("MOD",     MOD    );
+    IU NEG   = _PRIM("NEGATE",  NEG    );
+    IU GT    = _PRIM(">",       GT     );
+    IU EQ    = _PRIM("=",       EQ     );
+    IU LT    = _PRIM("<",       LT     );
+    IU ZGT   = _PRIM("0>",      ZGT    );
+    IU ZEQ   = _PRIM("0=",      ZEQ    );
+    IU ZLT   = _PRIM("0<",      ZLT    );
+    IU ONEP  = _PRIM("1+",      ONEP   );
+    IU ONEM  = _PRIM("1-",      ONEM   );
+    IU QDUP  = _PRIM("?DUP",    QDUP   );
+    IU DEPTH = _PRIM("DEPTH",   DEPTH  );
+    IU RP    = _PRIM("RP",      RP     );
+    IU BLANK = _PRIM("BL",      BL     );
+    IU CELL  = _PRIM("CELL",    CELL   );
+    IU ABS   = _PRIM("ABS",     ABS    );
+    IU MAX   = _PRIM("MAX",     MAX    );
+    IU MIN   = _PRIM("MIN",     MIN    );
+    IU WITHI = _PRIM("WITHIN",  WITHIN );    ///> ( u ul uh -- f ) check 3rd item within [ul uh)
     
-    IU TOUPP = _XCODE(">UPPER",  TOUPP  );
-    IU COUNT = _XCODE("COUNT",   COUNT  );
-    IU ULESS = _XCODE("U<",      ULESS  );
+    IU TOUPP = _PRIM(">UPPER",  TOUPP  );
+    IU COUNT = _PRIM("COUNT",   COUNT  );
+    IU ULESS = _PRIM("U<",      ULESS  );
     
-    IU UMMOD = _XCODE("UM/MOD",  UMMOD  );    ///> ( udl udh u -- ur uq ) unsigned double divided by a single
-    IU UMSTA = _XCODE("UM*",     UMSTAR );    ///> ( u1 u2 -- ud ) unsigned double = multiply unsigned singles
-    IU MSTAR = _XCODE("M*",      MSTAR  );    ///> ( n1 n2 -- d ) double = single * single
-    IU UMPLU = _XCODE("UM+",     UMPLUS );    ///> ( n1 n2 -- sum c ) add two numbers and carry flag
-    IU SSMOD = _XCODE("*/MOD",   SSMOD  );    ///> ( n1 n2 n -- r q ) multiply n1 n2 div/mod by a single
-    IU SMOD  = _XCODE("/MOD",    SMOD   );    ///> ( n1 n2 -- r q ) single devide
-    IU MSLAS = _XCODE("*/",      MSLAS  );    ///> ( n1 n2 n3 -- q ) multiply n1 n2 divide by n3 return quotient
+    IU UMMOD = _PRIM("UM/MOD",  UMMOD  );    ///> ( udl udh u -- ur uq ) unsigned double divided by a single
+    IU UMSTA = _PRIM("UM*",     UMSTAR );    ///> ( u1 u2 -- ud ) unsigned double = multiply unsigned singles
+    IU MSTAR = _PRIM("M*",      MSTAR  );    ///> ( n1 n2 -- d ) double = single * single
+    IU UMPLU = _PRIM("UM+",     UMPLUS );    ///> ( n1 n2 -- sum c ) add two numbers and carry flag
+    IU SSMOD = _PRIM("*/MOD",   SSMOD  );    ///> ( n1 n2 n -- r q ) multiply n1 n2 div/mod by a single
+    IU SMOD  = _PRIM("/MOD",    SMOD   );    ///> ( n1 n2 -- r q ) single devide
+    IU MSLAS = _PRIM("*/",      MSLAS  );    ///> ( n1 n2 n3 -- q ) multiply n1 n2 divide by n3 return quotient
     
-    IU S2D   = _XCODE("S>D",     S2D    );    ///> ( n -- dl dh )
-    IU D2S   = _XCODE("D>S",     D2S    );    ///> ( dl dh -- n )
-    IU DNEG  = _XCODE("DNEGATE", DNEG   );
-    IU DADD  = _XCODE("D+",      DADD   );
-    IU DSUB  = _XCODE("D-",      DSUB   );
-    IU DSTOR = _COLON("2!",      DUP, TOR, DOLIT, CELLSZ, ADD, STORE, RFROM, STORE, EXIT);
-    IU DAT   = _COLON("2@",      DUP, TOR, AT, RFROM, DOLIT, CELLSZ, ADD, AT, EXIT);
-    IU DDUP  = _COLON("2DUP",    OVER, OVER, EXIT);
-    IU DDROP = _COLON("2DROP",   DROP, DROP, EXIT);
+    IU S2D   = _PRIM("S>D",     S2D    );    ///> ( n -- dl dh )
+    IU D2S   = _PRIM("D>S",     D2S    );    ///> ( dl dh -- n )
+    IU DNEG  = _PRIM("DNEGATE", DNEG   );
+    IU DADD  = _PRIM("D+",      DADD   );
+    IU DSUB  = _PRIM("D-",      DSUB   );
+    IU DSTOR = _COLON("2!",     DUP, TOR, DOLIT, CELLSZ, ADD, STORE, RFROM, STORE, EXIT);
+    IU DAT   = _COLON("2@",     DUP, TOR, AT, RFROM, DOLIT, CELLSZ, ADD, AT, EXIT);
+    IU DDUP  = _COLON("2DUP",   OVER, OVER, EXIT);
+    IU DDROP = _COLON("2DROP",  DROP, DROP, EXIT);
     _COLON("2SWAP",   ROT, TOR, ROT, RFROM, EXIT);
     _COLON("2OVER",   DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
     ///
@@ -127,13 +127,13 @@ int assemble(U8 *cdata)
     _COLON("2*",    DOLIT, 1, LSH, EXIT);
     _COLON("2/",    DOLIT, 1, RSH, EXIT);
     _COLON("S0",    DOLIT, FORTH_STACK_ADDR, EXIT);   ///> base of data stack (fixed instead of user var)
-    _XCODE("SP@",   SPAT);                    ///> address of stack pointer
-    _XCODE("I",     RAT );
+    _PRIM("SP@",   SPAT);                    ///> address of stack pointer
+    _PRIM("I",     RAT );
     ///  (TODO: add J)
-    _XCODE("TRACE", TRC  );                   ///  ( f -- )     enable/disable debug tracing
-    _XCODE("SAVE",  SAVE );                   ///  ( -- )       save user variables and dictionary to EEPROM
-    _XCODE("LOAD",  LOAD );                   ///  ( -- )       restore user variables and dictionary from EERPROM
-    _XCODE("CALL",  CALL );                   ///  ( n -- )     call a C-function vector
+    _PRIM("TRACE", TRC  );                   ///  ( f -- )     enable/disable debug tracing
+    _PRIM("SAVE",  SAVE );                   ///  ( -- )       save user variables and dictionary to EEPROM
+    _PRIM("LOAD",  LOAD );                   ///  ( -- )       restore user variables and dictionary from EERPROM
+    _PRIM("CALL",  CALL );                   ///  ( n -- )     call a C-function vector
     ///
     /// Kernel constants
     ///
@@ -613,7 +613,7 @@ int assemble(U8 *cdata)
     ///
     IU CODE  = _COLON("CODE", TOKEN, SNAME, vLAST, AT, vCNTX, STORE, EXIT);
     IU CREAT = _COLON("CREATE", CODE, COMPI, opDOVAR, COMPI, opEXIT, EXIT);
-    IU DOES  = _COLON("DOES>",                          ///> change runtime behavior to following code
+    _COLON("DOES>",                                             ///> change runtime behavior to following code
            RFROM, HERE, vLAST, AT, NAMET, DUP, TOR, SUB, ONEM,  /// ( ra ca ) para on return stack, offset to defining word
            DOLIT, opDOES, RAT, CSTOR, RFROM, ONEP, CSTOR,
            COMPI, opBRAN, COMMA, COMPI, opEXIT, EXIT);          /// * the last opEXIT is not needed but nicer
@@ -642,17 +642,17 @@ int assemble(U8 *cdata)
     ///
     ///> Arduino specific opcodes
     ///
-    IU PINMODE = _XCODE("PINMODE",  PIN  ); ///  ( n p -- )   set pinMode(p, n=1:OUTPUT, n=0: INPUT)
-    IU MAP     = _XCODE("MAP",      MAP  ); ///  ( h l p -- ) set map range to pin
-    IU IN      = _XCODE("IN",       IN   ); ///  ( p -- n )   digitalRead(p)
-    IU OUT     = _XCODE("OUT",      OUT  ); ///  ( n p -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
-    IU AIN     = _XCODE("AIN",      AIN  ); ///  ( p -- n )   read analog value from pin
-    IU PWM     = _XCODE("PWM",      PWM  ); ///  ( n p -- )   set duty cycle % (PWM) to pin
-    IU TMISR   = _XCODE("TMISR",    TMISR); ///  ( xt n -- )  on timer interrupt calls xt every n ms
-    IU PCISR   = _XCODE("PCISR",    PCISR); ///  ( xt p -- )  on pin change interrupt calls xt
-    IU TIMER   = _XCODE("TIMER",    TMRE ); ///  ( f -- )     enable/disable timer interrupt
-    IU PCINT   = _XCODE("PCINT",    PCIE ); ///  ( f -- )     enable/disable pin change interrupt
-    IU CLK     = _XCODE("CLOCK",    CLK  ); ///  ( -- ud ud ) get current clock (in ms)
+    IU CLK = _PRIM("CLOCK", CLK  ); ///  ( -- ud ud ) get current clock (in ms)
+    _PRIM("PINMODE",  PIN  );       ///  ( n p -- )   set pinMode(p, n=1:OUTPUT, n=0: INPUT)
+    _PRIM("MAP",      MAP  );       ///  ( h l p -- ) set map range to pin
+    _PRIM("IN",       IN   );       ///  ( p -- n )   digitalRead(p)
+    _PRIM("OUT",      OUT  );       ///  ( n p -- )   digitialWrite(p, n=1 HIGH, n=0 LOW)
+    _PRIM("AIN",      AIN  );       ///  ( p -- n )   read analog value from pin
+    _PRIM("PWM",      PWM  );       ///  ( n p -- )   set duty cycle % (PWM) to pin
+    _PRIM("TMISR",    TMISR);       ///  ( xt n -- )  on timer interrupt calls xt every n ms
+    _PRIM("PCISR",    PCISR);       ///  ( xt p -- )  on pin change interrupt calls xt
+    _PRIM("TIMER",    TMRE );       ///  ( f -- )     enable/disable timer interrupt
+    _PRIM("PCINT",    PCIE );       ///  ( f -- )     enable/disable pin change interrupt
     _COLON("DELAY", S2D, CLK, DADD, vTMP, DSTOR); {
         _BEGIN(vTMP, DAT, CLK, DSUB, ZLT, SWAP, DROP);
         _UNTIL(EXIT);

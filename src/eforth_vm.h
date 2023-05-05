@@ -28,15 +28,6 @@
 #include "eforth_core.h"
 
 namespace EfVM {
-///@name VM registers
-///@{
-extern IU  IP;                    ///< instruction pointer, IU is 16-bit, opcode is 8-bit
-extern IU  PC;                    ///< program counter, IU is 16-bit
-extern DU  *DS;                   ///< data stack pointer, Dr. Ting's stack
-extern DU  *RS;                   ///< return stack pointer, Dr. Ting's rack
-extern DU  top;                   ///< ALU (i.e. cached top of stack value)
-extern DU  rtop;                  ///< cached loop counter on return stack
-///@}
 ///@name MMU
 ///@{
 extern PGM_P  _rom;               ///< ROM, Forth word stored in Arduino Flash Memory
@@ -74,12 +65,12 @@ void SET(U16 d, U16 v) {
 ///
 /// push a value onto stack top
 ///
-DU   DEPTH()      { return (DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1; }
-void PUSH(DU v)   { *++DS = top;  top  = v; }
-void RPUSH(DU v)  { *--RS = rtop; rtop = v; }
-#define POP()     (top  = *DS--)
-#define RPOP()    (rtop = *RS++)
-#define DTOP(d)   { *DS = (d)&0xffff; top = (d)>>16; }
+#define NDS()    ((DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1)
+#define PUSH(v)  { *++DS = top;  top  = (v); }
+#define RPUSH(v) { *--RS = rtop; rtop = (v); }
+#define POP()    (top  = *DS--)
+#define RPOP()   (rtop = *RS++)
+#define DTOP(d)  { *DS = (d)&0xffff; top = (d)>>16; }
 
 ///
 ///@name Tracing
@@ -96,12 +87,12 @@ int constexpr opENTER = 2;
 int constexpr opDOLIT = 6;
 int constexpr opEXEC  = 8;
 
-#define DEBUG(s,v)  printf((s),(v))
+#define DEBUG(s,v)  if (tCNT) printf((s),(v))
 void TAB() {
     LOG("\n");
     for (int i=0; i<tTAB; i++) LOG("  ");
 }
-void TRACE(U8 op)
+void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
 {
     if (!tCNT) return;                       /// * skip if not tracing or end of program
     // indent call depth
@@ -109,30 +100,26 @@ void TRACE(U8 op)
     	TAB();
     	tTAB++;
     }
-    IU pc = (op==opENTER) ? (PC | BGET(IP)) : PC;
-    // display IP:PC[opcode]
-    LOG_H(" ", IP-1);                        /// * mem pointer
-    LOG_H(":", pc);                          /// * program counter, for indirect thread
-    LOG_H("[", op); LOG("]");                /// * opcode to be executed
+    // display IP:W[opcode]
+    LOG_H(" ", ip - 1);                      /// * mem pointer
+    LOG_H(":", w);                           /// * return addr
+	LOG_H("[", op); LOG("]");                /// * opcode to be executed
     // dump stack
-    DU s = DEPTH() - 1;                      ///< stack depth (minus top)
-    while (s-- > 0) {
-        DU *vp = ((DU*)DS - s);
-        DU v   = *vp;
-        LOG_H("_", v);
+    while (s > 0) {
+        LOG_H("_", *((DU*)RAM(FORTH_STACK_ADDR) + s--));
     }
     LOG_H("_", top);
     LOG("_");
     /// special opcode handlers for DOLIT, ENTER, EXIT
     switch (op) {
-    case opDOLIT: LOG_H("$", GET(IP)); LOG(" "); break;
+    case opDOLIT: LOG_H("$", GET(ip)); LOG(" "); break;
     case opEXIT:  LOG(";");  --tTAB;             break;
-    case opEXEC: pc = top; /** no break */
+    case opEXEC: w = top; /** no break */
     case opENTER:                                 /// * display word name
-    	for (--pc; (BGET(pc) & 0x7f)>0x20; pc--); /// * retract pointer to word name (ASCII range: 0x21~0x7f)
-    	int len = BGET(pc++) & 0x1f;              /// Forth allows 31 char max
-    	for (int i=0; i<len; i++, pc++) {
-    		LOG_C((char)BGET(pc));
+    	for (--w; (BGET(w) & 0x7f)>0x20; w--);    /// * retract pointer to word name (ASCII range: 0x21~0x7f)
+    	int len = BGET(w++) & 0x1f;               /// Forth allows 31 char max
+    	for (int i=0; i<len; i++, w++) {
+    		LOG_C((char)BGET(w));
     	}
     	LOG(" :");
         break;
@@ -141,8 +128,8 @@ void TRACE(U8 op)
 #else
     
 #define DEBUG(s,v)
-#define TAB()         /* skip */
-#define TRACE(op)     /* skip */
+#define TAB()                   /* skip */
+#define TRACE(op, ip, w, t, s)  /* skip */
     
 #endif // EXE_TRACE
 ///@}

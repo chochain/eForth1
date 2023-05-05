@@ -28,14 +28,11 @@
 #include "eforth_core.h"
 
 namespace EfVM {
-///@name MMU
+///@name MMU & IO interfaces
 ///@{
 extern PGM_P  _rom;               ///< ROM, Forth word stored in Arduino Flash Memory
 extern U8     *_ram;              ///< RAM, memory block for user define dictionary
-///@}
-///@name IO Stream interface
-///@{
-extern Stream *io;
+extern Stream *io;                ///< Stream IO interface
 ///@}
 #define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
 #define IDX_MASK       0x07ff     /**< RAM index mask  (0x0000~0x07ff) */
@@ -65,7 +62,7 @@ void SET(U16 d, U16 v) {
 ///
 /// push a value onto stack top
 ///
-#define NDS()    ((DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1)
+#define DEPTH()  ((DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1)
 #define PUSH(v)  { *++DS = top;  top  = (v); }
 #define RPUSH(v) { *--RS = rtop; rtop = (v); }
 #define POP()    (top  = *DS--)
@@ -82,15 +79,15 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-int constexpr opEXIT  = 1;
+int constexpr opEXIT  = 1;    /// cross-check with OPCODE enum in eforth_core.h
 int constexpr opENTER = 2;
 int constexpr opDOLIT = 6;
 int constexpr opEXEC  = 8;
 
 #define DEBUG(s,v)  if (tCNT) printf((s),(v))
-void TAB() {
-    LOG("\n");
-    for (int i=0; i<tTAB; i++) LOG("  ");
+#define TAB()       if (tCNT) {           \
+    LOG("\n");                            \
+    for (int i=0; i<tTAB; i++) LOG("  "); \
 }
 void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
 {
@@ -105,8 +102,8 @@ void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
     LOG_H(":", w);                           /// * return addr
 	LOG_H("[", op); LOG("]");                /// * opcode to be executed
     // dump stack
-    while (s > 0) {
-        LOG_H("_", *((DU*)RAM(FORTH_STACK_ADDR) + s--));
+    for (int i=0; i<s; i++) {
+        LOG_H("_", *((DU*)RAM(FORTH_STACK_ADDR) + (i+1)));
     }
     LOG_H("_", top);
     LOG("_");

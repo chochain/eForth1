@@ -109,8 +109,8 @@ void _qrx()                  ///> ( -- c ) fetch a char from console
 
 void _txsto()                ///> (c -- ) send a char to console
 {
-#if 0 && EXE_TRACE
-    if (tCNT) {
+#if EXE_TRACE
+    if (tCNT > 1) {
         switch (top) {
         case 0xa: tCNT ? LOG("<LF>") : LOG("\n");  break;
         case 0xd: LOG("<CR>");    break;
@@ -242,7 +242,7 @@ void vm_outer() {
             W |= BGET(IP);              /// * fetch low-byte of IP
             op = opENTER;
         }
-        TRACE(op, IP, W, top, NDS());   /// * debug tracing
+        TRACE(op, IP, W, top, DEPTH()); /// * debug tracing
 
         DISPATCH(op) {
         ///
@@ -371,7 +371,7 @@ void vm_outer() {
         _X(ONEP,  top++);
         _X(ONEM,  top--);
         _X(QDUP,  if (top) *++DS = top);
-        _X(DEPTH, DU d = NDS(); PUSH(d));
+        _X(DEPTH, DU d = DEPTH(); PUSH(d));
         _X(RP,
             DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
             PUSH(r));

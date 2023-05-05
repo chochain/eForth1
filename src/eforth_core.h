@@ -23,6 +23,7 @@
 ///@{
 #define ASM_TRACE       0             /**< assembler tracing flag */
 #define EXE_TRACE       0             /**< virtual machine execution tracing flag */
+#define ENABLE_SEE      1             /**< add see implementation, ROM extra ~300 bytes */
 ///@}
 ///
 ///@name Portable Types

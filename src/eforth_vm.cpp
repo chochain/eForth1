@@ -14,7 +14,7 @@ namespace EfVM {
 ///@name VM Registers
 ///@{
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
-IU  PC;                           ///< program counter, IU is 16-bit
+IU  W;                            ///< work register, IU is 16-bit
 DU  *DS;                          ///< data stack pointer, Dr. Ting's stack
 DU  *RS;                          ///< return stack pointer, Dr. Ting's rack
 DU  top;                          ///< ALU (i.e. cached top of stack value)
@@ -46,7 +46,7 @@ void _init() {
     RS = (DU*)RAM(FORTH_STACK_TOP);
 
 #if EXE_TRACE
-    tCNT = 1; tTAB = 0;               ///> setup tracing variables
+    tCNT = 0; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
 
     /// FORTH_UVAR_ADDR;
@@ -109,7 +109,7 @@ void _qrx()                  ///> ( -- c ) fetch a char from console
 
 void _txsto()                ///> (c -- ) send a char to console
 {
-#if EXE_TRACE
+#if 0 && EXE_TRACE
     if (tCNT) {
         switch (top) {
         case 0xa: tCNT ? LOG("<LF>") : LOG("\n");  break;
@@ -219,13 +219,13 @@ void vm_outer() {
     #define _X(n, code)  L_##n: { DEBUG("%s",#n); code; continue; }
     #define DISPATCH(op) goto *vt[op];
     #define opENTER      2              /** hardcoded for ENTER */
-    PROGMEM const void *vt[100] = {     ///< computed label lookup table
+    PROGMEM const void *vt[] = {        ///< computed label lookup table
         OP(NOP),                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
 #else // !COMPUTED_JUMP
     #define OP(name)     op##name
-    #define _X(n, code)  case op##n: { DEBUG("%s",#n); code; break; }
+    #define _X(n, code)  case op##n: { DEBUG("%s",#n); { code; } break; }
     #define DISPATCH(op) switch(op)
     enum {
         OP(NOP) = 0,                    ///< opcodes start at 0
@@ -238,10 +238,11 @@ void vm_outer() {
         YIELD();                        /// * yield to interrupt services
         U8 op = BGET(IP++);             /// * NEXT in Forth's context
         if (op & 0x80) {                /// * COLON word?
-            PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
+            W  = (U16)(op & 0x7f) << 8; /// * take high-byte of 16-bit address
+            W |= BGET(IP);              /// * fetch low-byte of IP
             op = opENTER;
         }
-        TRACE(op);
+        TRACE(op, IP, W, top, NDS());   /// * debug tracing
 
         DISPATCH(op) {
         ///
@@ -250,17 +251,15 @@ void vm_outer() {
         _X(NOP,   {});
         _X(EXIT,
             TAB();
-            IP = rtop;
-            RPOP();                     ///> pop return address
+            IP = rtop; RPOP();          ///> pop return address
             if (IP & IRET_FLAG) {       /// * IRETURN?
                 IR = 0;                 /// * interrupt disabled
                 IP &= ~IRET_FLAG;
             });
         _X(ENTER,
-            PC |= BGET(IP++);           /// * fetch low-byte of PC
+            RPUSH(++IP);                ///> keep return address
             DEBUG(">>%x", IP);
-            RPUSH(IP);                  ///> keep return address
-            IP = PC);                   ///> jump to next instruction
+            IP = W);                    ///> jump to next instruction
 #if ARDUINO
         _X(BYE,   _init());             /// * reset
 #else // !ARDUINO
@@ -372,7 +371,7 @@ void vm_outer() {
         _X(ONEP,  top++);
         _X(ONEM,  top--);
         _X(QDUP,  if (top) *++DS = top);
-        _X(DEPTH, DU d = DEPTH(); PUSH(d));
+        _X(DEPTH, DU d = NDS(); PUSH(d));
         _X(RP,
             DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
             PUSH(r));

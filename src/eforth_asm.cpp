@@ -508,7 +508,22 @@ int assemble(U8 *cdata)
         _THEN(NOP);
         _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                // restore BASE
     }
-#if 1 || EXE_TRACE
+    _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {       // tmp keeps width
+        _BEGIN(AT, QDUP);
+        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,                   // get name length
+             DUP, ONEP, ONEP, vTMP, PSTOR,                     // add to tmp
+             TYPE, SPACE, SPACE, CELL, SUB,                    // get LFA
+             vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {          // check row width
+            _IF(CR, DOLIT, 0, vTMP, STORE);
+            _THEN(NOP);
+        }
+        _REPEAT(EXIT);
+    }
+    _COLON("FORGET", TOKEN, NAMEQ, QDUP); {
+        _IF(CELL, SUB, DUP, vCP, STORE, AT, DUP, vCNTX, STORE, vLAST, STORE, DROP, EXIT);
+        _THEN(ERROR);
+    }
+#if ENABLE_SEE
     /// Optional: Takes ~300 bytes ROM space
     ///> display address with colon delimiter ( a -- )
     IU DOTAD = _COLON(".ADDR", CR, DUP, DOT, DOLIT, 0x3a, EMIT, EXIT);
@@ -559,22 +574,7 @@ int assemble(U8 *cdata)
         _WHILE(DOTOP);                                         // disasmble opcode
         _REPEAT(DDROP, SPACE, DOLIT, 0x3b, EMIT, EXIT);        // semi colon
     }
-#endif // EXE_TRACE
-    _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {       // tmp keeps width
-        _BEGIN(AT, QDUP);
-        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,                   // get name length
-             DUP, ONEP, ONEP, vTMP, PSTOR,                     // add to tmp
-             TYPE, SPACE, SPACE, CELL, SUB,                    // get LFA
-             vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {          // check row width
-            _IF(CR, DOLIT, 0, vTMP, STORE);
-            _THEN(NOP);
-        }
-        _REPEAT(EXIT);
-    }
-    _COLON("FORGET", TOKEN, NAMEQ, QDUP); {
-        _IF(CELL, SUB, DUP, vCP, STORE, AT, DUP, vCNTX, STORE, vLAST, STORE, DROP, EXIT);
-        _THEN(ERROR);
-    }
+#endif // ENABLE_SEE
     ///
     ///> Control Structures
     ///

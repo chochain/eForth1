@@ -208,7 +208,7 @@ typedef const char          *PGM_P;
 #define LOG(s)              printf("%s", (s))
 #define LOG_C(c)            printf("%c", (c))
 #define LOG_V(s, n)         printf("%s%d", (s), (n))
-#define LOG_H(s, n)         printf("%s%x", (s), (n)&0xffff)
+#define LOG_H(s, n)         printf("%s%x", (s), (U16)((n)&0xffff))
 #define LOW                 (0)
 #define HIGH                (1)
 #define CLI()

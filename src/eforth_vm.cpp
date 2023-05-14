@@ -81,8 +81,8 @@ void _yield()                ///> yield to interrupt service
         IP = IR;                  /// * skip opENTER
     }
 }
-int _yield_cnt = 0;          ///< interrupt service throttle counter
-#define YIELD_PERIOD 50
+U8 _yield_cnt = 0;           ///< interrupt service throttle counter
+#define YIELD_PERIOD 100     /** 256 max */
 #define YIELD()                               \
     if (!IR && ++_yield_cnt > YIELD_PERIOD) { \
         _yield_cnt = 0;                       \
@@ -253,7 +253,7 @@ void vm_outer() {
             TAB();
             IP = rtop; RPOP();          ///> pop return address
             if (IP & IRET_FLAG) {       /// * IRETURN?
-                IR = 0;                 /// * interrupt disabled
+                IR = 0;                 /// * interrupt clear
                 IP &= ~IRET_FLAG;
             });
         _X(ENTER,

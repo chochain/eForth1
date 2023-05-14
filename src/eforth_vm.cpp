@@ -208,10 +208,10 @@ int vm_pop() {
 /// @return
 ///   0 - exit
 void vm_outer() {
-#if COMPUTED_JUMP
+#if COMPUTED_GOTO
     /// Note:
-    ///   computed label jumps
-    ///      + overall 15% faster than subroutine calls
+    ///   computed goto
+    ///      + overall ~3% faster, -80ms/100K, than token switch jump
     ///      + but uses extra 180 bytes of RAM (avr-gcc failed to put vt in PROGMEM)
     ///      + the 'continue' in _X() macro behaves as $NEXT
     ///
@@ -223,7 +223,7 @@ void vm_outer() {
         OP(NOP),                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
-#else // !COMPUTED_JUMP
+#else // !COMPUTED_GOTO
     #define OP(name)     op##name
     #define _X(n, code)  case op##n: { DEBUG("%s",#n); { code; } break; }
     #define DISPATCH(op) switch(op)
@@ -231,15 +231,15 @@ void vm_outer() {
         OP(NOP) = 0,                    ///< opcodes start at 0
         OPCODES
     };
-#endif // COMPUTED_JUMP
+#endif // COMPUTED_GOTO
     IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
-    while (1) {
+    while (1) {                         ///> Forth inner loop
         YIELD();                        /// * yield to interrupt services
         U8 op = BGET(IP++);             /// * NEXT in Forth's context
         if (op & 0x80) {                /// * COLON word?
-            W  = (U16)(op & 0x7f) << 8; /// * take high-byte of 16-bit address
-            W |= BGET(IP);              /// * fetch low-byte of IP
+            W = ((U16)(op & 0x7f)<<8)   /// * take high-byte of 16-bit address
+                | BGET(IP);             /// * fetch low-byte of IP
             op = opENTER;
         }
         TRACE(op, IP, W, top, DEPTH()); /// * debug tracing

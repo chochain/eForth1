@@ -222,10 +222,10 @@ typedef const char          *PGM_P;
 void intr_reset();          ///< reset interrupts
 U16  intr_hits();
 IU   intr_service();
-void intr_add_tmisr(U16 i, U16 ms, IU xt);
-void intr_add_pcisr(U16 pin, IU xt);
-void intr_timer_enable(U16 f);
-void intr_pci_enable(U16 f);
+void intr_add_tmisr(U8 i, U16 ms, IU xt);
+void intr_add_pcisr(U8 pin, IU xt);
+void intr_timer_enable(U8 f);
+void intr_pci_enable(U8 f);
 ///@}
 ///@name eForth Virtual Machine Functions
 ///@{

@@ -65,7 +65,7 @@ IU intr_service() {
 ///
 ///> add timer interrupt service routine
 ///
-void intr_add_tmisr(U16 i, U16 ms, U16 xt) {
+void intr_add_tmisr(U8 i, U16 ms, U16 xt) {
     if (xt==0 || i > 7) return; // range check
 
     CLI();
@@ -79,7 +79,7 @@ void intr_add_tmisr(U16 i, U16 ms, U16 xt) {
 ///
 ///> add pin change interrupt service routine
 ///
-void intr_add_pcisr(U16 p, U16 xt) {
+void intr_add_pcisr(U8 p, U16 xt) {
     if (xt==0) return;              // range check
     CLI();
     if (p < 8)       {
@@ -99,7 +99,7 @@ void intr_add_pcisr(U16 p, U16 xt) {
 ///
 ///> enable/disable pin change interrupt
 ///
-void intr_pci_enable(U16 f) {
+void intr_pci_enable(U8 f) {
     CLI();
     if (f) {
         if (ir.xt[8])  PCICR |= _BV(PCIE0);  // enable PORTB
@@ -112,7 +112,7 @@ void intr_pci_enable(U16 f) {
 ///
 ///> enable/disable timer2 interrupt
 ///
-void intr_timer_enable(U16 f) {
+void intr_timer_enable(U8 f) {
     CLI();
     TCCR2A = TCCR2B = TCNT2 = 0;           // reset counter
     if (f) {
@@ -142,9 +142,9 @@ ISR(PCINT2_vect) { ir.p_hit |= 4; }
 
 #else // !ARDUINO
 
-void intr_add_pcisr(U16 p, U16 xt) {}        // mocked functions for x86
-void intr_pci_enable(U16 f)        {}
-void intr_timer_enable(U16 f) {
+void intr_add_pcisr(U8 p, U16 xt) {}        // mocked functions for x86
+void intr_pci_enable(U8 f)        {}
+void intr_timer_enable(U8 f) {
     tmr_on = f;
 }
 

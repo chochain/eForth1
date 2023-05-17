@@ -82,7 +82,7 @@ void _yield()                ///> yield to interrupt service
     }
 }
 U8 _yield_cnt = 0;           ///< interrupt service throttle counter
-#define YIELD_PERIOD 100     /** 256 max */
+#define YIELD_PERIOD 50      /** 256 max (1ms ~ 50*20us/op) */
 #define YIELD()                               \
     if (!IR && ++_yield_cnt > YIELD_PERIOD) { \
         _yield_cnt = 0;                       \

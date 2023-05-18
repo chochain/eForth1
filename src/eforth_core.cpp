@@ -7,10 +7,10 @@
 /// interrupt handlers
 ///
 typedef struct {
-    U8  t_idx { 0 };                 ///< timer ISR index
-    U16 t_cnt[8];                    ///< timer CTC counters
-    U16 t_max[8];                    ///< timer CTC top value
     U16 xt[11];                      ///< interrupt vectors 0-7: timer, 8-10: pin change
+    U16 t_max[8];                    ///< timer CTC top value
+    U8  t_idx { 0 };                 ///< timer ISR index
+    volatile U16 t_cnt[8];           ///< timer CTC counters
     volatile U8  t_hit { 0 };        ///< 8-bit for 8 timer ISR
     volatile U8  p_hit { 0 };        ///< pin change interrupt (PORT-B,C,D)
 } IsrRec;
@@ -35,18 +35,23 @@ U8  tmr_on = 0;                   ///< fake timer enabler
 void _fake_intr(U8 hits)
 {
     static int n = 0;                              // fake interrupt
-    if (tmr_on && !hits && ++n >= 1000) {
-        n=0; ir.t_hit = 1;
+    if (tmr_on && !hits && ++n >= 100) {
+        n=0; ir.t_hit = 3;
     }
 }
 #endif // ARDUINO
 ///
 ///> service interrupt routines
 ///
+#define YIELD_PERIOD 50      /** 256 max (1ms ~ 50*20us/op) */
 IU intr_service() {
-    volatile static U16 hits = 0;
+    volatile static U16 hits = 0;                  ///> cached interrupt flags
+	static U8 cnt = 0;                             ///> throttle counter
 
-    _fake_intr(hits);                              // on x86 platform
+    _fake_intr(hits);                              /// * on x86 platform
+
+    if (!hits && ++cnt < YIELD_PERIOD) return 0;   /// * throttle down (boot performance a bit)
+    cnt = 0;                                       /// * reset throttle counter
 
     CLI();
     if (!hits) {
@@ -69,9 +74,9 @@ void intr_add_tmisr(U8 i, U16 ms, U16 xt) {
     if (xt==0 || i > 7) return; // range check
 
     CLI();
-    ir.xt[i]    = xt;              // ISR xt
-    ir.t_cnt[i] = 0;               // init counter
-    ir.t_max[i] = ms;              // period (in ms)
+    ir.xt[i]    = xt;                   // ISR xt
+    ir.t_cnt[i] = (U16)millis() % ms;   // init counter (randomize, to even time slice)
+    ir.t_max[i] = ms;                   // period (in ms)
     if (i >= ir.t_idx) ir.t_idx = i + 1;
     SEI();
 }

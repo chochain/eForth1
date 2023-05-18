@@ -12,14 +12,14 @@
 Servo sv[8];
 
 PROGMEM const char code[] =
-"variable w 7 cells allot\n"
-": xx ( -- ) 7 for r@ dup 1 + 10 * swap cells w + ! next ; xx\n"
-": w@ ( n -- c w ) 90 swap cells w + @ ;\n"
-": ang= ( ph n -- ) swap over w@ rot 1 call swap 0 call ;\n"
-"variable x\n"
-": step 7 for dup r@ ang= next drop ;\n"
-": swing x @ dup 1+ x ! step ;\n"
-"' swing 100 0 tmisr\n"
+"CREATE w 8 ALLOT\n"
+": xx ( -- ) 7 FOR I DUP 1 + 10 * SWAP w + C! NEXT ; xx\n"
+": w@ ( n -- c w ) 90 SWAP w + C@ ;\n"
+": ang= ( ph n -- ) SWAP OVER w@ ROT 1 CALL SWAP 0 CALL ;\n"
+"VARIABLE x\n"
+": step 7 FOR DUP I ang= NEXT DROP ;\n"
+": swing x @ DUP 1+ x ! step ;\n"
+"' swing 100 0 TMISR\n"
 ;
 
 void servo() {

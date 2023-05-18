@@ -73,21 +73,16 @@ void _init() {
 ///
 ///> serve interrupt routines
 ///
-void _yield()                ///> yield to interrupt service
+void _yield()                     ///> yield to interrupt service
 {
-    IR = intr_service();          /// * check interrupts
+	if (IR) return;               /// * still servcing interrupt
+
+    IR  = intr_service();         /// * check interrupts
     if (IR) {                     /// * service interrupt?
         RPUSH(IP | IRET_FLAG);    /// * flag return address as IRET
         IP = IR;                  /// * skip opENTER
     }
 }
-U8 _yield_cnt = 0;           ///< interrupt service throttle counter
-#define YIELD_PERIOD 50      /** 256 max (1ms ~ 50*20us/op) */
-#define YIELD()                               \
-    if (!IR && ++_yield_cnt > YIELD_PERIOD) { \
-        _yield_cnt = 0;                       \
-        _yield();                             \
-    }
 ///
 ///> console IO functions
 ///
@@ -235,7 +230,7 @@ void vm_outer() {
     IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
     while (1) {                         ///> Forth inner loop
-        YIELD();                        /// * yield to interrupt services
+        _yield();                       /// * yield to interrupt services
         U8 op = BGET(IP++);             /// * NEXT in Forth's context
         if (op & 0x80) {                /// * COLON word?
             W = ((U16)(op & 0x7f)<<8)   /// * take high-byte of 16-bit address

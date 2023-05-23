@@ -98,6 +98,10 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 
   * Drives 8 Servos at <a href="https://wokwi.com/projects/356866133593965569" target="_blank">*this Wokwi project*</a>
 
+  * Controls 4-legged Robot (8 servos) with ultrasound and IR remote. <a href="https://youtu.be/pvBo-G87Fzw">Ultrasound ranging</a> and <a href="https://youtu.be/-zBb82UFZpA">Walking</a>. Demo code in ~/examples/8_kame
+
+  * Communicate through Bluetooth (HC-05). Demo code in ~/examples/9_bluetooth
+
 ### Benchmark
   * Classic 1 million cycles
     <pre>

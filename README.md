@@ -94,7 +94,8 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     
     |||
     |:--|:--|
-    |<a href="https://youtu.be/--iLaLC5cG0" target="_blank">Blinker</a>|<a href="https://youtu.be/gr3OVOcgF4Q" target="_blank">Serve Interrupt</a>|
+    |Blinker|Serve Interrupt|
+    |<a href="https://youtu.be/--iLaLC5cG0" target="_blank"><img src="https://img.youtube.com/vi/--iLaLC5cG0/1.jpg" width=200></a>|<a href="https://youtu.be/gr3OVOcgF4Q" target="_blank"><img src="https://img.youtube.com/vi/gr3OVOcgF4Q/1.jpg" width=200></a>|
 
   * Drives 8 Servos at <a href="https://wokwi.com/projects/356866133593965569" target="_blank">*this Wokwi project*</a>
 

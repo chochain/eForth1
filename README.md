@@ -66,13 +66,14 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
   * > <img src="https://chochain.github.io/eForth1/images/eforth1_words_snip.png" width=400>
 
 ### Different from Dr. Ting's
-  * Instead of original 32-bit, CELL is 16-bit, and prmitive are 8-bit opcodes.
+  * Instead of the original 32-bit, CELL is 16-bit, and prmitives are 8-bit opcodes.
   * To save space, primitives are compiled as bytecode and composite words are flagged address pointers.
   * For speed, use direct threading model instead of original subroutine threaded,
-  * For familiarity to the IDE platform, instead of raw GPIO port read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... 
-  * Support multi-tasking through interrupts. A Timer ticks at 1ms using Timer2. There are 8 timer interrupt handler slots provided. Timer1 is left free for Servo or other libraries.
-  * CLOCK returns a 32-bit number, it takes 2 cells off 16-bit stack. So, to calculate difference, arithmetics for double are needed. DNEGATE, D+, or D- and the conversion words D>S, S>D are provided.
-  * DELAY takes a 16-bit value thus max delay time is 32767ms. For longer delay, use loops. BTW, DELAY does not pause the MCU nor does it interfer with interrupts. (see demos below).
+  * For the familiarity to the IDE platform, instead of raw GPIO port read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... 
+  * Support multi-tasking through timer interrupts. Timer2 ticks at 1ms as the heart-beat with 8 handler slots provided. Timer1 is left free for Servo or other libraries.
+  * Pin Change Interrupts are supported on all pins. Handler slots are provided for each of Port B,C, and D.
+  * CLOCK returns a 32-bit number, it takes 2 cells off 16-bit stack. Arithmetics for double are also provided. DNEGATE, D+, or D- plus the conversion words D>S, S>D.
+  * DELAY does not pause the MCU nor does it interfer with interrupts. It takes a 16-bit value thus max delay time is 32767ms. For longer delay, define word that loops.
 
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6, or try <a href="https://wokwi.com/projects/356793878308297729" target="_blank">*this Wokwi project*</a>)

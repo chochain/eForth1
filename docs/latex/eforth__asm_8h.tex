@@ -57,7 +57,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 \#define \mbox{\hyperlink{eforth__asm_8h_a6fd020b4ee926c9d86260e283bd2b660}{\+\_\+\+C\+O\+DE}}(seg, ...)~\+\_\+code(F(seg), \mbox{\hyperlink{eforth__asm_8h_a8b4fbd083a242445cf8eba9028c2a715}{\+\_\+\+N\+A\+RG}}(\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+), \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)
 \item 
-\#define \mbox{\hyperlink{eforth__asm_8h_abeb04659d0496ec73bb428a13ea3e0b3}{\+\_\+\+X\+C\+O\+DE}}(seg,  x)~op\#\#x; \mbox{\hyperlink{eforth__asm_8h_a6fd020b4ee926c9d86260e283bd2b660}{\+\_\+\+C\+O\+DE}}(seg, op\#\#x, op\+E\+X\+IT)
+\#define \mbox{\hyperlink{eforth__asm_8h_acb1d5930a112ae4f4ffe181b3da37fa1}{\+\_\+\+P\+R\+IM}}(seg,  x)~(\mbox{\hyperlink{eforth__asm_8h_a6fd020b4ee926c9d86260e283bd2b660}{\+\_\+\+C\+O\+DE}}(seg, op\#\#x, op\+E\+X\+IT), op\#\#x)
 \item 
 \#define \mbox{\hyperlink{eforth__asm_8h_a9b4d0c68e95ce57cf7cdda4ee95d93f8}{\+\_\+\+C\+O\+L\+ON}}(seg, ...)~\+\_\+colon(F(seg), \mbox{\hyperlink{eforth__asm_8h_a8b4fbd083a242445cf8eba9028c2a715}{\+\_\+\+N\+A\+RG}}(\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+), \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)
 \item 
@@ -261,11 +261,11 @@ variable length parameter handler macros \mbox{\Hypertarget{eforth__asm_8h_a9b89
 \doxysubsubsection{\texorpdfstring{\_CODE}{\_CODE}}
 {\footnotesize\ttfamily \#define \+\_\+\+C\+O\+DE(\begin{DoxyParamCaption}\item[{}]{seg,  }\item[{}]{... }\end{DoxyParamCaption})~\+\_\+code(F(seg), \mbox{\hyperlink{eforth__asm_8h_a8b4fbd083a242445cf8eba9028c2a715}{\+\_\+\+N\+A\+RG}}(\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+), \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)}
 
-\mbox{\Hypertarget{eforth__asm_8h_abeb04659d0496ec73bb428a13ea3e0b3}\label{eforth__asm_8h_abeb04659d0496ec73bb428a13ea3e0b3}} 
-\index{eforth\_asm.h@{eforth\_asm.h}!\_XCODE@{\_XCODE}}
-\index{\_XCODE@{\_XCODE}!eforth\_asm.h@{eforth\_asm.h}}
-\doxysubsubsection{\texorpdfstring{\_XCODE}{\_XCODE}}
-{\footnotesize\ttfamily \#define \+\_\+\+X\+C\+O\+DE(\begin{DoxyParamCaption}\item[{}]{seg,  }\item[{}]{x }\end{DoxyParamCaption})~op\#\#x; \mbox{\hyperlink{eforth__asm_8h_a6fd020b4ee926c9d86260e283bd2b660}{\+\_\+\+C\+O\+DE}}(seg, op\#\#x, op\+E\+X\+IT)}
+\mbox{\Hypertarget{eforth__asm_8h_acb1d5930a112ae4f4ffe181b3da37fa1}\label{eforth__asm_8h_acb1d5930a112ae4f4ffe181b3da37fa1}} 
+\index{eforth\_asm.h@{eforth\_asm.h}!\_PRIM@{\_PRIM}}
+\index{\_PRIM@{\_PRIM}!eforth\_asm.h@{eforth\_asm.h}}
+\doxysubsubsection{\texorpdfstring{\_PRIM}{\_PRIM}}
+{\footnotesize\ttfamily \#define \+\_\+\+P\+R\+IM(\begin{DoxyParamCaption}\item[{}]{seg,  }\item[{}]{x }\end{DoxyParamCaption})~(\mbox{\hyperlink{eforth__asm_8h_a6fd020b4ee926c9d86260e283bd2b660}{\+\_\+\+C\+O\+DE}}(seg, op\#\#x, op\+E\+X\+IT), op\#\#x)}
 
 \mbox{\Hypertarget{eforth__asm_8h_a9b4d0c68e95ce57cf7cdda4ee95d93f8}\label{eforth__asm_8h_a9b4d0c68e95ce57cf7cdda4ee95d93f8}} 
 \index{eforth\_asm.h@{eforth\_asm.h}!\_COLON@{\_COLON}}

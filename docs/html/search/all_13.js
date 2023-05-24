@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['yield_175',['YIELD',['../eforth__vm_8cpp.html#ab225fd437247be81c502ebd3b4857465',1,'eforth_vm.cpp']]],
-  ['yield_5fperiod_176',['YIELD_PERIOD',['../eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e',1,'eforth_vm.cpp']]]
+  ['xt_191',['xt',['../structIsrRec.html#a3e8170dd456690b7172212015b9c2671',1,'IsrRec']]]
 ];

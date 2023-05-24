@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['r_263',['R',['../group__Assembler.html#ga85323f491b7b3ea3883bad0c91d9de17',1,'EfAsm']]],
-  ['ram_264',['ram',['../eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52',1,'eforth1.cpp']]],
-  ['rs_265',['RS',['../namespaceEfVM.html#a44c4b6ad0dc45ad811db233793ab9ba8',1,'EfVM']]],
-  ['rtop_266',['rtop',['../namespaceEfVM.html#a61aea862ab3bab556736663c844366c7',1,'EfVM']]]
+  ['p_5fhit_285',['p_hit',['../structIsrRec.html#a68ca112642aa4725c18b1958c4f29867',1,'IsrRec']]],
+  ['pc_286',['PC',['../group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb',1,'EfAsm']]],
+  ['progmem_287',['PROGMEM',['../eforth__rom_8c.html#a0babba59a58a58d5de2f517a9cd465b2',1,'eforth_rom.c']]]
 ];

@@ -3,26 +3,26 @@
 
 
 In 2011, Dr. Ting created \href{https://chochain.github.io/eForth1/ref/328eForth.pdf}{\texttt{ $\ast$328e\+Forth$\ast$}} to run Forth on Arduino U\+NO and wrote in his ce\+Forth\+\_\+33 document\+: \begin{quote}
-{\itshape I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. However, you had only 1.\+5\+KB of R\+AM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
+{\itshape I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. ...., it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
 
 
 Before Dr. Ting conceded his fight with cancer in May, 2022, I\textquotesingle{}ve spent the last 11 months working with him expanding the concept of $\ast$$\ast$\char`\"{}\+Forth without Forth\char`\"{}$\ast$$\ast$ -\/ a new e\+Forth model -\/ he called. Traditionally, Forth is built with a set of core words in low-\/level assembly language and establish the rest of words with high-\/level Forth scripts which get boot-\/strapped on start-\/up time. Nowadays, build Forth without using Forth, he reasoned that Forth built entirely in high-\/level languages, specifically in C, can not only greatly simplify the virtual machine, utilizing operating system, but also encourage portability and optimization. Taking the concept forward, we completed new batch of e\+Forths in Javascript, Java, C++, ported them to Windows, E\+S\+P32 in just a few months. Dr. Ting presented a video on November, 2021 to \href{https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s}{\texttt{ $\ast$\+Sillicon Valley Forth Interest Group$\ast$}}. Later, we fancied creating a hardware version e\+Forth with System\+Verilog and joint venture with Don \& Demitri\textquotesingle{}s C\+O\+R\+E-\/I F\+P\+GA project of \href{https://www.facebook.com/groups/1304548976637542}{\texttt{ $\ast$\+AI \& Robotics Group$\ast$}} til Dr. Ting\textquotesingle{}s eventual departure. The project is still active now.
 
-Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model and have fun with it. Since his {\itshape 328e\+Forth} was a teaser only, to move it forward, there are a few major things I need to make changes to Dr. Ting\textquotesingle{}s implementation i.\+g. make C-\/coder friendly macro assembler, remove dependency on extra bootloader programmer, add E\+E\+P\+R\+OM save/load, and support interrupts, ... So, here we go!
+Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model and have fun with it. Since his {\itshape 328e\+Forth} was a teaser only, to move it forward formally, there are a few major things I need to make changes to Dr. Ting\textquotesingle{}s implementation i.\+g. make C-\/coder friendly macro assembler, remove dependency on extra bootloader programmer, add E\+E\+P\+R\+OM save/load, and support interrupts, ... So, here we go!
 
 \doxysubsection*{What is e\+Forth1?}
 
 
 \begin{DoxyItemize}
 \item An e\+Forth for Arduino U\+N\+O/\+Nano implemented in C.
-\item A .ino file that can be openned in Arduino I\+DE and load/run directly onto Arduino.
+\item Use .ino sketch file that can be openned in Arduino I\+DE and load/run directly onto Arduino M\+CU.
 \item Has 16-\/bit cells and stacks.
-\item Can read/write Arduino pins.
+\item Can read/write Arduino G\+P\+IO pins.
 \item Supports Arduino Timer and Pin Change Interrupts.
 \item Has C A\+PI to interface with user defined functions written in .ino.
-\item Can save/load app to/from E\+E\+P\+R\+OM.
+\item Can save/restore app to/from E\+E\+P\+R\+OM.
 \item Can be embeded with other Arduino applications.
-\item Become Turnkey system booting from saved E\+E\+P\+R\+OM.
+\item Can become a turnkey system booting from saved E\+E\+P\+R\+OM or enscripted Forth code.
 \end{DoxyItemize}
 
 \doxysubsection*{How to install e\+Forth1?}
@@ -86,13 +86,14 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 
 
 \begin{DoxyItemize}
-\item Instead of original 32-\/bit, C\+E\+LL is 16-\/bit, opcodes are 8-\/bit bytecode primitives.
+\item Instead of the original 32-\/bit, C\+E\+LL is 16-\/bit, and prmitives are 8-\/bit opcodes.
 \item To save space, primitives are compiled as bytecode and composite words are flagged address pointers.
 \item For speed, use direct threading model instead of original subroutine threaded,
-\item Instead of direct G\+P\+IO port manipulation with byte read/write, e\+Forth1 calls Arduino library functions i.\+g. P\+I\+N\+M\+O\+DE = pin\+Mode, IN = digital\+Read, O\+UT = digital\+Write, ... for familiarity to the I\+DE platform.
-\item Multi-\/tasking supported through interrupts. A base tick of 1ms precision using Timer2 i.\+e. one assigns mulply of 1ms as I\+SR repetition trigger period. For example 500 means triggered every 500ms and there are 8 timer interrupt handler slots provided. Timer1 is left free for Servo or other libraries.
-\item On this 16-\/bit system, C\+L\+O\+CK still returns a double number (i.\+e. 32-\/bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.\+e. using D\+N\+E\+G\+A\+TE, D+, or D-\/ and the conversion words D$>$S, S$>$D.
-\item D\+E\+L\+AY takes a 16-\/bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, D\+E\+L\+AY does not interfer with interrupts (see demos below).
+\item For the familiarity to the I\+DE platform, instead of raw G\+P\+IO port read/write, e\+Forth1 calls Arduino library functions i.\+g. P\+I\+N\+M\+O\+DE = pin\+Mode, IN = digital\+Read, O\+UT = digital\+Write, ...
+\item Support multi-\/tasking through timer interrupts. Timer2 ticks at 1ms as the heart-\/beat with 8 handler slots provided. Timer1 is left free for Servo or other libraries.
+\item Pin Change Interrupts are supported on all pins. Handler slots are provided for each of Port B,C, and D.
+\item C\+L\+O\+CK returns a 32-\/bit number, it takes 2 cells off 16-\/bit stack. Arithmetics for double are also provided. D\+N\+E\+G\+A\+TE, D+, or D-\/ plus the conversion words D$>$S, S$>$D.
+\item D\+E\+L\+AY does not pause the M\+CU nor does it interfer with interrupts. It takes a 16-\/bit value thus max delay time is 32767ms. For longer delay, define word that loops.
 \end{DoxyItemize}
 
 \doxysubsection*{Demos}
@@ -116,9 +117,45 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
     > 19 blink⏎                              \textbackslash{} let's have them both blink (blue LED 10 times) 
     \end{DoxyPre}
 
+\end{DoxyItemize}
 
-$\vert$$\vert$$\vert$ $\vert$\+:--$\vert$\+:--$\vert$ $\vert$$\vert$$\vert$
-\item Drives 8 Servos at \href{https://wokwi.com/projects/356866133593965569}{\texttt{ $\ast$this Wokwi project$\ast$}}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Blinker }&\cellcolor{\tableheadbgcolor}\textbf{ Serve Interrupt  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Blinker }&\cellcolor{\tableheadbgcolor}\textbf{ Serve Interrupt  }\\\cline{1-2}
+\endhead
+\href{https://youtu.be/--iLaLC5cG0}{\texttt{ }} &\href{https://youtu.be/gr3OVOcgF4Q}{\texttt{ }}  \\\cline{1-2}
+\end{longtabu}
+
+
+
+\begin{DoxyItemize}
+\item Drives 8 Servos. Demo at \href{https://wokwi.com/projects/356866133593965569}{\texttt{ $\ast$this Wokwi project$\ast$}}
+\item Controls 4-\/legged Robot (8 servos) with ultrasound and IR remote. Demo code in $\sim$/examples/8\+\_\+kame
+\end{DoxyItemize}
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Ultrasound Ranging }&\cellcolor{\tableheadbgcolor}\textbf{ Walking  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Ultrasound Ranging }&\cellcolor{\tableheadbgcolor}\textbf{ Walking  }\\\cline{1-2}
+\endhead
+\href{https://youtu.be/pvBo-G87Fzw}{\texttt{ }} &\href{https://youtu.be/-zBb82UFZpA}{\texttt{ }}  \\\cline{1-2}
+\end{longtabu}
+
+
+
+\begin{DoxyItemize}
+\item Communicate through Bluetooth (H\+C-\/05). Demo code in $\sim$/examples/9\+\_\+bluetooth
 \end{DoxyItemize}
 
 \doxysubsection*{Benchmark}

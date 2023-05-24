@@ -4,9 +4,7 @@
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{namespaceEfVM_aaaa9f256ad4e73f2885577923fa23447}{\+\_\+init}} ()
-\begin{DoxyCompactList}\small\item\em \begin{quote}
-store C function pointer \end{quote}
-\end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{namespaceEfVM_a1149487a9866fbd91d4ccaf57eab9ea6}{\+\_\+yield}} ()
 \begin{DoxyCompactList}\small\item\em \begin{quote}
 yield to interrupt service \end{quote}
@@ -28,20 +26,7 @@ void \mbox{\hyperlink{namespaceEfVM_a015b593d5fa03ddd62e929786fe5ea8e}{\+\_\+out
 \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{namespaceEfVM_a07e74ced8251d26cd20bce5a2c386d7a}{G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
 \item 
 void \mbox{\hyperlink{namespaceEfVM_a6704f4eed222b21f8754d5c4711c1a15}{S\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} v)
-\item 
-\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} \mbox{\hyperlink{namespaceEfVM_a42d6bbbd96179a13b2fb9b0c9d58330a}{D\+E\+P\+TH}} ()
-\item 
-void \mbox{\hyperlink{namespaceEfVM_ac4f69cc49b68f10383886820029f6257}{P\+U\+SH}} (\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} v)
-\item 
-void \mbox{\hyperlink{namespaceEfVM_acfaf9ecd06a6d4b5dc4243201efaf38e}{R\+P\+U\+SH}} (\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} v)
 \end{DoxyCompactItemize}
-\doxysubsection*{Variables}
-\begin{DoxyCompactItemize}
-\item 
-static Stream $\ast$ \mbox{\hyperlink{namespaceEfVM_aa5ac1bb7ff2e93de1df7e220797fc690}{io}}
-\item 
-int \mbox{\hyperlink{namespaceEfVM_a09d628000e6b3bb7306a3bc9c3299efe}{\+\_\+yield\+\_\+cnt}} = 0
-\begin{DoxyCompactList}\small\item\em interrupt service throttle counter \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Function Documentation}
@@ -51,10 +36,8 @@ int \mbox{\hyperlink{namespaceEfVM_a09d628000e6b3bb7306a3bc9c3299efe}{\+\_\+yiel
 \doxysubsubsection{\texorpdfstring{\_init()}{\_init()}}
 {\footnotesize\ttfamily void Ef\+V\+M\+::\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-
-
 \begin{quote}
-store C function pointer \end{quote}
+Forth Virtual Machine primitive functions \end{quote}
 
 
 virtual machine initializer 
@@ -99,6 +82,7 @@ yield to interrupt service \end{quote}
 serve interrupt routines \end{quote}
 
 \begin{DoxyItemize}
+\item still servcing interrupt
 \item check interrupts
 \item service interrupt?
 \item flag return address as I\+R\+ET
@@ -178,33 +162,9 @@ word (16-\/bit) fetch from either R\+AM or R\+OM depends on filtered range \mbox
 \doxysubsubsection{\texorpdfstring{SET()}{SET()}}
 {\footnotesize\ttfamily void Ef\+V\+M\+::\+S\+ET (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{d,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{v }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{namespaceEfVM_a42d6bbbd96179a13b2fb9b0c9d58330a}\label{namespaceEfVM_a42d6bbbd96179a13b2fb9b0c9d58330a}} 
-\index{EfVM@{EfVM}!DEPTH@{DEPTH}}
-\index{DEPTH@{DEPTH}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{DEPTH()}{DEPTH()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} Ef\+V\+M\+::\+D\+E\+P\+TH (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-push a value onto stack top \mbox{\Hypertarget{namespaceEfVM_ac4f69cc49b68f10383886820029f6257}\label{namespaceEfVM_ac4f69cc49b68f10383886820029f6257}} 
-\index{EfVM@{EfVM}!PUSH@{PUSH}}
-\index{PUSH@{PUSH}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{PUSH()}{PUSH()}}
-{\footnotesize\ttfamily void Ef\+V\+M\+::\+P\+U\+SH (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}}]{v }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespaceEfVM_acfaf9ecd06a6d4b5dc4243201efaf38e}\label{namespaceEfVM_acfaf9ecd06a6d4b5dc4243201efaf38e}} 
-\index{EfVM@{EfVM}!RPUSH@{RPUSH}}
-\index{RPUSH@{RPUSH}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{RPUSH()}{RPUSH()}}
-{\footnotesize\ttfamily void Ef\+V\+M\+::\+R\+P\+U\+SH (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}}]{v }\end{DoxyParamCaption})}
-
 
 
 \doxysubsection{Variable Documentation}
-\mbox{\Hypertarget{namespaceEfVM_aa5ac1bb7ff2e93de1df7e220797fc690}\label{namespaceEfVM_aa5ac1bb7ff2e93de1df7e220797fc690}} 
-\index{EfVM@{EfVM}!io@{io}}
-\index{io@{io}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{io}{io}}
-{\footnotesize\ttfamily Stream$\ast$ Ef\+V\+M\+::io\hspace{0.3cm}{\ttfamily [static]}}
-
 \mbox{\Hypertarget{namespaceEfVM_a34e9492841c1a98e29286c41dcdac10b}\label{namespaceEfVM_a34e9492841c1a98e29286c41dcdac10b}} 
 \index{EfVM@{EfVM}!IP@{IP}}
 \index{IP@{IP}!EfVM@{EfVM}}
@@ -215,31 +175,31 @@ push a value onto stack top \mbox{\Hypertarget{namespaceEfVM_ac4f69cc49b68f10383
 
 instruction pointer, IU is 16-\/bit, opcode is 8-\/bit 
 
-\mbox{\Hypertarget{namespaceEfVM_a4444ce01dd126290156b6339aedb281b}\label{namespaceEfVM_a4444ce01dd126290156b6339aedb281b}} 
-\index{EfVM@{EfVM}!PC@{PC}}
-\index{PC@{PC}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{PC}{PC}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+V\+M\+::\+PC}
+\mbox{\Hypertarget{namespaceEfVM_a476e4e985a0ac7776ca341f58f910962}\label{namespaceEfVM_a476e4e985a0ac7776ca341f58f910962}} 
+\index{EfVM@{EfVM}!W@{W}}
+\index{W@{W}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{W}{W}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} Ef\+V\+M\+::W}
 
 
 
-program counter, IU is 16-\/bit 
+work register, IU is 16-\/bit 
 
-\mbox{\Hypertarget{namespaceEfVM_a9def3ba25dadbb291ebaee373982a18c}\label{namespaceEfVM_a9def3ba25dadbb291ebaee373982a18c}} 
+\mbox{\Hypertarget{namespaceEfVM_aa76f09a5a1c8d753230006aab2827d3f}\label{namespaceEfVM_aa76f09a5a1c8d753230006aab2827d3f}} 
 \index{EfVM@{EfVM}!DS@{DS}}
 \index{DS@{DS}!EfVM@{EfVM}}
 \doxysubsubsection{\texorpdfstring{DS}{DS}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} $\ast$ Ef\+V\+M\+::\+DS}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$ Ef\+V\+M\+::\+DS}
 
 
 
 data stack pointer, Dr. Ting\textquotesingle{}s stack 
 
-\mbox{\Hypertarget{namespaceEfVM_a44c4b6ad0dc45ad811db233793ab9ba8}\label{namespaceEfVM_a44c4b6ad0dc45ad811db233793ab9ba8}} 
+\mbox{\Hypertarget{namespaceEfVM_abf397b013c4b72715edcab1de7a6f2a1}\label{namespaceEfVM_abf397b013c4b72715edcab1de7a6f2a1}} 
 \index{EfVM@{EfVM}!RS@{RS}}
 \index{RS@{RS}!EfVM@{EfVM}}
 \doxysubsubsection{\texorpdfstring{RS}{RS}}
-{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}} $\ast$ Ef\+V\+M\+::\+RS}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$ Ef\+V\+M\+::\+RS}
 
 
 
@@ -311,13 +271,13 @@ Pre-\/built/embedded Forth code.
 \doxysubsubsection{\texorpdfstring{\_fp}{\_fp}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a2d422d478f77fc6c4aa3c9538683829d}{C\+FP}} Ef\+V\+M\+::\+\_\+fp\mbox{[}\mbox{\hyperlink{eforth__core_8h_a64cd413675fa1692404160ae9def373d}{C\+F\+U\+N\+C\+\_\+\+M\+AX}}\mbox{]}}
 
-\mbox{\Hypertarget{namespaceEfVM_a09d628000e6b3bb7306a3bc9c3299efe}\label{namespaceEfVM_a09d628000e6b3bb7306a3bc9c3299efe}} 
-\index{EfVM@{EfVM}!\_yield\_cnt@{\_yield\_cnt}}
-\index{\_yield\_cnt@{\_yield\_cnt}!EfVM@{EfVM}}
-\doxysubsubsection{\texorpdfstring{\_yield\_cnt}{\_yield\_cnt}}
-{\footnotesize\ttfamily int Ef\+V\+M\+::\+\_\+yield\+\_\+cnt = 0}
+\mbox{\Hypertarget{namespaceEfVM_ab51b14fbcfce5418c63e780034d81dd2}\label{namespaceEfVM_ab51b14fbcfce5418c63e780034d81dd2}} 
+\index{EfVM@{EfVM}!io@{io}}
+\index{io@{io}!EfVM@{EfVM}}
+\doxysubsubsection{\texorpdfstring{io}{io}}
+{\footnotesize\ttfamily Stream $\ast$ Ef\+V\+M\+::io}
 
 
 
-interrupt service throttle counter 
+Stream IO interface. 
 

@@ -1,0 +1,88 @@
+\hypertarget{structIsrRec}{}\doxysection{Isr\+Rec Struct Reference}
+\label{structIsrRec}\index{IsrRec@{IsrRec}}
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{structIsrRec_a3e8170dd456690b7172212015b9c2671}{xt}} \mbox{[}11\mbox{]}
+\begin{DoxyCompactList}\small\item\em interrupt vectors 0-\/7\+: timer, 8-\/10\+: pin change \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{structIsrRec_a014a1f07c541e3715b59903f96cfc5b4}{t\+\_\+max}} \mbox{[}8\mbox{]}
+\begin{DoxyCompactList}\small\item\em timer C\+TC top value \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{structIsrRec_a72444eadee9cf64ad21b7b42aa896060}{t\+\_\+idx}} \{ 0 \}
+\begin{DoxyCompactList}\small\item\em timer I\+SR index \end{DoxyCompactList}\item 
+volatile \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{structIsrRec_ab57d0a4cae8d1658a8d239c0ebc7e200}{t\+\_\+cnt}} \mbox{[}8\mbox{]}
+\begin{DoxyCompactList}\small\item\em timer C\+TC counters \end{DoxyCompactList}\item 
+volatile \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{structIsrRec_aaa8c7585f095649cb258b9126a4a48be}{t\+\_\+hit}} \{ 0 \}
+\begin{DoxyCompactList}\small\item\em 8-\/bit for 8 timer I\+SR \end{DoxyCompactList}\item 
+volatile \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{structIsrRec_a68ca112642aa4725c18b1958c4f29867}{p\+\_\+hit}} \{ 0 \}
+\begin{DoxyCompactList}\small\item\em pin change interrupt (P\+O\+R\+T-\/B,C,D) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+interrupt handlers 
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{structIsrRec_a3e8170dd456690b7172212015b9c2671}\label{structIsrRec_a3e8170dd456690b7172212015b9c2671}} 
+\index{IsrRec@{IsrRec}!xt@{xt}}
+\index{xt@{xt}!IsrRec@{IsrRec}}
+\doxysubsubsection{\texorpdfstring{xt}{xt}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} Isr\+Rec\+::xt\mbox{[}11\mbox{]}}
+
+
+
+interrupt vectors 0-\/7\+: timer, 8-\/10\+: pin change 
+
+\mbox{\Hypertarget{structIsrRec_a014a1f07c541e3715b59903f96cfc5b4}\label{structIsrRec_a014a1f07c541e3715b59903f96cfc5b4}} 
+\index{IsrRec@{IsrRec}!t\_max@{t\_max}}
+\index{t\_max@{t\_max}!IsrRec@{IsrRec}}
+\doxysubsubsection{\texorpdfstring{t\_max}{t\_max}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} Isr\+Rec\+::t\+\_\+max\mbox{[}8\mbox{]}}
+
+
+
+timer C\+TC top value 
+
+\mbox{\Hypertarget{structIsrRec_a72444eadee9cf64ad21b7b42aa896060}\label{structIsrRec_a72444eadee9cf64ad21b7b42aa896060}} 
+\index{IsrRec@{IsrRec}!t\_idx@{t\_idx}}
+\index{t\_idx@{t\_idx}!IsrRec@{IsrRec}}
+\doxysubsubsection{\texorpdfstring{t\_idx}{t\_idx}}
+{\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} Isr\+Rec\+::t\+\_\+idx \{ 0 \}}
+
+
+
+timer I\+SR index 
+
+\mbox{\Hypertarget{structIsrRec_ab57d0a4cae8d1658a8d239c0ebc7e200}\label{structIsrRec_ab57d0a4cae8d1658a8d239c0ebc7e200}} 
+\index{IsrRec@{IsrRec}!t\_cnt@{t\_cnt}}
+\index{t\_cnt@{t\_cnt}!IsrRec@{IsrRec}}
+\doxysubsubsection{\texorpdfstring{t\_cnt}{t\_cnt}}
+{\footnotesize\ttfamily volatile \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} Isr\+Rec\+::t\+\_\+cnt\mbox{[}8\mbox{]}}
+
+
+
+timer C\+TC counters 
+
+\mbox{\Hypertarget{structIsrRec_aaa8c7585f095649cb258b9126a4a48be}\label{structIsrRec_aaa8c7585f095649cb258b9126a4a48be}} 
+\index{IsrRec@{IsrRec}!t\_hit@{t\_hit}}
+\index{t\_hit@{t\_hit}!IsrRec@{IsrRec}}
+\doxysubsubsection{\texorpdfstring{t\_hit}{t\_hit}}
+{\footnotesize\ttfamily volatile \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} Isr\+Rec\+::t\+\_\+hit \{ 0 \}}
+
+
+
+8-\/bit for 8 timer I\+SR 
+
+\mbox{\Hypertarget{structIsrRec_a68ca112642aa4725c18b1958c4f29867}\label{structIsrRec_a68ca112642aa4725c18b1958c4f29867}} 
+\index{IsrRec@{IsrRec}!p\_hit@{p\_hit}}
+\index{p\_hit@{p\_hit}!IsrRec@{IsrRec}}
+\doxysubsubsection{\texorpdfstring{p\_hit}{p\_hit}}
+{\footnotesize\ttfamily volatile \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} Isr\+Rec\+::p\+\_\+hit \{ 0 \}}
+
+
+
+pin change interrupt (P\+O\+R\+T-\/B,C,D) 
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{eforth__core_8cpp}{eforth\+\_\+core.\+cpp}}\end{DoxyCompactItemize}

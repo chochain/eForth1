@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rpush_237',['RPUSH',['../namespaceEfVM.html#acfaf9ecd06a6d4b5dc4243201efaf38e',1,'EfVM']]]
+  ['trig_263',['trig',['../eforth1_8ino_8cpp.html#aef6059030299e1558622bd2d8b786c12',1,'eforth1.ino.cpp']]]
 ];

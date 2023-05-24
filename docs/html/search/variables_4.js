@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['p_5fhit_259',['p_hit',['../eforth__core_8cpp.html#ae259ae1b2f3e4ec198f2650a4f9f4686',1,'eforth_core.cpp']]],
-  ['p_5fxt_260',['p_xt',['../eforth__core_8cpp.html#aa67f46dd3e98d55a27e738555d5c38f8',1,'eforth_core.cpp']]],
-  ['pc_261',['PC',['../group__Assembler.html#ga77406fd9edef6925ff2bafc8746085eb',1,'EfAsm::PC()'],['../namespaceEfVM.html#a4444ce01dd126290156b6339aedb281b',1,'EfVM::PC()']]],
-  ['progmem_262',['PROGMEM',['../eforth__rom_8c.html#a0babba59a58a58d5de2f517a9cd465b2',1,'eforth_rom.c']]]
+  ['io_282',['io',['../eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b',1,'io():&#160;eforth1.cpp'],['../namespaceEfVM.html#ab51b14fbcfce5418c63e780034d81dd2',1,'EfVM::io()']]],
+  ['ip_283',['IP',['../namespaceEfVM.html#a34e9492841c1a98e29286c41dcdac10b',1,'EfVM']]],
+  ['ir_284',['ir',['../eforth__core_8cpp.html#a6c7ba52511bb7f580b211f466a58001c',1,'ir():&#160;eforth_core.cpp'],['../namespaceEfVM.html#ad6bf1128d9ffa5007021ecabed123c74',1,'EfVM::IR()']]]
 ];

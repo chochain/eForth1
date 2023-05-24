@@ -38,18 +38,17 @@ var menudata={children:[
 {text:"p",url:"namespacemembers.html#index_p"},
 {text:"r",url:"namespacemembers.html#index_r"},
 {text:"s",url:"namespacemembers.html#index_s"},
-{text:"t",url:"namespacemembers.html#index_t"}]},
-{text:"Functions",url:"namespacemembers_func.html",children:[
-{text:"_",url:"namespacemembers_func.html#index__5F"},
-{text:"a",url:"namespacemembers_func.html#index_a"},
-{text:"b",url:"namespacemembers_func.html#index_b"},
-{text:"d",url:"namespacemembers_func.html#index_d"},
-{text:"g",url:"namespacemembers_func.html#index_g"},
-{text:"p",url:"namespacemembers_func.html#index_p"},
-{text:"r",url:"namespacemembers_func.html#index_r"},
-{text:"s",url:"namespacemembers_func.html#index_s"}]},
+{text:"t",url:"namespacemembers.html#index_t"},
+{text:"w",url:"namespacemembers.html#index_w"}]},
+{text:"Functions",url:"namespacemembers_func.html"},
 {text:"Variables",url:"namespacemembers_vars.html"},
 {text:"Enumerator",url:"namespacemembers_eval.html"}]}]},
+{text:"Data Structures",url:"annotated.html",children:[
+{text:"Data Structures",url:"annotated.html"},
+{text:"Data Structure Index",url:"classes.html"},
+{text:"Data Fields",url:"functions.html",children:[
+{text:"All",url:"functions.html"},
+{text:"Variables",url:"functions_vars.html"}]}]},
 {text:"Files",url:"files.html",children:[
 {text:"File List",url:"files.html"},
 {text:"Globals",url:"globals.html",children:[
@@ -78,6 +77,9 @@ var menudata={children:[
 {text:"_",url:"globals_func.html#index__5F"},
 {text:"e",url:"globals_func.html#index_e"},
 {text:"i",url:"globals_func.html#index_i"},
+{text:"l",url:"globals_func.html#index_l"},
+{text:"s",url:"globals_func.html#index_s"},
+{text:"t",url:"globals_func.html#index_t"},
 {text:"v",url:"globals_func.html#index_v"}]},
 {text:"Variables",url:"globals_vars.html"},
 {text:"Typedefs",url:"globals_type.html"},

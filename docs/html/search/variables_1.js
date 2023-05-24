@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['dotqp_251',['DOTQP',['../group__Assembler.html#ga6b8f6e7e77a210d6bfaf73bb43897580',1,'EfAsm']]],
-  ['ds_252',['DS',['../namespaceEfVM.html#a9def3ba25dadbb291ebaee373982a18c',1,'EfVM']]]
+  ['code_275',['code',['../eforth1_8ino_8cpp.html#a63a995671251aa83e88332d1c70e9313',1,'eforth1.ino.cpp']]]
 ];

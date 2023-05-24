@@ -143,6 +143,12 @@ Macros</h2></td></tr>
 <tr class="separator:a77270f01b515a878ec2853760cb20dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35a26ccdccc5949a9553ce8547b3814c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a35a26ccdccc5949a9553ce8547b3814c">S2D</a>(h,  l)&#160;&#160;&#160;(((<a class="el" href="eforth__core_8h.html#a39c786017723555afb9e8b85accec0de">S32</a>)(h)&lt;&lt;16) | ((l)&amp;0xffff))</td></tr>
 <tr class="separator:a35a26ccdccc5949a9553ce8547b3814c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a074e5eb53ba2a83312746e4a74a3c091"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a074e5eb53ba2a83312746e4a74a3c091">DEPTH</a>()&#160;&#160;&#160;((<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>)((<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)DS - <a class="el" href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(<a class="el" href="eforth__core_8h.html#af278ea3f0013fa26db155c0945bcb9d2">FORTH_STACK_ADDR</a>)) &gt;&gt; 1)</td></tr>
+<tr class="separator:a074e5eb53ba2a83312746e4a74a3c091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5e48aa480f649754b62299ee5cbc35a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#af5e48aa480f649754b62299ee5cbc35a">PUSH</a>(v)&#160;&#160;&#160;{ *++DS = top;  top  = (v); }</td></tr>
+<tr class="separator:af5e48aa480f649754b62299ee5cbc35a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26fbeab0e94b30a69cd049aef73acbbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a26fbeab0e94b30a69cd049aef73acbbd">RPUSH</a>(v)&#160;&#160;&#160;{ *--RS = rtop; rtop = (v); }</td></tr>
+<tr class="separator:a26fbeab0e94b30a69cd049aef73acbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2106695e949772f765546777ef34690e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a2106695e949772f765546777ef34690e">POP</a>()&#160;&#160;&#160;(top  = *DS--)</td></tr>
 <tr class="separator:a2106695e949772f765546777ef34690e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55b5173e6face979deb7372dcbb643df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a55b5173e6face979deb7372dcbb643df">RPOP</a>()&#160;&#160;&#160;(rtop = *RS++)</td></tr>
@@ -154,8 +160,8 @@ Macros</h2></td></tr>
 <tr class="separator:a3254550e1d6d185f6b3e69b2d6468343"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2e226689a02d2b5f1256e7e98f03cf5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#ad2e226689a02d2b5f1256e7e98f03cf5">TAB</a>()&#160;&#160;&#160;/* skip */</td></tr>
 <tr class="separator:ad2e226689a02d2b5f1256e7e98f03cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf78c62d3da5e71ee2d75576561a8531"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#abf78c62d3da5e71ee2d75576561a8531">TRACE</a>(op)&#160;&#160;&#160;/* skip */</td></tr>
-<tr class="separator:abf78c62d3da5e71ee2d75576561a8531"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b97e4d442d7cdaa77140c8d272ad4fa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a9b97e4d442d7cdaa77140c8d272ad4fa">TRACE</a>(op,  ip,  w,  t,  s)&#160;&#160;&#160;/* skip */</td></tr>
+<tr class="separator:a9b97e4d442d7cdaa77140c8d272ad4fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -165,12 +171,6 @@ Functions</h2></td></tr>
 <tr class="separator:a07e74ced8251d26cd20bce5a2c386d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6704f4eed222b21f8754d5c4711c1a15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#a6704f4eed222b21f8754d5c4711c1a15">EfVM::SET</a> (<a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> d, <a class="el" href="eforth__core_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> v)</td></tr>
 <tr class="separator:a6704f4eed222b21f8754d5c4711c1a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42d6bbbd96179a13b2fb9b0c9d58330a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#a42d6bbbd96179a13b2fb9b0c9d58330a">EfVM::DEPTH</a> ()</td></tr>
-<tr class="separator:a42d6bbbd96179a13b2fb9b0c9d58330a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4f69cc49b68f10383886820029f6257"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#ac4f69cc49b68f10383886820029f6257">EfVM::PUSH</a> (<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a> v)</td></tr>
-<tr class="separator:ac4f69cc49b68f10383886820029f6257"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acfaf9ecd06a6d4b5dc4243201efaf38e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEfVM.html#acfaf9ecd06a6d4b5dc4243201efaf38e">EfVM::RPUSH</a> (<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a> v)</td></tr>
-<tr class="separator:acfaf9ecd06a6d4b5dc4243201efaf38e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>eForth Virtual Machine module header </p>
@@ -326,6 +326,60 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a074e5eb53ba2a83312746e4a74a3c091"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a074e5eb53ba2a83312746e4a74a3c091">&#9670;&nbsp;</a></span>DEPTH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEPTH</td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>&#160;&#160;&#160;((<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>)((<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)DS - <a class="el" href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(<a class="el" href="eforth__core_8h.html#af278ea3f0013fa26db155c0945bcb9d2">FORTH_STACK_ADDR</a>)) &gt;&gt; 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>push a value onto stack top </p>
+
+</div>
+</div>
+<a id="af5e48aa480f649754b62299ee5cbc35a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5e48aa480f649754b62299ee5cbc35a">&#9670;&nbsp;</a></span>PUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PUSH</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">v</td><td>)</td>
+          <td>&#160;&#160;&#160;{ *++DS = top;  top  = (v); }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a26fbeab0e94b30a69cd049aef73acbbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26fbeab0e94b30a69cd049aef73acbbd">&#9670;&nbsp;</a></span>RPUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RPUSH</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">v</td><td>)</td>
+          <td>&#160;&#160;&#160;{ *--RS = rtop; rtop = (v); }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a2106695e949772f765546777ef34690e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2106695e949772f765546777ef34690e">&#9670;&nbsp;</a></span>POP</h2>
 
@@ -423,8 +477,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abf78c62d3da5e71ee2d75576561a8531"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf78c62d3da5e71ee2d75576561a8531">&#9670;&nbsp;</a></span>TRACE</h2>
+<a id="a9b97e4d442d7cdaa77140c8d272ad4fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b97e4d442d7cdaa77140c8d272ad4fa">&#9670;&nbsp;</a></span>TRACE</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -433,8 +487,36 @@ Functions</h2></td></tr>
           <td class="memname">#define TRACE</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">op</td><td>)</td>
-          <td>&#160;&#160;&#160;/* skip */</td>
+          <td class="paramname">op, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ip, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">w, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">t, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">s&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;/* skip */</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -443,10 +525,10 @@ Functions</h2></td></tr>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespaceEfVM_html_a0d508bfbdbd7a09dcd56a24e3b6cb169"><div class="ttname"><a href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">EfVM::top</a></div><div class="ttdeci">DU top</div><div class="ttdoc">ALU (i.e. cached top of stack value)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:22</div></div>
-<div class="ttc" id="aeforth__vm_8h_html_aaf6b91711b3d8b68c942eccd99b9d19e"><div class="ttname"><a href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a></div><div class="ttdeci">#define RAM(i)</div><div class="ttdef"><b>Definition:</b> eforth_vm.h:49</div></div>
+<div class="ttc" id="anamespaceEfVM_html_a0d508bfbdbd7a09dcd56a24e3b6cb169"><div class="ttname"><a href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">EfVM::top</a></div><div class="ttdeci">DU top</div><div class="ttdoc">ALU (i.e. cached top of stack value)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:20</div></div>
+<div class="ttc" id="aeforth__vm_8h_html_aaf6b91711b3d8b68c942eccd99b9d19e"><div class="ttname"><a href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a></div><div class="ttdeci">#define RAM(i)</div><div class="ttdef"><b>Definition:</b> eforth_vm.h:41</div></div>
 <div class="ttc" id="agroup__Assembler_html_ga85323f491b7b3ea3883bad0c91d9de17"><div class="ttname"><a href="group__Assembler.html#ga85323f491b7b3ea3883bad0c91d9de17">EfAsm::R</a></div><div class="ttdeci">U8 R</div><div class="ttdoc">assembler return stack index</div><div class="ttdef"><b>Definition:</b> eforth_asm.cpp:17</div></div>
-<div class="ttc" id="anamespaceEfVM_html_a61aea862ab3bab556736663c844366c7"><div class="ttname"><a href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">EfVM::rtop</a></div><div class="ttdeci">DU rtop</div><div class="ttdoc">cached loop counter on return stack</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:23</div></div>
+<div class="ttc" id="anamespaceEfVM_html_a61aea862ab3bab556736663c844366c7"><div class="ttname"><a href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">EfVM::rtop</a></div><div class="ttdeci">DU rtop</div><div class="ttdoc">cached loop counter on return stack</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:21</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

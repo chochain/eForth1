@@ -10,7 +10,7 @@ var eforth__asm_8h =
     [ "_NARG0", "eforth__asm_8h.html#a201f9ddd85daf92a29792435bb50d5bc", null ],
     [ "_NARG", "eforth__asm_8h.html#a8b4fbd083a242445cf8eba9028c2a715", null ],
     [ "_CODE", "eforth__asm_8h.html#a6fd020b4ee926c9d86260e283bd2b660", null ],
-    [ "_XCODE", "eforth__asm_8h.html#abeb04659d0496ec73bb428a13ea3e0b3", null ],
+    [ "_PRIM", "eforth__asm_8h.html#acb1d5930a112ae4f4ffe181b3da37fa1", null ],
     [ "_COLON", "eforth__asm_8h.html#a9b4d0c68e95ce57cf7cdda4ee95d93f8", null ],
     [ "_IMMED", "eforth__asm_8h.html#a25550183c2dd8e46c4c93bc9b138ce87", null ],
     [ "_LABEL", "eforth__asm_8h.html#a59c00f3ec4f7443bcea73eb05cbd8642", null ],

@@ -158,8 +158,8 @@ Macros</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Vargs Header (calculate number of parameters by compiler)</div></td></tr>
 <tr class="memitem:a6fd020b4ee926c9d86260e283bd2b660"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a6fd020b4ee926c9d86260e283bd2b660">_CODE</a>(seg, ...)&#160;&#160;&#160;_code(F(seg), <a class="el" href="eforth__asm_8h.html#a8b4fbd083a242445cf8eba9028c2a715">_NARG</a>(__VA_ARGS__), __VA_ARGS__)</td></tr>
 <tr class="separator:a6fd020b4ee926c9d86260e283bd2b660"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abeb04659d0496ec73bb428a13ea3e0b3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#abeb04659d0496ec73bb428a13ea3e0b3">_XCODE</a>(seg,  x)&#160;&#160;&#160;op##x; <a class="el" href="eforth__asm_8h.html#a6fd020b4ee926c9d86260e283bd2b660">_CODE</a>(seg, op##x, opEXIT)</td></tr>
-<tr class="separator:abeb04659d0496ec73bb428a13ea3e0b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb1d5930a112ae4f4ffe181b3da37fa1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#acb1d5930a112ae4f4ffe181b3da37fa1">_PRIM</a>(seg,  x)&#160;&#160;&#160;(<a class="el" href="eforth__asm_8h.html#a6fd020b4ee926c9d86260e283bd2b660">_CODE</a>(seg, op##x, opEXIT), op##x)</td></tr>
+<tr class="separator:acb1d5930a112ae4f4ffe181b3da37fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b4d0c68e95ce57cf7cdda4ee95d93f8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a9b4d0c68e95ce57cf7cdda4ee95d93f8">_COLON</a>(seg, ...)&#160;&#160;&#160;_colon(F(seg), <a class="el" href="eforth__asm_8h.html#a8b4fbd083a242445cf8eba9028c2a715">_NARG</a>(__VA_ARGS__), __VA_ARGS__)</td></tr>
 <tr class="separator:a9b4d0c68e95ce57cf7cdda4ee95d93f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25550183c2dd8e46c4c93bc9b138ce87"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__asm_8h.html#a25550183c2dd8e46c4c93bc9b138ce87">_IMMED</a>(seg, ...)&#160;&#160;&#160;_immed(F(seg), <a class="el" href="eforth__asm_8h.html#a8b4fbd083a242445cf8eba9028c2a715">_NARG</a>(__VA_ARGS__), __VA_ARGS__)</td></tr>
@@ -872,14 +872,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="abeb04659d0496ec73bb428a13ea3e0b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abeb04659d0496ec73bb428a13ea3e0b3">&#9670;&nbsp;</a></span>_XCODE</h2>
+<a id="acb1d5930a112ae4f4ffe181b3da37fa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb1d5930a112ae4f4ffe181b3da37fa1">&#9670;&nbsp;</a></span>_PRIM</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define _XCODE</td>
+          <td class="memname">#define _PRIM</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">seg, </td>
@@ -893,7 +893,7 @@ Variables</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;op##x; <a class="el" href="eforth__asm_8h.html#a6fd020b4ee926c9d86260e283bd2b660">_CODE</a>(seg, op##x, opEXIT)</td>
+          <td></td><td>&#160;&#160;&#160;(<a class="el" href="eforth__asm_8h.html#a6fd020b4ee926c9d86260e283bd2b660">_CODE</a>(seg, op##x, opEXIT), op##x)</td>
         </tr>
       </table>
 </div><div class="memdoc">

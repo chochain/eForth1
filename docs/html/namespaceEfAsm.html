@@ -366,16 +366,12 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <blockquote class="doxtable">
 <p>Debugging Tools </p>
 </blockquote>
-<p>Optional: Takes 240 bytes ROM space </p><blockquote class="doxtable">
-<p>display opcode name ( n &ndash; ) </p>
-</blockquote>
-<blockquote class="doxtable">
+<p>Optional: Takes ~300 bytes ROM space </p><blockquote class="doxtable">
 <p>display address with colon delimiter ( a &ndash; ) </p>
 </blockquote>
 <blockquote class="doxtable">
-<p>see colon word definition ( &ndash; ;; &lt;string&gt; ) </p>
+<p>display opcode at given address ( a0 op &ndash; a1 ) </p>
 </blockquote>
-<p>TODO: add _CASE</p>
 <blockquote class="doxtable">
 <p>Control Structures </p>
 </blockquote>
@@ -422,6 +418,7 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <blockquote class="doxtable">
 <p>Arduino specific opcodes </p>
 </blockquote>
+<p>( &ndash; ud ud ) get current clock (in ms)</p>
 <p>( n p &ndash; ) set pinMode(p, n=1:OUTPUT, n=0: INPUT)</p>
 <p>( h l p &ndash; ) set map range to pin</p>
 <p>( p &ndash; n ) digitalRead(p)</p>
@@ -432,7 +429,6 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <p>( xt p &ndash; ) on pin change interrupt calls xt</p>
 <p>( f &ndash; ) enable/disable timer interrupt</p>
 <p>( f &ndash; ) enable/disable pin change interrupt</p>
-<p>( &ndash; ud ud ) get current clock (in ms)</p>
 <blockquote class="doxtable">
 <p>Cold Start address (End of dictionary) </p>
 </blockquote>

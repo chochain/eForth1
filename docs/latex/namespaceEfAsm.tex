@@ -321,17 +321,13 @@ T\+O\+DO\+: add \mbox{[}\textquotesingle{}\mbox{]}
 Debugging Tools \end{quote}
 
 
-Optional\+: Takes 240 bytes R\+OM space \begin{quote}
-display opcode name ( n -- ) \end{quote}
-
-
-\begin{quote}
+Optional\+: Takes $\sim$300 bytes R\+OM space \begin{quote}
 display address with colon delimiter ( a -- ) \end{quote}
 
 
 \begin{quote}
-see colon word definition ( -- ;; $<$string$>$ ) \end{quote}
-T\+O\+DO\+: add \+\_\+\+C\+A\+SE
+display opcode at given address ( a0 op -- a1 ) \end{quote}
+
 
 \begin{quote}
 Control Structures \end{quote}
@@ -399,6 +395,8 @@ Lexicon Bits \end{quote}
 Arduino specific opcodes \end{quote}
 
 
+( -- ud ud ) get current clock (in ms)
+
 ( n p -- ) set pin\+Mode(p, n=1\+:O\+U\+T\+P\+UT, n=0\+: I\+N\+P\+UT)
 
 ( h l p -- ) set map range to pin
@@ -418,8 +416,6 @@ Arduino specific opcodes \end{quote}
 ( f -- ) enable/disable timer interrupt
 
 ( f -- ) enable/disable pin change interrupt
-
-( -- ud ud ) get current clock (in ms)
 
 \begin{quote}
 Cold Start address (End of dictionary) \end{quote}

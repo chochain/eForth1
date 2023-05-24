@@ -1,7 +1,5 @@
 var eforth__vm_8cpp =
 [
-    [ "YIELD_PERIOD", "eforth__vm_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e", null ],
-    [ "YIELD", "eforth__vm_8cpp.html#ab225fd437247be81c502ebd3b4857465", null ],
     [ "OP", "eforth__vm_8cpp.html#ac7635cecf944d5bfcc89665c08022828", null ],
     [ "_X", "eforth__vm_8cpp.html#a694d28437d830c2e82367a5b56ae5163", null ],
     [ "DISPATCH", "eforth__vm_8cpp.html#a99cca8c766bbb673859637a1cf1f1150", null ],
@@ -16,11 +14,10 @@ var eforth__vm_8cpp =
     [ "vm_cfunc", "eforth__vm_8cpp.html#ac274d9a96db09bfc7ec4635be50d3aa5", null ],
     [ "vm_push", "eforth__vm_8cpp.html#a35fceadcc39370dc87d3be5608979925", null ],
     [ "vm_pop", "eforth__vm_8cpp.html#a14b4544b998f4659f54969f571c58d8f", null ],
-    [ "io", "eforth__vm_8cpp.html#aa5ac1bb7ff2e93de1df7e220797fc690", null ],
     [ "IP", "eforth__vm_8cpp.html#a34e9492841c1a98e29286c41dcdac10b", null ],
-    [ "PC", "eforth__vm_8cpp.html#a4444ce01dd126290156b6339aedb281b", null ],
-    [ "DS", "eforth__vm_8cpp.html#a9def3ba25dadbb291ebaee373982a18c", null ],
-    [ "RS", "eforth__vm_8cpp.html#a44c4b6ad0dc45ad811db233793ab9ba8", null ],
+    [ "W", "eforth__vm_8cpp.html#a476e4e985a0ac7776ca341f58f910962", null ],
+    [ "DS", "eforth__vm_8cpp.html#aa76f09a5a1c8d753230006aab2827d3f", null ],
+    [ "RS", "eforth__vm_8cpp.html#abf397b013c4b72715edcab1de7a6f2a1", null ],
     [ "top", "eforth__vm_8cpp.html#a0d508bfbdbd7a09dcd56a24e3b6cb169", null ],
     [ "rtop", "eforth__vm_8cpp.html#a61aea862ab3bab556736663c844366c7", null ],
     [ "IR", "eforth__vm_8cpp.html#ad6bf1128d9ffa5007021ecabed123c74", null ],
@@ -28,5 +25,5 @@ var eforth__vm_8cpp =
     [ "_ram", "eforth__vm_8cpp.html#a5aee8e42a1af9c470bbb7e4ed5a54f5d", null ],
     [ "_pre", "eforth__vm_8cpp.html#abfd3e15e27907da33aaeb9d1ede21f16", null ],
     [ "_fp", "eforth__vm_8cpp.html#a6e85eb10cf4c1d4b1ccc6028d17c79ed", null ],
-    [ "_yield_cnt", "eforth__vm_8cpp.html#a09d628000e6b3bb7306a3bc9c3299efe", null ]
+    [ "io", "eforth__vm_8cpp.html#ab51b14fbcfce5418c63e780034d81dd2", null ]
 ];

@@ -35,7 +35,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_a6094f5f4a8aa099faa6d80b4f020927b}{C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE}}~0
 \item 
-\#define \mbox{\hyperlink{eforth__core_8h_ae1af8ef125fabb6ee8f56a40ad9243f7}{C\+O\+M\+P\+U\+T\+E\+D\+\_\+\+J\+U\+MP}}~0
+\#define \mbox{\hyperlink{eforth__core_8h_ac46612a75487757fdfe97bc748be0ee0}{C\+O\+M\+P\+U\+T\+E\+D\+\_\+\+G\+O\+TO}}~0
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}{A\+S\+M\+\_\+\+O\+N\+LY}}~0
 \item 
@@ -47,6 +47,8 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \#define \mbox{\hyperlink{eforth__core_8h_afd97bab563464ed479ba96d704adf0bc}{A\+S\+M\+\_\+\+T\+R\+A\+CE}}~0
 \item 
 \#define \mbox{\hyperlink{eforth__core_8h_a4e7ebf605b9379a385139d145f5b1fc5}{E\+X\+E\+\_\+\+T\+R\+A\+CE}}~0
+\item 
+\#define \mbox{\hyperlink{eforth__core_8h_ac7cfe3ead9ac7e564fb9319f81080ee8}{E\+N\+A\+B\+L\+E\+\_\+\+S\+EE}}~1
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Capacity and Sizing}\par
@@ -161,19 +163,19 @@ void \mbox{\hyperlink{eforth__core_8h_a0132f57c344961e9ff4037dd06b06948}{intr\+\
 \item 
 \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{eforth__core_8h_a2c97726ffb62839e8c6fe399f6ed83f3}{intr\+\_\+service}} ()
 \item 
-void \mbox{\hyperlink{eforth__core_8h_a3c41fd6c7c425d4f7bccc68ded7142db}{intr\+\_\+add\+\_\+tmisr}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} i, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} ms, \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} xt)
+void \mbox{\hyperlink{eforth__core_8h_a2a27acd3c6961e629f9aa9209b0d2d40}{intr\+\_\+add\+\_\+tmisr}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} i, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} ms, \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} xt)
 \item 
-void \mbox{\hyperlink{eforth__core_8h_a2beac691734412a59b782af798e4d636}{intr\+\_\+add\+\_\+pcisr}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} pin, \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} xt)
+void \mbox{\hyperlink{eforth__core_8h_ac82dfcdf6e23bab81ab27ff8287d54e4}{intr\+\_\+add\+\_\+pcisr}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} pin, \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} xt)
 \item 
-void \mbox{\hyperlink{eforth__core_8h_a4e469b64b1feed8f578349c87ae2ef84}{intr\+\_\+timer\+\_\+enable}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} f)
+void \mbox{\hyperlink{eforth__core_8h_a7336f28b0a79390b012f36a71e2df5d9}{intr\+\_\+timer\+\_\+enable}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} f)
 \item 
-void \mbox{\hyperlink{eforth__core_8h_a227d4b84f416c811b8ac176743593dec}{intr\+\_\+pci\+\_\+enable}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} f)
+void \mbox{\hyperlink{eforth__core_8h_a57ebb184e4580915047ed5a46ff53263}{intr\+\_\+pci\+\_\+enable}} (\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} f)
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ e\+Forth Virtual Machine Functions}\par
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{eforth__core_8h_a2dfaa0bea7ac318a0d0c5a5dfa252ca3}{vm\+\_\+init}} (P\+G\+M\+\_\+P rom, \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}}, void $\ast$io\+\_\+stream, const char $\ast$code)
+void \mbox{\hyperlink{eforth__core_8h_a2dfaa0bea7ac318a0d0c5a5dfa252ca3}{vm\+\_\+init}} (P\+G\+M\+\_\+P rom, \mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$\mbox{\hyperlink{eforth1_8cpp_a2db7a107cc81da46a75803d3c85ead52}{ram}}, void $\ast$io\+\_\+stream, const char $\ast$\mbox{\hyperlink{eforth1_8ino_8cpp_a63a995671251aa83e88332d1c70e9313}{code}})
 \item 
 void \mbox{\hyperlink{eforth__core_8h_a4bafcde45de1826f5d95260ec6143e39}{vm\+\_\+outer}} ()
 \begin{DoxyCompactList}\small\item\em Forth outer interpreter. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -214,13 +216,13 @@ e\+Forth prototype and interface
 \doxysubsubsection{\texorpdfstring{CASE\_SENSITIVE}{CASE\_SENSITIVE}}
 {\footnotesize\ttfamily \#define C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE~0}
 
-define case sensitivity \mbox{\Hypertarget{eforth__core_8h_ae1af8ef125fabb6ee8f56a40ad9243f7}\label{eforth__core_8h_ae1af8ef125fabb6ee8f56a40ad9243f7}} 
-\index{eforth\_core.h@{eforth\_core.h}!COMPUTED\_JUMP@{COMPUTED\_JUMP}}
-\index{COMPUTED\_JUMP@{COMPUTED\_JUMP}!eforth\_core.h@{eforth\_core.h}}
-\doxysubsubsection{\texorpdfstring{COMPUTED\_JUMP}{COMPUTED\_JUMP}}
-{\footnotesize\ttfamily \#define C\+O\+M\+P\+U\+T\+E\+D\+\_\+\+J\+U\+MP~0}
+define case sensitivity \mbox{\Hypertarget{eforth__core_8h_ac46612a75487757fdfe97bc748be0ee0}\label{eforth__core_8h_ac46612a75487757fdfe97bc748be0ee0}} 
+\index{eforth\_core.h@{eforth\_core.h}!COMPUTED\_GOTO@{COMPUTED\_GOTO}}
+\index{COMPUTED\_GOTO@{COMPUTED\_GOTO}!eforth\_core.h@{eforth\_core.h}}
+\doxysubsubsection{\texorpdfstring{COMPUTED\_GOTO}{COMPUTED\_GOTO}}
+{\footnotesize\ttfamily \#define C\+O\+M\+P\+U\+T\+E\+D\+\_\+\+G\+O\+TO~0}
 
-VM uses computed jump ($\sim$15\% faster but use extra 180 bytes R\+AM) \mbox{\Hypertarget{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}\label{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}} 
+VM uses computed goto ($\sim$3\% faster but use extra 180 bytes R\+AM) \mbox{\Hypertarget{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}\label{eforth__core_8h_ae6bc65df3ece8101857357cbecc60d19}} 
 \index{eforth\_core.h@{eforth\_core.h}!ASM\_ONLY@{ASM\_ONLY}}
 \index{ASM\_ONLY@{ASM\_ONLY}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{ASM\_ONLY}{ASM\_ONLY}}
@@ -238,7 +240,13 @@ assembler tracing flag \mbox{\Hypertarget{eforth__core_8h_a4e7ebf605b9379a385139
 \doxysubsubsection{\texorpdfstring{EXE\_TRACE}{EXE\_TRACE}}
 {\footnotesize\ttfamily \#define E\+X\+E\+\_\+\+T\+R\+A\+CE~0}
 
-virtual machine execution tracing flag \mbox{\Hypertarget{eforth__core_8h_a483d8c32764af688ede31fdc4d9707dc}\label{eforth__core_8h_a483d8c32764af688ede31fdc4d9707dc}} 
+virtual machine execution tracing flag \mbox{\Hypertarget{eforth__core_8h_ac7cfe3ead9ac7e564fb9319f81080ee8}\label{eforth__core_8h_ac7cfe3ead9ac7e564fb9319f81080ee8}} 
+\index{eforth\_core.h@{eforth\_core.h}!ENABLE\_SEE@{ENABLE\_SEE}}
+\index{ENABLE\_SEE@{ENABLE\_SEE}!eforth\_core.h@{eforth\_core.h}}
+\doxysubsubsection{\texorpdfstring{ENABLE\_SEE}{ENABLE\_SEE}}
+{\footnotesize\ttfamily \#define E\+N\+A\+B\+L\+E\+\_\+\+S\+EE~1}
+
+add see implementation, R\+OM extra $\sim$300 bytes \mbox{\Hypertarget{eforth__core_8h_a483d8c32764af688ede31fdc4d9707dc}\label{eforth__core_8h_a483d8c32764af688ede31fdc4d9707dc}} 
 \index{eforth\_core.h@{eforth\_core.h}!CELLSZ@{CELLSZ}}
 \index{CELLSZ@{CELLSZ}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{CELLSZ}{CELLSZ}}
@@ -514,6 +522,8 @@ function pointer
 
 reset interrupts 
 
+\begin{quote}
+reset interrupt states \end{quote}
 \mbox{\Hypertarget{eforth__core_8h_a93c9ba339402353230060b417633ccd4}\label{eforth__core_8h_a93c9ba339402353230060b417633ccd4}} 
 \index{eforth\_core.h@{eforth\_core.h}!intr\_hits@{intr\_hits}}
 \index{intr\_hits@{intr\_hits}!eforth\_core.h@{eforth\_core.h}}
@@ -526,35 +536,48 @@ reset interrupts
 \doxysubsubsection{\texorpdfstring{intr\_service()}{intr\_service()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{eforth__core_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} intr\+\_\+service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{eforth__core_8h_a3c41fd6c7c425d4f7bccc68ded7142db}\label{eforth__core_8h_a3c41fd6c7c425d4f7bccc68ded7142db}} 
+\begin{quote}
+cached interrupt flags \end{quote}
+
+
+\begin{quote}
+throttle counter \end{quote}
+
+
+
+\begin{DoxyItemize}
+\item on x86 platform
+\item throttle down (boot performance a bit)
+\item reset throttle counter
+\end{DoxyItemize}\mbox{\Hypertarget{eforth__core_8h_a2a27acd3c6961e629f9aa9209b0d2d40}\label{eforth__core_8h_a2a27acd3c6961e629f9aa9209b0d2d40}} 
 \index{eforth\_core.h@{eforth\_core.h}!intr\_add\_tmisr@{intr\_add\_tmisr}}
 \index{intr\_add\_tmisr@{intr\_add\_tmisr}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{intr\_add\_tmisr()}{intr\_add\_tmisr()}}
-{\footnotesize\ttfamily void intr\+\_\+add\+\_\+tmisr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{i,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{ms,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{xt }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void intr\+\_\+add\+\_\+tmisr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}}]{i,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{ms,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{xt }\end{DoxyParamCaption})}
 
 \begin{quote}
 add timer interrupt service routine \end{quote}
-\mbox{\Hypertarget{eforth__core_8h_a2beac691734412a59b782af798e4d636}\label{eforth__core_8h_a2beac691734412a59b782af798e4d636}} 
+\mbox{\Hypertarget{eforth__core_8h_ac82dfcdf6e23bab81ab27ff8287d54e4}\label{eforth__core_8h_ac82dfcdf6e23bab81ab27ff8287d54e4}} 
 \index{eforth\_core.h@{eforth\_core.h}!intr\_add\_pcisr@{intr\_add\_pcisr}}
 \index{intr\_add\_pcisr@{intr\_add\_pcisr}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{intr\_add\_pcisr()}{intr\_add\_pcisr()}}
-{\footnotesize\ttfamily void intr\+\_\+add\+\_\+pcisr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{p,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{xt }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void intr\+\_\+add\+\_\+pcisr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}}]{p,  }\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{xt }\end{DoxyParamCaption})}
 
 \begin{quote}
 add pin change interrupt service routine \end{quote}
-\mbox{\Hypertarget{eforth__core_8h_a4e469b64b1feed8f578349c87ae2ef84}\label{eforth__core_8h_a4e469b64b1feed8f578349c87ae2ef84}} 
+\mbox{\Hypertarget{eforth__core_8h_a7336f28b0a79390b012f36a71e2df5d9}\label{eforth__core_8h_a7336f28b0a79390b012f36a71e2df5d9}} 
 \index{eforth\_core.h@{eforth\_core.h}!intr\_timer\_enable@{intr\_timer\_enable}}
 \index{intr\_timer\_enable@{intr\_timer\_enable}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{intr\_timer\_enable()}{intr\_timer\_enable()}}
-{\footnotesize\ttfamily void intr\+\_\+timer\+\_\+enable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{f }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void intr\+\_\+timer\+\_\+enable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}}]{f }\end{DoxyParamCaption})}
 
 \begin{quote}
 enable/disable timer2 interrupt \end{quote}
-\mbox{\Hypertarget{eforth__core_8h_a227d4b84f416c811b8ac176743593dec}\label{eforth__core_8h_a227d4b84f416c811b8ac176743593dec}} 
+\mbox{\Hypertarget{eforth__core_8h_a57ebb184e4580915047ed5a46ff53263}\label{eforth__core_8h_a57ebb184e4580915047ed5a46ff53263}} 
 \index{eforth\_core.h@{eforth\_core.h}!intr\_pci\_enable@{intr\_pci\_enable}}
 \index{intr\_pci\_enable@{intr\_pci\_enable}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{intr\_pci\_enable()}{intr\_pci\_enable()}}
-{\footnotesize\ttfamily void intr\+\_\+pci\+\_\+enable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}]{f }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void intr\+\_\+pci\+\_\+enable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}}]{f }\end{DoxyParamCaption})}
 
 \begin{quote}
 enable/disable pin change interrupt \end{quote}

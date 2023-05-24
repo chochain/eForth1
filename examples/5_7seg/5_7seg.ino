@@ -15,9 +15,8 @@
 
 PROGMEM const char code[] =
 ": ini 11 FOR 1 I 2+ PINMODE NEXT ; ini FORGET ini\n"  // set pin 2~13 to OUTPUT
-"VARIABLE x\n"                                         // x keeps 7-seg pin patterns of 0~9
-"$F360 x ! $B5F4 , $66D6 , $D770 , $F776 ,\n"
-"VARIABLE d $3834 d ! $2C1C ,\n"                       // d keeps digit control pin patterns
+"CREATE x $F360 , $B5F4 , $66D6 , $D770 , $F776 ,\n"   // x keeps 7-seg pin patterns of 0~9
+"CREATE d $3834 , $2C1C ,\n"                           // d keeps digit control pin patterns
 ": 7d d + C@ DUP $10C OUT $230 OUT ;\n"                // ( n -- ) set output digit
 "VARIABLE vx 2 ALLOT\n"                                // vx cache pattern for 4 digits before display
 ": ?v 3 FOR DUP 10 MOD x + C@ I vx + C! 10 / NEXT DROP ;\n"  // ( n -- ) process number into 4-digit bit patterns

@@ -4,23 +4,23 @@
 > *In all these years, I have thought that the eForth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.*
 
 In 2011, Dr. Ting created <a href="https://chochain.github.io/eForth1/ref/328eForth.pdf" target="_blank">*328eForth*</a> to run Forth on Arduino UNO and wrote in his ceForth_33 document:
-> *I was attracted to Arduino Uno Kit and ported eForth to it as 328eForth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino IDE...I extended Forth dictionary in the RAM memory. It worked. However, you had only 1.5KB of RAM memory left over for new Forth words, and you could not save these new words before you lost power. As I stated then, it was only a teaser to entice new people to try Forth on Arduino Uno.*
+> *I was attracted to Arduino Uno Kit and ported eForth to it as 328eForth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino IDE...I extended Forth dictionary in the RAM memory. It worked. ...., it was only a teaser to entice new people to try Forth on Arduino Uno.*
 
 Before Dr. Ting conceded his fight with cancer in May, 2022, I've spent the last 11 months working with him expanding the concept of **"Forth without Forth"** - a new eForth model - he called. Traditionally, Forth is built with a set of core words in low-level assembly language and establish the rest of words with high-level Forth scripts which get boot-strapped on start-up time. Nowadays, build Forth without using Forth, he reasoned that Forth built entirely in high-level languages, specifically in C, can not only greatly simplify the virtual machine, utilizing operating system, but also encourage portability and optimization. Taking the concept forward, we completed new batch of eForths in Javascript, Java, C++, ported them to Windows, ESP32 in just a few months. Dr. Ting presented a video on November, 2021 to <a href="https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s" target="_blank">*Sillicon Valley Forth Interest Group*</a>. Later, we fancied creating a hardware version eForth with SystemVerilog and joint venture with Don & Demitri's CORE-I FPGA project of <a href="https://www.facebook.com/groups/1304548976637542" target="_blank">*AI & Robotics Group*</a> til Dr. Ting's eventual departure. The project is still active now.
 
-Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model and have fun with it. Since his *328eForth* was a teaser only, to move it forward, there are a few major things I need to make changes to Dr. Ting's implementation i.g. make C-coder friendly macro assembler, remove dependency on extra bootloader programmer, add EEPROM save/load, and support interrupts, ... So, here we go!
+Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model and have fun with it. Since his *328eForth* was a teaser only, to move it forward formally, there are a few major things I need to make changes to Dr. Ting's implementation i.g. make C-coder friendly macro assembler, remove dependency on extra bootloader programmer, add EEPROM save/load, and support interrupts, ... So, here we go!
 
 ### What is eForth1?
 
 * An eForth for Arduino UNO/Nano implemented in C.
-* A .ino file that can be openned in Arduino IDE and load/run directly onto Arduino.
+* Use .ino sketch file that can be openned in Arduino IDE and load/run directly onto Arduino MCU.
 * Has 16-bit cells and stacks.
-* Can read/write Arduino pins.
+* Can read/write Arduino GPIO pins.
 * Supports Arduino Timer and Pin Change Interrupts.
 * Has C API to interface with user defined functions written in .ino.
-* Can save/load app to/from EEPROM.
+* Can save/restore app to/from EEPROM.
 * Can be embeded with other Arduino applications.
-* Become Turnkey system booting from saved EEPROM.
+* Can become a turnkey system booting from saved EEPROM or enscripted Forth code.
 
 ### How to install eForth1?
 
@@ -66,13 +66,14 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
   * > <img src="https://chochain.github.io/eForth1/images/eforth1_words_snip.png" width=400>
 
 ### Different from Dr. Ting's
-  * Instead of original 32-bit, CELL is 16-bit, opcodes are 8-bit bytecode primitives.
+  * Instead of the original 32-bit, CELL is 16-bit, and prmitives are 8-bit opcodes.
   * To save space, primitives are compiled as bytecode and composite words are flagged address pointers.
   * For speed, use direct threading model instead of original subroutine threaded,
-  * Instead of direct GPIO port manipulation with byte read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... for familiarity to the IDE platform.
-  * Multi-tasking supported through interrupts. A base tick of 1ms precision using Timer2 i.e. one assigns mulply of 1ms as ISR repetition trigger period. For example 500 means triggered every 500ms and there are 8 timer interrupt handler slots provided. Timer1 is left free for Servo or other libraries.
-  * On this 16-bit system, CLOCK still returns a double number (i.e. 32-bit) which takes 2 cells off stack. To calculate time difference, double arithmetic is needed, i.e. using DNEGATE, D+, or D- and the conversion words D>S, S>D.
-  * DELAY takes a 16-bit value. So, max delay time is 32767ms. Longer delay will have to use loops. Also, DELAY does not interfer with interrupts (see demos below).
+  * For the familiarity to the IDE platform, instead of raw GPIO port read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... 
+  * Support multi-tasking through timer interrupts. Timer2 ticks at 1ms as the heart-beat with 8 handler slots provided. Timer1 is left free for Servo or other libraries.
+  * Pin Change Interrupts are supported on all pins. Handler slots are provided for each of Port B,C, and D.
+  * CLOCK returns a 32-bit number, it takes 2 cells off 16-bit stack. Arithmetics for double are also provided. DNEGATE, D+, or D- plus the conversion words D>S, S>D.
+  * DELAY does not pause the MCU nor does it interfer with interrupts. It takes a 16-bit value thus max delay time is 32767ms. For longer delay, define word that loops.
 
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6, or try <a href="https://wokwi.com/projects/356793878308297729" target="_blank">*this Wokwi project*</a>)
@@ -92,11 +93,19 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>
     
-    |||
+    |Blinker|Serve Interrupt|
     |:--|:--|
-    |@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/--iLaLC5cG0?version=3&playlist=--iLaLC5cG0&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|@htmlonly <iframe width="400" height="225" src="https://www.youtube.com/embed/gr3OVOcgF4Q?version=3&playlist=gr3OVOcgF4Q&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
+    |<a href="https://youtu.be/--iLaLC5cG0" target="_blank"><img src="https://img.youtube.com/vi/--iLaLC5cG0/1.jpg" width=200></a>|<a href="https://youtu.be/gr3OVOcgF4Q" target="_blank"><img src="https://img.youtube.com/vi/gr3OVOcgF4Q/1.jpg" width=200></a>|
 
-  * Drives 8 Servos at <a href="https://wokwi.com/projects/356866133593965569" target="_blank">*this Wokwi project*</a>
+  * Drives 8 Servos. Demo at <a href="https://wokwi.com/projects/356866133593965569" target="_blank">*this Wokwi project*</a>
+
+  * Controls 4-legged Robot (8 servos) with ultrasound and IR remote.  Demo code in ~/examples/8_kame
+  
+    |Ultrasound Ranging|Walking|
+    |:--|:--|
+    |<a href="https://youtu.be/pvBo-G87Fzw" target="_blank"><img src="https://img.youtube.com/vi/pvBo-G87Fzw/1.jpg" width=300></a>|<a href="https://youtu.be/-zBb82UFZpA" target="_blank"><img src="https://img.youtube.com/vi/-zBb82UFZpA/default.jpg" width=300></a>|
+
+  * Communicate through Bluetooth (HC-05). Demo code in ~/examples/9_bluetooth
 
 ### Benchmark
   * Classic 1 million cycles

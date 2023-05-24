@@ -16,13 +16,14 @@
 #define APP_NAME        "eForth1"
 #define MAJOR_VERSION   "v2"
 #define CASE_SENSITIVE  0             /**< define case sensitivity */
-#define COMPUTED_JUMP   0             /**< VM uses computed jump (~15% faster but use extra 180 bytes RAM) */
+#define COMPUTED_GOTO   0             /**< VM uses computed goto (~3% faster but use extra 180 bytes RAM) */
 #define ASM_ONLY        0             /**< create ROM only (i.e. no debugging) */
 ///
 ///@name Debug Tracing Flags
 ///@{
 #define ASM_TRACE       0             /**< assembler tracing flag */
 #define EXE_TRACE       0             /**< virtual machine execution tracing flag */
+#define ENABLE_SEE      1             /**< add see implementation, ROM extra ~300 bytes */
 ///@}
 ///
 ///@name Portable Types
@@ -207,7 +208,7 @@ typedef const char          *PGM_P;
 #define LOG(s)              printf("%s", (s))
 #define LOG_C(c)            printf("%c", (c))
 #define LOG_V(s, n)         printf("%s%d", (s), (n))
-#define LOG_H(s, n)         printf("%s%x", (s), (n)&0xffff)
+#define LOG_H(s, n)         printf("%s%x", (s), (U16)((n)&0xffff))
 #define LOW                 (0)
 #define HIGH                (1)
 #define CLI()
@@ -221,10 +222,10 @@ typedef const char          *PGM_P;
 void intr_reset();          ///< reset interrupts
 U16  intr_hits();
 IU   intr_service();
-void intr_add_tmisr(U16 i, U16 ms, IU xt);
-void intr_add_pcisr(U16 pin, IU xt);
-void intr_timer_enable(U16 f);
-void intr_pci_enable(U16 f);
+void intr_add_tmisr(U8 i, U16 ms, IU xt);
+void intr_add_pcisr(U8 pin, IU xt);
+void intr_timer_enable(U8 f);
+void intr_pci_enable(U8 f);
 ///@}
 ///@name eForth Virtual Machine Functions
 ///@{

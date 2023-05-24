@@ -69,7 +69,7 @@ typedef const char                FCHAR;
 ///@name Vargs Header (calculate number of parameters by compiler)
 ///@{
 #define _CODE(seg, ...)      _code(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
-#define _XCODE(seg, x)       op##x; _CODE(seg, op##x, opEXIT)
+#define _PRIM(seg, x)        (_CODE(seg, op##x, opEXIT), op##x)
 #define _COLON(seg, ...)     _colon(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _IMMED(seg, ...)     _immed(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _LABEL(...)          _label(_NARG(__VA_ARGS__), __VA_ARGS__)

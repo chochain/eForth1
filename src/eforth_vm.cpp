@@ -10,13 +10,11 @@
 #include "eforth_vm.h"
 
 namespace EfVM {
-
-static Stream *io;
 ///
 ///@name VM Registers
 ///@{
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
-IU  PC;                           ///< program counter, IU is 16-bit
+IU  W;                            ///< work register, IU is 16-bit
 DU  *DS;                          ///< data stack pointer, Dr. Ting's stack
 DU  *RS;                          ///< return stack pointer, Dr. Ting's rack
 DU  top;                          ///< ALU (i.e. cached top of stack value)
@@ -30,9 +28,13 @@ U8    *_ram;                      ///< RAM, memory block for user define diction
 U8    *_pre;                      ///< Pre-built/embedded Forth code
 CFP   _fp[CFUNC_MAX];             ///> store C function pointer
 ///@}
-//
-// Forth Virtual Machine primitive functions
-//
+///@name IO Streaming interface
+///@{
+Stream *io;
+///@}
+///
+///> Forth Virtual Machine primitive functions
+///
 ///
 /// virtual machine initializer
 ///
@@ -44,7 +46,7 @@ void _init() {
     RS = (DU*)RAM(FORTH_STACK_TOP);
 
 #if EXE_TRACE
-    tCNT = 1; tTAB = 0;               ///> setup tracing variables
+    tCNT = 0; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
 
     /// FORTH_UVAR_ADDR;
@@ -71,21 +73,16 @@ void _init() {
 ///
 ///> serve interrupt routines
 ///
-void _yield()                ///> yield to interrupt service
+void _yield()                     ///> yield to interrupt service
 {
-    IR = intr_service();          /// * check interrupts
+	if (IR) return;               /// * still servcing interrupt
+
+    IR  = intr_service();         /// * check interrupts
     if (IR) {                     /// * service interrupt?
         RPUSH(IP | IRET_FLAG);    /// * flag return address as IRET
         IP = IR;                  /// * skip opENTER
     }
 }
-int _yield_cnt = 0;          ///< interrupt service throttle counter
-#define YIELD_PERIOD 50
-#define YIELD()                               \
-    if (!IR && ++_yield_cnt > YIELD_PERIOD) { \
-        _yield_cnt = 0;                       \
-        _yield();                             \
-    }
 ///
 ///> console IO functions
 ///
@@ -108,7 +105,7 @@ void _qrx()                  ///> ( -- c ) fetch a char from console
 void _txsto()                ///> (c -- ) send a char to console
 {
 #if EXE_TRACE
-    if (tCNT) {
+    if (tCNT > 1) {
         switch (top) {
         case 0xa: tCNT ? LOG("<LF>") : LOG("\n");  break;
         case 0xd: LOG("<CR>");    break;
@@ -206,10 +203,10 @@ int vm_pop() {
 /// @return
 ///   0 - exit
 void vm_outer() {
-#if COMPUTED_JUMP
+#if COMPUTED_GOTO
     /// Note:
-    ///   computed label jumps
-    ///      + overall 15% faster than subroutine calls
+    ///   computed goto
+    ///      + overall ~3% faster, -80ms/100K, than token switch jump
     ///      + but uses extra 180 bytes of RAM (avr-gcc failed to put vt in PROGMEM)
     ///      + the 'continue' in _X() macro behaves as $NEXT
     ///
@@ -217,29 +214,30 @@ void vm_outer() {
     #define _X(n, code)  L_##n: { DEBUG("%s",#n); code; continue; }
     #define DISPATCH(op) goto *vt[op];
     #define opENTER      2              /** hardcoded for ENTER */
-    PROGMEM const void *vt[100] = {     ///< computed label lookup table
+    PROGMEM const void *vt[] = {        ///< computed label lookup table
         OP(NOP),                        ///< opcode 0
         OPCODES                         ///< convert opcodes to address of labels
     };
-#else // !COMPUTED_JUMP
+#else // !COMPUTED_GOTO
     #define OP(name)     op##name
-    #define _X(n, code)  case op##n: { DEBUG("%s",#n); code; break; }
+    #define _X(n, code)  case op##n: { DEBUG("%s",#n); { code; } break; }
     #define DISPATCH(op) switch(op)
     enum {
-        opNOP = 0,                      ///< opcodes start at 0
+        OP(NOP) = 0,                    ///< opcodes start at 0
         OPCODES
     };
-#endif // COMPUTED_JUMP
+#endif // COMPUTED_GOTO
     IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
 
-    while (1) {
-        YIELD();                        /// * yield to interrupt services
+    while (1) {                         ///> Forth inner loop
+        _yield();                       /// * yield to interrupt services
         U8 op = BGET(IP++);             /// * NEXT in Forth's context
         if (op & 0x80) {                /// * COLON word?
-            PC = (U16)(op & 0x7f) << 8; /// * take upper 8-bit of address
+            W = ((U16)(op & 0x7f)<<8)   /// * take high-byte of 16-bit address
+                | BGET(IP);             /// * fetch low-byte of IP
             op = opENTER;
         }
-        TRACE(op);
+        TRACE(op, IP, W, top, DEPTH()); /// * debug tracing
 
         DISPATCH(op) {
         ///
@@ -248,17 +246,15 @@ void vm_outer() {
         _X(NOP,   {});
         _X(EXIT,
             TAB();
-            IP = rtop;
-            RPOP();                     ///> pop return address
+            IP = rtop; RPOP();          ///> pop return address
             if (IP & IRET_FLAG) {       /// * IRETURN?
-                IR = 0;                 /// * interrupt disabled
+                IR = 0;                 /// * interrupt clear
                 IP &= ~IRET_FLAG;
             });
         _X(ENTER,
-            PC |= BGET(IP++);           /// * fetch low-byte of PC
+            RPUSH(++IP);                ///> keep return address
             DEBUG(">>%x", IP);
-            RPUSH(IP);                  ///> keep return address
-            IP = PC);                   ///> jump to next instruction
+            IP = W);                    ///> jump to next instruction
 #if ARDUINO
         _X(BYE,   _init());             /// * reset
 #else // !ARDUINO

@@ -24,31 +24,31 @@ Personnally, I enjoyed the beauty of working on something small and simple, so d
 
 * From Arduino IDE's Library Manager
 
-    Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
-    > from *Arduino IDE > Tools > Manage* Libraries, enter FORTH in search box
-    > find eForth1 in the short list, select the latest version, and click the Install button
-    > from *Files > Examples*, find eForth1 in Examples from Custom Libraries at very buttom section
-    > load one of the eForth1 examples, such as *0_hello*
-    > open Serial Monitor, set baud rate to *115200*, and line ending to *Both NL & CR*
-    > hit compile and upload. You should see the 'ok' prompt
+    > Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
+    > \> from *Arduino IDE > Tools > Manage* Libraries, enter FORTH in search box
+    > \> find eForth1 in the short list, select the latest version, and click the Install button
+    > \> from *Files > Examples*, find eForth1 in Examples from Custom Libraries at very buttom section
+    > \> load one of the eForth1 examples, such as *0_hello*
+    > \> open Serial Monitor, set baud rate to *115200*, and line ending to *Both NL & CR*
+    > \> hit compile and upload. You should see the 'ok' prompt
 
 * Or, from GitHub directly, if you prefer managing source codes manually
 
-    > git clone <a href="https://github.com/chochain/eForth1" target="_blank">*https://github.com/chochain/eForth1*</a> onto your local Sketch directory
-    > copy *examples/0_hello/0_hello.ino* from sub-directory, then rename it as *eforth1.ino*
-    > open *eforth1.ino* with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
-    > in *eforth1.ino*, change the <em>#include \<eforth1.h\></em> to <em>#include "./src/eforth1.h"</em>
-    > open Serial Monitor, set baud rate to *115200*, and line ending to *Both NL & CR*
-    > compile and upload, you should see the 'ok' prompt
+    > \> git clone <a href="https://github.com/chochain/eForth1" target="_blank">*https://github.com/chochain/eForth1*</a> onto your local Sketch directory
+    > \> copy *examples/0_hello/0_hello.ino* from sub-directory, then rename it as *eforth1.ino*
+    > \> open *eforth1.ino* with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
+    > \> in *eforth1.ino*, change the <em>#include \<eforth1.h\></em> to <em>#include "./src/eforth1.h"</em>
+    > \> open Serial Monitor, set baud rate to *115200*, and line ending to *Both NL & CR*
+    > \> compile and upload, you should see the 'ok' prompt
   <p/>
 
 Hopefully, thing goes well and you get something like the snip below if eForth1 is uploaded successfully.
 
-  > <img src="https://chochain.github.io/eForth1/images/eforth1_init_snip.png" width=400><br/>
+  > > <img src="https://chochain.github.io/eForth1/images/eforth1_init_snip.png" width=400><br/>
   
 Now type **WORDS** in the input bar and hit \<return\> to list all the words supprted by eForth1. It is ready to serve your future fun projects.
 
-  > <img src="https://chochain.github.io/eForth1/images/eforth1_words_snip.png" width=400>
+  > > <img src="https://chochain.github.io/eForth1/images/eforth1_words_snip.png" width=400>
 
 ### Different from Dr. Ting's
 

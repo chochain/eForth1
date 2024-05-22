@@ -126,9 +126,7 @@ void cfunc1() {
 int main(int ac, char* av[]) {
     setvbuf(stdout, NULL, _IONBF, 0);         /// * autoflush (turn STDOUT buffering off)
 
-    int sz = ef_assemble(_rom);
-
-#if !ASM_ONLY
+    int sz  = ef_assemble(_rom);              ///< fill ROM for testing
     U8 *ram = (U8*)malloc(FORTH_RAM_SZ);      ///< forth memory block dynamic allocated
     _stat(_rom, sz, NULL);
 
@@ -136,7 +134,6 @@ int main(int ac, char* av[]) {
     vm_cfunc(0, cfunc0);
     vm_cfunc(1, cfunc1);
     vm_outer();
-#endif // !ASM_ONLY
 
     return 0;
 }

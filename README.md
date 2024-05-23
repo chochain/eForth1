@@ -11,7 +11,7 @@ Personnally, I enjoyed the beauty of working on something small and simple, so d
 ### What is eForth1?
 
 * An eForth for Arduino UNO/Nano implemented in C.
-* Use .ino sketch file that can be openned in Arduino IDE and load/run directly onto Arduino MCU.
+* .ino sketch file can be openned in Arduino IDE, no programmer to overwrite bootloader needed.
 * Has 16-bit cells and stacks.
 * Can read/write Arduino GPIO pins.
 * Supports Arduino Timer and Pin Change Interrupts.
@@ -68,11 +68,11 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 * Instead of the original 32-bit, CELL is 16-bit, and prmitives are 8-bit opcodes.
 * To save space, primitives are compiled as bytecode and composite words are flagged address pointers.
 * For speed, use direct threading model instead of original subroutine threaded,
-* For the familiarity to the IDE platform, instead of raw GPIO port read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... 
-* Support multi-tasking through timer interrupts. Timer2 ticks at 1ms as the heart-beat with 8 handler slots provided. Timer1 is left free for Servo or other libraries.
-* Pin Change Interrupts are supported on all pins. Handler slots are provided for each of Port B,C, and D.
-* CLOCK returns a 32-bit number, it takes 2 cells off 16-bit stack. Arithmetics for double are also provided. DNEGATE, D+, or D- plus the conversion words D>S, S>D.
-* DELAY does not pause the MCU nor does it interfer with interrupts. It takes a 16-bit value thus max delay time is 32767ms. For longer delay, define word that loops.
+* Instead of raw GPIO port read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ... 
+* Support multi-tasking. Timer2 sliced at 1ms as the heart-beat with 8 ISR handler slots provided which Forth words can be assigned to. Timer1 is left free for Servo or other libraries.
+* Support Delay (sleep). It does not pause the MCU nor does it interfer with interrupts. 16-bit delay max 32767ms, longer delay can be have by defining word that loops.
+* Support Pin Change Interrupts. ISR handler slots are provided for each of Port B,C, and D.
+* Support 32-bit clock (in ms). It takes 2 cells off 16-bit stack. Arithmetics for double are also provided. DNEGATE, D+, or D- plus the conversion words D>S, S>D.
 
 ### Demos
   * LED blinker (assume you have a blue LED on pin 6, or try <a href="https://wokwi.com/projects/356793878308297729" target="_blank">*this Wokwi project*</a>)

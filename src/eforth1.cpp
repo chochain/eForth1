@@ -102,37 +102,50 @@ void ef_run()
 {
 	vm_outer();
 }
+///
+///> VM RAM space
+///
+char *ef_ram(int i) {
+    return (char*)&ram[i - FORTH_RAM_ADDR];
+}
 
 #else  // !ARDUINO
 
-static U8 _rom[FORTH_ROM_SZ] = {};            ///< fake rom to simulate run time
+static U8 _rom[FORTH_ROM_SZ] = {}; ///< fake rom to simulate run time
 const char code[] =
     "words\n"
     "123 456\n"
-    "+\n";
+    "+\n"
+    "0 CALL\n"
+    "123 456\n"
+    "1 CALL\n"
+    "=\n"
+    "BYE\n";
 ///
 ///> main to support C development debugging
 ///
-void cfunc0() {
-	printf(" => func0()\n");
+void my_dot() {
+	printf(" => my_dot()\n");
 }
 
-void cfunc1() {
-	int t = vm_pop();
-	printf(" => func1(%d)\n", t);
-	vm_push(123);
+void my_add() {
+	int b = vm_pop();
+    int a = vm_pop();
+	printf(" => my_add(%d, %d)\n", a, b);
+	vm_push(a + b);
 }
 
 int main(int ac, char* av[]) {
-    setvbuf(stdout, NULL, _IONBF, 0);         /// * autoflush (turn STDOUT buffering off)
+    setvbuf(stdout, NULL, _IONBF, 0);    /// * autoflush (turn STDOUT buffering off)
 
-    int sz  = ef_assemble(_rom);              ///< fill ROM for testing
-    U8 *ram = (U8*)malloc(FORTH_RAM_SZ);      ///< forth memory block dynamic allocated
+    int sz  = ef_assemble(_rom);         ///< fill ROM for testing
+    U8 *ram = (U8*)malloc(FORTH_RAM_SZ); ///< forth memory block dynamic allocated
     _stat(_rom, sz, NULL);
 
+    vm_cfunc(0, my_dot);                 ///< register C API[0]
+    vm_cfunc(1, my_add);                 ///< register C API[1]
+    
     vm_init((char*)_rom, ram, 0, code);
-    vm_cfunc(0, cfunc0);
-    vm_cfunc(1, cfunc1);
     vm_outer();
 
     return 0;

@@ -47,12 +47,12 @@ typedef void (*CFP)();                ///< function pointer
 #define CFUNC_MAX        8            /**< size C function pointer slots (8)   */
 #define FORTH_ROM_SZ     0x2000       /**< size of ROM (for pre-defined words) */
 #define FORTH_UVAR_SZ    0x20         /**< size of Forth user variables        */
-#define FORTH_DIC_SZ     0x3e0        /**< size of dictionary space            */
+#define FORTH_DIC_SZ     (0x400-FORTH_UVAR_SZ) /**< size of dictionary space   */
 #define FORTH_STACK_SZ   0x80         /**< size of data/return stack           */
 #define FORTH_TIB_SZ     0x80         /**< size of terminal input buffer       */
 #define FORTH_RAM_SZ     ( \
-        FORTH_UVAR_SZ + FORTH_DIC_SZ + \
-        FORTH_STACK_SZ + FORTH_TIB_SZ)      /**< total RAM allocated           */
+     FORTH_UVAR_SZ + FORTH_DIC_SZ + \
+     FORTH_STACK_SZ + FORTH_TIB_SZ)   /**< total RAM allocated                 */
 ///@}
 ///
 ///> note:

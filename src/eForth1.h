@@ -13,7 +13,8 @@ int  vm_pop();                    ///< pop TOS off VM data stack
 
 void ef_setup(const char *code=0, Stream &io_stream=Serial);
 void ef_run();
-#endif // ARDUINO
+char *ef_ram(int i);              ///< expose VM RAM space to Sketch
 
+#endif // ARDUINO
 #endif // __EFORTH1_H
 

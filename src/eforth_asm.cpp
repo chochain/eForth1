@@ -685,7 +685,13 @@ using namespace EfAsm;
 ///
 void _dump_rom(U8* cdata, int len)
 {
-    printf("//\n// cut and paste the following segment into Arduino C code\n//");
+    printf(
+        "///\n"
+        "/// @file eforth_rom.c\n"
+        "/// @brief eForth ROM (loaded in Arduino Flash Memory)\n"
+        "/// @attention 8K max ROM before changing FORTH_ROM_SZ in eforth_core.h \n"
+        "///\n"
+        "#include \"eforth_core.h\"");
     printf("\nconst U32 forth_rom_sz PROGMEM = 0x%x;", len);
     printf("\nconst U32 forth_rom[] PROGMEM = {\n");
     for (int p=0; p<len+0x20; p+=0x20) {
@@ -710,3 +716,14 @@ int ef_assemble(U8 *cdata) {
 
     return sz;
 }
+
+#if ASM_ONLY
+static U8 _rom[FORTH_ROM_SZ] = {};            ///< fake rom to simulate run time
+int main(int ac, char* av[]) {
+    setvbuf(stdout, NULL, _IONBF, 0);         /// * autoflush (turn STDOUT buffering off)
+
+    int sz = ef_assemble(_rom);
+
+    return 0;
+}
+#endif

@@ -186,7 +186,7 @@ void _ccall() {
 
 void vm_cfunc(int n, CFP fp) {
     _fp[n] = fp;
-    LOG_V(", fp[", n); LOG_H("]=", (uintptr_t)fp);
+    LOG_V(", API", n); LOG_H("=x", (uintptr_t)fp);
 }
 
 void vm_push(int v) {                 /// proxy to VM
@@ -308,7 +308,7 @@ void vm_outer() {
             SET(top, *DS--);
             POP());
         _X(PSTOR,
-            SET(top, GET(top) + *DS--);
+            SET(top, (DU)GET(top) + *DS--);
             POP());
         _X(AT,    top = (DU)GET(top));
         _X(CSTOR,
@@ -422,19 +422,9 @@ void vm_outer() {
             S32 d1 = S2D(*(DS-1), *(DS-2));
             DS -= 2; DTOP(d1 - d0));
         /// TODO: add J
-        /*
-        _X(DSTOR,
-           SET(top + CELLSZ, *DS--);
-           SET(top, *DS--);
-           POP());
-        _X(DAT,
-           *(++DS) = (DU)GET(top);
-           top     = (DU)GET(top + CELLSZ));
-        */
         _X(SPAT,
             DU r = (U8*)DS - (U8*)RAM(FORTH_STACK_ADDR);
             PUSH(FORTH_STACK_ADDR + r));
-//        _X(S0, PUSH(FORTH_STACK_ADDR));      /// fixed, instead of a user variable
 #if EXE_TRACE
         _X(TRC,  tCNT = top; POP());
 #else

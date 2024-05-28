@@ -531,8 +531,9 @@ int assemble(U8 *cdata)
     IU DOTOP = _COLON(".OP", DUP, DOLIT, 0x80, AND); {         // check primitive flag?
         /* poorman's CASE */
         _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND, DUP,            // colon word - show name
-            SPACE, TNAME, COUNT, TYPE, DOLIT, DOTQP, EQ); {
-            _IF(SPACE, CELL, ADD, COUNT, DDUP, TYPE,           // ."| (string)"
+            SPACE, TNAME, COUNT, TYPE, DUP,
+            DOLIT, DOTQP, EQ, SWAP, DOLIT, STRQP, EQ, OR); {
+            _IF(SPACE, CELL, ADD, COUNT, DDUP, TYPE,           // ."| or $"| (string)"
                 DOLIT, 0x22, EMIT, ADD, EXIT);
             _ELSE(CELL, ADD, EXIT);
             _THEN(NOP);
@@ -710,11 +711,7 @@ void _dump_rom(U8* cdata, int len)
 }
 
 int ef_assemble(U8 *cdata) {
-    int sz = assemble(cdata);
-
-    _dump_rom(cdata, sz);
-
-    return sz;
+    return assemble(cdata);
 }
 
 #if ASM_ONLY
@@ -723,6 +720,8 @@ int main(int ac, char* av[]) {
     setvbuf(stdout, NULL, _IONBF, 0);         /// * autoflush (turn STDOUT buffering off)
 
     int sz = ef_assemble(_rom);
+
+    _dump_rom(_rom, sz);
 
     return 0;
 }

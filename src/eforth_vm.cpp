@@ -67,7 +67,7 @@ void _init() {
     ///
     /// display init prompt
     ///
-    LOG("\n\n"); LOG(APP_NAME); LOG(" "); LOG(MAJOR_VERSION);
+    LOG("\n\n"); LOG(APP_NAME);
 }
 
 ///

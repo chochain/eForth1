@@ -13,8 +13,7 @@
 #include "user_interface.h"
 #endif // ESP8266
 
-#define APP_NAME        "eForth1"
-#define MAJOR_VERSION   "v2"
+#define APP_NAME        "eForth1 v2"
 #define CASE_SENSITIVE  0             /**< define case sensitivity */
 #define COMPUTED_GOTO   0             /**< VM uses computed goto (~3% faster but use extra 180 bytes RAM) */
 ///

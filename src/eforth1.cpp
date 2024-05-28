@@ -9,7 +9,7 @@
 #include "eForth1.h"
 
 void _stat(U8 *ram, int sz, Stream *io) {
-	LOG_H("\nROM_SZ=x",  sz);
+    LOG_H("\nROM_SZ=x",  sz);
     LOG_H(", RAM_SZ=x",  FORTH_RAM_SZ);
     LOG_V(", Addr=",     (U16)sizeof(IU)*8);
     LOG_V("-bit, CELL=", CELLSZ);
@@ -89,7 +89,7 @@ static Stream *io;                         ///< IO stream (Serial Monitor)
 ///
 void ef_setup(const char *code, Stream &io_stream)
 {
-	io  = &io_stream;
+    io  = &io_stream;
     ram = (U8*)malloc(FORTH_RAM_SZ);       ///< dynamically allocated (to prevent IDE complaint)
 
     vm_init((PGM_P)forth_rom, ram, io, code);
@@ -100,7 +100,7 @@ void ef_setup(const char *code, Stream &io_stream)
 ///
 void ef_run()
 {
-	vm_outer();
+    vm_outer();
 }
 ///
 ///> VM RAM space
@@ -119,20 +119,19 @@ const char code[] =
     "0 CALL\n"
     "123 456\n"
     "1 CALL\n"
-    "=\n"
-    "BYE\n";
+    "=\n";
 ///
 ///> main to support C development debugging
 ///
 void my_dot() {
-	printf(" => my_dot()\n");
+    printf(" => my_dot()\n");
 }
 
 void my_add() {
-	int b = vm_pop();
+    int b = vm_pop();
     int a = vm_pop();
-	printf(" => my_add(%d, %d)\n", a, b);
-	vm_push(a + b);
+    printf(" => my_add(%d, %d)\n", a, b);
+    vm_push(a + b);
 }
 
 int main(int ac, char* av[]) {

@@ -79,9 +79,10 @@ int ef_load(U8 *ram)
 #undef GET
 #undef SET
 
-#if ARDUINO
 extern U32    forth_rom[];                 ///< from eforth_rom.c
 extern U32    forth_rom_sz;                ///< actual size of ROM
+
+#if ARDUINO
 static U8     *ram;                        ///< forth memory block dynamic allocated
 static Stream *io;                         ///< IO stream (Serial Monitor)
 ///
@@ -132,9 +133,6 @@ void my_add() {
     vm_push(a + b);
 }
 
-extern U32 forth_rom_sz;
-extern U32 forth_rom[];
-
 int main(int ac, char* av[]) {
     setvbuf(stdout, NULL, _IONBF, 0);    /// * autoflush (turn STDOUT buffering off)
 
@@ -144,7 +142,7 @@ int main(int ac, char* av[]) {
     vm_cfunc(0, my_dot);                 ///< register C API[0]
     vm_cfunc(1, my_add);                 ///< register C API[1]
     
-    vm_init((char*)forth_rom, ram, 0, code);
+    vm_init((char*)forth_rom, ram, NULL, code);
     vm_outer();
 
     return 0;

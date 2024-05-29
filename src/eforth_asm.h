@@ -6,9 +6,12 @@
  */
 #ifndef __EFORTH_ASM_H
 #define __EFORTH_ASM_H
-#include "eforth_core.h"
+#include "eforth_config.h"
 
-namespace EfAsm {
+#define ASM_TRACE       0          /** create assembler trace */
+#define CASE_SENSITIVE  0          /** enable case sensitive  */
+#define ENABLE_SEE      1          /** add SEE, +280 bytes    */
+///
 /// Name field
 /// +----------+-------------+
 /// | len byte | name string |
@@ -16,13 +19,13 @@ namespace EfAsm {
 /// Forth name len max 31
 /// the following flags are used to flag word attributes
 ///
-#define fCMPL          0x40         /**< compile only flag */
-#define fIMMD          0x80         /**< immediate flag    */
+#define fCMPL           0x40       /**< compile only flag */
+#define fIMMD           0x80       /**< immediate flag    */
 ///
 /// define opcode enums
 /// Note: in sync with VM's vtable
 ///
-#define OP(name)  op##name
+#define OP(name)        op##name
 enum {
     opNOP = 0,                      ///< opcodes start at 0
     OPCODES
@@ -37,12 +40,6 @@ enum {
 #define DEBUG(s,v)
 #define SHOWOP(op)
 #endif // ASM_TRACE
-#if ARDUINO
-typedef const __FlashStringHelper FCHAR;
-#else
-#define F(s)                      (s)
-typedef const char                FCHAR;
-#endif // ARDUINO
 ///
 /// variable length parameter handler macros
 ///
@@ -68,10 +65,10 @@ typedef const char                FCHAR;
 ///
 ///@name Vargs Header (calculate number of parameters by compiler)
 ///@{
-#define _CODE(seg, ...)      _code(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _CODE(seg, ...)      _code(seg, _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _PRIM(seg, x)        (_CODE(seg, op##x, opEXIT), op##x)
-#define _COLON(seg, ...)     _colon(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
-#define _IMMED(seg, ...)     _immed(F(seg), _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _COLON(seg, ...)     _colon(seg, _NARG(__VA_ARGS__), __VA_ARGS__)
+#define _IMMED(seg, ...)     _immed(seg, _NARG(__VA_ARGS__), __VA_ARGS__)
 #define _LABEL(...)          _label(_NARG(__VA_ARGS__), __VA_ARGS__)
 ///@}
 ///@name Vargs Branching
@@ -90,7 +87,7 @@ typedef const char                FCHAR;
 ///@}
 ///@name Vargs IO
 ///@{
-#define _DOTQ(str)           _dotq(F(str))
+#define _DOTQ(str)           _dotq(str)
 ///@}
 ///@name Memory Access and Stack Op
 ///@{
@@ -135,19 +132,17 @@ typedef const char                FCHAR;
     _rdump();                                   \
 }
 
-#define PGMCPY(len, seq) {                      \
-    PGM_P p = reinterpret_cast<PGM_P>(seq);     \
-    for (int i=0; i < len; i++) {               \
-        BSET(PC++, pgm_read_byte(p++));         \
-    }                                           \
+#define MEMCPY(len, seq) {                      \
+    memcpy(&_byte[PC], seq, len);               \
+    PC += len;                                  \
 }
 
 #define OPSTR(ip, seq) {                        \
     SET(PC, ip | fCOLON);                       \
     PC += CELLSZ;                               \
-    int len = _strlen(seq);                     \
+    int len = strlen(seq);                      \
     BSET(PC++, len);                            \
-    PGMCPY(len, seq);                           \
+    MEMCPY(len, seq);                           \
 }
 ///@}
 ///@defgroup Assembler Module variables
@@ -181,16 +176,10 @@ void _rdump()                            ///> dump return stack
     }
     DEBUG("%c]", ' ');
 }
-int _strlen(FCHAR *seq) {                ///> string length (in Arduino Flash memory block)
-    PGM_P p = reinterpret_cast<PGM_P>(seq);
-    int i=0;
-    for (; pgm_read_byte(p); i++, p++);  /// * length includes terminating zero
-    return i;
-}
 ///
 ///> create a word hearder
 ///
-void _header(int lex, FCHAR *seq) {      /// create a word header in dictionary
+void _header(int lex, const char *seq) { /// create a word header in dictionary
     if (_link) {
         if (PC >= FORTH_ROM_SZ) DEBUG("ROM %s", "max!");
         _dump(_link - sizeof(IU), PC);   /// * dump data from previous word to current word
@@ -200,16 +189,17 @@ void _header(int lex, FCHAR *seq) {      /// create a word header in dictionary
 
     BSET(PC++, lex);                     /// * length of word (with optional fIMMED or fCOMPO flags)
     int len = lex & 0x1f;                /// * Forth allows word max length 31
-    PGMCPY(len, seq);                    /// * memcpy word string
+    
+    MEMCPY(len, seq);                    /// * memcpy word string
     DEBUG("\n%04x: ", PC);
     DEBUG("%s", seq);
 }
 ///
 ///> create an opcode stream for built-in word
 ///
-int _code(FCHAR *seg, int len, ...) {
-    _header(_strlen(seg), seg);
-    int addr = PC;                       /// * keep address of current word
+int _code(const char *seg, int len, ...) {
+    _header(strlen(seg), seg);
+    int addr = PC;                       ///< keep address of current word
     va_list argList;
     va_start(argList, len);
     for (; len; len--) {                 /// * copy bytecodes
@@ -223,8 +213,8 @@ int _code(FCHAR *seg, int len, ...) {
 ///
 ///> create a colon word
 ///
-int _colon(FCHAR *seg, int len, ...) {
-    _header(_strlen(seg), seg);
+int _colon(const char *seg, int len, ...) {
+    _header(strlen(seg), seg);
     DEBUG(" %s", ":_COLON");
     int addr = PC;
     //BSET(PC++, opENTER);    // no need for direct threading
@@ -234,8 +224,8 @@ int _colon(FCHAR *seg, int len, ...) {
 ///
 /// create a immediate word
 ///
-int _immed(FCHAR *seg, int len, ...) {
-    _header(fIMMD | _strlen(seg), seg);
+int _immed(const char *seg, int len, ...) {
+    _header(fIMMD | strlen(seg), seg);
     SHOWOP("IMMD");
     int addr = PC;
     //BSET(PC++, opENTER);    // no need for direct threading
@@ -335,11 +325,10 @@ void _then(int len, ...) {         /// IF-ELSE--**THEN**
 ///
 ///> IO Functions
 ///
-void _dotq(FCHAR *seq) {
+void _dotq(const char *seq) {
     SHOWOP("DOTQ");
     DEBUG("%s", seq);
     OPSTR(DOTQP, seq);
 }
 ///@}
-};  // namespace EfAsm
 #endif // __EFORTH_ASM_H

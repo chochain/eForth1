@@ -92,7 +92,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>
     
-    |Blinker|Serve Interrupt|
+    |Blinker|Interrupt Service|
     |:--|:--|
     |<a href="https://youtu.be/--iLaLC5cG0" target="_blank"><img src="https://img.youtube.com/vi/--iLaLC5cG0/1.jpg" width=200></a>|<a href="https://youtu.be/gr3OVOcgF4Q" target="_blank"><img src="https://img.youtube.com/vi/gr3OVOcgF4Q/1.jpg" width=200></a>|
 
@@ -104,8 +104,10 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     |:--|:--|
     |<a href="https://youtu.be/pvBo-G87Fzw" target="_blank"><img src="https://img.youtube.com/vi/pvBo-G87Fzw/1.jpg" width=300></a>|<a href="https://youtu.be/-zBb82UFZpA" target="_blank"><img src="https://img.youtube.com/vi/-zBb82UFZpA/default.jpg" width=300></a>|
 
-  * Communicate through Bluetooth (HC-05). Demo code in ~/examples/9_bluetooth
-
+  * Bluetooth (HC-05) communication. Demo code in ~/examples/9_bluetooth
+  * WiFi (nRF24L01s) communication. Demo code in ~/examples/11_rf
+    <img src="https://chochain.github.io/eForth1/images/eforth1_rf_comm.jpg" width=600>
+    
 ### Benchmark
   * Classic 1 million cycles
     <pre>
@@ -123,8 +125,27 @@ If your programming language exposure has been with C, Java, or even Python so f
 
 To understand the philosophy of FORTH, excellent online e-books are here free for you.
 * Timeless classic for the history, paths, and thoughts behind FORTH language.
-  > <a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">*Starting Forth by Leo Brodie*</a><br/>
+  > <a href="https://www.forth.com/starting-forth/" target="_blank">*Starting Forth by Leo Brodie*</a><br/>
   > <a href="http://thinking-forth.sourceforge.net" target="_blank">*Thinking Forth by Leo Brodie*</a>
+
+### Build your own Forth
+Traditionally, the Forth image is build from low-level assembly and high-level Forth via a process called meta-compilation. See [details here](https://www.ultratechnology.com/meta.html). Latest eForth, from Dr. Ting, changed the process to build the entire image with C only. I follow the same philosophy.
+  >
+  > \> git clone <a href="https://github.com/chochain/eForth1" target="_blank">*https://github.com/chochain/eForth1*</a> onto your local directory
+  >
+  > \> make rom  # to create src/eforth_rom.c
+  >
+  > study how src/eforth_asm.h, and src/eforth_asm.c create Forth image
+  >
+  > study how vm_outer() in src/eforth_vm.cpp interacts with the ROM image
+  >
+  > modify src/eforth_asm.c to build your version of eForth
+  >
+  > \> make      # to generate tests/eforth1 for debugging, or
+  >
+  > use Arduino IDE to compile and upload
+  >
+  <p/>
 
 ### Performance Tuning (~15% faster)
 * Check your Arduino IDE installed directory, say <em>C:\Users\myname\AppData\Local\Arduino...</em> on Windows or <em>/home/myname/Arduino/...</em> on Linux,

@@ -92,7 +92,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > 19 blink⏎                              \ let's have them both blink (blue LED 10 times) 
     </pre>
     
-    |Blinker|Serve Interrupt|
+    |Blinker|Interrupt Service|
     |:--|:--|
     |<a href="https://youtu.be/--iLaLC5cG0" target="_blank"><img src="https://img.youtube.com/vi/--iLaLC5cG0/1.jpg" width=200></a>|<a href="https://youtu.be/gr3OVOcgF4Q" target="_blank"><img src="https://img.youtube.com/vi/gr3OVOcgF4Q/1.jpg" width=200></a>|
 
@@ -104,8 +104,10 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     |:--|:--|
     |<a href="https://youtu.be/pvBo-G87Fzw" target="_blank"><img src="https://img.youtube.com/vi/pvBo-G87Fzw/1.jpg" width=300></a>|<a href="https://youtu.be/-zBb82UFZpA" target="_blank"><img src="https://img.youtube.com/vi/-zBb82UFZpA/default.jpg" width=300></a>|
 
-  * Communicate through Bluetooth (HC-05). Demo code in ~/examples/9_bluetooth
-
+  * Bluetooth (HC-05) communication. Demo code in ~/examples/9_bluetooth
+  * WiFi (nRF24L01s) communication. Demo code in ~/examples/11_rf
+    <img src="https://chochain.github.io/eForth1/images/eforth1_rf_comm.jpg" width=600>
+    
 ### Benchmark
   * Classic 1 million cycles
     <pre>

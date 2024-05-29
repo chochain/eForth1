@@ -106,7 +106,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 
   * Bluetooth (HC-05) communication. Demo code in ~/examples/9_bluetooth
   * WiFi (nRF24L01s) communication. Demo code in ~/examples/11_rf
-    <img src="https://chochain.github.io/eForth1/images/eforth1_rf_comm.jpg" width=600>
+    <img src="https://chochain.github.io/eForth1/images/eforth1_rf_comm.jpg" width=400>
     
 ### Benchmark
   * Classic 1 million cycles
@@ -114,7 +114,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > : inner 999 FOR 34 DROP NEXT ;⏎          \ inner loop (put 34 on stack then drop it)
     > : outer 999 FOR inner NEXT ;⏎            \ create the outer loop
     > : bench CLOCK DNEGATE outer CLOCK D+ ;⏎  \ CLOCK returns a double value
-    > zz⏎                                      \ benchmark the 1000x1000 cycles
+    > bench⏎                                   \ benchmark the 1000x1000 cycles
     > 25492 0 ok>                              \ 25492ms =~ 25.5us/cycle (with one blinking ISR running in the background)
     </pre>
 

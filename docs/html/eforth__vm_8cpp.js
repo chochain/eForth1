@@ -24,6 +24,6 @@ var eforth__vm_8cpp =
     [ "_rom", "eforth__vm_8cpp.html#a84f1ef51c831a00617756c690faa7194", null ],
     [ "_ram", "eforth__vm_8cpp.html#a5aee8e42a1af9c470bbb7e4ed5a54f5d", null ],
     [ "_pre", "eforth__vm_8cpp.html#abfd3e15e27907da33aaeb9d1ede21f16", null ],
-    [ "_fp", "eforth__vm_8cpp.html#a6e85eb10cf4c1d4b1ccc6028d17c79ed", null ],
+    [ "_api", "eforth__vm_8cpp.html#a4992bea894e84a7fb8d2ab9eec154964", null ],
     [ "io", "eforth__vm_8cpp.html#ab51b14fbcfce5418c63e780034d81dd2", null ]
 ];

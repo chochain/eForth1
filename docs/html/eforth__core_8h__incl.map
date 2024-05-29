@@ -1,10 +1,11 @@
 <map id="src/eforth_core.h" name="src/eforth_core.h">
-<area shape="rect" id="node1" title="eForth prototype and interface" alt="" coords="261,5,392,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,72,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="97,80,167,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="192,80,267,107"/>
-<area shape="rect" id="node5" title=" " alt="" coords="291,80,362,107"/>
-<area shape="rect" id="node6" title=" " alt="" coords="387,80,451,107"/>
-<area shape="rect" id="node7" title=" " alt="" coords="475,80,559,107"/>
-<area shape="rect" id="node8" title=" " alt="" coords="583,80,710,107"/>
+<area shape="rect" id="node1" title="eForth prototype and interface" alt="" coords="289,5,420,32"/>
+<area shape="rect" id="node2" href="$eforth__config_8h.html" title="eForth configurations and opcode list" alt="" coords="170,80,289,107"/>
+<area shape="rect" id="node8" title=" " alt="" coords="313,80,397,107"/>
+<area shape="rect" id="node9" title=" " alt="" coords="421,80,547,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,155,72,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="97,155,167,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="192,155,267,181"/>
+<area shape="rect" id="node6" title=" " alt="" coords="291,155,362,181"/>
+<area shape="rect" id="node7" title=" " alt="" coords="387,155,451,181"/>
 </map>

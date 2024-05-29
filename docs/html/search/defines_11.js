@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['words_5frow_5fwidth_398',['WORDS_ROW_WIDTH',['../eforth__asm_8cpp.html#aa18a10c05357a5f4115d17f150a0a0fb',1,'eforth_asm.cpp']]]
+  ['yield_5fperiod_392',['YIELD_PERIOD',['../eforth__core_8cpp.html#afc09b15fce90b9e00aa7277e7edd5c4e',1,'eforth_core.cpp']]]
 ];

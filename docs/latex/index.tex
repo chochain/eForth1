@@ -1,21 +1,17 @@
-{\bfseries{Dr. Chen-\/\+Hanson Ting}}, the creator of {\bfseries{e\+Forth}} and one of the inspiring figures of Forth community, wrote\+: \begin{quote}
-{\itshape In all these years, I have thought that the e\+Forth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.} \end{quote}
-
+{\bfseries{Dr. Chen-\/\+Hanson Ting}}, the creator of {\bfseries{e\+Forth}} and one of the inspiring figures of Forth community, wrote\+: $>$$\ast$\+In all these years, I have thought that the e\+Forth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.$\ast$
 
 In 2011, Dr. Ting created \href{https://chochain.github.io/eForth1/ref/328eForth.pdf}{\texttt{ $\ast$328e\+Forth$\ast$}} to run Forth on Arduino U\+NO and wrote in his ce\+Forth\+\_\+33 document\+: \begin{quote}
 {\itshape I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. ...., it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
 
 
-Before Dr. Ting conceded his fight with cancer in May, 2022, I\textquotesingle{}ve spent the last 11 months working with him expanding the concept of $\ast$$\ast$\char`\"{}\+Forth without Forth\char`\"{}$\ast$$\ast$ -\/ a new e\+Forth model -\/ he called. Traditionally, Forth is built with a set of core words in low-\/level assembly language and establish the rest of words with high-\/level Forth scripts which get boot-\/strapped on start-\/up time. Nowadays, build Forth without using Forth, he reasoned that Forth built entirely in high-\/level languages, specifically in C, can not only greatly simplify the virtual machine, utilizing operating system, but also encourage portability and optimization. Taking the concept forward, we completed new batch of e\+Forths in Javascript, Java, C++, ported them to Windows, E\+S\+P32 in just a few months. Dr. Ting presented a video on November, 2021 to \href{https://www.youtube.com/watch?v=bb5vi9kR1tE&t=827s}{\texttt{ $\ast$\+Sillicon Valley Forth Interest Group$\ast$}}. Later, we fancied creating a hardware version e\+Forth with System\+Verilog and joint venture with Don \& Demitri\textquotesingle{}s C\+O\+R\+E-\/I F\+P\+GA project of \href{https://www.facebook.com/groups/1304548976637542}{\texttt{ $\ast$\+AI \& Robotics Group$\ast$}} til Dr. Ting\textquotesingle{}s eventual departure. The project is still active now.
-
-Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model and have fun with it. Since his {\itshape 328e\+Forth} was a teaser only, to move it forward formally, there are a few major things I need to make changes to Dr. Ting\textquotesingle{}s implementation i.\+g. make C-\/coder friendly macro assembler, remove dependency on extra bootloader programmer, add E\+E\+P\+R\+OM save/load, and support interrupts, ... So, here we go!
+Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting\textquotesingle{}s e\+Forth Model to push it beyond being a teaser. Here we go...
 
 \doxysubsection*{What is e\+Forth1?}
 
 
 \begin{DoxyItemize}
 \item An e\+Forth for Arduino U\+N\+O/\+Nano implemented in C.
-\item Use .ino sketch file that can be openned in Arduino I\+DE and load/run directly onto Arduino M\+CU.
+\item .ino sketch file can be openned in Arduino I\+DE, no programmer to overwrite bootloader needed.
 \item Has 16-\/bit cells and stacks.
 \item Can read/write Arduino G\+P\+IO pins.
 \item Supports Arduino Timer and Pin Change Interrupts.
@@ -32,7 +28,7 @@ Personnally, I enjoyed the beauty of working on something small and simple, so d
 \item From Arduino I\+DE\textquotesingle{}s Library Manager \begin{quote}
 
 
-$>$ Make sure you\textquotesingle{}ve hooked up one of Arduino Nano/\+Uno, or a development board that hosts A\+Tmega328
+Make sure you\textquotesingle{}ve hooked up one of Arduino Nano/\+Uno, or a development board that hosts A\+Tmega328
 
 $>$ from {\itshape Arduino I\+DE $>$ Tools $>$ Manage} Libraries, enter F\+O\+R\+TH in search box
 
@@ -89,11 +85,11 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 \item Instead of the original 32-\/bit, C\+E\+LL is 16-\/bit, and prmitives are 8-\/bit opcodes.
 \item To save space, primitives are compiled as bytecode and composite words are flagged address pointers.
 \item For speed, use direct threading model instead of original subroutine threaded,
-\item For the familiarity to the I\+DE platform, instead of raw G\+P\+IO port read/write, e\+Forth1 calls Arduino library functions i.\+g. P\+I\+N\+M\+O\+DE = pin\+Mode, IN = digital\+Read, O\+UT = digital\+Write, ...
-\item Support multi-\/tasking through timer interrupts. Timer2 ticks at 1ms as the heart-\/beat with 8 handler slots provided. Timer1 is left free for Servo or other libraries.
-\item Pin Change Interrupts are supported on all pins. Handler slots are provided for each of Port B,C, and D.
-\item C\+L\+O\+CK returns a 32-\/bit number, it takes 2 cells off 16-\/bit stack. Arithmetics for double are also provided. D\+N\+E\+G\+A\+TE, D+, or D-\/ plus the conversion words D$>$S, S$>$D.
-\item D\+E\+L\+AY does not pause the M\+CU nor does it interfer with interrupts. It takes a 16-\/bit value thus max delay time is 32767ms. For longer delay, define word that loops.
+\item Instead of raw G\+P\+IO port read/write, e\+Forth1 calls Arduino library functions i.\+g. P\+I\+N\+M\+O\+DE = pin\+Mode, IN = digital\+Read, O\+UT = digital\+Write, ...
+\item Support multi-\/tasking. Timer2 sliced at 1ms as the heart-\/beat with 8 I\+SR handler slots provided which Forth words can be assigned to. Timer1 is left free for Servo or other libraries.
+\item Support Delay (sleep). It does not pause the M\+CU nor does it interfer with interrupts. 16-\/bit delay max 32767ms, longer delay can be have by defining word that loops.
+\item Support Pin Change Interrupts. I\+SR handler slots are provided for each of Port B,C, and D.
+\item Support 32-\/bit clock (in ms). It takes 2 cells off 16-\/bit stack. Arithmetics for double are also provided. D\+N\+E\+G\+A\+TE, D+, or D-\/ plus the conversion words D$>$S, S$>$D.
 \end{DoxyItemize}
 
 \doxysubsection*{Demos}
@@ -122,12 +118,12 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 \tabulinesep=1mm
 \begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
 \hline
-\cellcolor{\tableheadbgcolor}\textbf{ Blinker }&\cellcolor{\tableheadbgcolor}\textbf{ Serve Interrupt  }\\\cline{1-2}
+\cellcolor{\tableheadbgcolor}\textbf{ Blinker }&\cellcolor{\tableheadbgcolor}\textbf{ Interrupt Service  }\\\cline{1-2}
 \endfirsthead
 \hline
 \endfoot
 \hline
-\cellcolor{\tableheadbgcolor}\textbf{ Blinker }&\cellcolor{\tableheadbgcolor}\textbf{ Serve Interrupt  }\\\cline{1-2}
+\cellcolor{\tableheadbgcolor}\textbf{ Blinker }&\cellcolor{\tableheadbgcolor}\textbf{ Interrupt Service  }\\\cline{1-2}
 \endhead
 \href{https://youtu.be/--iLaLC5cG0}{\texttt{ }} &\href{https://youtu.be/gr3OVOcgF4Q}{\texttt{ }}  \\\cline{1-2}
 \end{longtabu}
@@ -155,7 +151,8 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 
 
 \begin{DoxyItemize}
-\item Communicate through Bluetooth (H\+C-\/05). Demo code in $\sim$/examples/9\+\_\+bluetooth
+\item Bluetooth (H\+C-\/05) communication. Demo code in $\sim$/examples/9\+\_\+bluetooth
+\item Wi\+Fi (n\+R\+F24\+L01s) communication. Demo code in $\sim$/examples/11\+\_\+rf 
 \end{DoxyItemize}
 
 \doxysubsection*{Benchmark}
@@ -185,10 +182,32 @@ If your programming language exposure has been with C, Java, or even Python so f
 To understand the philosophy of F\+O\+R\+TH, excellent online e-\/books are here free for you.
 \begin{DoxyItemize}
 \item Timeless classic for the history, paths, and thoughts behind F\+O\+R\+TH language. \begin{quote}
-\href{http://home.iae.nl/users/mhx/sf.html}{\texttt{ $\ast$\+Starting Forth by Leo Brodie$\ast$}}~\newline
+\href{https://www.forth.com/starting-forth/}{\texttt{ $\ast$\+Starting Forth by Leo Brodie$\ast$}}~\newline
  \href{http://thinking-forth.sourceforge.net}{\texttt{ $\ast$\+Thinking Forth by Leo Brodie$\ast$}} \end{quote}
 
 \end{DoxyItemize}
+
+\doxysubsection*{Build your own Forth}
+
+Traditionally, the Forth image is build from low-\/level assembly and high-\/level Forth via a process called meta-\/compilation. See \href{https://www.ultratechnology.com/meta.html}{\texttt{ details here}}. Latest e\+Forth, from Dr. Ting, changed the process to build the entire image with C only. I follow the same philosophy. \begin{quote}
+
+
+$>$ git clone \href{https://github.com/chochain/eForth1}{\texttt{ $\ast$https\+://github.com/chochain/e\+Forth1$\ast$}} onto your local directory
+
+$>$ make rom \# to create \mbox{\hyperlink{eforth__rom_8c}{src/eforth\+\_\+rom.\+c}}
+
+study how \mbox{\hyperlink{eforth__asm_8h}{src/eforth\+\_\+asm.\+h}}, and \mbox{\hyperlink{eforth__asm_8c}{src/eforth\+\_\+asm.\+c}} create Forth image
+
+study how \mbox{\hyperlink{eforth__core_8h_a4bafcde45de1826f5d95260ec6143e39}{vm\+\_\+outer()}} in \mbox{\hyperlink{eforth__vm_8cpp}{src/eforth\+\_\+vm.\+cpp}} interacts with the R\+OM image
+
+modify \mbox{\hyperlink{eforth__asm_8c}{src/eforth\+\_\+asm.\+c}} to build your version of e\+Forth
+
+$>$ make \# to generate tests/eforth1 for debugging, or
+
+use Arduino I\+DE to compile and upload
+
+\end{quote}
+
 
 \doxysubsection*{Performance Tuning ($\sim$15\% faster)}
 

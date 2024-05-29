@@ -6,7 +6,8 @@ e\+Forth Virtual Machine module header
 
 
 {\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
-Include dependency graph for eforth\+\_\+vm.\+h\+:\nopagebreak
+Include dependency graph for eforth\+\_\+vm.\+h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -34,15 +35,15 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 \#define \mbox{\hyperlink{eforth__vm_8h_a9d91438cfe35ddd3db827add653cf917}{I\+R\+E\+T\+\_\+\+F\+L\+AG}}~0x8000
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a1f75956c7e91b6411417071ea93f7bfe}{B\+O\+OL}}(f)~((f) ? \mbox{\hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}})
+\#define \mbox{\hyperlink{eforth__vm_8h_a1f75956c7e91b6411417071ea93f7bfe}{B\+O\+OL}}(f)~((f) ? \mbox{\hyperlink{eforth__config_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__config_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}})
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(i)~\&\+\_\+ram\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}
+\#define \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(i)~\&\+\_\+ram\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__config_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}(d,  c)~(\+\_\+ram\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))
+\#define \mbox{\hyperlink{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}{B\+S\+ET}}(d,  c)~(\+\_\+ram\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}{S2D}}(h,  l)~(((\mbox{\hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32}})(h)$<$$<$16) $\vert$ ((l)\&0xffff))
+\#define \mbox{\hyperlink{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}{S2D}}(h,  l)~(((\mbox{\hyperlink{eforth__config_8h_a39c786017723555afb9e8b85accec0de}{S32}})(h)$<$$<$16) $\vert$ ((l)\&0xffff))
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a074e5eb53ba2a83312746e4a74a3c091}{D\+E\+P\+TH}}()~((\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})((\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$)DS -\/ \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(\mbox{\hyperlink{eforth__core_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}})) $>$$>$ 1)
+\#define \mbox{\hyperlink{eforth__vm_8h_a074e5eb53ba2a83312746e4a74a3c091}{D\+E\+P\+TH}}()~((\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})((\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$)DS -\/ \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(\mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}})) $>$$>$ 1)
 \item 
 \#define \mbox{\hyperlink{eforth__vm_8h_af5e48aa480f649754b62299ee5cbc35a}{P\+U\+SH}}(v)~\{ $\ast$++DS = top;  top  = (v); \}
 \item 
@@ -67,11 +68,11 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}{Ef\+V\+M\+::\+B\+G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
+\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{namespaceEfVM_ab9cd2e7aef4c537d97137dafd02518ae}{Ef\+V\+M\+::\+B\+G\+ET}} (\mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
 \item 
-\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{namespaceEfVM_a07e74ced8251d26cd20bce5a2c386d7a}{Ef\+V\+M\+::\+G\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
+\mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{namespaceEfVM_a07e74ced8251d26cd20bce5a2c386d7a}{Ef\+V\+M\+::\+G\+ET}} (\mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d)
 \item 
-void \mbox{\hyperlink{namespaceEfVM_a6704f4eed222b21f8754d5c4711c1a15}{Ef\+V\+M\+::\+S\+ET}} (\mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d, \mbox{\hyperlink{eforth__core_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} v)
+void \mbox{\hyperlink{namespaceEfVM_a6704f4eed222b21f8754d5c4711c1a15}{Ef\+V\+M\+::\+S\+ET}} (\mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} d, \mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} v)
 \end{DoxyCompactItemize}
 
 
@@ -96,7 +97,7 @@ e\+Forth Virtual Machine module header
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{        S                   \mbox{\hyperlink{group__Assembler_ga85323f491b7b3ea3883bad0c91d9de17}{R}}}
+\DoxyCodeLine{        S                   \mbox{\hyperlink{group__Assembler_ga0c9180f85bdd5d780671eda881105c18}{R}}}
 \DoxyCodeLine{        |                   |}
 \DoxyCodeLine{\mbox{\hyperlink{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}{top}} -\/> [S0, S1, S2,..., R1, R0] <-\/ \mbox{\hyperlink{namespaceEfVM_a61aea862ab3bab556736663c844366c7}{rtop}}}
 \end{DoxyCode}
@@ -126,31 +127,31 @@ interrupt return flag ~\newline
 \index{eforth\_vm.h@{eforth\_vm.h}!BOOL@{BOOL}}
 \index{BOOL@{BOOL}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{BOOL}{BOOL}}
-{\footnotesize\ttfamily \#define B\+O\+OL(\begin{DoxyParamCaption}\item[{}]{f }\end{DoxyParamCaption})~((f) ? \mbox{\hyperlink{eforth__core_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__core_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}})}
+{\footnotesize\ttfamily \#define B\+O\+OL(\begin{DoxyParamCaption}\item[{}]{f }\end{DoxyParamCaption})~((f) ? \mbox{\hyperlink{eforth__config_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}} \+: \mbox{\hyperlink{eforth__config_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}})}
 
 \mbox{\Hypertarget{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}\label{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!RAM@{RAM}}
 \index{RAM@{RAM}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{RAM}{RAM}}
-{\footnotesize\ttfamily \#define R\+AM(\begin{DoxyParamCaption}\item[{}]{i }\end{DoxyParamCaption})~\&\+\_\+ram\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__core_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}}
+{\footnotesize\ttfamily \#define R\+AM(\begin{DoxyParamCaption}\item[{}]{i }\end{DoxyParamCaption})~\&\+\_\+ram\mbox{[}(i) -\/ \mbox{\hyperlink{eforth__config_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}\mbox{]}}
 
 \mbox{\Hypertarget{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}\label{eforth__vm_8h_a77270f01b515a878ec2853760cb20dfa}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!BSET@{BSET}}
 \index{BSET@{BSET}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{BSET}{BSET}}
-{\footnotesize\ttfamily \#define B\+S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{c }\end{DoxyParamCaption})~(\+\_\+ram\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))}
+{\footnotesize\ttfamily \#define B\+S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{c }\end{DoxyParamCaption})~(\+\_\+ram\mbox{[}(d)\&\mbox{\hyperlink{eforth__vm_8h_a6d325ff479ff96b8129435d7bbd85aa7}{I\+D\+X\+\_\+\+M\+A\+SK}}\mbox{]}=(\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}})(c))}
 
 \mbox{\Hypertarget{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}\label{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!S2D@{S2D}}
 \index{S2D@{S2D}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{S2D}{S2D}}
-{\footnotesize\ttfamily \#define S2D(\begin{DoxyParamCaption}\item[{}]{h,  }\item[{}]{l }\end{DoxyParamCaption})~(((\mbox{\hyperlink{eforth__core_8h_a39c786017723555afb9e8b85accec0de}{S32}})(h)$<$$<$16) $\vert$ ((l)\&0xffff))}
+{\footnotesize\ttfamily \#define S2D(\begin{DoxyParamCaption}\item[{}]{h,  }\item[{}]{l }\end{DoxyParamCaption})~(((\mbox{\hyperlink{eforth__config_8h_a39c786017723555afb9e8b85accec0de}{S32}})(h)$<$$<$16) $\vert$ ((l)\&0xffff))}
 
 \mbox{\Hypertarget{eforth__vm_8h_a074e5eb53ba2a83312746e4a74a3c091}\label{eforth__vm_8h_a074e5eb53ba2a83312746e4a74a3c091}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!DEPTH@{DEPTH}}
 \index{DEPTH@{DEPTH}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{DEPTH}{DEPTH}}
-{\footnotesize\ttfamily \#define D\+E\+P\+TH(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~((\mbox{\hyperlink{eforth__core_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})((\mbox{\hyperlink{eforth__core_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$)DS -\/ \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(\mbox{\hyperlink{eforth__core_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}})) $>$$>$ 1)}
+{\footnotesize\ttfamily \#define D\+E\+P\+TH(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~((\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})((\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$)DS -\/ \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(\mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}})) $>$$>$ 1)}
 
 push a value onto stack top \mbox{\Hypertarget{eforth__vm_8h_af5e48aa480f649754b62299ee5cbc35a}\label{eforth__vm_8h_af5e48aa480f649754b62299ee5cbc35a}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!PUSH@{PUSH}}

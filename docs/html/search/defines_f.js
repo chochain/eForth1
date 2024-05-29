@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['tab_391',['TAB',['../eforth__vm_8h.html#ad2e226689a02d2b5f1256e7e98f03cf5',1,'eforth_vm.h']]],
-  ['trace_392',['TRACE',['../eforth__vm_8h.html#a9b97e4d442d7cdaa77140c8d272ad4fa',1,'eforth_vm.h']]],
-  ['trig_5fpin_393',['TRIG_PIN',['../eforth1_8ino_8cpp.html#a8eab89acd7dcb0e77e7b00d1749022a6',1,'eforth1.ino.cpp']]],
-  ['true_394',['TRUE',['../eforth__core_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d',1,'eforth_core.h']]]
+  ['val_388',['VAL',['../eforth__asm_8h.html#a718c4b8645c2287c20bb4a796363b2a0',1,'eforth_asm.h']]],
+  ['vh_389',['VH',['../eforth__asm_8h.html#aca2bbb288661206e28c0488766c22f15',1,'eforth_asm.h']]],
+  ['vl_390',['VL',['../eforth__asm_8h.html#a3b1701d44f7b15525bc7b3c0a8f637e1',1,'eforth_asm.h']]]
 ];

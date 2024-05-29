@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.2</span>
+   &#160;<span id="projectnumber">v2.4</span>
    </div>
   </td>
  </tr>
@@ -98,53 +98,55 @@ Include dependency graph for eforth1.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="eforth1_8cpp__incl.png" border="0" usemap="#src_2eforth1_8cpp" alt=""/></div>
 <map name="src_2eforth1_8cpp" id="src_2eforth1_8cpp">
-<area shape="rect" title=" " alt="" coords="520,5,639,32"/>
-<area shape="rect" href="eforth__core_8h.html" title="eForth prototype and interface" alt="" coords="355,80,463,107"/>
-<area shape="rect" href="eForth1_8h.html" title=" " alt="" coords="538,80,621,107"/>
-<area shape="rect" title=" " alt="" coords="645,80,735,107"/>
-<area shape="rect" title=" " alt="" coords="446,155,513,181"/>
-<area shape="rect" title=" " alt="" coords="5,155,76,181"/>
-<area shape="rect" title=" " alt="" coords="101,155,175,181"/>
-<area shape="rect" title=" " alt="" coords="200,155,271,181"/>
-<area shape="rect" title=" " alt="" coords="646,155,710,181"/>
-<area shape="rect" title=" " alt="" coords="537,155,621,181"/>
-<area shape="rect" title=" " alt="" coords="295,155,421,181"/>
+<area shape="rect" title=" " alt="" coords="397,5,515,32"/>
+<area shape="rect" href="eforth__core_8h.html" title="eForth prototype and interface" alt="" coords="278,80,386,107"/>
+<area shape="rect" href="eForth1_8h.html" title=" " alt="" coords="415,80,497,107"/>
+<area shape="rect" title=" " alt="" coords="522,80,611,107"/>
+<area shape="rect" href="eforth__config_8h.html" title="eForth configurations and opcode list" alt="" coords="121,155,239,181"/>
+<area shape="rect" title=" " alt="" coords="414,155,498,181"/>
+<area shape="rect" title=" " alt="" coords="263,155,390,181"/>
+<area shape="rect" title=" " alt="" coords="5,229,72,256"/>
+<area shape="rect" title=" " alt="" coords="97,229,167,256"/>
+<area shape="rect" title=" " alt="" coords="192,229,267,256"/>
+<area shape="rect" title=" " alt="" coords="291,229,362,256"/>
+<area shape="rect" title=" " alt="" coords="445,229,509,256"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a8c15257f5a5277bb64afcbe594bea146"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(d)&#160;&#160;&#160;(*(<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;<a class="el" href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">ram</a>[d])</td></tr>
+<tr class="memitem:a8c15257f5a5277bb64afcbe594bea146"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(d)&#160;&#160;&#160;(*(<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;ram[d])</td></tr>
 <tr class="separator:a8c15257f5a5277bb64afcbe594bea146"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(d,  v)&#160;&#160;&#160;(*(<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;<a class="el" href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">ram</a>[d] = (v))</td></tr>
+<tr class="memitem:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(d,  v)&#160;&#160;&#160;(*(<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;ram[d] = (v))</td></tr>
 <tr class="separator:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aad641047965521b86d4e35831b922760"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#aad641047965521b86d4e35831b922760">_stat</a> (<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *<a class="el" href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">ram</a>, int sz, Stream *<a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>)</td></tr>
+<tr class="memitem:aad641047965521b86d4e35831b922760"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#aad641047965521b86d4e35831b922760">_stat</a> (<a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *ram, int sz, Stream *<a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>)</td></tr>
 <tr class="separator:aad641047965521b86d4e35831b922760"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a109acb528bfa0dfdd5b63f39f4a66702"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a109acb528bfa0dfdd5b63f39f4a66702">ef_save</a> (<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *<a class="el" href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">ram</a>)</td></tr>
+<tr class="memitem:a109acb528bfa0dfdd5b63f39f4a66702"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a109acb528bfa0dfdd5b63f39f4a66702">ef_save</a> (<a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *ram)</td></tr>
 <tr class="memdesc:a109acb528bfa0dfdd5b63f39f4a66702"><td class="mdescLeft">&#160;</td><td class="mdescRight">save user variables and dictionary to EEPROM  <a href="eforth1_8cpp.html#a109acb528bfa0dfdd5b63f39f4a66702">More...</a><br /></td></tr>
 <tr class="separator:a109acb528bfa0dfdd5b63f39f4a66702"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60c4be2ec5406c9cf0ff6885f9bc116f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a60c4be2ec5406c9cf0ff6885f9bc116f">ef_load</a> (<a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *<a class="el" href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">ram</a>)</td></tr>
+<tr class="memitem:a60c4be2ec5406c9cf0ff6885f9bc116f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a60c4be2ec5406c9cf0ff6885f9bc116f">ef_load</a> (<a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *ram)</td></tr>
 <tr class="memdesc:a60c4be2ec5406c9cf0ff6885f9bc116f"><td class="mdescLeft">&#160;</td><td class="mdescRight">load user variables and dictionary from EEPROM  <a href="eforth1_8cpp.html#a60c4be2ec5406c9cf0ff6885f9bc116f">More...</a><br /></td></tr>
 <tr class="separator:a60c4be2ec5406c9cf0ff6885f9bc116f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59f97abd902440824c60452e68eb390c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a59f97abd902440824c60452e68eb390c">ef_setup</a> (const char *<a class="el" href="eforth1_8ino_8cpp.html#a63a995671251aa83e88332d1c70e9313">code</a>, Stream &amp;io_stream)</td></tr>
 <tr class="separator:a59f97abd902440824c60452e68eb390c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fb0d84284dc4203d4a4e4dbe8e07b29"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a1fb0d84284dc4203d4a4e4dbe8e07b29">ef_run</a> ()</td></tr>
 <tr class="separator:a1fb0d84284dc4203d4a4e4dbe8e07b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a781c9630598b77ec4ac98aafaf40fef4"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a781c9630598b77ec4ac98aafaf40fef4">ef_ram</a> (int i)</td></tr>
+<tr class="memdesc:a781c9630598b77ec4ac98aafaf40fef4"><td class="mdescLeft">&#160;</td><td class="mdescRight">expose VM RAM space to Sketch  <a href="eforth1_8cpp.html#a781c9630598b77ec4ac98aafaf40fef4">More...</a><br /></td></tr>
+<tr class="separator:a781c9630598b77ec4ac98aafaf40fef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ab122f4898c37a0db81ea641558424375"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#ab122f4898c37a0db81ea641558424375">forth_rom</a> []</td></tr>
-<tr class="memdesc:ab122f4898c37a0db81ea641558424375"><td class="mdescLeft">&#160;</td><td class="mdescRight">from <a class="el" href="eforth__rom_8c.html" title="eForth ROM (loaded in Arduino Flash Memory)">eforth_rom.c</a>  <a href="eforth1_8cpp.html#ab122f4898c37a0db81ea641558424375">More...</a><br /></td></tr>
+<tr class="memitem:ab122f4898c37a0db81ea641558424375"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__config_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#ab122f4898c37a0db81ea641558424375">forth_rom</a> []</td></tr>
 <tr class="separator:ab122f4898c37a0db81ea641558424375"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fe6f33736fc0d8ed68fd74b454e00e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__core_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a6fe6f33736fc0d8ed68fd74b454e00e7">forth_rom_sz</a></td></tr>
-<tr class="memdesc:a6fe6f33736fc0d8ed68fd74b454e00e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">actual size of ROM  <a href="eforth1_8cpp.html#a6fe6f33736fc0d8ed68fd74b454e00e7">More...</a><br /></td></tr>
+<tr class="memitem:a6fe6f33736fc0d8ed68fd74b454e00e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="eforth__config_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a6fe6f33736fc0d8ed68fd74b454e00e7">forth_rom_sz</a></td></tr>
 <tr class="separator:a6fe6f33736fc0d8ed68fd74b454e00e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2db7a107cc81da46a75803d3c85ead52"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">ram</a></td></tr>
-<tr class="memdesc:a2db7a107cc81da46a75803d3c85ead52"><td class="mdescLeft">&#160;</td><td class="mdescRight">forth memory block dynamic allocated  <a href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">More...</a><br /></td></tr>
-<tr class="separator:a2db7a107cc81da46a75803d3c85ead52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcddd284fb005b31af6f342c131b1a6d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#afcddd284fb005b31af6f342c131b1a6d">forth_ram</a> [<a class="el" href="eforth__config_8h.html#ac13ec61d2b1799e4ab11371a4254e7dd">FORTH_RAM_SZ</a>]</td></tr>
+<tr class="memdesc:afcddd284fb005b31af6f342c131b1a6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">RAM pointer (malloc)  <a href="eforth1_8cpp.html#afcddd284fb005b31af6f342c131b1a6d">More...</a><br /></td></tr>
+<tr class="separator:afcddd284fb005b31af6f342c131b1a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a701d8d7ac1f23c7b361d62e89c06399b"><td class="memItemLeft" align="right" valign="top">static Stream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a></td></tr>
 <tr class="separator:a701d8d7ac1f23c7b361d62e89c06399b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -160,7 +162,7 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">d</td><td>)</td>
-          <td>&#160;&#160;&#160;(*(<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;<a class="el" href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">ram</a>[d])</td>
+          <td>&#160;&#160;&#160;(*(<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;ram[d])</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -194,7 +196,7 @@ Variables</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(*(<a class="el" href="eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;<a class="el" href="eforth1_8cpp.html#a2db7a107cc81da46a75803d3c85ead52">ram</a>[d] = (v))</td>
+          <td></td><td>&#160;&#160;&#160;(*(<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;ram[d] = (v))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -211,7 +213,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">void _stat </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td>
           <td class="paramname"><em>ram</em>, </td>
         </tr>
         <tr>
@@ -236,6 +238,9 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>display eForth system information </p>
 </blockquote>
+<p>&lt; freelist</p>
+<p>&lt; start of heap</p>
+<p>&lt; end of heap</p>
 
 </div>
 </div>
@@ -248,7 +253,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">int ef_save </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td>
           <td class="paramname"><em>ram</em></td><td>)</td>
           <td></td>
         </tr>
@@ -271,7 +276,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">int ef_load </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td>
           <td class="paramname"><em>ram</em></td><td>)</td>
           <td></td>
         </tr>
@@ -317,7 +322,6 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>setup (called by Arduino setup) </p>
 </blockquote>
-<p>&lt; dynamically allocated (to prevent IDE complaint)</p>
 
 </div>
 </div>
@@ -341,6 +345,29 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a781c9630598b77ec4ac98aafaf40fef4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a781c9630598b77ec4ac98aafaf40fef4">&#9670;&nbsp;</a></span>ef_ram()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* ef_ram </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>expose VM RAM space to Sketch </p>
+<blockquote class="doxtable">
+<p>VM RAM space </p>
+</blockquote>
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="ab122f4898c37a0db81ea641558424375"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab122f4898c37a0db81ea641558424375">&#9670;&nbsp;</a></span>forth_rom</h2>
@@ -349,12 +376,13 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="eforth__core_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a> forth_rom</td>
+          <td class="memname">const <a class="el" href="eforth__config_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a> forth_rom</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>from <a class="el" href="eforth__rom_8c.html" title="eForth ROM (loaded in Arduino Flash Memory)">eforth_rom.c</a> </p>
+<blockquote class="doxtable">
+<p>Forth ROM image (<a class="el" href="eforth__rom_8c.html" title="eForth ROM (loaded in Arduino Flash Memory)">eforth_rom.c</a>, generated by <a class="el" href="eforth__asm_8c.html" title="eForth Assembler module">eforth_asm.c</a>) </p>
+</blockquote>
 
 </div>
 </div>
@@ -365,17 +393,16 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="eforth__core_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a> forth_rom_sz</td>
+          <td class="memname"><a class="el" href="eforth__config_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a> forth_rom_sz</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>actual size of ROM </p>
 
 </div>
 </div>
-<a id="a2db7a107cc81da46a75803d3c85ead52"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2db7a107cc81da46a75803d3c85ead52">&#9670;&nbsp;</a></span>ram</h2>
+<a id="afcddd284fb005b31af6f342c131b1a6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcddd284fb005b31af6f342c131b1a6d">&#9670;&nbsp;</a></span>forth_ram</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -384,7 +411,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="eforth__core_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>* ram</td>
+          <td class="memname"><a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> forth_ram[<a class="el" href="eforth__config_8h.html#ac13ec61d2b1799e4ab11371a4254e7dd">FORTH_RAM_SZ</a>]</td>
         </tr>
       </table>
   </td>
@@ -394,7 +421,11 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>forth memory block dynamic allocated </p>
+<p>RAM pointer (malloc) </p>
+<blockquote class="doxtable">
+<p>Forth managed memory block </p>
+</blockquote>
+<dl class="section note"><dt>Note</dt><dd>: dynamic allocation is usually a bad idea for MCU 1) uses 4 more bytes of RAM (freelist), 2) uses ~700 bytes of Flash (allocator), 3) does prevent IDE complaints about low memory in compile time </dd></dl>
 
 </div>
 </div>
@@ -417,7 +448,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>IO stream (Serial Monitor) </p>
+<p>IO stream (Serial Monito/// </p>
 
 </div>
 </div>

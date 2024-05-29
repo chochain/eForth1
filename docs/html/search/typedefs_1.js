@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['du_301',['DU',['../eforth__core_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a',1,'eforth_core.h']]]
+  ['du_296',['DU',['../eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a',1,'eforth_config.h']]]
 ];

@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.2</span>
+   &#160;<span id="projectnumber">v2.4</span>
    </div>
   </td>
  </tr>
@@ -86,18 +86,15 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">eForth1 - eForth for Arduino UNO </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><b>Dr. Chen-Hanson Ting</b>, the creator of <b>eForth</b> and one of the inspiring figures of Forth community, wrote: </p><blockquote class="doxtable">
-<p><em>In all these years, I have thought that the eForth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.</em> </p>
-</blockquote>
+<div class="textblock"><p><b>Dr. Chen-Hanson Ting</b>, the creator of <b>eForth</b> and one of the inspiring figures of Forth community, wrote: &gt;*In all these years, I have thought that the eForth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.*</p>
 <p>In 2011, Dr. Ting created <a href="https://chochain.github.io/eForth1/ref/328eForth.pdf" target="_blank">*328eForth*</a> to run Forth on Arduino UNO and wrote in his ceForth_33 document: </p><blockquote class="doxtable">
 <p><em>I was attracted to Arduino Uno Kit and ported eForth to it as 328eForth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino IDE...I extended Forth dictionary in the RAM memory. It worked. ...., it was only a teaser to entice new people to try Forth on Arduino Uno.</em> </p>
 </blockquote>
-<p>Before Dr. Ting conceded his fight with cancer in May, 2022, I've spent the last 11 months working with him expanding the concept of **"Forth without Forth"** - a new eForth model - he called. Traditionally, Forth is built with a set of core words in low-level assembly language and establish the rest of words with high-level Forth scripts which get boot-strapped on start-up time. Nowadays, build Forth without using Forth, he reasoned that Forth built entirely in high-level languages, specifically in C, can not only greatly simplify the virtual machine, utilizing operating system, but also encourage portability and optimization. Taking the concept forward, we completed new batch of eForths in Javascript, Java, C++, ported them to Windows, ESP32 in just a few months. Dr. Ting presented a video on November, 2021 to <a href="https://www.youtube.com/watch?v=bb5vi9kR1tE&amp;t=827s" target="_blank">*Sillicon Valley Forth Interest Group*</a>. Later, we fancied creating a hardware version eForth with SystemVerilog and joint venture with Don &amp; Demitri's CORE-I FPGA project of <a href="https://www.facebook.com/groups/1304548976637542" target="_blank">*AI &amp; Robotics Group*</a> til Dr. Ting's eventual departure. The project is still active now.</p>
-<p>Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model and have fun with it. Since his <em>328eForth</em> was a teaser only, to move it forward formally, there are a few major things I need to make changes to Dr. Ting's implementation i.g. make C-coder friendly macro assembler, remove dependency on extra bootloader programmer, add EEPROM save/load, and support interrupts, ... So, here we go!</p>
+<p>Personnally, I enjoyed the beauty of working on something small and simple, so decided to pick up Dr. Ting's eForth Model to push it beyond being a teaser. Here we go...</p>
 <h2>What is eForth1?</h2>
 <ul>
 <li>An eForth for Arduino UNO/Nano implemented in C.</li>
-<li>Use .ino sketch file that can be openned in Arduino IDE and load/run directly onto Arduino MCU.</li>
+<li>.ino sketch file can be openned in Arduino IDE, no programmer to overwrite bootloader needed.</li>
 <li>Has 16-bit cells and stacks.</li>
 <li>Can read/write Arduino GPIO pins.</li>
 <li>Supports Arduino Timer and Pin Change Interrupts.</li>
@@ -110,7 +107,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <ul>
 <li>From Arduino IDE's Library Manager <blockquote class="doxtable">
 <p></p>
-<p>&gt; Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328</p>
+<p>Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328</p>
 <p>&gt; from <em>Arduino IDE &gt; Tools &gt; Manage</em> Libraries, enter FORTH in search box</p>
 <p>&gt; find eForth1 in the short list, select the latest version, and click the Install button</p>
 <p>&gt; from <em>Files &gt; Examples</em>, find eForth1 in Examples from Custom Libraries at very buttom section</p>
@@ -146,11 +143,11 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>Instead of the original 32-bit, CELL is 16-bit, and prmitives are 8-bit opcodes.</li>
 <li>To save space, primitives are compiled as bytecode and composite words are flagged address pointers.</li>
 <li>For speed, use direct threading model instead of original subroutine threaded,</li>
-<li>For the familiarity to the IDE platform, instead of raw GPIO port read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ...</li>
-<li>Support multi-tasking through timer interrupts. Timer2 ticks at 1ms as the heart-beat with 8 handler slots provided. Timer1 is left free for Servo or other libraries.</li>
-<li>Pin Change Interrupts are supported on all pins. Handler slots are provided for each of Port B,C, and D.</li>
-<li>CLOCK returns a 32-bit number, it takes 2 cells off 16-bit stack. Arithmetics for double are also provided. DNEGATE, D+, or D- plus the conversion words D&gt;S, S&gt;D.</li>
-<li>DELAY does not pause the MCU nor does it interfer with interrupts. It takes a 16-bit value thus max delay time is 32767ms. For longer delay, define word that loops.</li>
+<li>Instead of raw GPIO port read/write, eForth1 calls Arduino library functions i.g. PINMODE = pinMode, IN = digitalRead, OUT = digitalWrite, ...</li>
+<li>Support multi-tasking. Timer2 sliced at 1ms as the heart-beat with 8 ISR handler slots provided which Forth words can be assigned to. Timer1 is left free for Servo or other libraries.</li>
+<li>Support Delay (sleep). It does not pause the MCU nor does it interfer with interrupts. 16-bit delay max 32767ms, longer delay can be have by defining word that loops.</li>
+<li>Support Pin Change Interrupts. ISR handler slots are provided for each of Port B,C, and D.</li>
+<li>Support 32-bit clock (in ms). It takes 2 cells off 16-bit stack. Arithmetics for double are also provided. DNEGATE, D+, or D- plus the conversion words D&gt;S, S&gt;D.</li>
 </ul>
 <h2>Demos</h2>
 <ul>
@@ -170,7 +167,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadLeft">Blinker </th><th class="markdownTableHeadLeft">Serve Interrupt  </th></tr>
+<th class="markdownTableHeadLeft">Blinker </th><th class="markdownTableHeadLeft">Interrupt Service  </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft"><a href="https://youtu.be/--iLaLC5cG0" target="_blank"><img src="https://img.youtube.com/vi/--iLaLC5cG0/1.jpg" alt="" width="200" class="inline"/></a> </td><td class="markdownTableBodyLeft"><a href="https://youtu.be/gr3OVOcgF4Q" target="_blank"><img src="https://img.youtube.com/vi/gr3OVOcgF4Q/1.jpg" alt="" width="200" class="inline"/></a>  </td></tr>
 </table>
@@ -185,7 +182,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <td class="markdownTableBodyLeft"><a href="https://youtu.be/pvBo-G87Fzw" target="_blank"><img src="https://img.youtube.com/vi/pvBo-G87Fzw/1.jpg" alt="" width="300" class="inline"/></a> </td><td class="markdownTableBodyLeft"><a href="https://youtu.be/-zBb82UFZpA" target="_blank"><img src="https://img.youtube.com/vi/-zBb82UFZpA/default.jpg" alt="" width="300" class="inline"/></a>  </td></tr>
 </table>
 <ul>
-<li>Communicate through Bluetooth (HC-05). Demo code in ~/examples/9_bluetooth</li>
+<li>Bluetooth (HC-05) communication. Demo code in ~/examples/9_bluetooth</li>
+<li>WiFi (nRF24L01s) communication. Demo code in ~/examples/11_rf <img src="https://chochain.github.io/eForth1/images/eforth1_rf_comm.jpg" alt="" width="600" class="inline"/></li>
 </ul>
 <h2>Benchmark</h2>
 <ul>
@@ -206,11 +204,23 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <p>To understand the philosophy of FORTH, excellent online e-books are here free for you.</p><ul>
 <li>Timeless classic for the history, paths, and thoughts behind FORTH language. <blockquote class="doxtable">
-<p><a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">*Starting Forth by Leo Brodie*</a><br  />
+<p><a href="https://www.forth.com/starting-forth/" target="_blank">*Starting Forth by Leo Brodie*</a><br  />
  <a href="http://thinking-forth.sourceforge.net" target="_blank">*Thinking Forth by Leo Brodie*</a> </p>
 </blockquote>
 </li>
 </ul>
+<h2>Build your own Forth</h2>
+<p>Traditionally, the Forth image is build from low-level assembly and high-level Forth via a process called meta-compilation. See <a href="https://www.ultratechnology.com/meta.html">details here</a>. Latest eForth, from Dr. Ting, changed the process to build the entire image with C only. I follow the same philosophy. </p><blockquote class="doxtable">
+<p></p>
+<p>&gt; git clone <a href="https://github.com/chochain/eForth1" target="_blank">*https://github.com/chochain/eForth1*</a> onto your local directory</p>
+<p>&gt; make rom # to create <a class="el" href="eforth__rom_8c.html" title="eForth ROM (loaded in Arduino Flash Memory)">src/eforth_rom.c</a></p>
+<p>study how <a class="el" href="eforth__asm_8h.html" title="eForth assembler module header">src/eforth_asm.h</a>, and <a class="el" href="eforth__asm_8c.html" title="eForth Assembler module">src/eforth_asm.c</a> create Forth image</p>
+<p>study how <a class="el" href="eforth__core_8h.html#a4bafcde45de1826f5d95260ec6143e39" title="Forth outer interpreter.">vm_outer()</a> in <a class="el" href="eforth__vm_8cpp.html" title="eForth Virtual Machine module">src/eforth_vm.cpp</a> interacts with the ROM image</p>
+<p>modify <a class="el" href="eforth__asm_8c.html" title="eForth Assembler module">src/eforth_asm.c</a> to build your version of eForth</p>
+<p>&gt; make # to generate tests/eforth1 for debugging, or</p>
+<p>use Arduino IDE to compile and upload</p>
+<p></p>
+</blockquote>
 <h2>Performance Tuning (~15% faster)</h2>
 <ul>
 <li>Check your Arduino IDE installed directory, say <em>C:\Users\myname\AppData\Local\Arduino...</em> on Windows or <em>/home/myname/Arduino/...</em> on Linux,</li>

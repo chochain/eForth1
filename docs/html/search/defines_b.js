@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['op_378',['OP',['../eforth__asm_8h.html#ac7635cecf944d5bfcc89665c08022828',1,'OP():&#160;eforth_asm.h'],['../eforth__vm_8cpp.html#ac7635cecf944d5bfcc89665c08022828',1,'OP():&#160;eforth_vm.cpp']]],
-  ['opcodes_379',['OPCODES',['../eforth__core_8h.html#a9d8d8ad7c0601f1313a9d026757f019a',1,'eforth_core.h']]]
+  ['pop_373',['POP',['../eforth__vm_8h.html#a2106695e949772f765546777ef34690e',1,'eforth_vm.h']]],
+  ['push_374',['PUSH',['../eforth__vm_8h.html#af5e48aa480f649754b62299ee5cbc35a',1,'eforth_vm.h']]]
 ];

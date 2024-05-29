@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.2</span>
+   &#160;<span id="projectnumber">v2.4</span>
    </div>
   </td>
  </tr>
@@ -121,7 +121,7 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#ac274d9a96db09bfc7ec4635be50d3aa5">vm_cfunc</a> (int n, <a class="el" href="eforth__core_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a> fp)</td></tr>
+<tr class="memitem:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#ac274d9a96db09bfc7ec4635be50d3aa5">vm_cfunc</a> (int n, <a class="el" href="eforth__config_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a> fp)</td></tr>
 <tr class="memdesc:ac274d9a96db09bfc7ec4635be50d3aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><blockquote class="doxtable">
 <p>function pointer </p>
 </blockquote>
@@ -137,6 +137,9 @@ Functions</h2></td></tr>
 <tr class="separator:a9b017e1d7c9c60e3958ea145a89c8512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fb0d84284dc4203d4a4e4dbe8e07b29"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#a1fb0d84284dc4203d4a4e4dbe8e07b29">ef_run</a> ()</td></tr>
 <tr class="separator:a1fb0d84284dc4203d4a4e4dbe8e07b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a781c9630598b77ec4ac98aafaf40fef4"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eForth1_8h.html#a781c9630598b77ec4ac98aafaf40fef4">ef_ram</a> (int i)</td></tr>
+<tr class="memdesc:a781c9630598b77ec4ac98aafaf40fef4"><td class="mdescLeft">&#160;</td><td class="mdescRight">expose VM RAM space to Sketch  <a href="eForth1_8h.html#a781c9630598b77ec4ac98aafaf40fef4">More...</a><br /></td></tr>
+<tr class="separator:a781c9630598b77ec4ac98aafaf40fef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a2d422d478f77fc6c4aa3c9538683829d"></a>
@@ -169,7 +172,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="eforth__core_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="eforth__config_8h.html#a2d422d478f77fc6c4aa3c9538683829d">CFP</a>&#160;</td>
           <td class="paramname"><em>fp</em>&#160;</td>
         </tr>
         <tr>
@@ -256,7 +259,6 @@ Functions</h2></td></tr>
 <blockquote class="doxtable">
 <p>setup (called by Arduino setup) </p>
 </blockquote>
-<p>&lt; dynamically allocated (to prevent IDE complaint)</p>
 
 </div>
 </div>
@@ -276,6 +278,29 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <blockquote class="doxtable">
 <p>VM outer interpreter proxy </p>
+</blockquote>
+
+</div>
+</div>
+<a id="a781c9630598b77ec4ac98aafaf40fef4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a781c9630598b77ec4ac98aafaf40fef4">&#9670;&nbsp;</a></span>ef_ram()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* ef_ram </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>expose VM RAM space to Sketch </p>
+<blockquote class="doxtable">
+<p>VM RAM space </p>
 </blockquote>
 
 </div>

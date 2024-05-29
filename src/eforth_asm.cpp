@@ -8,8 +8,6 @@
 #include "eforth_asm.h"
 
 #define WORDS_ROW_WIDTH 0x44        /** WORDS row width control */
-
-namespace EfAsm {
 ///
 ///@name eForth Assembler module variables
 ///@{
@@ -25,9 +23,9 @@ IU DOTQP;                           ///< addr of output ops, used by _dotq, _str
 ///
 ///> eForth Macro Assembler
 ///
-int assemble(U8 *cdata)
+int assemble(U8 *rom)
 {
-    _byte = cdata;
+    _byte = rom;
     _link = R = 0;
     ///
     ///> ROM starting address
@@ -676,15 +674,10 @@ int assemble(U8 *cdata)
 
     return here;
 }
-}; // namespace EfAsm
-///
-/// eForth Assembler
-///
-using namespace EfAsm;
 ///
 /// create C array dump for ROM
 ///
-void _dump_rom(U8* cdata, int len)
+void _dump_rom(U8* rom, int len)
 {
     printf(
         "///\n"
@@ -696,13 +689,13 @@ void _dump_rom(U8* cdata, int len)
     printf("\nconst U32 forth_rom_sz PROGMEM = 0x%x;", len);
     printf("\nconst U32 forth_rom[] PROGMEM = {\n");
     for (int p=0; p<len+0x20; p+=0x20) {
-        U32 *x = (U32*)&cdata[p];
+        U32 *x = (U32*)&rom[p];
         for (int i=0; i<0x8; i++, x++) {
             printf("0x%08x,", *x);
         }
         printf(" // %04x ", p);
         for (int i=0; i<0x20; i++) {
-            U8 c = cdata[p+i];
+            U8 c = rom[p+i];
             printf("%c", c ? ((c!=0x5c && c>0x1f && c<0x7f) ? c : '_') : '.');
         }
         printf("\n");
@@ -710,19 +703,13 @@ void _dump_rom(U8* cdata, int len)
     printf("};\n");
 }
 
-int ef_assemble(U8 *cdata) {
-    return assemble(cdata);
-}
-
-#if ASM_ONLY
 static U8 _rom[FORTH_ROM_SZ] = {};            ///< fake rom to simulate run time
 int main(int ac, char* av[]) {
     setvbuf(stdout, NULL, _IONBF, 0);         /// * autoflush (turn STDOUT buffering off)
 
-    int sz = ef_assemble(_rom);
+    int sz = assemble(_rom);
 
     _dump_rom(_rom, sz);
 
     return 0;
 }
-#endif

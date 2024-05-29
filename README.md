@@ -126,6 +126,25 @@ To understand the philosophy of FORTH, excellent online e-books are here free fo
   > <a href="https://www.forth.com/starting-forth/" target="_blank">*Starting Forth by Leo Brodie*</a><br/>
   > <a href="http://thinking-forth.sourceforge.net" target="_blank">*Thinking Forth by Leo Brodie*</a>
 
+### Build your own Forth
+Traditionally, the Forth image is build from low-level assembly and high-level Forth via a process called meta-compilation. See [details here](https://www.ultratechnology.com/meta.html). Latest eForth, from Dr. Ting, changed the process to build the entire image with C only. I follow the same philosophy.
+  >
+  > \> git clone <a href="https://github.com/chochain/eForth1" target="_blank">*https://github.com/chochain/eForth1*</a> onto your local directory
+  >
+  > \> make rom  # to create src/eforth_rom.c
+  >
+  > # study how src/eforth_asm.h, and src/eforth_asm.c create Forth image
+  >
+  > # study how vm_outer() in src/eforth_vm.cpp interacts with the ROM image
+  >
+  > # modify src/eforth_asm.c to build your version of eForth
+  >
+  > \> make      # to generate tests/eforth1 for debugging, or
+  >
+  > # use Arduino IDE to compile and upload
+  >
+  <p/>
+
 ### Performance Tuning (~15% faster)
 * Check your Arduino IDE installed directory, say <em>C:\Users\myname\AppData\Local\Arduino...</em> on Windows or <em>/home/myname/Arduino/...</em> on Linux,
 * Find the directory *hardware -> arduino -> avr*,

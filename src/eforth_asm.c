@@ -703,6 +703,7 @@ void _dump_rom(U8* rom, int len)
     printf("};\n");
 }
 
+#if !ARDUINO
 static U8 _rom[FORTH_ROM_SZ] = {};            ///< fake rom to simulate run time
 int main(int ac, char* av[]) {
     setvbuf(stdout, NULL, _IONBF, 0);         /// * autoflush (turn STDOUT buffering off)
@@ -713,3 +714,4 @@ int main(int ac, char* av[]) {
 
     return 0;
 }
+#endif // !ARDUINO

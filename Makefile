@@ -2,8 +2,10 @@
 # To build ROM only
 # 1) make rom
 #
-CXX  = g++
-CXXFLAGS = -std=c++17 -O2 -Wall -Isrc
+CC       = gcc
+CFLAGS   = -std=c17 -O2 -Wall
+CXX      = g++
+CXXFLAGS = -std=c++17 -O2 -Wall
 
 EXE  = tests/eforth1
 ASM  = src/eforth_asm.o
@@ -13,21 +15,18 @@ OBJS = \
 	src/eforth_rom.o  \
 	src/eforth1.o
 
-%.o: %.cpp %.c
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -Isrc -c -o $@ $<
 
 all: rom $(EXE)
 
-rom:
-	$(CXX) $(CXXFLAGS) -DASM_ONLY=1 -c -o $(ASM) src/eforth_asm.cpp
+rom: $(ASM)
 	$(CXX) -o tests/ef_$@ $(ASM)
 	echo Geneating eForth ROM...
 	tests/ef_$@ > src/eforth_rom.c
-	rm $(ASM)
 
 $(EXE): $(OBJS)
-	$(CXX) $(CXXFLAGS) -c -o $(ASM) src/eforth_asm.cpp
-	$(CXX) -o $@ $(ASM) $^
+	$(CXX) -o $@ $^
 
 clean:
 	rm $(EXE) $(OBJS) $(ASM)

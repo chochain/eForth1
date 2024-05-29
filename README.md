@@ -133,15 +133,15 @@ Traditionally, the Forth image is build from low-level assembly and high-level F
   >
   > \> make rom  # to create src/eforth_rom.c
   >
-  > # study how src/eforth_asm.h, and src/eforth_asm.c create Forth image
+  > study how src/eforth_asm.h, and src/eforth_asm.c create Forth image
   >
-  > # study how vm_outer() in src/eforth_vm.cpp interacts with the ROM image
+  > study how vm_outer() in src/eforth_vm.cpp interacts with the ROM image
   >
-  > # modify src/eforth_asm.c to build your version of eForth
+  > modify src/eforth_asm.c to build your version of eForth
   >
   > \> make      # to generate tests/eforth1 for debugging, or
   >
-  > # use Arduino IDE to compile and upload
+  > use Arduino IDE to compile and upload
   >
   <p/>
 

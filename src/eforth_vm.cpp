@@ -26,7 +26,7 @@ IU  IR;                           ///< interrupt service routine
 PGM_P _rom;                       ///< ROM, Forth word stored in Arduino Flash Memory
 U8    *_ram;                      ///< RAM, memory block for user define dictionary
 U8    *_pre;                      ///< Pre-built/embedded Forth code
-CFP   _fp[CFUNC_MAX];             ///> store C function pointer
+CFP   _api[CFUNC_MAX];            ///> store C function pointer
 ///@}
 ///@name IO Streaming interface
 ///@{
@@ -179,13 +179,13 @@ void vm_init(PGM_P rom, U8 *ram, void *io_stream, const char *code) {
 ///  TODO: build formal C callstack construct
 ///
 void _ccall() {
-    CFP fp  = _fp[top];               ///> fetch C function pointer
+    CFP fp  = _api[top];              ///> fetch C function pointer
     POP();                            ///> pop off TOS
     fp();                             ///> call C function
 }
 
 void vm_cfunc(int n, CFP fp) {
-    _fp[n] = fp;
+    _api[n] = fp;
     LOG_V(", API", n); LOG_H("=x", (uintptr_t)fp);
 }
 

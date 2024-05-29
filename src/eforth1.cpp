@@ -110,8 +110,6 @@ char *ef_ram(int i) {
 }
 
 #else  // !ARDUINO
-
-static U8 _rom[FORTH_ROM_SZ] = {}; ///< fake rom to simulate run time
 const char code[] =
     "words\n"
     "123 456\n"
@@ -134,17 +132,19 @@ void my_add() {
     vm_push(a + b);
 }
 
+extern U32 forth_rom_sz;
+extern U32 forth_rom[];
+
 int main(int ac, char* av[]) {
     setvbuf(stdout, NULL, _IONBF, 0);    /// * autoflush (turn STDOUT buffering off)
 
-    int sz  = ef_assemble(_rom);         ///< fill ROM for testing
     U8 *ram = (U8*)malloc(FORTH_RAM_SZ); ///< forth memory block dynamic allocated
-    _stat(_rom, sz, NULL);
+    _stat(ram, forth_rom_sz, NULL);
 
     vm_cfunc(0, my_dot);                 ///< register C API[0]
     vm_cfunc(1, my_add);                 ///< register C API[1]
     
-    vm_init((char*)_rom, ram, 0, code);
+    vm_init((char*)forth_rom, ram, 0, code);
     vm_outer();
 
     return 0;

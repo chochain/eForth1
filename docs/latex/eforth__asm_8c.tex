@@ -1,0 +1,413 @@
+\hypertarget{eforth__asm_8c}{}\doxysection{src/eforth\+\_\+asm.c File Reference}
+\label{eforth__asm_8c}\index{src/eforth\_asm.c@{src/eforth\_asm.c}}
+
+
+e\+Forth Assembler module  
+
+
+{\ttfamily \#include \char`\"{}eforth\+\_\+asm.\+h\char`\"{}}\newline
+Include dependency graph for eforth\+\_\+asm.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__asm_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__asm_8c_aa18a10c05357a5f4115d17f150a0a0fb}{W\+O\+R\+D\+S\+\_\+\+R\+O\+W\+\_\+\+W\+I\+D\+TH}}~0x44        /$\ast$$\ast$ W\+O\+R\+DS row width control $\ast$/
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{eforth__asm_8c_a533854d7335e1f6c544728d830cc7f2b}{assemble}} (\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$rom)
+\item 
+void \mbox{\hyperlink{eforth__asm_8c_aa4e22bf79d3960aef442640f4539e8b4}{\+\_\+dump\+\_\+rom}} (\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$rom, int len)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{Indent}\textbf{ e\+Forth Assembler module variables}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{eforth__config_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_ga0bc9a88cf3073d8d4ce8f01b6e0a4760}{PC}}
+\begin{DoxyCompactList}\small\item\em assembler program counter \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} \mbox{\hyperlink{group__Assembler_ga0c9180f85bdd5d780671eda881105c18}{R}}
+\begin{DoxyCompactList}\small\item\em assembler return stack index \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$ \mbox{\hyperlink{group__Assembler_gad3e28d0e386277ac066af0b7d9d1a250}{\+\_\+byte}}
+\begin{DoxyCompactList}\small\item\em assembler byte array (heap) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{eforth__config_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_gab6b1a8e55083963508cb13b04b6db79d}{\+\_\+link}}
+\begin{DoxyCompactList}\small\item\em link to previous word \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Compiled Address for Branching}\par
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{eforth__config_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}} \mbox{\hyperlink{group__Assembler_ga0879e6f07ec09bef21b94fe0450f4240}{D\+O\+T\+QP}}
+\begin{DoxyCompactList}\small\item\em addr of output ops, used by \+\_\+dotq, \+\_\+strq, \+\_\+abortq \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\doxysubsection{Detailed Description}
+e\+Forth Assembler module 
+
+Forth Macro Assembler Note\+: T\+O\+DO\+: adding Leo Brodie\textquotesingle{}s words 
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{eforth__asm_8c_aa18a10c05357a5f4115d17f150a0a0fb}\label{eforth__asm_8c_aa18a10c05357a5f4115d17f150a0a0fb}} 
+\index{eforth\_asm.c@{eforth\_asm.c}!WORDS\_ROW\_WIDTH@{WORDS\_ROW\_WIDTH}}
+\index{WORDS\_ROW\_WIDTH@{WORDS\_ROW\_WIDTH}!eforth\_asm.c@{eforth\_asm.c}}
+\doxysubsubsection{\texorpdfstring{WORDS\_ROW\_WIDTH}{WORDS\_ROW\_WIDTH}}
+{\footnotesize\ttfamily \#define W\+O\+R\+D\+S\+\_\+\+R\+O\+W\+\_\+\+W\+I\+D\+TH~0x44        /$\ast$$\ast$ W\+O\+R\+DS row width control $\ast$/}
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{eforth__asm_8c_a533854d7335e1f6c544728d830cc7f2b}\label{eforth__asm_8c_a533854d7335e1f6c544728d830cc7f2b}} 
+\index{eforth\_asm.c@{eforth\_asm.c}!assemble@{assemble}}
+\index{assemble@{assemble}!eforth\_asm.c@{eforth\_asm.c}}
+\doxysubsubsection{\texorpdfstring{assemble()}{assemble()}}
+{\footnotesize\ttfamily int assemble (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{rom }\end{DoxyParamCaption})}
+
+\begin{quote}
+e\+Forth Macro Assembler \end{quote}
+\begin{quote}
+R\+OM starting address \end{quote}
+
+
+reserved for C\+O\+LD boot vector
+
+\begin{quote}
+Kernel dictionary (primitive words) \end{quote}
+
+
+\begin{quote}
+( u ul uh -- f ) check 3rd item within \mbox{[}ul uh) \end{quote}
+
+
+\begin{quote}
+( udl udh u -- ur uq ) unsigned double divided by a single \end{quote}
+
+
+\begin{quote}
+( u1 u2 -- ud ) unsigned double = multiply unsigned singles \end{quote}
+
+
+\begin{quote}
+( n1 n2 -- d ) double = single $\ast$ single \end{quote}
+
+
+\begin{quote}
+( n1 n2 -- sum c ) add two numbers and carry flag \end{quote}
+
+
+\begin{quote}
+( n1 n2 n -- r q ) multiply n1 n2 div/mod by a single \end{quote}
+
+
+\begin{quote}
+( n1 n2 -- r q ) single devide \end{quote}
+
+
+\begin{quote}
+( n1 n2 n3 -- q ) multiply n1 n2 divide by n3 return quotient \end{quote}
+
+
+\begin{quote}
+( n -- dl dh ) \end{quote}
+
+
+\begin{quote}
+( dl dh -- n ) \end{quote}
+
+
+extended words
+
+\begin{quote}
+base of data stack (fixed instead of user var) \end{quote}
+
+
+\begin{quote}
+address of stack pointer \end{quote}
+
+
+(T\+O\+DO\+: add J)
+
+( f -- ) enable/disable debug tracing
+
+( -- ) save user variables and dictionary to E\+E\+P\+R\+OM
+
+( -- ) restore user variables and dictionary from E\+E\+R\+P\+R\+OM
+
+( n -- ) call a C-\/function vector
+
+Kernel constants
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item \textquotesingle{}T\+IB console input buffer pointer 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item B\+A\+SE current radix for numeric ops 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item CP, top of dictionary, same as H\+E\+RE 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item C\+O\+N\+T\+E\+XT name field of last word 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item L\+A\+ST, same as C\+O\+N\+T\+E\+XT 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item \textquotesingle{}M\+O\+DE (\textquotesingle{}T\+E\+V\+AL -\/ interpreter or compiler) 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item A\+B\+O\+RT exception rescue handler (Q\+U\+IT) 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item H\+LD char pointer to output buffer 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item S\+P\+AN number of character accepted 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item $>$IN interpreter pointer to next char 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item \#\+T\+IB number of character received in T\+IB 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item tmp storage (alternative to return stack) 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+Console Input and Common words \end{quote}
+
+
+\begin{quote}
+Number Conversions and formatting \end{quote}
+
+
+T\+O\+DO\+: add $>$N\+U\+M\+B\+ER
+
+\begin{quote}
+Console Output \end{quote}
+
+
+T\+O\+DO\+: add P\+A\+GE
+
+\begin{quote}
+Parsing \end{quote}
+
+
+\begin{quote}
+Dictionary serach \end{quote}
+
+
+T\+O\+DO\+: add C\+O\+M\+P\+A\+RE
+
+\begin{quote}
+Terminal Input \end{quote}
+
+
+\begin{quote}
+Text Interpreter \end{quote}
+\begin{DoxyVerb}QUERY/TIB/ACCEPT - start the interpreter loop <-------<------.
+TOKEN/PARSE - get a space delimited word                      .
+EXECUTE - attempt to look up that word in the dictionary       .
+  NAME?/find - was the word found?                              ^
+  |-Yes:                                                        |
+  |   $INTERPRET - are we in compile mode?                      |
+  |   |-Yes:                                                    ^
+  |   |  \-Is the Word an Immediate word?                       |
+  |   |   |-Yes:                                                |
+  |   |   |    \- EXECUTE Execute the word -------------------->.
+  |   |   |     |                                               |
+  |   |   |     \- if (NAME?) EXECU else NUMBQ ---------------->.
+  |   |    \-No:                                                |
+  |   |        \-Compile the word into the dictionary --------->.
+  |    \-No:                                                    |
+  |       \- EXECUTE Execute the word ----->------------------->.
+   \-No:                                                        ^
+      NUMBER? - Can the word be treated as a number?            |
+      |-Yes:                                                    |
+      | \-Are we in compile mode?                               |
+      |  |-Yes:                                                 |
+      |  |  |                                                   |
+      |  |   \-Compile a literal into the dictionary >--------->.
+      |  |                                                      |
+      |   \-No:                                                 |
+      |     |                                                   |
+      |      \-Push the number to the variable stack >--------->.
+       \-No:                                                   .
+          \-An Error has occurred, prIU out an error message ->
+\end{DoxyVerb}
+
+
+T\+O\+DO\+: add ?S\+T\+A\+CK
+
+\begin{quote}
+Colon Compiler \end{quote}
+
+
+T\+O\+DO\+: add \mbox{[}\textquotesingle{}\mbox{]}
+
+\begin{quote}
+Debugging Tools \end{quote}
+
+
+Optional\+: Takes $\sim$300 bytes R\+OM space \begin{quote}
+display address with colon delimiter ( a -- ) \end{quote}
+
+
+\begin{quote}
+display opcode at given address ( a0 op -- a1 ) \end{quote}
+
+
+\begin{quote}
+Control Structures \end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item B\+E\+G\+IN...A\+G\+A\+IN, B\+E\+G\+IN... f U\+N\+T\+IL, B\+E\+G\+IN...(once)...f W\+H\+I\+LE...(loop)...R\+E\+P\+E\+AT 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item f IF...T\+H\+EN, f IF...E\+L\+SE...T\+H\+EN 
+\end{DoxyItemize}\end{quote}
+
+
+\begin{quote}
+
+\begin{DoxyItemize}
+\item n F\+OR...N\+E\+XT, n F\+OR...(first)... f A\+FT...(2nd,...)...T\+H\+EN...(every)...N\+E\+XT 
+\end{DoxyItemize}\end{quote}
+
+
+T\+O\+DO\+: add DO...L\+O\+OP, +L\+O\+OP, L\+E\+A\+VE
+
+\begin{quote}
+String Literals \end{quote}
+
+
+\begin{quote}
+Defining Words -\/ variable, constant, and comments \end{quote}
+
+
+\begin{quote}
+change runtime behavior to following code \end{quote}
+
+
+( ra ca ) para on return stack, offset to defining word
+
+
+\begin{DoxyItemize}
+\item the last op\+E\+X\+IT is not needed but nicer
+\end{DoxyItemize}
+
+T\+O\+DO\+: add P\+O\+S\+T\+P\+O\+NE
+
+
+\begin{DoxyItemize}
+\item CC\+: Dr. Ting hardcoded here
+\item calculate addr of constant
+\end{DoxyItemize}
+
+\begin{quote}
+Comments \end{quote}
+
+
+\begin{quote}
+Lexicon Bits \end{quote}
+
+
+\begin{quote}
+Arduino specific opcodes \end{quote}
+
+
+( -- ud ud ) get current clock (in ms)
+
+( n p -- ) set pin\+Mode(p, n=1\+:O\+U\+T\+P\+UT, n=0\+: I\+N\+P\+UT)
+
+( h l p -- ) set map range to pin
+
+( p -- n ) digital\+Read(p)
+
+( n p -- ) digitial\+Write(p, n=1 H\+I\+GH, n=0 L\+OW)
+
+( p -- n ) read analog value from pin
+
+( n p -- ) set duty cycle \% (P\+WM) to pin
+
+( xt n -- ) on timer interrupt calls xt every n ms
+
+( xt p -- ) on pin change interrupt calls xt
+
+( f -- ) enable/disable timer interrupt
+
+( f -- ) enable/disable pin change interrupt
+
+\begin{quote}
+Cold Start address (End of dictionary) \end{quote}
+
+
+\begin{quote}
+Boot Vector Setup \end{quote}
+\mbox{\Hypertarget{eforth__asm_8c_aa4e22bf79d3960aef442640f4539e8b4}\label{eforth__asm_8c_aa4e22bf79d3960aef442640f4539e8b4}} 
+\index{eforth\_asm.c@{eforth\_asm.c}!\_dump\_rom@{\_dump\_rom}}
+\index{\_dump\_rom@{\_dump\_rom}!eforth\_asm.c@{eforth\_asm.c}}
+\doxysubsubsection{\texorpdfstring{\_dump\_rom()}{\_dump\_rom()}}
+{\footnotesize\ttfamily void \+\_\+dump\+\_\+rom (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}} $\ast$}]{rom,  }\item[{int}]{len }\end{DoxyParamCaption})}
+
+create C array dump for R\+OM 

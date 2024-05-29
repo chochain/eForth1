@@ -1,0 +1,362 @@
+\hypertarget{eforth__config_8h}{}\doxysection{src/eforth\+\_\+config.h File Reference}
+\label{eforth__config_8h}\index{src/eforth\_config.h@{src/eforth\_config.h}}
+
+
+e\+Forth configurations and opcode list  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+Include dependency graph for eforth\+\_\+config.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__config_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{eforth__config_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_af0b5cfa4242ae7f98ba80fd23ef8afa9}{A\+P\+P\+\_\+\+N\+A\+ME}}~\char`\"{}e\+Forth1 v2.\+4\char`\"{}
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a9d8d8ad7c0601f1313a9d026757f019a}{O\+P\+C\+O\+D\+ES}}
+\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Capacity and Sizing}\par
+{\em \begin{DoxyAttention}{Attention}
+reassemble R\+OM needed if F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ or F\+O\+R\+T\+H\+\_\+\+P\+A\+D\+\_\+\+SZ changed 
+\end{DoxyAttention}
+}\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a483d8c32764af688ede31fdc4d9707dc}{C\+E\+L\+L\+SZ}}~2
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a64cd413675fa1692404160ae9def373d}{C\+F\+U\+N\+C\+\_\+\+M\+AX}}~8
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a68b9e34d65501f01d02ed377146ef0bb}{F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ}}~0x2000
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_ae8b4d200001ac27b69d50b2aa3d659e7}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+SZ}}~0x20
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_aff92e9d3a1f1b8f50e5f99f48e415b9a}{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+SZ}}~(0x400-\/\mbox{\hyperlink{eforth__config_8h_ae8b4d200001ac27b69d50b2aa3d659e7}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+SZ}})
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_ae1c5fa2ddd43bad831ec09b454a87476}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}}~0x80
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_ae58acffa6250f628ad15cdc182d146bc}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ}}~0x80
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_ac13ec61d2b1799e4ab11371a4254e7dd}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ}}
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Memory Map Addressing}\par
+{\em \begin{quote}
+note\+: Forth only needs a few bytes for Arduino auto (on heap), but Serial default T\+X/\+RX buffers uses 0x40 $\ast$ 2 = 128 bytes
+
+logic and stack op macros (processor dependent)
+
+\end{quote}
+}\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a8854972678927e0868e458eab4d789a2}{F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR}}~0x0000
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}~\mbox{\hyperlink{eforth__config_8h_a68b9e34d65501f01d02ed377146ef0bb}{F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ}}
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_af15f803ea14ff0e9a3fa11fe533d0393}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}}~\mbox{\hyperlink{eforth__config_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a9574a362044eba73eb09283aaa5d6ad3}{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR}}~(\mbox{\hyperlink{eforth__config_8h_af15f803ea14ff0e9a3fa11fe533d0393}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}} + \mbox{\hyperlink{eforth__config_8h_ae8b4d200001ac27b69d50b2aa3d659e7}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+SZ}})
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}}~(\mbox{\hyperlink{eforth__config_8h_a9574a362044eba73eb09283aaa5d6ad3}{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR}}  + \mbox{\hyperlink{eforth__config_8h_aff92e9d3a1f1b8f50e5f99f48e415b9a}{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+SZ}})
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP}}~(\mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}} + \mbox{\hyperlink{eforth__config_8h_ae1c5fa2ddd43bad831ec09b454a87476}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}})
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a7b21761447b5ce2df53bcd72baa34c73}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}}~(\mbox{\hyperlink{eforth__config_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP}})
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a2722d08eb4a77f6bb94140328d4ca3d7}{F\+O\+R\+T\+H\+\_\+\+M\+A\+X\+\_\+\+A\+D\+DR}}~(\mbox{\hyperlink{eforth__config_8h_a7b21761447b5ce2df53bcd72baa34c73}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}} + \mbox{\hyperlink{eforth__config_8h_ae58acffa6250f628ad15cdc182d146bc}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ}})
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Logical}\par
+{\em T\+R\+UE cannot use 1 because N\+O\+T(ffff)==0 while N\+O\+T(1)==ffff which does not need boolean op (i.\+e. in C) }\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{T\+R\+UE}}~-\/1
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_aa93f0eb578d23995850d61f7d61c55c1}{F\+A\+L\+SE}}~0
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ VM operational flags}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a7f47e1f84ff391a5ef46f3f721697665}{f\+C\+O\+L\+ON}}~0x8000
+\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Typedefs}
+\begin{Indent}\textbf{ Portable Types}\par
+\begin{DoxyCompactItemize}
+\item 
+typedef uint32\+\_\+t \mbox{\hyperlink{eforth__config_8h_a696390429f2f3b644bde8d0322a24124}{U32}}
+\begin{DoxyCompactList}\small\item\em 32-\/bit unsigned integer \end{DoxyCompactList}\item 
+typedef uint16\+\_\+t \mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}
+\begin{DoxyCompactList}\small\item\em 16-\/bit unsigned integer \end{DoxyCompactList}\item 
+typedef uint8\+\_\+t \mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}
+\begin{DoxyCompactList}\small\item\em 8-\/bit unsigned integer \end{DoxyCompactList}\item 
+typedef int32\+\_\+t \mbox{\hyperlink{eforth__config_8h_a39c786017723555afb9e8b85accec0de}{S32}}
+\begin{DoxyCompactList}\small\item\em 32-\/bit signed integer \end{DoxyCompactList}\item 
+typedef int16\+\_\+t \mbox{\hyperlink{eforth__config_8h_a6d241ad21a823c90d4835380787db5d4}{S16}}
+\begin{DoxyCompactList}\small\item\em 16-\/bit signed integer \end{DoxyCompactList}\item 
+typedef int8\+\_\+t \mbox{\hyperlink{eforth__config_8h_af1475a0bb1962ef08dd1f78bd5dba87a}{S8}}
+\begin{DoxyCompactList}\small\item\em 8-\/bit signed integer \end{DoxyCompactList}\item 
+typedef \mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{eforth__config_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}}
+\begin{DoxyCompactList}\small\item\em instruction/address unit (16-\/bit) \end{DoxyCompactList}\item 
+typedef \mbox{\hyperlink{eforth__config_8h_a6d241ad21a823c90d4835380787db5d4}{S16}} \mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}
+\begin{DoxyCompactList}\small\item\em data/cell unit \end{DoxyCompactList}\item 
+typedef void($\ast$ \mbox{\hyperlink{eforth__config_8h_a2d422d478f77fc6c4aa3c9538683829d}{C\+FP}}) ()
+\begin{DoxyCompactList}\small\item\em function pointer \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\doxysubsection{Detailed Description}
+e\+Forth configurations and opcode list 
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{eforth__config_8h_af0b5cfa4242ae7f98ba80fd23ef8afa9}\label{eforth__config_8h_af0b5cfa4242ae7f98ba80fd23ef8afa9}} 
+\index{eforth\_config.h@{eforth\_config.h}!APP\_NAME@{APP\_NAME}}
+\index{APP\_NAME@{APP\_NAME}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{APP\_NAME}{APP\_NAME}}
+{\footnotesize\ttfamily \#define A\+P\+P\+\_\+\+N\+A\+ME~\char`\"{}e\+Forth1 v2.\+4\char`\"{}}
+
+\mbox{\Hypertarget{eforth__config_8h_a483d8c32764af688ede31fdc4d9707dc}\label{eforth__config_8h_a483d8c32764af688ede31fdc4d9707dc}} 
+\index{eforth\_config.h@{eforth\_config.h}!CELLSZ@{CELLSZ}}
+\index{CELLSZ@{CELLSZ}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{CELLSZ}{CELLSZ}}
+{\footnotesize\ttfamily \#define C\+E\+L\+L\+SZ~2}
+
+16-\/bit cell size ~\newline
+ \mbox{\Hypertarget{eforth__config_8h_a64cd413675fa1692404160ae9def373d}\label{eforth__config_8h_a64cd413675fa1692404160ae9def373d}} 
+\index{eforth\_config.h@{eforth\_config.h}!CFUNC\_MAX@{CFUNC\_MAX}}
+\index{CFUNC\_MAX@{CFUNC\_MAX}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{CFUNC\_MAX}{CFUNC\_MAX}}
+{\footnotesize\ttfamily \#define C\+F\+U\+N\+C\+\_\+\+M\+AX~8}
+
+size C function pointer slots (8) ~\newline
+ \mbox{\Hypertarget{eforth__config_8h_a68b9e34d65501f01d02ed377146ef0bb}\label{eforth__config_8h_a68b9e34d65501f01d02ed377146ef0bb}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_ROM\_SZ@{FORTH\_ROM\_SZ}}
+\index{FORTH\_ROM\_SZ@{FORTH\_ROM\_SZ}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_ROM\_SZ}{FORTH\_ROM\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ~0x2000}
+
+size of R\+OM (for pre-\/defined words) \mbox{\Hypertarget{eforth__config_8h_ae8b4d200001ac27b69d50b2aa3d659e7}\label{eforth__config_8h_ae8b4d200001ac27b69d50b2aa3d659e7}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_UVAR\_SZ@{FORTH\_UVAR\_SZ}}
+\index{FORTH\_UVAR\_SZ@{FORTH\_UVAR\_SZ}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_UVAR\_SZ}{FORTH\_UVAR\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+SZ~0x20}
+
+size of Forth user variables ~\newline
+ \mbox{\Hypertarget{eforth__config_8h_aff92e9d3a1f1b8f50e5f99f48e415b9a}\label{eforth__config_8h_aff92e9d3a1f1b8f50e5f99f48e415b9a}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_DIC\_SZ@{FORTH\_DIC\_SZ}}
+\index{FORTH\_DIC\_SZ@{FORTH\_DIC\_SZ}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_DIC\_SZ}{FORTH\_DIC\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+SZ~(0x400-\/\mbox{\hyperlink{eforth__config_8h_ae8b4d200001ac27b69d50b2aa3d659e7}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+SZ}})}
+
+size of dictionary space ~\newline
+ \mbox{\Hypertarget{eforth__config_8h_ae1c5fa2ddd43bad831ec09b454a87476}\label{eforth__config_8h_ae1c5fa2ddd43bad831ec09b454a87476}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_STACK\_SZ@{FORTH\_STACK\_SZ}}
+\index{FORTH\_STACK\_SZ@{FORTH\_STACK\_SZ}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_STACK\_SZ}{FORTH\_STACK\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ~0x80}
+
+size of data/return stack ~\newline
+ \mbox{\Hypertarget{eforth__config_8h_ae58acffa6250f628ad15cdc182d146bc}\label{eforth__config_8h_ae58acffa6250f628ad15cdc182d146bc}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_TIB\_SZ@{FORTH\_TIB\_SZ}}
+\index{FORTH\_TIB\_SZ@{FORTH\_TIB\_SZ}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_TIB\_SZ}{FORTH\_TIB\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ~0x80}
+
+size of terminal input buffer ~\newline
+ \mbox{\Hypertarget{eforth__config_8h_ac13ec61d2b1799e4ab11371a4254e7dd}\label{eforth__config_8h_ac13ec61d2b1799e4ab11371a4254e7dd}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_RAM\_SZ@{FORTH\_RAM\_SZ}}
+\index{FORTH\_RAM\_SZ@{FORTH\_RAM\_SZ}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_RAM\_SZ}{FORTH\_RAM\_SZ}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+SZ}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{     ( \(\backslash\)}
+\DoxyCodeLine{     FORTH\_UVAR\_SZ + \mbox{\hyperlink{eforth__config_8h_aff92e9d3a1f1b8f50e5f99f48e415b9a}{FORTH\_DIC\_SZ}} + \(\backslash\)}
+\DoxyCodeLine{     FORTH\_STACK\_SZ + \mbox{\hyperlink{eforth__config_8h_ae58acffa6250f628ad15cdc182d146bc}{FORTH\_TIB\_SZ}})}
+
+\end{DoxyCode}
+total R\+AM allocated ~\newline
+ \mbox{\Hypertarget{eforth__config_8h_a8854972678927e0868e458eab4d789a2}\label{eforth__config_8h_a8854972678927e0868e458eab4d789a2}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_BOOT\_ADDR@{FORTH\_BOOT\_ADDR}}
+\index{FORTH\_BOOT\_ADDR@{FORTH\_BOOT\_ADDR}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_BOOT\_ADDR}{FORTH\_BOOT\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+B\+O\+O\+T\+\_\+\+A\+D\+DR~0x0000}
+
+\mbox{\Hypertarget{eforth__config_8h_a5f9cc7e4245085a5ddabcbcd07635aad}\label{eforth__config_8h_a5f9cc7e4245085a5ddabcbcd07635aad}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_RAM\_ADDR@{FORTH\_RAM\_ADDR}}
+\index{FORTH\_RAM\_ADDR@{FORTH\_RAM\_ADDR}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_RAM\_ADDR}{FORTH\_RAM\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR~\mbox{\hyperlink{eforth__config_8h_a68b9e34d65501f01d02ed377146ef0bb}{F\+O\+R\+T\+H\+\_\+\+R\+O\+M\+\_\+\+SZ}}}
+
+\mbox{\Hypertarget{eforth__config_8h_af15f803ea14ff0e9a3fa11fe533d0393}\label{eforth__config_8h_af15f803ea14ff0e9a3fa11fe533d0393}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_UVAR\_ADDR@{FORTH\_UVAR\_ADDR}}
+\index{FORTH\_UVAR\_ADDR@{FORTH\_UVAR\_ADDR}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_UVAR\_ADDR}{FORTH\_UVAR\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR~\mbox{\hyperlink{eforth__config_8h_a5f9cc7e4245085a5ddabcbcd07635aad}{F\+O\+R\+T\+H\+\_\+\+R\+A\+M\+\_\+\+A\+D\+DR}}}
+
+\mbox{\Hypertarget{eforth__config_8h_a9574a362044eba73eb09283aaa5d6ad3}\label{eforth__config_8h_a9574a362044eba73eb09283aaa5d6ad3}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_DIC\_ADDR@{FORTH\_DIC\_ADDR}}
+\index{FORTH\_DIC\_ADDR@{FORTH\_DIC\_ADDR}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_DIC\_ADDR}{FORTH\_DIC\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR~(\mbox{\hyperlink{eforth__config_8h_af15f803ea14ff0e9a3fa11fe533d0393}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+A\+D\+DR}} + \mbox{\hyperlink{eforth__config_8h_ae8b4d200001ac27b69d50b2aa3d659e7}{F\+O\+R\+T\+H\+\_\+\+U\+V\+A\+R\+\_\+\+SZ}})}
+
+\mbox{\Hypertarget{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}\label{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_STACK\_ADDR@{FORTH\_STACK\_ADDR}}
+\index{FORTH\_STACK\_ADDR@{FORTH\_STACK\_ADDR}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_STACK\_ADDR}{FORTH\_STACK\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR~(\mbox{\hyperlink{eforth__config_8h_a9574a362044eba73eb09283aaa5d6ad3}{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+A\+D\+DR}}  + \mbox{\hyperlink{eforth__config_8h_aff92e9d3a1f1b8f50e5f99f48e415b9a}{F\+O\+R\+T\+H\+\_\+\+D\+I\+C\+\_\+\+SZ}})}
+
+\mbox{\Hypertarget{eforth__config_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}\label{eforth__config_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_STACK\_TOP@{FORTH\_STACK\_TOP}}
+\index{FORTH\_STACK\_TOP@{FORTH\_STACK\_TOP}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_STACK\_TOP}{FORTH\_STACK\_TOP}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP~(\mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}} + \mbox{\hyperlink{eforth__config_8h_ae1c5fa2ddd43bad831ec09b454a87476}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+SZ}})}
+
+\mbox{\Hypertarget{eforth__config_8h_a7b21761447b5ce2df53bcd72baa34c73}\label{eforth__config_8h_a7b21761447b5ce2df53bcd72baa34c73}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_TIB\_ADDR@{FORTH\_TIB\_ADDR}}
+\index{FORTH\_TIB\_ADDR@{FORTH\_TIB\_ADDR}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_TIB\_ADDR}{FORTH\_TIB\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR~(\mbox{\hyperlink{eforth__config_8h_a0ff79d0c91d8f4e7af41afdd399d28a4}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+T\+OP}})}
+
+\mbox{\Hypertarget{eforth__config_8h_a2722d08eb4a77f6bb94140328d4ca3d7}\label{eforth__config_8h_a2722d08eb4a77f6bb94140328d4ca3d7}} 
+\index{eforth\_config.h@{eforth\_config.h}!FORTH\_MAX\_ADDR@{FORTH\_MAX\_ADDR}}
+\index{FORTH\_MAX\_ADDR@{FORTH\_MAX\_ADDR}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FORTH\_MAX\_ADDR}{FORTH\_MAX\_ADDR}}
+{\footnotesize\ttfamily \#define F\+O\+R\+T\+H\+\_\+\+M\+A\+X\+\_\+\+A\+D\+DR~(\mbox{\hyperlink{eforth__config_8h_a7b21761447b5ce2df53bcd72baa34c73}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+A\+D\+DR}} + \mbox{\hyperlink{eforth__config_8h_ae58acffa6250f628ad15cdc182d146bc}{F\+O\+R\+T\+H\+\_\+\+T\+I\+B\+\_\+\+SZ}})}
+
+\mbox{\Hypertarget{eforth__config_8h_aa8cecfc5c5c054d2875c03e77b7be15d}\label{eforth__config_8h_aa8cecfc5c5c054d2875c03e77b7be15d}} 
+\index{eforth\_config.h@{eforth\_config.h}!TRUE@{TRUE}}
+\index{TRUE@{TRUE}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{TRUE}{TRUE}}
+{\footnotesize\ttfamily \#define T\+R\+UE~-\/1}
+
+\mbox{\Hypertarget{eforth__config_8h_aa93f0eb578d23995850d61f7d61c55c1}\label{eforth__config_8h_aa93f0eb578d23995850d61f7d61c55c1}} 
+\index{eforth\_config.h@{eforth\_config.h}!FALSE@{FALSE}}
+\index{FALSE@{FALSE}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{FALSE}{FALSE}}
+{\footnotesize\ttfamily \#define F\+A\+L\+SE~0}
+
+\mbox{\Hypertarget{eforth__config_8h_a7f47e1f84ff391a5ef46f3f721697665}\label{eforth__config_8h_a7f47e1f84ff391a5ef46f3f721697665}} 
+\index{eforth\_config.h@{eforth\_config.h}!fCOLON@{fCOLON}}
+\index{fCOLON@{fCOLON}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{fCOLON}{fCOLON}}
+{\footnotesize\ttfamily \#define f\+C\+O\+L\+ON~0x8000}
+
+flag a colon word \mbox{\Hypertarget{eforth__config_8h_a9d8d8ad7c0601f1313a9d026757f019a}\label{eforth__config_8h_a9d8d8ad7c0601f1313a9d026757f019a}} 
+\index{eforth\_config.h@{eforth\_config.h}!OPCODES@{OPCODES}}
+\index{OPCODES@{OPCODES}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{OPCODES}{OPCODES}}
+{\footnotesize\ttfamily \#define O\+P\+C\+O\+D\+ES}
+
+Forth VM Opcodes (for Bytecode Assembler) 
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{eforth__config_8h_a696390429f2f3b644bde8d0322a24124}\label{eforth__config_8h_a696390429f2f3b644bde8d0322a24124}} 
+\index{eforth\_config.h@{eforth\_config.h}!U32@{U32}}
+\index{U32@{U32}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{U32}{U32}}
+{\footnotesize\ttfamily typedef uint32\+\_\+t \mbox{\hyperlink{eforth__config_8h_a696390429f2f3b644bde8d0322a24124}{U32}}}
+
+
+
+32-\/bit unsigned integer 
+
+\mbox{\Hypertarget{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}\label{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}} 
+\index{eforth\_config.h@{eforth\_config.h}!U16@{U16}}
+\index{U16@{U16}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{U16}{U16}}
+{\footnotesize\ttfamily typedef uint16\+\_\+t \mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}}}
+
+
+
+16-\/bit unsigned integer 
+
+\mbox{\Hypertarget{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}\label{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}} 
+\index{eforth\_config.h@{eforth\_config.h}!U8@{U8}}
+\index{U8@{U8}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{U8}{U8}}
+{\footnotesize\ttfamily typedef uint8\+\_\+t \mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}}
+
+
+
+8-\/bit unsigned integer 
+
+\mbox{\Hypertarget{eforth__config_8h_a39c786017723555afb9e8b85accec0de}\label{eforth__config_8h_a39c786017723555afb9e8b85accec0de}} 
+\index{eforth\_config.h@{eforth\_config.h}!S32@{S32}}
+\index{S32@{S32}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{S32}{S32}}
+{\footnotesize\ttfamily typedef int32\+\_\+t \mbox{\hyperlink{eforth__config_8h_a39c786017723555afb9e8b85accec0de}{S32}}}
+
+
+
+32-\/bit signed integer 
+
+\mbox{\Hypertarget{eforth__config_8h_a6d241ad21a823c90d4835380787db5d4}\label{eforth__config_8h_a6d241ad21a823c90d4835380787db5d4}} 
+\index{eforth\_config.h@{eforth\_config.h}!S16@{S16}}
+\index{S16@{S16}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{S16}{S16}}
+{\footnotesize\ttfamily typedef int16\+\_\+t \mbox{\hyperlink{eforth__config_8h_a6d241ad21a823c90d4835380787db5d4}{S16}}}
+
+
+
+16-\/bit signed integer 
+
+\mbox{\Hypertarget{eforth__config_8h_af1475a0bb1962ef08dd1f78bd5dba87a}\label{eforth__config_8h_af1475a0bb1962ef08dd1f78bd5dba87a}} 
+\index{eforth\_config.h@{eforth\_config.h}!S8@{S8}}
+\index{S8@{S8}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{S8}{S8}}
+{\footnotesize\ttfamily typedef int8\+\_\+t \mbox{\hyperlink{eforth__config_8h_af1475a0bb1962ef08dd1f78bd5dba87a}{S8}}}
+
+
+
+8-\/bit signed integer 
+
+\mbox{\Hypertarget{eforth__config_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}\label{eforth__config_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}} 
+\index{eforth\_config.h@{eforth\_config.h}!IU@{IU}}
+\index{IU@{IU}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{IU}{IU}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{eforth__config_8h_a0a0a322d5fa4a546d293a77ba8b4a71f}{U16}} \mbox{\hyperlink{eforth__config_8h_a5fd90490ca5b2ceb72bf8b2c89a9634b}{IU}}}
+
+
+
+instruction/address unit (16-\/bit) 
+
+\mbox{\Hypertarget{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}\label{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}} 
+\index{eforth\_config.h@{eforth\_config.h}!DU@{DU}}
+\index{DU@{DU}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{DU}{DU}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{eforth__config_8h_a6d241ad21a823c90d4835380787db5d4}{S16}} \mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}}
+
+
+
+data/cell unit 
+
+\mbox{\Hypertarget{eforth__config_8h_a2d422d478f77fc6c4aa3c9538683829d}\label{eforth__config_8h_a2d422d478f77fc6c4aa3c9538683829d}} 
+\index{eforth\_config.h@{eforth\_config.h}!CFP@{CFP}}
+\index{CFP@{CFP}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{CFP}{CFP}}
+{\footnotesize\ttfamily typedef void($\ast$ C\+FP) ()}
+
+
+
+function pointer 
+

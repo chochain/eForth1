@@ -89,7 +89,7 @@ int constexpr opEXEC  = 8;
     LOG("\n");                            \
     for (int i=0; i<tTAB; i++) LOG("  "); \
 }
-void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
+void TRACE(U8 op, U16 ip, U16 top, S16 s)
 {
     if (!tCNT) return;                       /// * skip if not tracing or end of program
     // indent call depth
@@ -98,8 +98,8 @@ void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
     	tTAB++;
     }
     // display IP:W[opcode]
-    LOG_H(" ", ip - 1);                      /// * mem pointer
-    LOG_H(":", w);                           /// * return addr
+    U16 w = ip - 1;
+    LOG_H(" ", w);                           /// * mem pointer
 	LOG_H("[", op); LOG("]");                /// * opcode to be executed
     // dump stack
     for (int i=0; i<s; i++) {
@@ -125,8 +125,8 @@ void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
 #else
     
 #define DEBUG(s,v)
-#define TAB()                   /* skip */
-#define TRACE(op, ip, w, t, s)  /* skip */
+#define TAB()                /* skip */
+#define TRACE(op, ip, t, s)  /* skip */
     
 #endif // EXE_TRACE
 ///@}

@@ -14,7 +14,6 @@ namespace EfVM {
 ///@name VM Registers
 ///@{
 IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
-IU  W;                            ///< work register, IU is 16-bit
 DU  *DS;                          ///< data stack pointer, Dr. Ting's stack
 DU  *RS;                          ///< return stack pointer, Dr. Ting's rack
 DU  top;                          ///< ALU (i.e. cached top of stack value)
@@ -63,7 +62,7 @@ void _init() {
     SET(p+2, 10);                     /// * set BASE to 10
     SET(p+4, FORTH_DIC_ADDR);         /// * top of dictionary
 
-    IP = GET(0) & ~fCOLON;            ///> fetch cold boot vector
+    IP = GET(FORTH_BOOT_ADDR) & ~fCOLON; ///> fetch cold boot vector
     ///
     /// display init prompt
     ///
@@ -233,11 +232,13 @@ void vm_outer() {
         _yield();                       /// * yield to interrupt services
         U8 op = BGET(IP++);             /// * NEXT in Forth's context
         if (op & 0x80) {                /// * COLON word?
-            W = ((U16)(op & 0x7f)<<8)   /// * take high-byte of 16-bit address
-                | BGET(IP);             /// * fetch low-byte of IP
+            RPUSH(IP + 1);
+            DEBUG(">>%x", IP + 1);
+            IP = ((U16)(op & 0x7f)<<8)  /// * take high-byte of 16-bit address
+                 | BGET(IP);            /// * and low-byte from *IP
             op = opENTER;
         }
-        TRACE(op, IP, W, top, DEPTH()); /// * debug tracing
+        TRACE(op, IP, w, top, DEPTH()); /// * debug tracing
 
         DISPATCH(op) {
         ///
@@ -251,10 +252,7 @@ void vm_outer() {
                 IR = 0;                 /// * interrupt clear
                 IP &= ~IRET_FLAG;
             });
-        _X(ENTER,
-            RPUSH(++IP);                ///> keep return address
-            DEBUG(">>%x", IP);
-            IP = W);                    ///> jump to next instruction
+        _X(ENTER, {});                  ///> handled above
 #if ARDUINO
         _X(BYE,   _init());             /// * reset
 #else // !ARDUINO

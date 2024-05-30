@@ -62,7 +62,7 @@ void _init() {
     SET(p+2, 10);                     /// * set BASE to 10
     SET(p+4, FORTH_DIC_ADDR);         /// * top of dictionary
 
-    IP = GET(FORTH_BOOT_ADDR) & ~fCOLON; ///> fetch cold boot vector
+    IP = GET(FORTH_BOOT_ADDR);        ///> fetch cold boot vector
     ///
     /// display init prompt
     ///
@@ -226,17 +226,16 @@ void vm_outer() {
         OPCODES
     };
 #endif // COMPUTED_GOTO
-    IP = GET(0) & ~fCOLON;              ///> fetch cold boot vector
-
+    
     while (1) {                         ///> Forth inner loop
         _yield();                       /// * yield to interrupt services
-        U8 op = BGET(IP++);             /// * NEXT in Forth's context
-        if (op & 0x80) {                /// * COLON word?
-            RPUSH(IP + 1);
+        U8 op = BGET(IP++);             /// * fetch next opcode
+        if (op & fCOLON8) {             /// * COLON word?
+            RPUSH(IP + 1);              /// * save return address
             DEBUG(">>%x", IP + 1);
             IP = ((U16)(op & 0x7f)<<8)  /// * take high-byte of 16-bit address
                  | BGET(IP);            /// * and low-byte from *IP
-            op = opENTER;
+            op = opENTER;               /// * doLIST a colon word
         }
         TRACE(op, IP, top, DEPTH());    /// * debug tracing
 

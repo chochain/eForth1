@@ -72,7 +72,8 @@ typedef void (*CFP)();                ///< function pointer
 ///@}
 ///@name VM operational flags
 ///@{
-#define fCOLON           0x8000       /**< flag a colon word */
+#define fCOLON16        0x8000       /**< 16-bit flag, colon word */
+#define fCOLON8         0x80         /**< 8-bit flag (high-byte)  */
 ///@}
 ///
 /// Forth VM Opcodes (for Bytecode Assembler)

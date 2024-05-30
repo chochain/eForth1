@@ -238,7 +238,7 @@ void vm_outer() {
                  | BGET(IP);            /// * and low-byte from *IP
             op = opENTER;
         }
-        TRACE(op, IP, w, top, DEPTH()); /// * debug tracing
+        TRACE(op, IP, top, DEPTH());    /// * debug tracing
 
         DISPATCH(op) {
         ///

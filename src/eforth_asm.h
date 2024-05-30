@@ -124,7 +124,7 @@ enum {
             }                                   \
         }                                       \
         else {          /** colon words */      \
-          STORE(j | fCOLON);                    \
+          STORE(j | fCOLON16);                  \
           DEBUG(" %04x", j);                    \
         }                                       \
     }                                           \
@@ -138,7 +138,7 @@ enum {
 }
 
 #define OPSTR(ip, seq) {                        \
-    SET(PC, ip | fCOLON);                       \
+    SET(PC, ip | fCOLON16);                     \
     PC += CELLSZ;                               \
     int len = strlen(seq);                      \
     BSET(PC++, len);                            \
@@ -217,7 +217,6 @@ int _colon(const char *seg, int len, ...) {
     _header(strlen(seg), seg);
     DEBUG(" %s", ":_COLON");
     int addr = PC;
-    //BSET(PC++, opENTER);    // no need for direct threading
     CELLCPY(len);
     return addr;
 }
@@ -228,7 +227,6 @@ int _immed(const char *seg, int len, ...) {
     _header(fIMMD | strlen(seg), seg);
     SHOWOP("IMMD");
     int addr = PC;
-    //BSET(PC++, opENTER);    // no need for direct threading
     CELLCPY(len);
     return addr;
 }

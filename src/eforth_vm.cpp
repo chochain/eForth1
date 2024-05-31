@@ -244,11 +244,7 @@ void vm_outer() {
                 ip &= ~IRET_FLAG;
             });
         _X(ENTER, {});                  ///> handled above
-#if ARDUINO
-        _X(BYE,   _init());             /// * reset
-#else // !ARDUINO
-        _X(BYE,   return);              /// * quit
-#endif // ARDUINO
+        _X(BYE,   _init(); return);     ///> quit, Arduino will restart
         ///
         /// @name Console IO
         /// @{

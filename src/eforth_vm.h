@@ -17,9 +17,9 @@
  * ### Data and Return Stack
  *
  * @code
- *            S                   R
- *            |                   |
- *    top -> [S0, S1, S2,..., R1, R0] <- rtop
+ *          S                   R
+ *          |                   |
+ *    T -> [S0, S1, S2,..., R1, R0] <- I
  * @endcode
  * Note: Dr. Ting uses U8 (0~255) for wrap-around control
  */
@@ -62,12 +62,12 @@ void SET(U16 d, U16 v) {
 ///
 /// push a value onto stack top
 ///
-#define DEPTH()  ((DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1)
-#define PUSH(v)  { *++DS = top;  top  = (v); }
-#define RPUSH(v) { *--RS = rtop; rtop = (v); }
-#define POP()    (top  = *DS--)
-#define RPOP()   (rtop = *RS++)
-#define DTOP(d)  { *DS = (d)&0xffff; top = (d)>>16; }
+#define DEPTH()  ((DU)((U8*)S - RAM(FORTH_STACK_ADDR)) >> 1)
+#define PUSH(v)  { *++S = T; T = (v); }
+#define RPUSH(v) { *--R = I; I = (v); }
+#define POP()    (T = *S--)
+#define RPOP()   (I = *R++)
+#define DTOP(d)  { *S = (d)&0xffff; T = (d)>>16; }
 
 ///
 ///@name Tracing

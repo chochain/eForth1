@@ -6,6 +6,7 @@
  *   202212 EfVMSub module - vtable subroutine calling
  *   202301 indirect threading - computed label jumping
  *   202302 direct threading - opcode => code(); continue = $NEXT
+ *   202405 add computed_goto; DS,RS,top,rtop=>S,R,T,I
  */
 #include "eforth_vm.h"
 
@@ -13,10 +14,14 @@ namespace EfVM {
 ///
 ///@name VM Registers
 ///@{
-DU  *DS;               ///< data stack pointer,   'stack' in Dr. Ting's
-DU  *RS;               ///< return stack pointer, 'rack'  in Dr. Ting's
-DU  top;               ///< ALU (i.e. cached top of stack value)
-DU  rtop;              ///< cached loop counter on return stack
+DU    *S;              ///< data stack pointer,   'stack' in Dr. Ting's
+DU    *R;              ///< return stack pointer, 'rack'  in Dr. Ting's
+DU    T;               ///< TOS, cached top of stack value
+DU    I;               ///< RTOS, cached loop counter on return stack
+///@}
+///@name IO Streaming interface
+///@{
+Stream *io;            ///< IO Stream, tied to Serial usually
 ///@}
 ///@name Memory Management Unit
 ///@{
@@ -25,19 +30,15 @@ U8    *_ram;           ///< RAM, for user defined words
 U8    *_pre;           ///< Forth code pre-defined/embedded in .ino
 CFP   _api[CFUNC_MAX]; ///< C API function pointer
 ///@}
-///@name IO Streaming interface
-///@{
-Stream *io;            ///< IO Stream, tied to Serial usually
-///@}
 ///
 ///> Forth Virtual Machine primitive functions
 ///
 void _init() {                        ///> VM initializer
     intr_reset();                     /// * reset interrupt handlers
 
-    top = 0;                          ///> setup control variables
-    DS = (DU*)RAM(FORTH_STACK_ADDR - CELLSZ);
-    RS = (DU*)RAM(FORTH_STACK_TOP);
+    T = 0;                            ///> setup control variables
+    S = (DU*)RAM(FORTH_STACK_ADDR - CELLSZ);
+    R = (DU*)RAM(FORTH_STACK_TOP);
 
 #if EXE_TRACE
     tCNT = 0; tTAB = 0;               ///> setup tracing variables
@@ -84,30 +85,21 @@ inline void _txsto()         ///> (c -- ) send a char to console
 {
 #if EXE_TRACE
     if (tCNT > 1) {
-        switch (top) {
+        switch (T) {
         case 0xa: tCNT ? LOG("<LF>") : LOG("\n");  break;
         case 0xd: LOG("<CR>");    break;
         case 0x8: LOG("<TAB>");   break;
-        default: LOG("<"); LOG_C((char)top); LOG(">");
+        default: LOG("<"); LOG_C((char)T); LOG(">");
         }
     }
-    else LOG_C((char)top);
+    else LOG_C((char)T);
 #else  // !EXE_TRACE
-    LOG_C((char)top);
+    LOG_C((char)T);
 #endif // EXE_TRACE
     POP();
 }
-///@}
-inline void _ummod()        /// (udl udh u -- ur uq) unsigned double divided by a single
-{
-    U32 d = (U32)top;       ///> CC: auto variable uses C stack
-    U32 m = ((U32)*DS<<16) + (U16)*(DS-1);
-    POP();
-    *DS   = (DU)(m % d);    ///> remainder
-    top   = (DU)(m / d);    ///> quotient
-}
 
-inline void _out(U16 p, U16 v)
+inline void _out(U16 p, U16 v)   ///> Arduino port setting
 {
 #if ARDUINO
     switch (p & 0x300) {
@@ -127,6 +119,17 @@ inline void _out(U16 p, U16 v)
     }
 #endif  // ARDUINO
 }
+///@}
+    
+inline void _ummod()        ///> (udl udh u -- ur uq) unsigned double divided by a single
+{
+    U32 d = (U32)T;         ///> CC: auto variable uses C stack
+    U32 m = ((U32)*S<<16) + (U16)*(S-1);
+    POP();
+    *S   = (DU)(m % d);     ///> remainder
+    T    = (DU)(m / d);     ///> quotient
+}
+
 ///@}
 }; // namespace EfVM
 ///
@@ -157,9 +160,9 @@ void vm_init(PGM_P rom, U8 *ram, void *io_stream, const char *code) {
 ///  TODO: build formal C callstack construct
 ///
 void _ccall() {
-    CFP fp  = _api[top];              ///> fetch C function pointer
-    POP();                            ///> pop off TOS
-    fp();                             ///> call C function
+    CFP fp  = _api[T];          ///> fetch C function pointer
+    POP();                      ///> pop off TOS
+    fp();                       ///> call C function
 }
 
 void vm_cfunc(int n, CFP fp) {
@@ -167,12 +170,12 @@ void vm_cfunc(int n, CFP fp) {
     LOG_V(", API", n); LOG_H("=x", (uintptr_t)fp);
 }
 
-void vm_push(int v) {                 /// proxy to VM
+void vm_push(int v) {           /// proxy to VM
     PUSH(v);
 }
 
 int vm_pop() {
-    int t = (int)top;
+    int t = (int)T;
     POP();
     return t;
 }
@@ -202,31 +205,31 @@ int vm_pop() {
 
 void vm_outer() {
     VTABLE;
-    IU IR = 0;                          ///< interrupt flag
-    IU IP = GET(FORTH_BOOT_ADDR);       ///< IP = cold boot vector
+    IU ir = 0;                          ///< interrupt flag
+    IU ip = GET(FORTH_BOOT_ADDR);       ///< ip = cold boot vector
     while (1) {                         ///> Forth inner loop
         ///
         ///> serve interrupt routines
         ///
-        if (!IR) {                      /// * still servcing interrupt
-            IR = intr_service();        /// * get interrupt vectors
-            if (IR) {                   /// * serve interrupt
-                RPUSH(IP | IRET_FLAG);  /// * push IRET address
-                IP = IR;                /// * skip opENTER
+        if (!ir) {                      /// * still servcing interrupt
+            ir = intr_service();        /// * get interrupt vectors
+            if (ir) {                   /// * serve interrupt
+                RPUSH(ip | IRET_FLAG);  /// * push IRET address
+                ip = ir;                /// * skip opENTER
             }
         }
         ///
         ///> fetch primitive opcode or colon word address
         ///
-        U8 op = BGET(IP++);             /// * fetch next opcode
+        U8 op = BGET(ip++);             /// * fetch next opcode
         if (op & fCOLON8) {             /// * COLON word?
-            RPUSH(IP + 1);              /// * save return address
-            DEBUG(">>%x", IP + 1);
-            IP = ((U16)(op & 0x7f)<<8)  /// * take high-byte of 16-bit address
-                 | BGET(IP);            /// * and low-byte from *IP
+            RPUSH(ip + 1);              /// * save return address
+            DEBUG(">>%x", ip + 1);
+            ip = ((U16)(op & 0x7f)<<8)  /// * take high-byte of 16-bit address
+                 | BGET(ip);            /// * and low-byte from *IP
             op = opENTER;               /// * doLIST a colon word
         }
-        TRACE(op, IP, top, DEPTH());    /// * debug tracing
+        TRACE(op, ip, T, DEPTH());      /// * debug tracing
         
         DISPATCH(op) {
         ///
@@ -235,10 +238,10 @@ void vm_outer() {
         _X(NOP,   {});
         _X(EXIT,
             TAB();
-            IP = rtop; RPOP();          ///> pop return address
-            if (IP & IRET_FLAG) {       /// * IRETURN?
-                IR = 0;                 /// * interrupt clear
-                IP &= ~IRET_FLAG;
+            ip = I; RPOP();             ///> pop return address
+            if (ip & IRET_FLAG) {       /// * IRETURN?
+                ir = 0;                 /// * interrupt clear
+                ip &= ~IRET_FLAG;
             });
         _X(ENTER, {});                  ///> handled above
 #if ARDUINO
@@ -255,164 +258,164 @@ void vm_outer() {
         /// @name Built-in ops
         /// @{
         _X(DOLIT,
-            PUSH(GET(IP));              ///> push literal onto data stack
-            IP += CELLSZ);
-        _X(DOVAR, PUSH(IP+1));          ///> push literal addr to data stack
+            PUSH(GET(ip));              ///> push literal onto data stack
+            ip += CELLSZ);
+        _X(DOVAR, PUSH(ip+1));          ///> push literal addr to data stack
                                         /// * +1 means skip EXIT byte (08)
         /// @}
         /// @name Branching ops
         /// @{
         _X(EXECU,                       ///> ( xt -- ) execute xt
-            DEBUG(">>%x", IP);
-            RPUSH(IP);
-            IP = (IU)top;               /// * fetch program counter
+            DEBUG(">>%x", ip);
+            RPUSH(ip);
+            ip = (IU)T;                 /// * fetch program counter
             POP());
         _X(DOES,
-           PUSH(IP+1);                  /// * +1 means skip the offset byte
-           IP += BGET(IP));             /// * skip offset bytes, to does> code
+           PUSH(ip+1);                  /// * +1 means skip the offset byte
+           ip += BGET(ip));             /// * skip offset bytes, to does> code
         _X(DONEXT,
             TAB();
-            if (rtop-- > 0) {           ///> check if loop counter > 0
-                IP = GET(IP);           ///>> branch back to FOR
+            if (I-- > 0) {              ///> check if loop counter > 0
+                ip = GET(ip);           ///>> branch back to FOR
             }
             else {                      ///> or,
-                IP += CELLSZ;           ///>> skip to next instruction
+                ip += CELLSZ;           ///>> skip to next instruction
                 RPOP();                 ///>> pop off return stack
             });
         _X(QBRAN,
             TAB();
-            if (top) IP += CELLSZ;      ///> next instruction, or
-            else     IP = GET(IP);      ///> fetch branching target address
+            if (T) ip += CELLSZ;        ///> next instruction, or
+            else   ip = GET(ip);        ///> fetch branching target address
             POP());
         _X(BRAN,                        ///> fetch branching target address
             TAB();
-            IP = GET(IP));
+            ip = GET(ip));
         /// @}
         /// @name Memory Storage ops
         /// @{
         _X(STORE,
-            SET(top, *DS--);
+            SET(T, *S--);
             POP());
         _X(PSTOR,
-            SET(top, (DU)GET(top) + *DS--);
+            SET(T, (DU)GET(T) + *S--);
             POP());
-        _X(AT,    top = (DU)GET(top));
+        _X(AT,    T = (DU)GET(T));
         _X(CSTOR,
-            BSET(top, *DS--);
+            BSET(T, *S--);
             POP());
-        _X(CAT,   top = (DU)BGET(top));
-        _X(RFROM, PUSH(rtop); RPOP());
-        _X(RAT,   PUSH(rtop));
+        _X(CAT,   T = (DU)BGET(T));
+        _X(RFROM, PUSH(I); RPOP());
+        _X(RAT,   PUSH(I));
         _X(TOR,
-            RPUSH(top);
+            RPUSH(T);
             POP());
         /// @{
         /// @name Stack ops
         /// @}
         _X(DROP,  POP());
-        _X(DUP,   *++DS = top);
+        _X(DUP,   *++S = T);
         _X(SWAP,
-            DU tmp = top;
-            top    = *DS;
-            *DS    = tmp);
-        _X(OVER,  DU v = *DS; PUSH(v));      /// * note PUSH macro changes DS
+            DU tmp = T;
+            T      = *S;
+            *S     = tmp);
+        _X(OVER,  DU v = *S; PUSH(v));      /// * note PUSH macro changes S
         _X(ROT,
-            DU tmp = *(DS-1);
-            *(DS-1)= *DS;
-            *DS    = top;
-            top    = tmp);
-        _X(PICK,  top = *(DS - top));
+            DU tmp = *(S-1);
+            *(S-1) = *S;
+            *S     = T;
+            T      = tmp);
+        _X(PICK,  T = *(S - T));
         /// @}
         /// @name ALU ops
         /// @{
-        _X(AND,   top &= *DS--);
-        _X(OR,    top |= *DS--);
-        _X(XOR,   top ^= *DS--);
-        _X(INV,   top ^= -1);
-        _X(LSH,   top =  *DS-- << top);
-        _X(RSH,   top =  *DS-- >> top);
-        _X(ADD,   top += *DS--);
-        _X(SUB,   top =  *DS-- - top);
-        _X(MUL,   top *= *DS--);
-        _X(DIV,   top = top ? *DS-- / top : (DS--, 0));
-        _X(MOD,   top = top ? *DS-- % top : *DS--);
-        _X(NEG,   top = -top);
+        _X(AND,   T &= *S--);
+        _X(OR,    T |= *S--);
+        _X(XOR,   T ^= *S--);
+        _X(INV,   T ^= -1);
+        _X(LSH,   T =  *S-- << T);
+        _X(RSH,   T =  *S-- >> T);
+        _X(ADD,   T += *S--);
+        _X(SUB,   T =  *S-- - T);
+        _X(MUL,   T *= *S--);
+        _X(DIV,   T = T ? *S-- / T : (S--, 0));
+        _X(MOD,   T = T ? *S-- % T : *S--);
+        _X(NEG,   T = -T);
         /// @}
         /// @name Logic ops
         /// @{
-        _X(GT,    top = BOOL(*DS-- > top));
-        _X(EQ,    top = BOOL(*DS-- ==top));
-        _X(LT,    top = BOOL(*DS-- < top));
-        _X(ZGT,   top = BOOL(top > 0));
-        _X(ZEQ,   top = BOOL(top == 0));
-        _X(ZLT,   top = BOOL(top < 0));
+        _X(GT,    T = BOOL(*S-- > T));
+        _X(EQ,    T = BOOL(*S-- ==T));
+        _X(LT,    T = BOOL(*S-- < T));
+        _X(ZGT,   T = BOOL(T > 0));
+        _X(ZEQ,   T = BOOL(T == 0));
+        _X(ZLT,   T = BOOL(T < 0));
         /// @}
         /// @name Misc. ops
         /// @{
-        _X(ONEP,  top++);
-        _X(ONEM,  top--);
-        _X(QDUP,  if (top) *++DS = top);
+        _X(ONEP,  T++);
+        _X(ONEM,  T--);
+        _X(QDUP,  if (T) *++S = T);
         _X(DEPTH, DU d = DEPTH(); PUSH(d));
         _X(RP,
-            DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)RS) >> 1;
+            DU r = ((U8*)RAM(FORTH_STACK_TOP) - (U8*)R) >> 1;
             PUSH(r));
         _X(BL,    PUSH(0x20));
         _X(CELL,  PUSH(CELLSZ));
-        _X(ABS,   top  = abs(top));
-        _X(MAX,   DU s = *DS--; if (s > top) top = s);
-        _X(MIN,   DU s = *DS--; if (s < top) top = s);
+        _X(ABS,   T = abs(T));
+        _X(MAX,   DU s = *S--; if (s > T) T = s);
+        _X(MIN,   DU s = *S--; if (s < T) T = s);
         _X(WITHIN,                        /// ( u ul uh -- f ) 3rd item is within [ul, uh)
-            DU ul = *DS--;
-            DU u  = *DS--;
-            top = BOOL((U16)(u - ul) < (U16)(top - ul)));
-        _X(TOUPP, if (top >= 0x61 && top <= 0x7b) top &= 0x5f);
-        _X(COUNT, *++DS = top + 1; top = BGET(top));
-        _X(ULESS, top = BOOL((U16)*DS-- < (U16)top));
+            DU ul = *S--;
+            DU u  = *S--;
+            T = BOOL((U16)(u - ul) < (U16)(T - ul)));
+        _X(TOUPP, if (T >= 0x61 && T <= 0x7b) T &= 0x5f);
+        _X(COUNT, *++S = T + 1; T = BGET(T));
+        _X(ULESS, T = BOOL((U16)*S-- < (U16)T));
         _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
-            U32 u = (U32)*DS * top;
+            U32 u = (U32)*S * T;
             DTOP(u));
         _X(MSTAR,                         /// (n1 n2 -- d) signed multiply, return double product
-            S32 d = (S32)*DS * top;
+            S32 d = (S32)*S * T;
             DTOP(d));
         _X(UMPLUS,                        /// ( n1 n2 -- sum c ) return sum of two numbers and carry flag
-            U32 u = (U32)*DS + top;
+            U32 u = (U32)*S + T;
             DTOP(u));
         _X(SSMOD,                         /// ( dl dh n -- r q ) double div/mod by a single
-            S32 d = (S32)*DS * *(DS - 1);
-            *--DS = (DU)(d % top);
-            top   = (DU)(d / top));
+            S32 d = (S32)*S * *(S - 1);
+            *--S  = (DU)(d % T);
+            T     = (DU)(d / T));
         _X(SMOD,                          /// ( n1 n2 -- r q )
-            DU s = *DS;
-            *DS = s % top;
-            top = s / top);
+            DU s = *S;
+            *S = s % T;
+            T  = s / T);
         _X(MSLAS,
-            S32 d = (S32)*DS-- * *DS--;   /// ( n1 n2 n3 -- q ) multiply n1 n2, divided by n3 return quotient
-            top = (DU)(d / top));
-        _X(S2D,   S32 d = (S32)top; DS++; DTOP(d));
+            S32 d = (S32)*S-- * *S--;     /// ( n1 n2 n3 -- q ) multiply n1 n2, divided by n3 return quotient
+            T = (DU)(d / T));
+        _X(S2D,   S32 d = (S32)T; S++; DTOP(d));
         _X(D2S,
-           DU s = *DS--;
-           top = (top < 0) ? -abs(s) : abs(s));
+           DU s = *S--;
+           T = (T < 0) ? -abs(s) : abs(s));
         /// @}
         /// @name Double precision ops
         /// @{
-        _X(DNEG,                          /// (d -- -d) two's complemente of top double
-            S32 d = S2D(top, *DS);
+        _X(DNEG,                          /// (d -- -d) two's complemente of T double
+            S32 d = S2D(T, *S);
             DTOP(-d));
         _X(DADD,                          /// (d1 d2 -- d1+d2) add two double precision numbers
-            S32 d0 = S2D(top, *DS);
-            S32 d1 = S2D(*(DS-1), *(DS-2));
-            DS -= 2; DTOP(d1 + d0));
+            S32 d0 = S2D(T, *S);
+            S32 d1 = S2D(*(S-1), *(S-2));
+            S -= 2; DTOP(d1 + d0));
         _X(DSUB,                          /// (d1 d2 -- d1-d2) subtract d2 from d1
-            S32 d0 = S2D(top, *DS);
-            S32 d1 = S2D(*(DS-1), *(DS-2));
-            DS -= 2; DTOP(d1 - d0));
+            S32 d0 = S2D(T, *S);
+            S32 d1 = S2D(*(S-1), *(S-2));
+            S -= 2; DTOP(d1 - d0));
         /// TODO: add J
         _X(SPAT,
-            DU r = (U8*)DS - (U8*)RAM(FORTH_STACK_ADDR);
+            DU r = (U8*)S - (U8*)RAM(FORTH_STACK_ADDR);
             PUSH(FORTH_STACK_ADDR + r));
 #if EXE_TRACE
-        _X(TRC,  tCNT = top; POP());
+        _X(TRC,  tCNT = T; POP());
 #else
         _X(TRC,  POP());
 #endif // EXE_TRACE
@@ -425,29 +428,29 @@ void vm_outer() {
             LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
         );
         _X(CALL,
-            _ccall());                       /// * call C function
+            _ccall());                     /// * call C function
         _X(CLK,
             U32 t = millis();
-            *++DS = top; DS++;               /// * allocate 2-cells for clock ticks
+            *++S  = T; S++;                /// * allocate 2-cells for clock ticks
             DTOP(t));
         /// @}
         /// @name Arduino specific ops
         /// @{
         _X(PIN,
-            pinMode(top, *DS-- ? OUTPUT : INPUT);
+            pinMode(T, *S-- ? OUTPUT : INPUT);
             POP());
         _X(MAP,
-            U16 tmp = map(top, *(DS-3), *(DS-2), *(DS-1), *DS);
-            DS -= 4;
-            top = tmp);
-        _X(IN,    top = digitalRead(top));
-        _X(OUT,   _out(top, *DS);   DS--; POP());
-        _X(AIN,   top = analogRead(top));
-        _X(PWM,   analogWrite(top, *DS);    DS--; POP());
-        _X(TMISR, intr_add_tmisr(top, *DS, *(DS-1)); DS-=2; POP());
-        _X(PCISR, intr_add_pcisr(top, *DS); DS--; POP());
-        _X(TMRE,  intr_timer_enable(top);   POP());
-        _X(PCIE,  intr_pci_enable(top);     POP());
+            U16 tmp = map(T, *(S-3), *(S-2), *(S-1), *S);
+            S -= 4;
+            T = tmp);
+        _X(IN,    T = digitalRead(T));
+        _X(OUT,   _out(T, *S);   S--; POP());
+        _X(AIN,   T = analogRead(T));
+        _X(PWM,   analogWrite(T, *S);    S--; POP());
+        _X(TMISR, intr_add_tmisr(T, *S, *(S-1)); S-=2; POP());
+        _X(PCISR, intr_add_pcisr(T, *S); S--; POP());
+        _X(TMRE,  intr_timer_enable(T);   POP());
+        _X(PCIE,  intr_pci_enable(T);     POP());
         }
     }
 }

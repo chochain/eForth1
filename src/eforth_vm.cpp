@@ -13,34 +13,29 @@ namespace EfVM {
 ///
 ///@name VM Registers
 ///@{
-IU  IP;                           ///< instruction pointer, IU is 16-bit, opcode is 8-bit
-DU  *DS;                          ///< data stack pointer, Dr. Ting's stack
-DU  *RS;                          ///< return stack pointer, Dr. Ting's rack
-DU  top;                          ///< ALU (i.e. cached top of stack value)
-DU  rtop;                         ///< cached loop counter on return stack
-IU  IR;                           ///< interrupt service routine
+DU  *DS;               ///< data stack pointer,   'stack' in Dr. Ting's
+DU  *RS;               ///< return stack pointer, 'rack'  in Dr. Ting's
+DU  top;               ///< ALU (i.e. cached top of stack value)
+DU  rtop;              ///< cached loop counter on return stack
 ///@}
 ///@name Memory Management Unit
 ///@{
-PGM_P _rom;                       ///< ROM, Forth word stored in Arduino Flash Memory
-U8    *_ram;                      ///< RAM, memory block for user define dictionary
-U8    *_pre;                      ///< Pre-built/embedded Forth code
-CFP   _api[CFUNC_MAX];            ///> store C function pointer
+PGM_P _rom;            ///< ROM, Forth built-in words stored in Flash
+U8    *_ram;           ///< RAM, for user defined words
+U8    *_pre;           ///< Forth code pre-defined/embedded in .ino
+CFP   _api[CFUNC_MAX]; ///< C API function pointer
 ///@}
 ///@name IO Streaming interface
 ///@{
-Stream *io;
+Stream *io;            ///< IO Stream, tied to Serial usually
 ///@}
 ///
 ///> Forth Virtual Machine primitive functions
 ///
-///
-/// virtual machine initializer
-///
-void _init() {
+void _init() {                        ///> VM initializer
     intr_reset();                     /// * reset interrupt handlers
 
-    IR = top = 0;                     ///> setup control variables
+    top = 0;                          ///> setup control variables
     DS = (DU*)RAM(FORTH_STACK_ADDR - CELLSZ);
     RS = (DU*)RAM(FORTH_STACK_TOP);
 
@@ -61,31 +56,15 @@ void _init() {
     SET(p,   FORTH_TIB_ADDR);         /// * set 'TIB pointer
     SET(p+2, 10);                     /// * set BASE to 10
     SET(p+4, FORTH_DIC_ADDR);         /// * top of dictionary
-
-    IP = GET(FORTH_BOOT_ADDR);        ///> fetch cold boot vector
     ///
     /// display init prompt
     ///
     LOG("\n\n"); LOG(APP_NAME);
 }
-
-///
-///> serve interrupt routines
-///
-void _yield()                     ///> yield to interrupt service
-{
-	if (IR) return;               /// * still servcing interrupt
-
-    IR  = intr_service();         /// * check interrupts
-    if (IR) {                     /// * service interrupt?
-        RPUSH(IP | IRET_FLAG);    /// * flag return address as IRET
-        IP = IR;                  /// * skip opENTER
-    }
-}
 ///
 ///> console IO functions
 ///
-void _qrx()                  ///> ( -- c ) fetch a char from console
+inline void _qrx()           ///> ( -- c ) fetch a char from console
 {
     static char *p = (char*)_pre;
 #if ARDUINO
@@ -101,7 +80,7 @@ void _qrx()                  ///> ( -- c ) fetch a char from console
 #endif
 }
 
-void _txsto()                ///> (c -- ) send a char to console
+inline void _txsto()         ///> (c -- ) send a char to console
 {
 #if EXE_TRACE
     if (tCNT > 1) {
@@ -119,7 +98,7 @@ void _txsto()                ///> (c -- ) send a char to console
     POP();
 }
 ///@}
-void _ummod()               /// (udl udh u -- ur uq) unsigned double divided by a single
+inline void _ummod()        /// (udl udh u -- ur uq) unsigned double divided by a single
 {
     U32 d = (U32)top;       ///> CC: auto variable uses C stack
     U32 m = ((U32)*DS<<16) + (U16)*(DS-1);
@@ -128,7 +107,7 @@ void _ummod()               /// (udl udh u -- ur uq) unsigned double divided by 
     top   = (DU)(m / d);    ///> quotient
 }
 
-void _out(U16 p, U16 v)
+inline void _out(U16 p, U16 v)
 {
 #if ARDUINO
     switch (p & 0x300) {
@@ -201,34 +180,44 @@ int vm_pop() {
 /// eForth virtual machine outer interpreter (single-step) execution unit
 /// @return
 ///   0 - exit
-void vm_outer() {
+///
 #if COMPUTED_GOTO
-    /// Note:
-    ///   computed goto
-    ///      + overall ~3% faster, -80ms/100K, than token switch jump
-    ///      + but uses extra 180 bytes of RAM (avr-gcc failed to put vt in PROGMEM)
-    ///      + the 'continue' in _X() macro behaves as $NEXT
-    ///
-    #define OP(name)     &&L_##name
-    #define _X(n, code)  L_##n: { DEBUG("%s",#n); code; continue; }
-    #define DISPATCH(op) goto *vt[op];
-    #define opENTER      2              /** hardcoded for ENTER */
-    PROGMEM const void *vt[] = {        ///< computed label lookup table
-        OP(NOP),                        ///< opcode 0
-        OPCODES                         ///< convert opcodes to address of labels
-    };
+/// Note:
+///   computed goto
+///      + overall ~5% faster, -100ms/100K, than token switch jump
+///      + but uses extra 180 bytes of RAM (avr-gcc failed to put vt in PROGMEM)
+///      + the 'continue' in _X() macro behaves as $NEXT
+///
+  #define OP(name)     &&L_##name
+  #define VTABLE       const void *vt[] = { OP(NOP), OPCODES }
+  #define DISPATCH(op) goto *vt[op];
+  #define _X(n, code)  L_##n: { DEBUG("%s",#n); code; continue; }
+  #define opENTER      2                  /** hardcoded for ENTER */
 #else // !COMPUTED_GOTO
-    #define OP(name)     op##name
-    #define _X(n, code)  case op##n: { DEBUG("%s",#n); { code; } break; }
-    #define DISPATCH(op) switch(op)
-    enum {
-        OP(NOP) = 0,                    ///< opcodes start at 0
-        OPCODES
-    };
+  #define OP(name)     op##name
+  #define VTABLE       enum { OP(NOP) = 0, OPCODES }
+  #define DISPATCH(op) switch(op)
+  #define _X(n, code)  case op##n: { DEBUG("%s",#n); { code; } break; }
 #endif // COMPUTED_GOTO
-    
+
+void vm_outer() {
+    VTABLE;
+    IU IR = 0;                          ///< interrupt flag
+    IU IP = GET(FORTH_BOOT_ADDR);       ///< IP = cold boot vector
     while (1) {                         ///> Forth inner loop
-        _yield();                       /// * yield to interrupt services
+        ///
+        ///> serve interrupt routines
+        ///
+        if (!IR) {                      /// * still servcing interrupt
+            IR = intr_service();        /// * get interrupt vectors
+            if (IR) {                   /// * serve interrupt
+                RPUSH(IP | IRET_FLAG);  /// * push IRET address
+                IP = IR;                /// * skip opENTER
+            }
+        }
+        ///
+        ///> fetch primitive opcode or colon word address
+        ///
         U8 op = BGET(IP++);             /// * fetch next opcode
         if (op & fCOLON8) {             /// * COLON word?
             RPUSH(IP + 1);              /// * save return address
@@ -238,7 +227,7 @@ void vm_outer() {
             op = opENTER;               /// * doLIST a colon word
         }
         TRACE(op, IP, top, DEPTH());    /// * debug tracing
-
+        
         DISPATCH(op) {
         ///
         /// the following part is in assembly for most of Forth implementations

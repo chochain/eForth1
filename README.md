@@ -1,6 +1,6 @@
 # eForth1 - eForth for Arduino UNO
 
-**Dr. Chen-Hanson Ting**, the creator of **eForth** and one of the inspiring figures of Forth community, wrote:
+**Dr. Chen-Hanson Ting**, the name often associated with **eForth** and one of the inspiring figures of Forth community, wrote:
 >*In all these years, I have thought that the eForth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.*
 
 In 2011, Dr. Ting created <a href="https://chochain.github.io/eForth1/ref/328eForth.pdf" target="_blank">*328eForth*</a> to run Forth on Arduino UNO and wrote in his ceForth_33 document:

@@ -17,9 +17,9 @@
  * ### Data and Return Stack
  *
  * @code
- *            S                   R
- *            |                   |
- *    top -> [S0, S1, S2,..., R1, R0] <- rtop
+ *          S                   R
+ *          |                   |
+ *    T -> [S0, S1, S2,..., R1, R0] <- I
  * @endcode
  * Note: Dr. Ting uses U8 (0~255) for wrap-around control
  */
@@ -62,12 +62,12 @@ void SET(U16 d, U16 v) {
 ///
 /// push a value onto stack top
 ///
-#define DEPTH()  ((DU)((U8*)DS - RAM(FORTH_STACK_ADDR)) >> 1)
-#define PUSH(v)  { *++DS = top;  top  = (v); }
-#define RPUSH(v) { *--RS = rtop; rtop = (v); }
-#define POP()    (top  = *DS--)
-#define RPOP()   (rtop = *RS++)
-#define DTOP(d)  { *DS = (d)&0xffff; top = (d)>>16; }
+#define DEPTH()  ((DU)((U8*)S - RAM(FORTH_STACK_ADDR)) >> 1)
+#define PUSH(v)  { *++S = T; T = (v); }
+#define RPUSH(v) { *--R = I; I = (v); }
+#define POP()    (T = *S--)
+#define RPOP()   (I = *R++)
+#define DTOP(d)  { *S = (d)&0xffff; T = (d)>>16; }
 
 ///
 ///@name Tracing
@@ -89,7 +89,7 @@ int constexpr opEXEC  = 8;
     LOG("\n");                            \
     for (int i=0; i<tTAB; i++) LOG("  "); \
 }
-void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
+void TRACE(U8 op, U16 ip, U16 top, S16 s)
 {
     if (!tCNT) return;                       /// * skip if not tracing or end of program
     // indent call depth
@@ -98,8 +98,8 @@ void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
     	tTAB++;
     }
     // display IP:W[opcode]
-    LOG_H(" ", ip - 1);                      /// * mem pointer
-    LOG_H(":", w);                           /// * return addr
+    U16 w = ip - 1;
+    LOG_H(" ", w);                           /// * mem pointer
 	LOG_H("[", op); LOG("]");                /// * opcode to be executed
     // dump stack
     for (int i=0; i<s; i++) {
@@ -125,8 +125,8 @@ void TRACE(U8 op, U16 ip, U16 w, U16 top, S16 s)
 #else
     
 #define DEBUG(s,v)
-#define TAB()                   /* skip */
-#define TRACE(op, ip, w, t, s)  /* skip */
+#define TAB()                /* skip */
+#define TRACE(op, ip, t, s)  /* skip */
     
 #endif // EXE_TRACE
 ///@}

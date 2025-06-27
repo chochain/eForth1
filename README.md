@@ -1,6 +1,6 @@
 # eForth1 - eForth for Arduino UNO
 
-**Dr. Chen-Hanson Ting**, the creator of **eForth** and one of the inspiring figures of Forth community, wrote:
+**Dr. Chen-Hanson Ting**, the name often associated with **eForth** and one of the inspiring figures of Forth community, wrote:
 >*In all these years, I have thought that the eForth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.*
 
 In 2011, Dr. Ting created <a href="https://chochain.github.io/eForth1/ref/328eForth.pdf" target="_blank">*328eForth*</a> to run Forth on Arduino UNO and wrote in his ceForth_33 document:
@@ -106,7 +106,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
 
   * Bluetooth (HC-05) communication. Demo code in ~/examples/9_bluetooth
   * WiFi (nRF24L01s) communication. Demo code in ~/examples/11_rf
-    <img src="https://chochain.github.io/eForth1/images/eforth1_rf_comm.jpg" width=600>
+    <img src="https://chochain.github.io/eForth1/images/eforth1_rf_comm.jpg" width=400>
     
 ### Benchmark
   * Classic 1 million cycles
@@ -114,7 +114,7 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > : inner 999 FOR 34 DROP NEXT ;⏎          \ inner loop (put 34 on stack then drop it)
     > : outer 999 FOR inner NEXT ;⏎            \ create the outer loop
     > : bench CLOCK DNEGATE outer CLOCK D+ ;⏎  \ CLOCK returns a double value
-    > zz⏎                                      \ benchmark the 1000x1000 cycles
+    > bench⏎                                   \ benchmark the 1000x1000 cycles
     > 25492 0 ok>                              \ 25492ms =~ 25.5us/cycle (with one blinking ISR running in the background)
     </pre>
 

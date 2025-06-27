@@ -31,7 +31,7 @@ int assemble(U8 *rom)
     ///> ROM starting address
     ///
     PC = FORTH_BOOT_ADDR;
-    IU BOOT  = _LABEL(0xfeed);           /// reserved for COLD boot vector
+    IU BOOT  = _LABEL(0xfeed);     ///< reserved for COLD boot vector
     ///
     ///> Kernel dictionary (primitive words)
     ///
@@ -247,9 +247,9 @@ int assemble(U8 *rom)
         _NEXT(DROP, EXIT);
     }
     IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);               // LF i.e. \n actually
-    IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, EXIT);
+    IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, COUNT, EXIT);
     IU STRQP = _COLON("$\"|", DOSTR, EXIT);
-       DOTQP = _COLON(".\"|", DOSTR, COUNT, TYPE, EXIT);                       // Note: DOTQP export to _dotq
+       DOTQP = _COLON(".\"|", DOSTR, TYPE, EXIT);                       // Note: DOTQP export to _dotq
     IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);  // shown as string
     IU UDOTR = _COLON("U.R",  TOR, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);
     IU UDOT  = _COLON("U.",   BDIGS, DIGS, EDIGS, SPACE, TYPE, EXIT);
@@ -451,7 +451,7 @@ int assemble(U8 *rom)
             _ELSE(DUP, DUP, DOLIT, FORTH_ROM_SZ, LT, // a primitive?
                   SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {  // XX08 <= this might break
                 _IF(CAT, CCMMA);                     // append just the opcode
-                _ELSE(DOLIT, fCOLON, OR, COMMA);     // append colon word address with flag
+                _ELSE(DOLIT, fCOLON16, OR, COMMA);   // append colon word address with flag
                 _THEN(NOP);
             }
             _THEN(EXIT);
@@ -526,7 +526,7 @@ int assemble(U8 *rom)
     ///> display address with colon delimiter ( a -- )
     IU DOTAD = _COLON(".ADDR", CR, DUP, DOT, DOLIT, 0x3a, EMIT, EXIT);
     ///> display opcode at given address ( a0 op -- a1 )
-    IU DOTOP = _COLON(".OP", DUP, DOLIT, 0x80, AND); {         // check primitive flag?
+    IU DOTOP = _COLON(".OP", DUP, DOLIT, fCOLON8, AND); {      // check primitive flag?
         /* poorman's CASE */
         _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND, DUP,            // colon word - show name
             SPACE, TNAME, COUNT, TYPE, DUP,
@@ -605,8 +605,8 @@ int assemble(U8 *rom)
     ///
     IU STRCQ  = _COLON("$,\"", DOLIT, 0x22, WORD,       // find quote in TIB (0x22 is " in ASCII)
                     COUNT, ADD, vCP, STORE, EXIT);      // advance dic pointer
-    _IMMED("$\"",   DOLIT, STRQP | fCOLON, HERE, STORE, STRCQ, EXIT);
-    _IMMED(".\"",   DOLIT, DOTQP | fCOLON, HERE, STORE, STRCQ, EXIT);
+    _IMMED("$\"",   DOLIT, STRQP | fCOLON16, HERE, STORE, STRCQ, EXIT);
+    _IMMED(".\"",   DOLIT, DOTQP | fCOLON16, HERE, STORE, STRCQ, EXIT);
     ///
     ///> Defining Words - variable, constant, and comments
     ///

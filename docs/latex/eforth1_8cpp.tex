@@ -3,21 +3,13 @@
 {\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}e\+Forth1.\+h\char`\"{}}\newline
 {\ttfamily \#include $<$E\+E\+P\+R\+O\+M.\+h$>$}\newline
-Include dependency graph for eforth1.\+cpp\+:
-\nopagebreak
+Include dependency graph for eforth1.\+cpp\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{eforth1_8cpp__incl}
 \end{center}
 \end{figure}
-\doxysubsection*{Macros}
-\begin{DoxyCompactItemize}
-\item 
-\#define \mbox{\hyperlink{eforth1_8cpp_a8c15257f5a5277bb64afcbe594bea146}{G\+ET}}(d)~($\ast$(\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&ram\mbox{[}d\mbox{]})
-\item 
-\#define \mbox{\hyperlink{eforth1_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}{S\+ET}}(d,  v)~($\ast$(\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&ram\mbox{[}d\mbox{]} = (v))
-\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -46,25 +38,6 @@ static Stream $\ast$ \mbox{\hyperlink{eforth1_8cpp_a701d8d7ac1f23c7b361d62e89c06
 \end{DoxyCompactItemize}
 
 
-\doxysubsection{Macro Definition Documentation}
-\mbox{\Hypertarget{eforth1_8cpp_a8c15257f5a5277bb64afcbe594bea146}\label{eforth1_8cpp_a8c15257f5a5277bb64afcbe594bea146}} 
-\index{eforth1.cpp@{eforth1.cpp}!GET@{GET}}
-\index{GET@{GET}!eforth1.cpp@{eforth1.cpp}}
-\doxysubsubsection{\texorpdfstring{GET}{GET}}
-{\footnotesize\ttfamily \#define G\+ET(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~($\ast$(\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&ram\mbox{[}d\mbox{]})}
-
-\begin{quote}
-E\+E\+P\+R\+OM interface \end{quote}
-\begin{quote}
-E\+E\+P\+R\+OM Save/\+Load \end{quote}
-\mbox{\Hypertarget{eforth1_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}\label{eforth1_8cpp_ac90aeca39f45fc56ac96c675d18a7e78}} 
-\index{eforth1.cpp@{eforth1.cpp}!SET@{SET}}
-\index{SET@{SET}!eforth1.cpp@{eforth1.cpp}}
-\doxysubsubsection{\texorpdfstring{SET}{SET}}
-{\footnotesize\ttfamily \#define S\+ET(\begin{DoxyParamCaption}\item[{}]{d,  }\item[{}]{v }\end{DoxyParamCaption})~($\ast$(\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}}$\ast$)\&ram\mbox{[}d\mbox{]} = (v))}
-
-
-
 \doxysubsection{Function Documentation}
 \mbox{\Hypertarget{eforth1_8cpp_aad641047965521b86d4e35831b922760}\label{eforth1_8cpp_aad641047965521b86d4e35831b922760}} 
 \index{eforth1.cpp@{eforth1.cpp}!\_stat@{\_stat}}
@@ -88,6 +61,14 @@ $<$ end of heap\mbox{\Hypertarget{eforth1_8cpp_a109acb528bfa0dfdd5b63f39f4a66702
 
 save user variables and dictionary to E\+E\+P\+R\+OM 
 
+\begin{quote}
+E\+E\+P\+R\+OM interface \end{quote}
+\begin{quote}
+E\+E\+P\+R\+OM Save/\+Load \end{quote}
+$<$ pointer to v\+CP (i.\+e. H\+E\+RE)
+
+$<$ uvar + colon words
+
 
 \begin{DoxyItemize}
 \item store dictionary byte-\/by-\/byte
@@ -105,10 +86,8 @@ $<$ CP addr in E\+E\+P\+R\+OM (aka H\+E\+RE)
 
 
 \begin{DoxyItemize}
-\item $>$IN (buffer pointer)
-\item keep v\+IN, v\+N\+T\+IB
+\item prevent garbage in E\+E\+P\+R\+OM
 \item retrieve dictionary byte-\/by-\/byte
-\item restore v\+IN, v\+N\+T\+IB
 \end{DoxyItemize}\mbox{\Hypertarget{eforth1_8cpp_a59f97abd902440824c60452e68eb390c}\label{eforth1_8cpp_a59f97abd902440824c60452e68eb390c}} 
 \index{eforth1.cpp@{eforth1.cpp}!ef\_setup@{ef\_setup}}
 \index{ef\_setup@{ef\_setup}!eforth1.cpp@{eforth1.cpp}}

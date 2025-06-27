@@ -10,16 +10,14 @@ e\+Forth configurations and opcode list
 {\ttfamily \#include $<$stdarg.\+h$>$}\newline
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$time.\+h$>$}\newline
-Include dependency graph for eforth\+\_\+config.\+h\+:
-\nopagebreak
+Include dependency graph for eforth\+\_\+config.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{eforth__config_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -93,7 +91,9 @@ logic and stack op macros (processor dependent)
 \begin{Indent}\textbf{ VM operational flags}\par
 \begin{DoxyCompactItemize}
 \item 
-\#define \mbox{\hyperlink{eforth__config_8h_a7f47e1f84ff391a5ef46f3f721697665}{f\+C\+O\+L\+ON}}~0x8000
+\#define \mbox{\hyperlink{eforth__config_8h_add3507429bdd153b6129f249934bdd7a}{f\+C\+O\+L\+O\+N16}}~0x8000
+\item 
+\#define \mbox{\hyperlink{eforth__config_8h_a9a5f8e274eeacd58df9878327678bfd0}{f\+C\+O\+L\+O\+N8}}~0x80
 \end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsection*{Typedefs}
@@ -255,13 +255,20 @@ total R\+AM allocated ~\newline
 \doxysubsubsection{\texorpdfstring{FALSE}{FALSE}}
 {\footnotesize\ttfamily \#define F\+A\+L\+SE~0}
 
-\mbox{\Hypertarget{eforth__config_8h_a7f47e1f84ff391a5ef46f3f721697665}\label{eforth__config_8h_a7f47e1f84ff391a5ef46f3f721697665}} 
-\index{eforth\_config.h@{eforth\_config.h}!fCOLON@{fCOLON}}
-\index{fCOLON@{fCOLON}!eforth\_config.h@{eforth\_config.h}}
-\doxysubsubsection{\texorpdfstring{fCOLON}{fCOLON}}
-{\footnotesize\ttfamily \#define f\+C\+O\+L\+ON~0x8000}
+\mbox{\Hypertarget{eforth__config_8h_add3507429bdd153b6129f249934bdd7a}\label{eforth__config_8h_add3507429bdd153b6129f249934bdd7a}} 
+\index{eforth\_config.h@{eforth\_config.h}!fCOLON16@{fCOLON16}}
+\index{fCOLON16@{fCOLON16}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{fCOLON16}{fCOLON16}}
+{\footnotesize\ttfamily \#define f\+C\+O\+L\+O\+N16~0x8000}
 
-flag a colon word \mbox{\Hypertarget{eforth__config_8h_a9d8d8ad7c0601f1313a9d026757f019a}\label{eforth__config_8h_a9d8d8ad7c0601f1313a9d026757f019a}} 
+16-\/bit flag, colon word \mbox{\Hypertarget{eforth__config_8h_a9a5f8e274eeacd58df9878327678bfd0}\label{eforth__config_8h_a9a5f8e274eeacd58df9878327678bfd0}} 
+\index{eforth\_config.h@{eforth\_config.h}!fCOLON8@{fCOLON8}}
+\index{fCOLON8@{fCOLON8}!eforth\_config.h@{eforth\_config.h}}
+\doxysubsubsection{\texorpdfstring{fCOLON8}{fCOLON8}}
+{\footnotesize\ttfamily \#define f\+C\+O\+L\+O\+N8~0x80}
+
+8-\/bit flag (high-\/byte) ~\newline
+ \mbox{\Hypertarget{eforth__config_8h_a9d8d8ad7c0601f1313a9d026757f019a}\label{eforth__config_8h_a9d8d8ad7c0601f1313a9d026757f019a}} 
 \index{eforth\_config.h@{eforth\_config.h}!OPCODES@{OPCODES}}
 \index{OPCODES@{OPCODES}!eforth\_config.h@{eforth\_config.h}}
 \doxysubsubsection{\texorpdfstring{OPCODES}{OPCODES}}

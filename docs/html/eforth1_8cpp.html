@@ -83,7 +83,6 @@ $(document).ready(function(){initNavTree('eforth1_8cpp.html',''); initResizable(
 
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -113,13 +112,6 @@ Include dependency graph for eforth1.cpp:</div>
 </map>
 </div>
 </div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a8c15257f5a5277bb64afcbe594bea146"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a8c15257f5a5277bb64afcbe594bea146">GET</a>(d)&#160;&#160;&#160;(*(<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;ram[d])</td></tr>
-<tr class="separator:a8c15257f5a5277bb64afcbe594bea146"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78">SET</a>(d,  v)&#160;&#160;&#160;(*(<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;ram[d] = (v))</td></tr>
-<tr class="separator:ac90aeca39f45fc56ac96c675d18a7e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aad641047965521b86d4e35831b922760"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#aad641047965521b86d4e35831b922760">_stat</a> (<a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *ram, int sz, Stream *<a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a>)</td></tr>
@@ -150,59 +142,6 @@ Variables</h2></td></tr>
 <tr class="memitem:a701d8d7ac1f23c7b361d62e89c06399b"><td class="memItemLeft" align="right" valign="top">static Stream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth1_8cpp.html#a701d8d7ac1f23c7b361d62e89c06399b">io</a></td></tr>
 <tr class="separator:a701d8d7ac1f23c7b361d62e89c06399b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a8c15257f5a5277bb64afcbe594bea146"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c15257f5a5277bb64afcbe594bea146">&#9670;&nbsp;</a></span>GET</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define GET</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">d</td><td>)</td>
-          <td>&#160;&#160;&#160;(*(<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;ram[d])</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<blockquote class="doxtable">
-<p>EEPROM interface </p>
-</blockquote>
-<blockquote class="doxtable">
-<p>EEPROM Save/Load </p>
-</blockquote>
-
-</div>
-</div>
-<a id="ac90aeca39f45fc56ac96c675d18a7e78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac90aeca39f45fc56ac96c675d18a7e78">&#9670;&nbsp;</a></span>SET</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define SET</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">d, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">v&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(*(<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>*)&amp;ram[d] = (v))</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="aad641047965521b86d4e35831b922760"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad641047965521b86d4e35831b922760">&#9670;&nbsp;</a></span>_stat()</h2>
@@ -261,6 +200,14 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>save user variables and dictionary to EEPROM </p>
+<blockquote class="doxtable">
+<p>EEPROM interface </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>EEPROM Save/Load </p>
+</blockquote>
+<p>&lt; pointer to vCP (i.e. HERE)</p>
+<p>&lt; uvar + colon words</p>
 <ul>
 <li>store dictionary byte-by-byte</li>
 </ul>
@@ -286,10 +233,8 @@ Variables</h2></td></tr>
 <p>load user variables and dictionary from EEPROM </p>
 <p>&lt; CP addr in EEPROM (aka HERE)</p>
 <ul>
-<li>&gt;IN (buffer pointer)</li>
-<li>keep vIN, vNTIB</li>
+<li>prevent garbage in EEPROM</li>
 <li>retrieve dictionary byte-by-byte</li>
-<li>restore vIN, vNTIB</li>
 </ul>
 
 </div>

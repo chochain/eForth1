@@ -144,25 +144,25 @@ Macros</h2></td></tr>
 <tr class="separator:a77270f01b515a878ec2853760cb20dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35a26ccdccc5949a9553ce8547b3814c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a35a26ccdccc5949a9553ce8547b3814c">S2D</a>(h,  l)&#160;&#160;&#160;(((<a class="el" href="eforth__config_8h.html#a39c786017723555afb9e8b85accec0de">S32</a>)(h)&lt;&lt;16) | ((l)&amp;0xffff))</td></tr>
 <tr class="separator:a35a26ccdccc5949a9553ce8547b3814c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a074e5eb53ba2a83312746e4a74a3c091"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a074e5eb53ba2a83312746e4a74a3c091">DEPTH</a>()&#160;&#160;&#160;((<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>)((<a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)DS - <a class="el" href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(<a class="el" href="eforth__config_8h.html#af278ea3f0013fa26db155c0945bcb9d2">FORTH_STACK_ADDR</a>)) &gt;&gt; 1)</td></tr>
+<tr class="memitem:a074e5eb53ba2a83312746e4a74a3c091"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a074e5eb53ba2a83312746e4a74a3c091">DEPTH</a>()&#160;&#160;&#160;((<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>)((<a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)S - <a class="el" href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(<a class="el" href="eforth__config_8h.html#af278ea3f0013fa26db155c0945bcb9d2">FORTH_STACK_ADDR</a>)) &gt;&gt; 1)</td></tr>
 <tr class="separator:a074e5eb53ba2a83312746e4a74a3c091"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5e48aa480f649754b62299ee5cbc35a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#af5e48aa480f649754b62299ee5cbc35a">PUSH</a>(v)&#160;&#160;&#160;{ *++DS = top;  top  = (v); }</td></tr>
+<tr class="memitem:af5e48aa480f649754b62299ee5cbc35a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#af5e48aa480f649754b62299ee5cbc35a">PUSH</a>(v)&#160;&#160;&#160;{ *++S = T; T = (v); }</td></tr>
 <tr class="separator:af5e48aa480f649754b62299ee5cbc35a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26fbeab0e94b30a69cd049aef73acbbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a26fbeab0e94b30a69cd049aef73acbbd">RPUSH</a>(v)&#160;&#160;&#160;{ *--RS = rtop; rtop = (v); }</td></tr>
+<tr class="memitem:a26fbeab0e94b30a69cd049aef73acbbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a26fbeab0e94b30a69cd049aef73acbbd">RPUSH</a>(v)&#160;&#160;&#160;{ *--<a class="el" href="group__Assembler.html#ga0c9180f85bdd5d780671eda881105c18">R</a> = I; I = (v); }</td></tr>
 <tr class="separator:a26fbeab0e94b30a69cd049aef73acbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2106695e949772f765546777ef34690e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a2106695e949772f765546777ef34690e">POP</a>()&#160;&#160;&#160;(top  = *DS--)</td></tr>
+<tr class="memitem:a2106695e949772f765546777ef34690e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a2106695e949772f765546777ef34690e">POP</a>()&#160;&#160;&#160;(T = *S--)</td></tr>
 <tr class="separator:a2106695e949772f765546777ef34690e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55b5173e6face979deb7372dcbb643df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a55b5173e6face979deb7372dcbb643df">RPOP</a>()&#160;&#160;&#160;(rtop = *RS++)</td></tr>
+<tr class="memitem:a55b5173e6face979deb7372dcbb643df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a55b5173e6face979deb7372dcbb643df">RPOP</a>()&#160;&#160;&#160;(I = *<a class="el" href="group__Assembler.html#ga0c9180f85bdd5d780671eda881105c18">R</a>++)</td></tr>
 <tr class="separator:a55b5173e6face979deb7372dcbb643df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a0ab46d7e9f1c39675adabb666df35d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a2a0ab46d7e9f1c39675adabb666df35d">DTOP</a>(d)&#160;&#160;&#160;{ *DS = (d)&amp;0xffff; top = (d)&gt;&gt;16; }</td></tr>
+<tr class="memitem:a2a0ab46d7e9f1c39675adabb666df35d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a2a0ab46d7e9f1c39675adabb666df35d">DTOP</a>(d)&#160;&#160;&#160;{ *S = (d)&amp;0xffff; T = (d)&gt;&gt;16; }</td></tr>
 <tr class="separator:a2a0ab46d7e9f1c39675adabb666df35d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Tracing</div></td></tr>
 <tr class="memitem:a3254550e1d6d185f6b3e69b2d6468343"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a3254550e1d6d185f6b3e69b2d6468343">DEBUG</a>(s,  v)</td></tr>
 <tr class="separator:a3254550e1d6d185f6b3e69b2d6468343"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2e226689a02d2b5f1256e7e98f03cf5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#ad2e226689a02d2b5f1256e7e98f03cf5">TAB</a>()&#160;&#160;&#160;/* skip */</td></tr>
 <tr class="separator:ad2e226689a02d2b5f1256e7e98f03cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b97e4d442d7cdaa77140c8d272ad4fa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a9b97e4d442d7cdaa77140c8d272ad4fa">TRACE</a>(op,  ip,  w,  t,  s)&#160;&#160;&#160;/* skip */</td></tr>
-<tr class="separator:a9b97e4d442d7cdaa77140c8d272ad4fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c8a1f84c94c2c9b68d99323967ac670"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__vm_8h.html#a3c8a1f84c94c2c9b68d99323967ac670">TRACE</a>(op,  ip,  t,  s)&#160;&#160;&#160;/* skip */</td></tr>
+<tr class="separator:a3c8a1f84c94c2c9b68d99323967ac670"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -184,9 +184,9 @@ Functions</h2></td></tr>
 <div class="line">    0x2480-0x24ff TIB (Terminal Input Buffer)</div>
 <div class="line">    0x2500        heap</div>
 </div><!-- fragment --><h3>Data and Return Stack</h3>
-<div class="fragment"><div class="line">        S                   <a class="code" href="group__Assembler.html#ga0c9180f85bdd5d780671eda881105c18">R</a></div>
-<div class="line">        |                   |</div>
-<div class="line"><a class="code" href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">top</a> -&gt; [S0, S1, S2,..., R1, R0] &lt;- <a class="code" href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">rtop</a></div>
+<div class="fragment"><div class="line">      <a class="code" href="namespaceEfVM.html#aaae459c4ea0977eed9159647babad85a">S</a>                   <a class="code" href="group__Assembler.html#ga0c9180f85bdd5d780671eda881105c18">R</a></div>
+<div class="line">      |                   |</div>
+<div class="line"><a class="code" href="namespaceEfVM.html#af1fd17a6ce9c9ccef3606ee4d593bb24">T</a> -&gt; [S0, S1, S2,..., R1, R0] &lt;- <a class="code" href="namespaceEfVM.html#ad5031c4bc95da9acf1b25f701c29a897">I</a></div>
 </div><!-- fragment --><p> Note: Dr. Ting uses U8 (0~255) for wrap-around control </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ad572a768450b0c645d096d7e830c25cc"></a>
@@ -337,7 +337,7 @@ Functions</h2></td></tr>
           <td class="memname">#define DEPTH</td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;((<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>)((<a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)DS - <a class="el" href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(<a class="el" href="eforth__config_8h.html#af278ea3f0013fa26db155c0945bcb9d2">FORTH_STACK_ADDR</a>)) &gt;&gt; 1)</td>
+          <td>&#160;&#160;&#160;((<a class="el" href="eforth__config_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a">DU</a>)((<a class="el" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)S - <a class="el" href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a>(<a class="el" href="eforth__config_8h.html#af278ea3f0013fa26db155c0945bcb9d2">FORTH_STACK_ADDR</a>)) &gt;&gt; 1)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -356,7 +356,7 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">v</td><td>)</td>
-          <td>&#160;&#160;&#160;{ *++DS = top;  top  = (v); }</td>
+          <td>&#160;&#160;&#160;{ *++S = T; T = (v); }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -374,7 +374,7 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">v</td><td>)</td>
-          <td>&#160;&#160;&#160;{ *--RS = rtop; rtop = (v); }</td>
+          <td>&#160;&#160;&#160;{ *--<a class="el" href="group__Assembler.html#ga0c9180f85bdd5d780671eda881105c18">R</a> = I; I = (v); }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -391,7 +391,7 @@ Functions</h2></td></tr>
           <td class="memname">#define POP</td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;(top  = *DS--)</td>
+          <td>&#160;&#160;&#160;(T = *S--)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -408,7 +408,7 @@ Functions</h2></td></tr>
           <td class="memname">#define RPOP</td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;(rtop = *RS++)</td>
+          <td>&#160;&#160;&#160;(I = *<a class="el" href="group__Assembler.html#ga0c9180f85bdd5d780671eda881105c18">R</a>++)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -426,7 +426,7 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">d</td><td>)</td>
-          <td>&#160;&#160;&#160;{ *DS = (d)&amp;0xffff; top = (d)&gt;&gt;16; }</td>
+          <td>&#160;&#160;&#160;{ *S = (d)&amp;0xffff; T = (d)&gt;&gt;16; }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -478,8 +478,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9b97e4d442d7cdaa77140c8d272ad4fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b97e4d442d7cdaa77140c8d272ad4fa">&#9670;&nbsp;</a></span>TRACE</h2>
+<a id="a3c8a1f84c94c2c9b68d99323967ac670"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c8a1f84c94c2c9b68d99323967ac670">&#9670;&nbsp;</a></span>TRACE</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -495,12 +495,6 @@ Functions</h2></td></tr>
           <td></td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">ip, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">w, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -526,10 +520,11 @@ Functions</h2></td></tr>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespaceEfVM_html_a0d508bfbdbd7a09dcd56a24e3b6cb169"><div class="ttname"><a href="namespaceEfVM.html#a0d508bfbdbd7a09dcd56a24e3b6cb169">EfVM::top</a></div><div class="ttdeci">DU top</div><div class="ttdoc">ALU (i.e. cached top of stack value)</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:20</div></div>
+<div class="ttc" id="anamespaceEfVM_html_aaae459c4ea0977eed9159647babad85a"><div class="ttname"><a href="namespaceEfVM.html#aaae459c4ea0977eed9159647babad85a">EfVM::S</a></div><div class="ttdeci">DU * S</div><div class="ttdoc">data stack pointer, 'stack' in Dr. Ting's</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:17</div></div>
+<div class="ttc" id="anamespaceEfVM_html_ad5031c4bc95da9acf1b25f701c29a897"><div class="ttname"><a href="namespaceEfVM.html#ad5031c4bc95da9acf1b25f701c29a897">EfVM::I</a></div><div class="ttdeci">DU I</div><div class="ttdoc">RTOS, cached loop counter on return stack.</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:20</div></div>
 <div class="ttc" id="aeforth__vm_8h_html_aaf6b91711b3d8b68c942eccd99b9d19e"><div class="ttname"><a href="eforth__vm_8h.html#aaf6b91711b3d8b68c942eccd99b9d19e">RAM</a></div><div class="ttdeci">#define RAM(i)</div><div class="ttdef"><b>Definition:</b> eforth_vm.h:41</div></div>
 <div class="ttc" id="agroup__Assembler_html_ga0c9180f85bdd5d780671eda881105c18"><div class="ttname"><a href="group__Assembler.html#ga0c9180f85bdd5d780671eda881105c18">R</a></div><div class="ttdeci">U8 R</div><div class="ttdoc">assembler return stack index</div><div class="ttdef"><b>Definition:</b> eforth_asm.c:15</div></div>
-<div class="ttc" id="anamespaceEfVM_html_a61aea862ab3bab556736663c844366c7"><div class="ttname"><a href="namespaceEfVM.html#a61aea862ab3bab556736663c844366c7">EfVM::rtop</a></div><div class="ttdeci">DU rtop</div><div class="ttdoc">cached loop counter on return stack</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:21</div></div>
+<div class="ttc" id="anamespaceEfVM_html_af1fd17a6ce9c9ccef3606ee4d593bb24"><div class="ttname"><a href="namespaceEfVM.html#af1fd17a6ce9c9ccef3606ee4d593bb24">EfVM::T</a></div><div class="ttdeci">DU T</div><div class="ttdoc">TOS, cached top of stack value.</div><div class="ttdef"><b>Definition:</b> eforth_vm.cpp:19</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

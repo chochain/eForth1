@@ -15,7 +15,7 @@ var eforth__vm_8h =
     [ "DTOP", "eforth__vm_8h.html#a2a0ab46d7e9f1c39675adabb666df35d", null ],
     [ "DEBUG", "eforth__vm_8h.html#a3254550e1d6d185f6b3e69b2d6468343", null ],
     [ "TAB", "eforth__vm_8h.html#ad2e226689a02d2b5f1256e7e98f03cf5", null ],
-    [ "TRACE", "eforth__vm_8h.html#a9b97e4d442d7cdaa77140c8d272ad4fa", null ],
+    [ "TRACE", "eforth__vm_8h.html#a3c8a1f84c94c2c9b68d99323967ac670", null ],
     [ "BGET", "eforth__vm_8h.html#ab9cd2e7aef4c537d97137dafd02518ae", null ],
     [ "GET", "eforth__vm_8h.html#a07e74ced8251d26cd20bce5a2c386d7a", null ],
     [ "SET", "eforth__vm_8h.html#a6704f4eed222b21f8754d5c4711c1a15", null ]

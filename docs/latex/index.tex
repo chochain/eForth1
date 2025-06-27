@@ -1,4 +1,4 @@
-{\bfseries{Dr. Chen-\/\+Hanson Ting}}, the creator of {\bfseries{e\+Forth}} and one of the inspiring figures of Forth community, wrote\+: $>$$\ast$\+In all these years, I have thought that the e\+Forth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.$\ast$
+{\bfseries{Dr. Chen-\/\+Hanson Ting}}, the name often associated with {\bfseries{e\+Forth}} and one of the inspiring figures of Forth community, wrote\+: $>$$\ast$\+In all these years, I have thought that the e\+Forth Model is a good model useful for all different processors and microcontrollers, and for all different applications. It is a very simple model for anybody who like to learn Forth and to use it for their own applications.$\ast$
 
 In 2011, Dr. Ting created \href{https://chochain.github.io/eForth1/ref/328eForth.pdf}{\texttt{ $\ast$328e\+Forth$\ast$}} to run Forth on Arduino U\+NO and wrote in his ce\+Forth\+\_\+33 document\+: \begin{quote}
 {\itshape I was attracted to Arduino Uno Kit and ported e\+Forth to it as 328e\+Forth...writing to flash memory, I had to take over the bootload section which was monopolized by Arduino I\+DE...I extended Forth dictionary in the R\+AM memory. It worked. ...., it was only a teaser to entice new people to try Forth on Arduino Uno.} \end{quote}
@@ -164,7 +164,7 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
     > : inner 999 FOR 34 DROP NEXT ;⏎          \textbackslash{} inner loop (put 34 on stack then drop it)
     > : outer 999 FOR inner NEXT ;⏎            \textbackslash{} create the outer loop
     > : bench CLOCK DNEGATE outer CLOCK D+ ;⏎  \textbackslash{} CLOCK returns a double value
-    > zz⏎                                      \textbackslash{} benchmark the 1000x1000 cycles
+    > bench⏎                                   \textbackslash{} benchmark the 1000x1000 cycles
     > 25492 0 ok>                              \textbackslash{} 25492ms =\string~ 25.5us/cycle (with one blinking ISR running in the background)
     \end{DoxyPre}
 

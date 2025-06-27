@@ -8,16 +8,14 @@ e\+Forth prototype and interface
 {\ttfamily \#include \char`\"{}eforth\+\_\+config.\+h\char`\"{}}\newline
 {\ttfamily \#include $<$Arduino.\+h$>$}\newline
 {\ttfamily \#include $<$avr/pgmspace.\+h$>$}\newline
-Include dependency graph for eforth\+\_\+core.\+h\+:
-\nopagebreak
+Include dependency graph for eforth\+\_\+core.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{eforth__core_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -104,7 +102,7 @@ VM execution tracing flag \mbox{\Hypertarget{eforth__core_8h_ac46612a75487757fdf
 \doxysubsubsection{\texorpdfstring{COMPUTED\_GOTO}{COMPUTED\_GOTO}}
 {\footnotesize\ttfamily \#define C\+O\+M\+P\+U\+T\+E\+D\+\_\+\+G\+O\+TO~0}
 
-dispatcher ($\sim$3\% faster, +180 bytes R\+AM) \mbox{\Hypertarget{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}\label{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}} 
+dispatcher ($\sim$5\% faster, +180 bytes R\+AM) \mbox{\Hypertarget{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}\label{eforth__core_8h_a570713ca4a493fc4d2130a405f3b87ea}} 
 \index{eforth\_core.h@{eforth\_core.h}!LOG@{LOG}}
 \index{LOG@{LOG}!eforth\_core.h@{eforth\_core.h}}
 \doxysubsubsection{\texorpdfstring{LOG}{LOG}}
@@ -252,6 +250,14 @@ Forth outer interpreter.
 
 save user variables and dictionary to E\+E\+P\+R\+OM 
 
+\begin{quote}
+E\+E\+P\+R\+OM interface \end{quote}
+\begin{quote}
+E\+E\+P\+R\+OM Save/\+Load \end{quote}
+$<$ pointer to v\+CP (i.\+e. H\+E\+RE)
+
+$<$ uvar + colon words
+
 
 \begin{DoxyItemize}
 \item store dictionary byte-\/by-\/byte
@@ -269,8 +275,6 @@ $<$ CP addr in E\+E\+P\+R\+OM (aka H\+E\+RE)
 
 
 \begin{DoxyItemize}
-\item $>$IN (buffer pointer)
-\item keep v\+IN, v\+N\+T\+IB
+\item prevent garbage in E\+E\+P\+R\+OM
 \item retrieve dictionary byte-\/by-\/byte
-\item restore v\+IN, v\+N\+T\+IB
 \end{DoxyItemize}

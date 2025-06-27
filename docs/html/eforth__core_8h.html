@@ -206,7 +206,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>dispatcher (~3% faster, +180 bytes RAM) </p>
+<p>dispatcher (~5% faster, +180 bytes RAM) </p>
 
 </div>
 </div>
@@ -602,6 +602,14 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>save user variables and dictionary to EEPROM </p>
+<blockquote class="doxtable">
+<p>EEPROM interface </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>EEPROM Save/Load </p>
+</blockquote>
+<p>&lt; pointer to vCP (i.e. HERE)</p>
+<p>&lt; uvar + colon words</p>
 <ul>
 <li>store dictionary byte-by-byte</li>
 </ul>
@@ -627,10 +635,8 @@ Functions</h2></td></tr>
 <p>load user variables and dictionary from EEPROM </p>
 <p>&lt; CP addr in EEPROM (aka HERE)</p>
 <ul>
-<li>&gt;IN (buffer pointer)</li>
-<li>keep vIN, vNTIB</li>
+<li>prevent garbage in EEPROM</li>
 <li>retrieve dictionary byte-by-byte</li>
-<li>restore vIN, vNTIB</li>
 </ul>
 
 </div>

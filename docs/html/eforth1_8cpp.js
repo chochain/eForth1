@@ -1,7 +1,5 @@
 var eforth1_8cpp =
 [
-    [ "GET", "eforth1_8cpp.html#a8c15257f5a5277bb64afcbe594bea146", null ],
-    [ "SET", "eforth1_8cpp.html#ac90aeca39f45fc56ac96c675d18a7e78", null ],
     [ "_stat", "eforth1_8cpp.html#aad641047965521b86d4e35831b922760", null ],
     [ "ef_save", "eforth1_8cpp.html#a109acb528bfa0dfdd5b63f39f4a66702", null ],
     [ "ef_load", "eforth1_8cpp.html#a60c4be2ec5406c9cf0ff6885f9bc116f", null ],

@@ -184,8 +184,10 @@ Macros</h2></td></tr>
 <tr class="memitem:aa93f0eb578d23995850d61f7d61c55c1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__config_8h.html#aa93f0eb578d23995850d61f7d61c55c1">FALSE</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:aa93f0eb578d23995850d61f7d61c55c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">VM operational flags</div></td></tr>
-<tr class="memitem:a7f47e1f84ff391a5ef46f3f721697665"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__config_8h.html#a7f47e1f84ff391a5ef46f3f721697665">fCOLON</a>&#160;&#160;&#160;0x8000</td></tr>
-<tr class="separator:a7f47e1f84ff391a5ef46f3f721697665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add3507429bdd153b6129f249934bdd7a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__config_8h.html#add3507429bdd153b6129f249934bdd7a">fCOLON16</a>&#160;&#160;&#160;0x8000</td></tr>
+<tr class="separator:add3507429bdd153b6129f249934bdd7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a5f8e274eeacd58df9878327678bfd0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eforth__config_8h.html#a9a5f8e274eeacd58df9878327678bfd0">fCOLON8</a>&#160;&#160;&#160;0x80</td></tr>
+<tr class="separator:a9a5f8e274eeacd58df9878327678bfd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -505,18 +507,34 @@ Typedefs</h2></td></tr>
 
 </div>
 </div>
-<a id="a7f47e1f84ff391a5ef46f3f721697665"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f47e1f84ff391a5ef46f3f721697665">&#9670;&nbsp;</a></span>fCOLON</h2>
+<a id="add3507429bdd153b6129f249934bdd7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add3507429bdd153b6129f249934bdd7a">&#9670;&nbsp;</a></span>fCOLON16</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define fCOLON&#160;&#160;&#160;0x8000</td>
+          <td class="memname">#define fCOLON16&#160;&#160;&#160;0x8000</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>flag a colon word </p>
+<p>16-bit flag, colon word </p>
+
+</div>
+</div>
+<a id="a9a5f8e274eeacd58df9878327678bfd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a5f8e274eeacd58df9878327678bfd0">&#9670;&nbsp;</a></span>fCOLON8</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define fCOLON8&#160;&#160;&#160;0x80</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>8-bit flag (high-byte) <br  />
+ </p>
 
 </div>
 </div>

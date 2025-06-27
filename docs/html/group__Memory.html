@@ -135,7 +135,7 @@ Macros</h2></td></tr>
 <div class="line">            }                                   \</div>
 <div class="line">        }                                       \</div>
 <div class="line">        else {                \</div>
-<div class="line">          STORE(j | <a class="code" href="eforth__config_8h.html#a7f47e1f84ff391a5ef46f3f721697665">fCOLON</a>);                    \</div>
+<div class="line">          STORE(j | <a class="code" href="eforth__config_8h.html#add3507429bdd153b6129f249934bdd7a">fCOLON16</a>);                  \</div>
 <div class="line">          DEBUG(<span class="stringliteral">&quot; %04x&quot;</span>, j);                    \</div>
 <div class="line">        }                                       \</div>
 <div class="line">    }                                           \</div>
@@ -203,7 +203,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">    {                        \</div>
-<div class="line">    SET(<a class="code" href="group__Assembler.html#ga0bc9a88cf3073d8d4ce8f01b6e0a4760">PC</a>, ip | <a class="code" href="eforth__config_8h.html#a7f47e1f84ff391a5ef46f3f721697665">fCOLON</a>);                       \</div>
+<div class="line">    SET(<a class="code" href="group__Assembler.html#ga0bc9a88cf3073d8d4ce8f01b6e0a4760">PC</a>, ip | <a class="code" href="eforth__config_8h.html#add3507429bdd153b6129f249934bdd7a">fCOLON16</a>);                     \</div>
 <div class="line">    PC += <a class="code" href="eforth__config_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a>;                               \</div>
 <div class="line">    int len = strlen(seq);                      \</div>
 <div class="line">    BSET(<a class="code" href="group__Assembler.html#ga0bc9a88cf3073d8d4ce8f01b6e0a4760">PC</a>++, len);                            \</div>
@@ -214,8 +214,8 @@ Macros</h2></td></tr>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aeforth__config_8h_html_add3507429bdd153b6129f249934bdd7a"><div class="ttname"><a href="eforth__config_8h.html#add3507429bdd153b6129f249934bdd7a">fCOLON16</a></div><div class="ttdeci">#define fCOLON16</div><div class="ttdef"><b>Definition:</b> eforth_config.h:75</div></div>
 <div class="ttc" id="agroup__Assembler_html_ga06fc87d81c62e9abb8790b6e5713c55ba40ca1718b18204c5206b1cdf98ddead4"><div class="ttname"><a href="group__Assembler.html#ga06fc87d81c62e9abb8790b6e5713c55ba40ca1718b18204c5206b1cdf98ddead4">opNOP</a></div><div class="ttdeci">@ opNOP</div><div class="ttdoc">opcodes start at 0</div><div class="ttdef"><b>Definition:</b> eforth_asm.h:30</div></div>
-<div class="ttc" id="aeforth__config_8h_html_a7f47e1f84ff391a5ef46f3f721697665"><div class="ttname"><a href="eforth__config_8h.html#a7f47e1f84ff391a5ef46f3f721697665">fCOLON</a></div><div class="ttdeci">#define fCOLON</div><div class="ttdef"><b>Definition:</b> eforth_config.h:75</div></div>
 <div class="ttc" id="aeforth__config_8h_html_a483d8c32764af688ede31fdc4d9707dc"><div class="ttname"><a href="eforth__config_8h.html#a483d8c32764af688ede31fdc4d9707dc">CELLSZ</a></div><div class="ttdeci">#define CELLSZ</div><div class="ttdef"><b>Definition:</b> eforth_config.h:36</div></div>
 <div class="ttc" id="aeforth__config_8h_html_a5fd90490ca5b2ceb72bf8b2c89a9634b"><div class="ttname"><a href="eforth__config_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b">IU</a></div><div class="ttdeci">U16 IU</div><div class="ttdoc">instruction/address unit (16-bit)</div><div class="ttdef"><b>Definition:</b> eforth_config.h:28</div></div>
 <div class="ttc" id="agroup__Assembler_html_ga0bc9a88cf3073d8d4ce8f01b6e0a4760"><div class="ttname"><a href="group__Assembler.html#ga0bc9a88cf3073d8d4ce8f01b6e0a4760">PC</a></div><div class="ttdeci">IU PC</div><div class="ttdoc">assembler program counter</div><div class="ttdef"><b>Definition:</b> eforth_asm.c:14</div></div>

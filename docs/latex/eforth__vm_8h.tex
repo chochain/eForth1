@@ -6,8 +6,7 @@ e\+Forth Virtual Machine module header
 
 
 {\ttfamily \#include \char`\"{}eforth\+\_\+core.\+h\char`\"{}}\newline
-Include dependency graph for eforth\+\_\+vm.\+h\+:
-\nopagebreak
+Include dependency graph for eforth\+\_\+vm.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -43,17 +42,17 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 \#define \mbox{\hyperlink{eforth__vm_8h_a35a26ccdccc5949a9553ce8547b3814c}{S2D}}(h,  l)~(((\mbox{\hyperlink{eforth__config_8h_a39c786017723555afb9e8b85accec0de}{S32}})(h)$<$$<$16) $\vert$ ((l)\&0xffff))
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a074e5eb53ba2a83312746e4a74a3c091}{D\+E\+P\+TH}}()~((\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})((\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$)DS -\/ \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(\mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}})) $>$$>$ 1)
+\#define \mbox{\hyperlink{eforth__vm_8h_a074e5eb53ba2a83312746e4a74a3c091}{D\+E\+P\+TH}}()~((\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})((\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$)S -\/ \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(\mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}})) $>$$>$ 1)
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_af5e48aa480f649754b62299ee5cbc35a}{P\+U\+SH}}(v)~\{ $\ast$++DS = top;  top  = (v); \}
+\#define \mbox{\hyperlink{eforth__vm_8h_af5e48aa480f649754b62299ee5cbc35a}{P\+U\+SH}}(v)~\{ $\ast$++S = T; T = (v); \}
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a26fbeab0e94b30a69cd049aef73acbbd}{R\+P\+U\+SH}}(v)~\{ $\ast$-\/-\/RS = rtop; rtop = (v); \}
+\#define \mbox{\hyperlink{eforth__vm_8h_a26fbeab0e94b30a69cd049aef73acbbd}{R\+P\+U\+SH}}(v)~\{ $\ast$-\/-\/\mbox{\hyperlink{group__Assembler_ga0c9180f85bdd5d780671eda881105c18}{R}} = I; I = (v); \}
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a2106695e949772f765546777ef34690e}{P\+OP}}()~(top  = $\ast$DS-\/-\/)
+\#define \mbox{\hyperlink{eforth__vm_8h_a2106695e949772f765546777ef34690e}{P\+OP}}()~(T = $\ast$S-\/-\/)
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a55b5173e6face979deb7372dcbb643df}{R\+P\+OP}}()~(rtop = $\ast$RS++)
+\#define \mbox{\hyperlink{eforth__vm_8h_a55b5173e6face979deb7372dcbb643df}{R\+P\+OP}}()~(I = $\ast$\mbox{\hyperlink{group__Assembler_ga0c9180f85bdd5d780671eda881105c18}{R}}++)
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a2a0ab46d7e9f1c39675adabb666df35d}{D\+T\+OP}}(d)~\{ $\ast$DS = (d)\&0xffff; top = (d)$>$$>$16; \}
+\#define \mbox{\hyperlink{eforth__vm_8h_a2a0ab46d7e9f1c39675adabb666df35d}{D\+T\+OP}}(d)~\{ $\ast$S = (d)\&0xffff; T = (d)$>$$>$16; \}
 \end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Tracing}\par
 \begin{DoxyCompactItemize}
@@ -62,7 +61,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \item 
 \#define \mbox{\hyperlink{eforth__vm_8h_ad2e226689a02d2b5f1256e7e98f03cf5}{T\+AB}}()~/$\ast$ skip $\ast$/
 \item 
-\#define \mbox{\hyperlink{eforth__vm_8h_a9b97e4d442d7cdaa77140c8d272ad4fa}{T\+R\+A\+CE}}(op,  ip,  w,  t,  s)~/$\ast$ skip $\ast$/
+\#define \mbox{\hyperlink{eforth__vm_8h_a3c8a1f84c94c2c9b68d99323967ac670}{T\+R\+A\+CE}}(op,  ip,  t,  s)~/$\ast$ skip $\ast$/
 \end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsection*{Functions}
@@ -97,9 +96,9 @@ e\+Forth Virtual Machine module header
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{        S                   \mbox{\hyperlink{group__Assembler_ga0c9180f85bdd5d780671eda881105c18}{R}}}
-\DoxyCodeLine{        |                   |}
-\DoxyCodeLine{\mbox{\hyperlink{namespaceEfVM_a0d508bfbdbd7a09dcd56a24e3b6cb169}{top}} -\/> [S0, S1, S2,..., R1, R0] <-\/ \mbox{\hyperlink{namespaceEfVM_a61aea862ab3bab556736663c844366c7}{rtop}}}
+\DoxyCodeLine{      \mbox{\hyperlink{namespaceEfVM_aaae459c4ea0977eed9159647babad85a}{S}}                   \mbox{\hyperlink{group__Assembler_ga0c9180f85bdd5d780671eda881105c18}{R}}}
+\DoxyCodeLine{      |                   |}
+\DoxyCodeLine{\mbox{\hyperlink{namespaceEfVM_af1fd17a6ce9c9ccef3606ee4d593bb24}{T}} -\/> [S0, S1, S2,..., R1, R0] <-\/ \mbox{\hyperlink{namespaceEfVM_ad5031c4bc95da9acf1b25f701c29a897}{I}}}
 \end{DoxyCode}
  Note\+: Dr. Ting uses U8 (0$\sim$255) for wrap-\/around control 
 
@@ -151,37 +150,37 @@ interrupt return flag ~\newline
 \index{eforth\_vm.h@{eforth\_vm.h}!DEPTH@{DEPTH}}
 \index{DEPTH@{DEPTH}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{DEPTH}{DEPTH}}
-{\footnotesize\ttfamily \#define D\+E\+P\+TH(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~((\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})((\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$)DS -\/ \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(\mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}})) $>$$>$ 1)}
+{\footnotesize\ttfamily \#define D\+E\+P\+TH(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~((\mbox{\hyperlink{eforth__config_8h_a149fe3b107a553d7f4a2fcf3adc02b6a}{DU}})((\mbox{\hyperlink{eforth__config_8h_aa63ef7b996d5487ce35a5a66601f3e73}{U8}}$\ast$)S -\/ \mbox{\hyperlink{eforth__vm_8h_aaf6b91711b3d8b68c942eccd99b9d19e}{R\+AM}}(\mbox{\hyperlink{eforth__config_8h_af278ea3f0013fa26db155c0945bcb9d2}{F\+O\+R\+T\+H\+\_\+\+S\+T\+A\+C\+K\+\_\+\+A\+D\+DR}})) $>$$>$ 1)}
 
 push a value onto stack top \mbox{\Hypertarget{eforth__vm_8h_af5e48aa480f649754b62299ee5cbc35a}\label{eforth__vm_8h_af5e48aa480f649754b62299ee5cbc35a}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!PUSH@{PUSH}}
 \index{PUSH@{PUSH}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{PUSH}{PUSH}}
-{\footnotesize\ttfamily \#define P\+U\+SH(\begin{DoxyParamCaption}\item[{}]{v }\end{DoxyParamCaption})~\{ $\ast$++DS = top;  top  = (v); \}}
+{\footnotesize\ttfamily \#define P\+U\+SH(\begin{DoxyParamCaption}\item[{}]{v }\end{DoxyParamCaption})~\{ $\ast$++S = T; T = (v); \}}
 
 \mbox{\Hypertarget{eforth__vm_8h_a26fbeab0e94b30a69cd049aef73acbbd}\label{eforth__vm_8h_a26fbeab0e94b30a69cd049aef73acbbd}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!RPUSH@{RPUSH}}
 \index{RPUSH@{RPUSH}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{RPUSH}{RPUSH}}
-{\footnotesize\ttfamily \#define R\+P\+U\+SH(\begin{DoxyParamCaption}\item[{}]{v }\end{DoxyParamCaption})~\{ $\ast$-\/-\/RS = rtop; rtop = (v); \}}
+{\footnotesize\ttfamily \#define R\+P\+U\+SH(\begin{DoxyParamCaption}\item[{}]{v }\end{DoxyParamCaption})~\{ $\ast$-\/-\/\mbox{\hyperlink{group__Assembler_ga0c9180f85bdd5d780671eda881105c18}{R}} = I; I = (v); \}}
 
 \mbox{\Hypertarget{eforth__vm_8h_a2106695e949772f765546777ef34690e}\label{eforth__vm_8h_a2106695e949772f765546777ef34690e}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!POP@{POP}}
 \index{POP@{POP}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{POP}{POP}}
-{\footnotesize\ttfamily \#define P\+OP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(top  = $\ast$DS-\/-\/)}
+{\footnotesize\ttfamily \#define P\+OP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(T = $\ast$S-\/-\/)}
 
 \mbox{\Hypertarget{eforth__vm_8h_a55b5173e6face979deb7372dcbb643df}\label{eforth__vm_8h_a55b5173e6face979deb7372dcbb643df}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!RPOP@{RPOP}}
 \index{RPOP@{RPOP}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{RPOP}{RPOP}}
-{\footnotesize\ttfamily \#define R\+P\+OP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(rtop = $\ast$RS++)}
+{\footnotesize\ttfamily \#define R\+P\+OP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(I = $\ast$\mbox{\hyperlink{group__Assembler_ga0c9180f85bdd5d780671eda881105c18}{R}}++)}
 
 \mbox{\Hypertarget{eforth__vm_8h_a2a0ab46d7e9f1c39675adabb666df35d}\label{eforth__vm_8h_a2a0ab46d7e9f1c39675adabb666df35d}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!DTOP@{DTOP}}
 \index{DTOP@{DTOP}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{DTOP}{DTOP}}
-{\footnotesize\ttfamily \#define D\+T\+OP(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~\{ $\ast$DS = (d)\&0xffff; top = (d)$>$$>$16; \}}
+{\footnotesize\ttfamily \#define D\+T\+OP(\begin{DoxyParamCaption}\item[{}]{d }\end{DoxyParamCaption})~\{ $\ast$S = (d)\&0xffff; T = (d)$>$$>$16; \}}
 
 \mbox{\Hypertarget{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}\label{eforth__vm_8h_a3254550e1d6d185f6b3e69b2d6468343}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!DEBUG@{DEBUG}}
@@ -195,9 +194,9 @@ push a value onto stack top \mbox{\Hypertarget{eforth__vm_8h_af5e48aa480f649754b
 \doxysubsubsection{\texorpdfstring{TAB}{TAB}}
 {\footnotesize\ttfamily \#define T\+AB(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~/$\ast$ skip $\ast$/}
 
-\mbox{\Hypertarget{eforth__vm_8h_a9b97e4d442d7cdaa77140c8d272ad4fa}\label{eforth__vm_8h_a9b97e4d442d7cdaa77140c8d272ad4fa}} 
+\mbox{\Hypertarget{eforth__vm_8h_a3c8a1f84c94c2c9b68d99323967ac670}\label{eforth__vm_8h_a3c8a1f84c94c2c9b68d99323967ac670}} 
 \index{eforth\_vm.h@{eforth\_vm.h}!TRACE@{TRACE}}
 \index{TRACE@{TRACE}!eforth\_vm.h@{eforth\_vm.h}}
 \doxysubsubsection{\texorpdfstring{TRACE}{TRACE}}
-{\footnotesize\ttfamily \#define T\+R\+A\+CE(\begin{DoxyParamCaption}\item[{}]{op,  }\item[{}]{ip,  }\item[{}]{w,  }\item[{}]{t,  }\item[{}]{s }\end{DoxyParamCaption})~/$\ast$ skip $\ast$/}
+{\footnotesize\ttfamily \#define T\+R\+A\+CE(\begin{DoxyParamCaption}\item[{}]{op,  }\item[{}]{ip,  }\item[{}]{t,  }\item[{}]{s }\end{DoxyParamCaption})~/$\ast$ skip $\ast$/}
 

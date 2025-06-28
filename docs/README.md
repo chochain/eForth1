@@ -1,8 +1,168 @@
-Note: To compile Dr. Ting's ceForth_33.cpp
-* comment out <tchar.h> - for multi-byte char only
-* make sure 'long' is 32-bit (instead of 64-bit) i.e. gcc -m32
-  + typedef int           S32;    // replace long
-  + typedef unsigned int  U32;    // replace unsigned long
-  + typedef long          S64;    // replace long long
-  + typedef unsigned long U64;    // replace unsigned long long
+### eForth1 Virtual Machine
+#### Memory Map
+Arduino IDE load the compiled eForth1 onto UNO/Nano flash memory. Unlike 328eForth, it does not overwrite the bootloader. The following memory map is logical instead of the physical address of ATmega328p processor. Built-in words are somewhere inside the 16K flash memory functions as a ROM, and the user defined words and other data parts stay in static RAM. They are stitched togather by eForth1 virtually as one continuous memory map.
+
+  | Address       | Size (B) | Store | Desc                   | Save to EEPROM |
+  |:--------------|:---------|:------|:-----------------------|----------------|
+  | 0x0000-0x1fff | 8K       | Flash | built-in words         |                |
+  | 0x2000-0x201f | 32       | SRAM  | user variables         | Yes            |
+  | 0x2020-0x23ff | 1K - 32  | SRAM  | user colon words       | Yes            |
+  | 0x2400-0x247f | 128      | SRAM  | data and return stacks |                |
+  | 0x2480-0x24ff | 128      | SRAM  | input buffer           |                |
+
+Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Many more can be added.
+        
+#### Dictionary - Indirect Threaded (built-in token, colon subroutine address)
+
+    +-------------+      +-------------+      +-------------+
+    | Dictionary  |      | Entry 1     |      | Entry 2     |
+    +-------------+      +-------------+      +-------------+
+    | Entry 1     | ---> | Link Field  | ---> | Link Field  | ---> ...
+    | (latest)    |      | Name Field  |      | Name Field  |
+    |             |      | Code Field  |      | Code Field  |
+    |             |      | Parameter   |      | Parameter   |
+    |             |      | Field       |      | Field       |
+    +-------------+      +-------------+      +-------------+
+
+#### User Variables
+
+  | User Variable | Address | Init Value | Function                                |
+  |:--------------|:--------|:-----------|:----------------------------------------|
+  | 'TIB          | 0x2000  | 0x2080     | Pointer to Terminal Input Buffer        |
+  | BASE          | 0x2002  | 0x10       | Numeric Radix                           |
+  | CP            | 0x2004  | 0x2020     | Top of dictionary                       |
+  | CONTEXT       | 0x2006  | 0xEB3      | Pointer to name field of last word      |
+  | LAST          | 0x2008  | 0xEB3      | Pointer to name field of last word      |
+  | 'MODE         | 0x200A  | 0x883      | Pointer to Compiler or Interpreter      |
+  | 'ABORT        | 0x200C  | 0x908      | Pointer to QUIT word, error handler     |
+  | HLD           | 0x200E  | 0x24FF     | Pointer to text buffer for number       |
+  | SPAN          | 0x2010  | 0x0        | Number of input characters              |
+  | >IN           | 0x2012  | 0x0        | Pointer to next input character         |
+  | #TIB          | 0x2014  | 0x0        | Number of character received from input |
+  | tmp           | 0x2016  | 0x0        | Scatch pad                              |
+    
+### Standard Built-in Words - for details, reference [Forth Standard](https://forth-standard.org/)
+#### Data Stack
+
+  | words                            | parameters | function |
+  |:---------------------------------|:-----------|:---------|
+  | DUP  DROP  SWAP  OVER  ROT  PICK |            |          |
+  | ?DUP  DEPTH  S0  SP@             |            |          |
+
+#### Arithmetic
+
+  | words                                 | parameters   | function         |
+  |:--------------------------------------|:-------------|:-----------------|
+  | +  -  *  /  MOD  MAX  MIN             | ( a b -- c ) | binary ops       |
+  | ABS  NEGATE  LSHIFT  RSHIFT           | ( a -- a' )  | unitary ops      |
+  | 1+  1-  2+  2-  2*  2/                | ( a -- a' )  | constant ops     |
+  | UM/MOD  UM*  M*  UM+  */MOD  /MOD  */ |              | multi-oprand ops |
+
+#### Binary and Logic
+
+  | words                   | parameters | function |
+  |:------------------------|:-----------|:---------|
+  | AND  OR  XOR  INVERT    |            |          |
+  | >  =  <  0>  0=  0<  U< |            |          |
+
+#### IO
+
+  | words                                        | parameters | function |
+  |:---------------------------------------------|:-----------|:---------|
+  | ?KEY  EMIT  KEY  >CHAR  SPACE  CHARS  SPACES |            |          |
+  | TYPE  CR  .                                  |            |          |
+
+#### Branching and Return Stack
+
+  | words                                    | parameters | function |
+  |:-----------------------------------------|:-----------|:---------|
+  | IF  ELSE  THEN                           |            |          |
+  | BEGIN  AGAIN  UNTIL  WHILE  WHEN  REPEAT |            |          |
+  | FOR  AFT  NEXT                           |            |          |
+  | I  R>  R@  >R  RP                        |            |          |
+
+#### Word Defining and Compiler
+
+  | words                               | parameters | function |
+  |:------------------------------------|:-----------|:---------|
+  | :  ;  CODE  CREATE  DOES>  '        |            |          |
+  | FIND  WORD  AHEAD  LITERAL  PARSE   |            |          |
+  | [  ]  [COMPILE]  COMPILE  IMMEDIATE |            |          |
+  | VARIABLE  CONSTANT                  |            |          |
+  | 2VARAIBLE  2CONSTANT                |            |          |
+  | QUIT  ABORT                         |            |          |
+
+#### Memory Management
+
+  | words                            | parameters | function |
+  |:---------------------------------|:-----------|:---------|
+  | !  +!  @  C!  C@  ,(comma)  C  ? |            |          |
+  | ALLOT  CMOVE  MOVE  FILL         |            |          |
+
+#### Output Formatting
+
+  | words                          | parameters | function |
+  |:-------------------------------|:-----------|:---------|
+  | <#  HOLD  #  #S  SIGN  #>  STR |            |          |
+  | .R  U.R  U.                    |            |          |
+
+#### Comments
+
+  | words    | parameters | function |
+  |:---------|:-----------|:---------|
+  | .(  \  ( |            |          |
+
+#### String
+
+  | words  | parameters | function |
+  |:-------|:-----------|:---------|
+  | $"  ." |            |          |
+  | ACCEPT |            |          |
+
+#### Misc. 
+
+  | words                                | parameters | function |
+  |:-------------------------------------|:-----------|:---------|
+  | BL  CELL  COUNT  CELL+  CELL-  CELLS |            |          |
+
+#### Double Precision
+
+  | words                             | parameters | function |
+  |:----------------------------------|:-----------|:---------|
+  | DNEGATE  D+  D-                   |            |          |
+  | 2!  2@  2DUP  2DROP  2SWAP  2OVER |            |          |
+  | S>D  D>S                          |            |          |
+
+#### Debugging Tools
+
+  | words                                | parameters | function |
+  |:-------------------------------------|:-----------|:---------|
+  | HERE  HEX  DECIMAL  DUMP  WORDS  SEE |            |          |
+  | FORGET  TRACE  BYE                   |            |          |
+
+### eForth1 specific - for parsing and system interface
+##### String Processing
+
+  | words          | parameters | function |
+  |:---------------|:-----------|:---------|
+  | do$  $\|  ."\| |            |          |
+
+#### Primitives
+
+  | words                     | parameters | function |
+  |:--------------------------|:-----------|:---------|
+  | NOP  ENTER  EXIT  EXECUTE |            |          |
+  | DOLIT  DOVAR              |            |          |
+  | QBRANCH  BRANCH  DONEXT   |            |          |
+
+#### Outer Interpreter and Parser
+
+  | words                                             | parameters | function |
+  |:--------------------------------------------------|:-----------|:---------|
+  | >UPPER  DIGIT  EXTRACT  DIGIT?  NUMBER?  (parse)  |            |          |
+  | PACK$  TOKEN  NAME?  NAME>  SAME?  >NAME  $,n     |            |          |
+  | ^H  TAP  kTAP  EXPECT  ?UNIQUE                    |            |          |
+  | $INTERPRET  $COMPILE  EVAL  COMPILE-ONLY          |            |          |
+  | .ADDR  .OP  .OK                                   |            |          |
+  | QUERY  ERROR  COLD                                |            |          |
 

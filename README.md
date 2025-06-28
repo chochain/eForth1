@@ -118,6 +118,42 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > 25492 0 ok>                              \ 25492ms =~ 25.5us/cycle (with one blinking ISR running in the background)
     </pre>
 
+### eForth1 Arduino specific words
+#### Digital and Analog IO
+
+  | Word    | Usage                  | Function                                   |
+  |:--------|:-----------------------|:-------------------------------------------|
+  | CLOCK   | ( -- ul uh )           | fetch millis(), in double precision        |
+  | PINMODE | ( f p -- )             | pinMode(f, p)                              |
+  | IN      | ( p -- 1\|0 )          | digitalRead(p)                             |
+  | OUT     | ( 1\|0 p -- )          | digitalWrite(p, 1\|0)                      |
+  | AIN     | ( p -- n )             | n = analogRead(p)                          |
+  | PWM     | ( n p -- )             | analogWrite(p, n)                          |
+  | MAP     | ( fl fh tl th x -- y ) | y = map(x, fl, fh, tl, th)                 |
+
+#### Timer and Pin Change Interrupts
+
+  | Word  | Usage         | Function                                   |
+  |:------|:--------------|:-------------------------------------------|
+  | TMISR | ( t n xt -- ) | make xt Timer ISR[n], ticks every t ms     |
+  | PCISR | ( p xt -- )   | make xt Pin Change ISR[n]                  |
+  | TIMER | ( 1\|0 -- )   | 1: enable, 0: disable Timer2 Interrupt     |
+  | PCINT | ( n -- )      | 1: enable, 0: disable Pin Change Interrupt |
+  | DELAY | ( n -- )      | delay n milliseconds                       |
+
+#### EEPROM Store/Restore
+
+  | Word | Usage    | Function                                   |
+  |:-----|:---------|:-------------------------------------------|
+  | SAVE | ( -- )   | save RAM:0x2000 ~ last_word into EEPROM    |
+  | LOAD | ( -- )   | restore EEPROM into RAM:0x2000 ~ last_word |
+
+#### C API call
+
+  | Word | Usage    | Function                                   |
+  |:-----|:---------|:-------------------------------------------|
+  | CALL | ( n -- ) | call C API[n], defined by vm_cfunc(n, xt)  |
+
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.
 * Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary.

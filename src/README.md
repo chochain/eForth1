@@ -58,74 +58,126 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
     
 ### Standard Built-in Words - for details, reference [Forth Standard](https://forth-standard.org/)
 #### Data Stack
+
   | DUP, DROP, SWAP, OVER, ROT, PICK |   |   |
   | ?DUP, DEPTH, S0, SP@             |   |   |
 
 #### Arithmetic
+
+  | words                                 | parameters   | function         |
+  |:--------------------------------------|:-------------|:-----------------|
   | +, -, *, /, MOD, MAX, MIN             | ( a b -- c ) | binary ops       |
   | ABS, NEGATE, LSHIFT, RSHIFT           | ( a -- a' )  | unitary ops      |
   | 1+, 1-, 2+, 2-, 2*, 2/                | ( a -- a' )  | constant ops     |
   | UM/MOD, UM*, M*, UM+, */MOD, /MOD, */ |              | multi-oprand ops |
 
 #### Binary and Logic
-  | AND, OR, XOR, INVERT    |   |   |
-  | >, =, <, 0>, 0=, 0<, U< |   |   |
+
+  | words                   | parameters | function |
+  |:------------------------|:-----------|:---------|
+  | AND, OR, XOR, INVERT    |            |          |
+  | >, =, <, 0>, 0=, 0<, U< |            |          |
 
 #### IO
-  | ?KEY, EMIT, KEY, >CHAR, SPACE, CHARS, SPACES |   |   |
-  | TYPE, CR, .                                  |   |   |
+
+  | words                                        | parameters | function |
+  |:---------------------------------------------|:-----------|:---------|
+  | ?KEY, EMIT, KEY, >CHAR, SPACE, CHARS, SPACES |            |          |
+  | TYPE, CR, .                                  |            |          |
 
 #### Branching and Return Stack
-  | IF, ELSE, THEN                           |   |   |
-  | BEGIN, AGAIN, UNTIL, WHILE, WHEN, REPEAT |   |   |
-  | FOR, AFT, NEXT                           |   |   |
-  | I, R>, R@, >R, RP                        |   |   |
 
-#### Word Defining
-  | :, ;, CODE, CREATE, DOES>, ', IMMEDIATE |   |   |
-  | VARIABLE, CONSTANT                      |   |   |
-  | 2VARAIBLE, 2CONSTANT                    |   |   |
+  | words                                    | parameters | function |
+  |:-----------------------------------------|:-----------|:---------|
+  | IF, ELSE, THEN                           |            |          |
+  | BEGIN, AGAIN, UNTIL, WHILE, WHEN, REPEAT |            |          |
+  | FOR, AFT, NEXT                           |            |          |
+  | I, R>, R@, >R, RP                        |            |          |
 
-#### Memory Access/Management
-  | !, +!, @, C!, C@, ,(comma), C, ? |   |   |
-  | ALLOT, CMOVE, MOVE, FILL         |   |   |
+#### Word Defining and Compiler
+
+  | words                               | parameters | function |
+  |:------------------------------------|:-----------|:---------|
+  | :, ;, CODE, CREATE, DOES>, '        |            |          |
+  | FIND, WORD, AHEAD, LITERAL, PARSE   |            |          |
+  | [, ], [COMPILE], COMPILE, IMMEDIATE |            |          |
+  | VARIABLE, CONSTANT                  |            |          |
+  | 2VARAIBLE, 2CONSTANT                |            |          |
+  | QUIT, ABORT                         |            |          |
+
+#### Memory Management
+
+  | words                            | parameters | function |
+  |:---------------------------------|:-----------|:---------|
+  | !, +!, @, C!, C@, ,(comma), C, ? |            |          |
+  | ALLOT, CMOVE, MOVE, FILL         |            |          |
 
 #### Output Formatting
-  | <#, HOLD, #, #S, SIGN, #>, STR |   |   |
-  | .R, U.R, U.                    |   |   |
+
+  | words                          | parameters | function |
+  |:-------------------------------|:-----------|:---------|
+  | <#, HOLD, #, #S, SIGN, #>, STR |            |          |
+  | .R, U.R, U.                    |            |          |
 
 #### Comments
-  | .(, \, ( |   |   |
+
+  | words    | parameters | function |
+  |:---------|:-----------|:---------|
+  | .(, \, ( |            |          |
 
 #### String
-  | $", ." |   |   |
+
+  | words  | parameters | function |
+  |:-------|:-----------|:---------|
+  | $", ." |            |          |
+  | ACCEPT |            |          |
 
 #### Misc. 
-  | BL, CELL, COUNT, CELL+, CELL-, CELLS | | |
+
+  | words                                | parameters | function |
+  |:-------------------------------------|:-----------|:---------|
+  | BL, CELL, COUNT, CELL+, CELL-, CELLS |            |          |
 
 #### Double Precision
-  | DNEGATE, D+, D-                   |   |   |
-  | 2!, 2@, 2DUP, 2DROP, 2SWAP, 2OVER |   |   |
-  | S>D, D>S                          |   |   |
+
+  | words                             | parameters | function |
+  |:----------------------------------|:-----------|:---------|
+  | DNEGATE, D+, D-                   |            |          |
+  | 2!, 2@, 2DUP, 2DROP, 2SWAP, 2OVER |            |          |
+  | S>D, D>S                          |            |          |
 
 #### Debugging Tools
-  | HERE, HEX, DECIMAL, DUMP, WORDS, SEE |   |   |
-  | FORGET, TRACE, BYE                   |   |   |
+
+  | words                                | parameters | function |
+  |:-------------------------------------|:-----------|:---------|
+  | HERE, HEX, DECIMAL, DUMP, WORDS, SEE |            |          |
+  | FORGET, TRACE, BYE                   |            |          |
 
 ### eForth1 specific - for parsing and system interface
 ##### String Processing
-  | do$, $\|, ." |   |   |
+
+  | words        | parameters | function |
+  |:-------------|:-----------|:---------|
+  | do$, $\|, ." |            |          |
 
 #### Primitives
-  | NOP, EXIT, ENTER, DOLIT, DOVAR, QBRANCH, BRANCH, DONEXT, EXECUTE |   |   |
+
+  | words                     | parameters | function |
+  |:--------------------------|:-----------|:---------|
+  | NOP, ENTER, EXIT, EXECUTE |            |          |
+  | DOLIT, DOVAR              |            |          |
+  | QBRANCH, BRANCH, DONEXT   |            |          |
 
 #### Outer Interpreter and Parser
-   | >UPPER, DIGIT, EXTRACT, DIGIT?, NUMBER?, (parse),   |   |   |
-   | AHEAD, PACK$, PARSE, TOKEN, WORD, NAME>, SAME?      |   |   |
-   | LITERAL, FIND, NAME?, ^H, TAP, kTAP, ACCEPT, EXPECT |   |   |
-   | $INTERPRET, $COMPILE, [, ], [COMPILE], COMPILE      |   |   |
-   | .ADDR, .OP, .OK, ?UNIQUE, $,n, >NAME                |   |   |
-   | EVAL, QUIT, QUERY, ABORT, ERROR, COLD, COMPILE-ONLY |   |   |
+
+  | words                                             | parameters | function |
+  |:--------------------------------------------------|:-----------|:---------|
+  | >UPPER, DIGIT, EXTRACT, DIGIT?, NUMBER?, (parse), |            |          |
+  | PACK$, TOKEN, NAME?, NAME>, SAME?, >NAME, $,n     |            |          |
+  | ^H, TAP, kTAP, EXPECT, ?UNIQUE                    |            |          |
+  | $INTERPRET, $COMPILE, EVAL, COMPILE-ONLY          |            |          |
+  | .ADDR, .OP, .OK                                   |            |          |
+  | QUERY, ERROR, COLD                                |            |          |
 
 
 

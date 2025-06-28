@@ -41,101 +41,85 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
 
 #### User Variables
 
-    | User Variable | Address | Init Value | Function                                |
-    |:--------------|:--------|:-----------|:----------------------------------------|
-    | 'TIB          | 0x2000  | 0x2080     | Pointer to Terminal Input Buffer        |
-    | BASE          | 0x2002  | 0x10       | Numeric Radix                           |
-    | CP            | 0x2004  | 0x2020     | Top of dictionary                       |
-    | CONTEXT       | 0x2006  | 0xEB3      | Pointer to name field of last word      |
-    | LAST          | 0x2008  | 0xEB3      | Pointer to name field of last word      |
-    | 'MODE         | 0x200A  | 0x883      | Pointer to Compiler or Interpreter      |
-    | 'ABORT        | 0x200C  | 0x908      | Pointer to QUIT word, error handler     |
-    | HLD           | 0x200E  | 0x24FF     | Pointer to text buffer for number       |
-    | SPAN          | 0x2010  | 0x0        | Number of input characters              |
-    | >IN           | 0x2012  | 0x0        | Pointer to next input character         |
-    | #TIB          | 0x2014  | 0x0        | Number of character received from input |
-    | tmp           | 0x2016  | 0x0        | Scatch pad                              |
+  | User Variable | Address | Init Value | Function                                |
+  |:--------------|:--------|:-----------|:----------------------------------------|
+  | 'TIB          | 0x2000  | 0x2080     | Pointer to Terminal Input Buffer        |
+  | BASE          | 0x2002  | 0x10       | Numeric Radix                           |
+  | CP            | 0x2004  | 0x2020     | Top of dictionary                       |
+  | CONTEXT       | 0x2006  | 0xEB3      | Pointer to name field of last word      |
+  | LAST          | 0x2008  | 0xEB3      | Pointer to name field of last word      |
+  | 'MODE         | 0x200A  | 0x883      | Pointer to Compiler or Interpreter      |
+  | 'ABORT        | 0x200C  | 0x908      | Pointer to QUIT word, error handler     |
+  | HLD           | 0x200E  | 0x24FF     | Pointer to text buffer for number       |
+  | SPAN          | 0x2010  | 0x0        | Number of input characters              |
+  | >IN           | 0x2012  | 0x0        | Pointer to next input character         |
+  | #TIB          | 0x2014  | 0x0        | Number of character received from input |
+  | tmp           | 0x2016  | 0x0        | Scatch pad                              |
     
 ### Standard Built-in Words - for details, reference [Forth Standard](https://forth-standard.org/)
 #### Data Stack
-
-    | DUP, DROP, SWAP, OVER, ROT, PICK |   |   |
-    | ?DUP, DEPTH, S0, SP@             |   |   |
+  | DUP, DROP, SWAP, OVER, ROT, PICK |   |   |
+  | ?DUP, DEPTH, S0, SP@             |   |   |
 
 #### Arithmetic
-
-    | +, -, *, /, MOD, MAX, MIN             | ( a b -- c ) | binary ops       |
-    | ABS, NEGATE, LSHIFT, RSHIFT           | ( a -- a' )  | unitary ops      |
-    | 1+, 1-, 2+, 2-, 2*, 2/                | ( a -- a' )  | constant ops     |
-    | UM/MOD, UM*, M*, UM+, */MOD, /MOD, */ |              | multi-oprand ops |
+  | +, -, *, /, MOD, MAX, MIN             | ( a b -- c ) | binary ops       |
+  | ABS, NEGATE, LSHIFT, RSHIFT           | ( a -- a' )  | unitary ops      |
+  | 1+, 1-, 2+, 2-, 2*, 2/                | ( a -- a' )  | constant ops     |
+  | UM/MOD, UM*, M*, UM+, */MOD, /MOD, */ |              | multi-oprand ops |
 
 #### Binary and Logic
-
-    | AND, OR, XOR, INVERT    |   |   |
-    | >, =, <, 0>, 0=, 0<, U< |   |   |
+  | AND, OR, XOR, INVERT    |   |   |
+  | >, =, <, 0>, 0=, 0<, U< |   |   |
 
 #### IO
-
-    | ?KEY, EMIT, KEY, >CHAR, SPACE, CHARS, SPACES |   |   |
-    | TYPE, CR, .                                  |   |   |
+  | ?KEY, EMIT, KEY, >CHAR, SPACE, CHARS, SPACES |   |   |
+  | TYPE, CR, .                                  |   |   |
 
 #### Branching and Return Stack
-
-    | IF, ELSE, THEN                           |   |   |
-    | BEGIN, AGAIN, UNTIL, WHILE, WHEN, REPEAT |   |   |
-    | FOR, AFT, NEXT                           |   |   |
-    | I, R>, R@, >R, RP                        |   |   |
+  | IF, ELSE, THEN                           |   |   |
+  | BEGIN, AGAIN, UNTIL, WHILE, WHEN, REPEAT |   |   |
+  | FOR, AFT, NEXT                           |   |   |
+  | I, R>, R@, >R, RP                        |   |   |
 
 #### Word Defining
-
-    | :, ;, CODE, CREATE, DOES>, ', IMMEDIATE |   |   |
-    | VARIABLE, CONSTANT                      |   |   |
-    | 2VARAIBLE, 2CONSTANT                    |   |   |
+  | :, ;, CODE, CREATE, DOES>, ', IMMEDIATE |   |   |
+  | VARIABLE, CONSTANT                      |   |   |
+  | 2VARAIBLE, 2CONSTANT                    |   |   |
 
 #### Memory Access/Management
-
-    | !, +!, @, C!, C@, ,(comma), C, ? |   |   |
-    | ALLOT, CMOVE, MOVE, FILL         |   |   |
+  | !, +!, @, C!, C@, ,(comma), C, ? |   |   |
+  | ALLOT, CMOVE, MOVE, FILL         |   |   |
 
 #### Output Formatting
-
-    | <#, HOLD, #, #S, SIGN, #>, STR |   |   |
-    | .R, U.R, U.                    |   |   |
+  | <#, HOLD, #, #S, SIGN, #>, STR |   |   |
+  | .R, U.R, U.                    |   |   |
 
 #### Comments
-
-    | .(, \, ( |   |   |
+  | .(, \, ( |   |   |
 
 #### String
-
-    | $", ." |   |   |
+  | $", ." |   |   |
 
 #### Misc. 
-
-    | BL, CELL, COUNT, CELL+, CELL-, CELLS | | |
+  | BL, CELL, COUNT, CELL+, CELL-, CELLS | | |
 
 #### Double Precision
-
-    | DNEGATE, D+, D-                   |   |   |
-    | 2!, 2@, 2DUP, 2DROP, 2SWAP, 2OVER |   |   |
-    | S>D, D>S                          |   |   |
+  | DNEGATE, D+, D-                   |   |   |
+  | 2!, 2@, 2DUP, 2DROP, 2SWAP, 2OVER |   |   |
+  | S>D, D>S                          |   |   |
 
 #### Debugging Tools
-
-    | HERE, HEX, DECIMAL, DUMP, WORDS, SEE |   |   |
-    | FORGET, TRACE, BYE                   |   |   |
+  | HERE, HEX, DECIMAL, DUMP, WORDS, SEE |   |   |
+  | FORGET, TRACE, BYE                   |   |   |
 
 ### eForth1 specific - for parsing and system interface
 ##### String Processing
-
-    | do$, $\|, ." |   |   |
+  | do$, $\|, ." |   |   |
 
 #### Primitives
-
-    | NOP, EXIT, ENTER, DOLIT, DOVAR, QBRANCH, BRANCH, DONEXT, EXECUTE |   |   |
+  | NOP, EXIT, ENTER, DOLIT, DOVAR, QBRANCH, BRANCH, DONEXT, EXECUTE |   |   |
 
 #### Outer Interpreter and Parser
-
    | >UPPER, DIGIT, EXTRACT, DIGIT?, NUMBER?, (parse),   |   |   |
    | AHEAD, PACK$, PARSE, TOKEN, WORD, NAME>, SAME?      |   |   |
    | LITERAL, FIND, NAME?, ^H, TAP, kTAP, ACCEPT, EXPECT |   |   |

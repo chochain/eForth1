@@ -58,68 +58,84 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
     
 ### Standard Built-in Words - for details, reference [Forth Standard](https://forth-standard.org/)
 #### Data Stack
+
     | DUP, DROP, SWAP, OVER, ROT, PICK |   |   |
     | ?DUP, DEPTH, S0, SP@             |   |   |
 
 #### Arithmetic
+
     | +, -, *, /, MOD, MAX, MIN             | ( a b -- c ) | binary ops       |
     | ABS, NEGATE, LSHIFT, RSHIFT           | ( a -- a' )  | unitary ops      |
     | 1+, 1-, 2+, 2-, 2*, 2/                | ( a -- a' )  | constant ops     |
     | UM/MOD, UM*, M*, UM+, */MOD, /MOD, */ |              | multi-oprand ops |
 
 #### Binary and Logic
+
     | AND, OR, XOR, INVERT    |   |   |
     | >, =, <, 0>, 0=, 0<, U< |   |   |
 
 #### IO
+
     | ?KEY, EMIT, KEY, >CHAR, SPACE, CHARS, SPACES |   |   |
     | TYPE, CR, .                                  |   |   |
 
 #### Branching and Return Stack
+
     | IF, ELSE, THEN                           |   |   |
     | BEGIN, AGAIN, UNTIL, WHILE, WHEN, REPEAT |   |   |
     | FOR, AFT, NEXT                           |   |   |
     | I, R>, R@, >R, RP                        |   |   |
 
 #### Word Defining
+
     | :, ;, CODE, CREATE, DOES>, ', IMMEDIATE |   |   |
     | VARIABLE, CONSTANT                      |   |   |
     | 2VARAIBLE, 2CONSTANT                    |   |   |
 
 #### Memory Access/Management
+
     | !, +!, @, C!, C@, ,(comma), C, ? |   |   |
     | ALLOT, CMOVE, MOVE, FILL         |   |   |
 
 #### Output Formatting
+
     | <#, HOLD, #, #S, SIGN, #>, STR |   |   |
     | .R, U.R, U.                    |   |   |
 
 #### Comments
+
     | .(, \, ( |   |   |
 
 #### String
+
     | $", ." |   |   |
 
 #### Misc. 
+
     | BL, CELL, COUNT, CELL+, CELL-, CELLS | | |
 
 #### Double Precision
+
     | DNEGATE, D+, D-                   |   |   |
     | 2!, 2@, 2DUP, 2DROP, 2SWAP, 2OVER |   |   |
     | S>D, D>S                          |   |   |
 
 #### Debugging Tools
+
     | HERE, HEX, DECIMAL, DUMP, WORDS, SEE |   |   |
     | FORGET, TRACE, BYE                   |   |   |
 
 ### eForth1 specific - for parsing and system interface
 ##### String Processing
+
     | do$, $\|, ." |   |   |
 
 #### Primitives
+
     | NOP, EXIT, ENTER, DOLIT, DOVAR, QBRANCH, BRANCH, DONEXT, EXECUTE |   |   |
 
 #### Outer Interpreter and Parser
+
    | >UPPER, DIGIT, EXTRACT, DIGIT?, NUMBER?, (parse),   |   |   |
    | AHEAD, PACK$, PARSE, TOKEN, WORD, NAME>, SAME?      |   |   |
    | LITERAL, FIND, NAME?, ^H, TAP, kTAP, ACCEPT, EXPECT |   |   |

@@ -47,65 +47,65 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
   |:----------------------------------------------------|:---------------|:-----------------|
   | **Data Stack words**                                |                |                  |
   | <code>DUP  DROP  SWAP  OVER  ROT  PICK</code>         |                |                  |
-  | <pre>?DUP  DEPTH  S0  SP@</pre>                     |                |                  |
+  | <code>?DUP  DEPTH  S0  SP@</code>                     |                |                  |
   |                                                     |                |                  |
   | **Arithmetic words**                                |                |                  |
-  | <pre>+  -  *  /  MOD  MAX  MIN</pre>                | ( a b -- c )   | binary ops       |
-  | <pre>ABS  NEGATE  LSHIFT  RSHIFT</pre>              | ( a -- a' )    | unitary ops      |
-  | <pre>1+  1-  2+  2-  2*  2/</pre>                   | ( a -- a' )    | constant ops     |
-  | <pre>UM/MOD  UM*  M*  UM+  */MOD  /MOD  */</pre>    |                | multi-oprand ops |
+  | <code>+  -  *  /  MOD  MAX  MIN</code>                | ( a b -- c )   | binary ops       |
+  | <code>ABS  NEGATE  LSHIFT  RSHIFT</code>              | ( a -- a' )    | unitary ops      |
+  | <code>1+  1-  2+  2-  2*  2/</code>                   | ( a -- a' )    | constant ops     |
+  | <code>UM/MOD  UM*  M*  UM+  */MOD  /MOD  */</code>    |                | multi-oprand ops |
   |                                                     |                |                  |
   | **Binary and Logic words**                          |                |                  |
-  | <pre>AND  OR  XOR  INVERT</pre>                     | ( a -- a' )    | unitary ops      |
-  | <pre>0> 0= 0<</pre>                                 | ( a -- f )     |                  |
-  | <pre>>  =  <  U<</pre>                              | ( a b -- f )   |                  |
-  | <pre>WITHIN</pre>                                   | ( L H a -- f ) | trinary op       |
+  | <code>AND  OR  XOR  INVERT</code>                     | ( a -- a' )    | unitary ops      |
+  | <code>0> 0= 0<</code>                                 | ( a -- f )     |                  |
+  | <code>>  =  <  U<</code>                              | ( a b -- f )   |                  |
+  | <code>WITHIN</code>                                   | ( L H a -- f ) | trinary op       |
   |                                                     |                |                  |
   | **IO words**                                        |                |                  |
-  | <pre>?KEY  KEY  >CHAR  CHARS</pre>                  |                |                  |
-  | <pre>EMIT  TYPE  SPACE  SPACES CR  .</pre>          |                |                  |
+  | <code>?KEY  KEY  >CHAR  CHARS</code>                  |                |                  |
+  | <code>EMIT  TYPE  SPACE  SPACES CR  .</code>          |                |                  |
   |                                                     |                |                  |
   | **Branching and Return Stack words**                |                |                  |
-  | <pre>IF  ELSE  THEN</pre>                           |                |                  |
-  | <pre>BEGIN  AGAIN  UNTIL  WHILE  WHEN  REPEAT</pre> |                |                  |
-  | <pre>FOR  AFT  NEXT</pre>                           |                |                  |
-  | <pre>I  R>  R@  >R  RP</pre>                        |                |                  |
+  | <code>IF  ELSE  THEN</code>                           |                |                  |
+  | <code>BEGIN  AGAIN  UNTIL  WHILE  WHEN  REPEAT</code> |                |                  |
+  | <code>FOR  AFT  NEXT</code>                           |                |                  |
+  | <code>I  R>  R@  >R  RP</code>                        |                |                  |
   |                                                     |                |                  |
   | **Word Defining and Compiler words**                |                |                  |
-  | <pre>:  ;  CODE  CREATE  DOES>  '</pre>             |                |                  |
-  | <pre>FIND  WORD  AHEAD  LITERAL  PARSE</pre>        |                |                  |
-  | <pre>[  ]  [COMPILE]  COMPILE  IMMEDIATE</pre>      |                |                  |
-  | <pre>VARIABLE  CONSTANT</pre>                       |                |                  |
-  | <pre>2VARAIBLE  2CONSTANT</pre>                     |                |                  |
-  | <pre>QUIT  ABORT</pre>                              |                |                  |
+  | <code>:  ;  CODE  CREATE  DOES>  '</code>             |                |                  |
+  | <code>FIND  WORD  AHEAD  LITERAL  PARSE</code>        |                |                  |
+  | <code>[  ]  [COMPILE]  COMPILE  IMMEDIATE</code>      |                |                  |
+  | <code>VARIABLE  CONSTANT</code>                       |                |                  |
+  | <code>2VARAIBLE  2CONSTANT</code>                     |                |                  |
+  | <code>QUIT  ABORT</code>                              |                |                  |
   |                                                     |                |                  |
   | **Memory Management words**                         |                |                  |
-  | <pre>!  +!  @  C!  C@  ,(comma)  C  ?</pre>         |                |                  |
-  | <pre>ALLOT  CMOVE  MOVE  FILL</pre>                 |                |                  |
+  | <code>!  +!  @  C!  C@  ,(comma)  C  ?</code>         |                |                  |
+  | <code>ALLOT  CMOVE  MOVE  FILL</code>                 |                |                  |
   |                                                     |                |                  |
   | **Output Formatting words**                         |                |                  |
-  | <pre><#  HOLD  #  #S  SIGN  #>  STR</pre>           |                |                  |
-  | <pre>.R  U.R  U.</pre>                              |                |                  |
+  | <code><#  HOLD  #  #S  SIGN  #>  STR</code>           |                |                  |
+  | <code>.R  U.R  U.</code>                              |                |                  |
   |                                                     |                |                  |
   | **Commenting words**                                |                |                  |
-  | <pre>.(  \  (</pre>                                 |                |                  |
+  | <code>.(  \  (</code>                                 |                |                  |
   |                                                     |                |                  |
   | **String words***                                   |                |                  |
-  | <pre>$"  ."</pre>                                   |                |                  |
-  | <pre>ACCEPT</pre>                                   |                |                  |
+  | <code>$"  ."</code>                                   |                |                  |
+  | <code>ACCEPT</code>                                   |                |                  |
   |                                                     |                |                  |
   | **Misc. words**                                     |                |                  |
-  | <pre>BL  CELL  COUNT  CELL+  CELL-  CELLS</pre>     |                |                  |
+  | <code>BL  CELL  COUNT  CELL+  CELL-  CELLS</code>     |                |                  |
   |                                                     |                |                  |
   | **Double Precision words**                          |                |                  |
-  | <pre>DNEGATE  D+  D-</pre>                          |                |                  |
-  | <pre>2!  2@  2DUP  2DROP  2SWAP  2OVER</pre>        |                |                  |
-  | <pre>S>D  D>S</pre>                                 |                |                  |
+  | <code>DNEGATE  D+  D-</code>                          |                |                  |
+  | <code>2!  2@  2DUP  2DROP  2SWAP  2OVER</code>        |                |                  |
+  | <code>S>D  D>S</code>                                 |                |                  |
   |                                                     |                |                  |
   | **Debugging Tools words**                           |                |                  |
-  | <pre>NOP  HERE  HEX  DECIMAL</pre>                  |                |                  |
-  | <pre>DUMP  WORDS  SEE</pre>                         |                |                  |
-  | <pre>FORGET  TRACE  BYE</pre>                       |                |                  |
+  | <code>NOP  HERE  HEX  DECIMAL</code>                  |                |                  |
+  | <code>DUMP  WORDS  SEE</code>                         |                |                  |
+  | <code>FORGET  TRACE  BYE</code>                       |                |                  |
   |                                                     |                |                  |
 
 
@@ -114,18 +114,18 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
   | eForth1 specific                                            | Parameters | function |
   |:------------------------------------------------------------|:-----------|:---------|
   | **String Processing words**                                 |            |          |
-  | <pre>do$  $\|  ."\|</pre>                                   |            |          |
+  | <code>do$  $\|  ."\|</code>                                   |            |          |
   |                                                             |            |          |
   | **Primitive words**                                         |            |          |
-  | <pre>ENTER  EXIT  EXECUTE</pre>                             |            |          |
-  | <pre>DOLIT  DOVAR</pre>                                     |            |          |
-  | <pre>QBRANCH  BRANCH  DONEXT</pre>                          |            |          |
+  | <code>ENTER  EXIT  EXECUTE</code>                             |            |          |
+  | <code>DOLIT  DOVAR</code>                                     |            |          |
+  | <code>QBRANCH  BRANCH  DONEXT</code>                          |            |          |
   |                                                             |            |          |
   | **Outer Interpreter and Parser words**                      |            |          |
-  | <pre>>UPPER  DIGIT  EXTRACT  DIGIT?  NUMBER?  (parse)</pre> |            |          |
-  | <pre>PACK$  TOKEN  NAME?  NAME>  SAME?  >NAME  $,n</pre>    |            |          |
-  | <pre>^H  TAP  kTAP  EXPECT  ?UNIQUE</pre>                   |            |          |
-  | <pre>$INTERPRET  $COMPILE  EVAL  COMPILE-ONLY</pre>         |            |          |
-  | <pre>.ADDR  .OP  .OK</pre>                                  |            |          |
-  | <pre>QUERY  ERROR  COLD</pre>                               |            |          |
+  | <code>>UPPER  DIGIT  EXTRACT  DIGIT?  NUMBER?  (parse)</code> |            |          |
+  | <code>PACK$  TOKEN  NAME?  NAME>  SAME?  >NAME  $,n</code>    |            |          |
+  | <code>^H  TAP  kTAP  EXPECT  ?UNIQUE</code>                   |            |          |
+  | <code>$INTERPRET  $COMPILE  EVAL  COMPILE-ONLY</code>         |            |          |
+  | <code>.ADDR  .OP  .OK</code>                                  |            |          |
+  | <code>QUERY  ERROR  COLD</code>                               |            |          |
 

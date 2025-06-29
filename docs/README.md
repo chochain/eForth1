@@ -43,68 +43,69 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
     
 ### Standard Built-in Words - for details, reference [Forth Standard](https://forth-standard.org/)
 
-  | Forth Standard Words                         | parameters   | function         |
-  |:---------------------------------------------|:-------------|:-----------------|
-  | **Data Stack words**                         |              |                  |
-  | DUP  DROP  SWAP  OVER  ROT  PICK             |              |                  |
-  | ?DUP  DEPTH  S0  SP@                         |              |                  |
-  |                                              |              |                  |
-  | **Arithmetic words**                         |              |                  |
-  | +  -  *  /  MOD  MAX  MIN                    | ( a b -- c ) | binary ops       |
-  | ABS  NEGATE  LSHIFT  RSHIFT                  | ( a -- a' )  | unitary ops      |
-  | 1+  1-  2+  2-  2*  2/                       | ( a -- a' )  | constant ops     |
-  | UM/MOD  UM*  M*  UM+  */MOD  /MOD  */        |              | multi-oprand ops |
-  |                                              |              |                  |
-  | **Binary and Logic words**                   |              |                  |
-  | AND  OR  XOR  INVERT                         | ( a -- a' )  | unitary ops      |
-  | 0> 0= 0<                                     | ( a -- f )   |                  |
-  | >  =  <  U<                                  | ( a b -- f ) |                  |
-  |                                              |              |                  |
-  | **IO words**                                 |              |                  |
-  | ?KEY  EMIT  KEY  >CHAR  SPACE  CHARS  SPACES |              |                  |
-  | TYPE  CR  .                                  |              |                  |
-  |                                              |              |                  |
-  | **Branching and Return Stack words**         |              |                  |
-  | IF  ELSE  THEN                               |              |                  |
-  | BEGIN  AGAIN  UNTIL  WHILE  WHEN  REPEAT     |              |                  |
-  | FOR  AFT  NEXT                               |              |                  |
-  | I  R>  R@  >R  RP                            |              |                  |
-  |                                              |              |                  |
-  | **Word Defining and Compiler words**         |              |                  |
-  | :  ;  CODE  CREATE  DOES>  '                 |              |                  |
-  | FIND  WORD  AHEAD  LITERAL  PARSE            |              |                  |
-  | [  ]  [COMPILE]  COMPILE  IMMEDIATE          |              |                  |
-  | VARIABLE  CONSTANT                           |              |                  |
-  | 2VARAIBLE  2CONSTANT                         |              |                  |
-  | QUIT  ABORT                                  |              |                  |
-  |                                              |              |                  |
-  | **Memory Management words**                  |              |                  |
-  | !  +!  @  C!  C@  ,(comma)  C  ?             |              |                  |
-  | ALLOT  CMOVE  MOVE  FILL                     |              |                  |
-  |                                              |              |                  |
-  | **Output Formatting words**                  |              |                  |
-  | <#  HOLD  #  #S  SIGN  #>  STR               |              |                  |
-  | .R  U.R  U.                                  |              |                  |
-  |                                              |              |                  |
-  | **Commenting words**                         |              |                  |
-  | .(  \  (                                     |              |                  |
-  |                                              |              |                  |
-  | **String words***                            |              |                  |
-  | $"  ."                                       |              |                  |
-  | ACCEPT                                       |              |                  |
-  |                                              |              |                  |
-  | **Misc. words**                              |              |                  |
-  | BL  CELL  COUNT  CELL+  CELL-  CELLS         |              |                  |
-  |                                              |              |                  |
-  | **Double Precision words**                   |              |                  |
-  | DNEGATE  D+  D-                              |              |                  |
-  | 2!  2@  2DUP  2DROP  2SWAP  2OVER            |              |                  |
-  | S>D  D>S                                     |              |                  |
-  |                                              |              |                  |
-  | **Debugging Tools words**                    |              |                  |
-  | HERE  HEX  DECIMAL  DUMP  WORDS  SEE         |              |                  |
-  | FORGET  TRACE  BYE                           |              |                  |
-  |                                              |              |                  |
+  | Forth Standard Words                                | parameters     | function         |
+  |:----------------------------------------------------|:---------------|:-----------------|
+  | **Data Stack words**                                |                |                  |
+  | <pre>DUP  DROP  SWAP  OVER  ROT  PICK</pre>         |                |                  |
+  | <pre>?DUP  DEPTH  S0  SP@</pre>                     |                |                  |
+  |                                                     |                |                  |
+  | **Arithmetic words**                                |                |                  |
+  | <pre>+  -  *  /  MOD  MAX  MIN</pre>                | ( a b -- c )   | binary ops       |
+  | <pre>ABS  NEGATE  LSHIFT  RSHIFT</pre>              | ( a -- a' )    | unitary ops      |
+  | <pre>1+  1-  2+  2-  2*  2/</pre>                   | ( a -- a' )    | constant ops     |
+  | <pre>UM/MOD  UM*  M*  UM+  */MOD  /MOD  */</pre>    |                | multi-oprand ops |
+  |                                                     |                |                  |
+  | **Binary and Logic words**                          |                |                  |
+  | <pre>AND  OR  XOR  INVERT</pre>                     | ( a -- a' )    | unitary ops      |
+  | <pre>0> 0= 0<</pre>                                 | ( a -- f )     |                  |
+  | <pre>>  =  <  U<</pre>                              | ( a b -- f )   |                  |
+  | <pre>WITHIN</pre>                                   | ( L H a -- f ) | trinary op       |
+  |                                                     |                |                  |
+  | **IO words**                                        |                |                  |
+  | <pre>?KEY  KEY  >CHAR  CHARS</pre>                  |                |                  |
+  | <pre>EMIT  TYPE  SPACE  SPACES CR  .</pre>          |                |                  |
+  |                                                     |                |                  |
+  | **Branching and Return Stack words**                |                |                  |
+  | <pre>IF  ELSE  THEN</pre>                           |                |                  |
+  | <pre>BEGIN  AGAIN  UNTIL  WHILE  WHEN  REPEAT</pre> |                |                  |
+  | <pre>FOR  AFT  NEXT</pre>                           |                |                  |
+  | <pre>I  R>  R@  >R  RP</pre>                        |                |                  |
+  |                                                     |                |                  |
+  | **Word Defining and Compiler words**                |                |                  |
+  | <pre>:  ;  CODE  CREATE  DOES>  '</pre>             |                |                  |
+  | <pre>FIND  WORD  AHEAD  LITERAL  PARSE</pre>        |                |                  |
+  | <pre>[  ]  [COMPILE]  COMPILE  IMMEDIATE</pre>      |                |                  |
+  | <pre>VARIABLE  CONSTANT</pre>                       |                |                  |
+  | <pre>2VARAIBLE  2CONSTANT</pre>                     |                |                  |
+  | <pre>QUIT  ABORT</pre>                              |                |                  |
+  |                                                     |                |                  |
+  | **Memory Management words**                         |                |                  |
+  | !  +!  @  C!  C@  ,(comma)  C  ?                    |                |                  |
+  | ALLOT  CMOVE  MOVE  FILL                            |                |                  |
+  |                                                     |                |                  |
+  | **Output Formatting words**                         |                |                  |
+  | <#  HOLD  #  #S  SIGN  #>  STR                      |                |                  |
+  | .R  U.R  U.                                         |                |                  |
+  |                                                     |                |                  |
+  | **Commenting words**                                |                |                  |
+  | .(  \  (                                            |                |                  |
+  |                                                     |                |                  |
+  | **String words***                                   |                |                  |
+  | $"  ."                                              |                |                  |
+  | ACCEPT                                              |                |                  |
+  |                                                     |                |                  |
+  | **Misc. words**                                     |                |                  |
+  | BL  CELL  COUNT  CELL+  CELL-  CELLS                |                |                  |
+  |                                                     |                |                  |
+  | **Double Precision words**                          |                |                  |
+  | DNEGATE  D+  D-                                     |                |                  |
+  | 2!  2@  2DUP  2DROP  2SWAP  2OVER                   |                |                  |
+  | S>D  D>S                                            |                |                  |
+  |                                                     |                |                  |
+  | **Debugging Tools words**                           |                |                  |
+  | HERE  HEX  DECIMAL  DUMP  WORDS  SEE                |                |                  |
+  | FORGET  TRACE  BYE                                  |                |                  |
+  |                                                     |                |                  |
 
 ### eForth1 specific - for parsing and system interface
 

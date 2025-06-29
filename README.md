@@ -118,30 +118,40 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     > 25492 0 ok>                              \ 25492ms =~ 25.5us/cycle (with one blinking ISR running in the background)
     </pre>
 
+### eForth1 Virtual Machine, User Variables, Dictionary and Standard FORTH words
+    See details in ~/docs/README [here](https://github.com/chochain/eForth1/tree/master/docs)
+
 ### eForth1 Arduino specific words
 #### Digital and Analog IO
+Instead of accessing memory mapped address (i.e. 0x20~0x3F), eForth1 uses the Arduino C functions to access GPIO pins. Not the preference by bare metal people but fast enough mostly and easier for new comers.
 
-  | Word    | Usage                  | Function                                   |
-  |:--------|:-----------------------|:-------------------------------------------|
-  | CLOCK   | ( -- ul uh )           | fetch millis(), in double precision        |
-  | PINMODE | ( f p -- )             | pinMode(f, p)                              |
-  | IN      | ( p -- 1\|0 )          | digitalRead(p)                             |
-  | OUT     | ( 1\|0 p -- )          | digitalWrite(p, 1\|0)                      |
-  | AIN     | ( p -- n )             | n = analogRead(p)                          |
-  | PWM     | ( n p -- )             | analogWrite(p, n)                          |
-  | MAP     | ( fl fh tl th x -- y ) | y = map(x, fl, fh, tl, th)                 |
+  | Word    | Usage                  | Function                                |
+  |:--------|:-----------------------|:----------------------------------------|
+  | PINMODE | ( f p -- )             | pinMode(f, p)                           |
+  | IN      | ( p -- 1\|0 )          | digitalRead(p)                          |
+  | OUT     | ( 1\|0 p -- )          | digitalWrite(p, 1\|0)                   |
+  | AIN     | ( p -- n )             | n = analogRead(p), n:0~1023             |
+  | PWM     | ( n p -- )             | analogWrite(p, n), n:0~255, duty cycle* |
+  | MAP     | ( l0 h0 l1 h1 x -- y ) | y = map(x, l0, h0, l1, h1)              |
+  | CLOCK   | ( -- ul uh )           | fetch millis(), in double precision     |
+  | DELAY   | ( n -- )               | delay n milliseconds                    |
+
+*Note: Since Timer0 (pin 5, 6) is used for clock and Timer2 (pin 3, 11) is used for timer interrupt, eForth1 can only safely use Pin 9 and 10 for PWM (unless you don't need CLOCK or DELAY). Other pins behave like digital pins. Anything above and equals to 128 is treated as HIGH, below as LOW. On the other hand, AIN does not use any timer. It can be safely used with all Analog Pins.
 
 #### Timer and Pin Change Interrupts
+eForth1 uses a data structure to capture interrupts. It supports 11 ISRs (interrupt service routines). 8 for Timer and 3 for Pin Change. Arduino UNO/Nano timer2 is used, ticking at 1 millisecond as the base freq for timer interrupt. Timer0 is used for delay and Timer1 are left for other Arduino libraries such as servo driving. Pin Changes are flagged by port-D (pin D0~D7), Port-B (pin D8~D13), and Port-C (pin A0~A5). Only one xt (function address) per port so your ISR needs to figure out which pin actually been triggered if they use the same port.
 
   | Word  | Usage         | Function                                   |
   |:------|:--------------|:-------------------------------------------|
-  | TMISR | ( t n xt -- ) | make xt Timer ISR[n], ticks every t ms     |
-  | PCISR | ( p xt -- )   | make xt Pin Change ISR[n]                  |
+  | TMISR | ( xt t n -- ) | make xt Timer ISR[n], ticks every t ms     |
   | TIMER | ( 1\|0 -- )   | 1: enable, 0: disable Timer2 Interrupt     |
+  | PCISR | ( xt p -- )   | make xt when p Pin Changes                 |
   | PCINT | ( n -- )      | 1: enable, 0: disable Pin Change Interrupt |
-  | DELAY | ( n -- )      | delay n milliseconds                       |
+
+*Example: [Ultrasound Ranging](https://github.com/chochain/eForth1/blob/master/examples/7_usound/7_usound.ino)
 
 #### EEPROM Store/Restore
+Arduino UNO/Nano has 1K of EEPROM which can cover eForth1 user variables, the newly defined words, and possible data stored within the 1K RAM. Your work can be saved onto EEPROM and can be restored even after a reboot.
 
   | Word | Usage    | Function                                   |
   |:-----|:---------|:-------------------------------------------|
@@ -149,10 +159,13 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
   | LOAD | ( -- )   | restore EEPROM into RAM:0x2000 ~ last_word |
 
 #### C API call
+eForth1 provides a C interface for accessing the vast amount of libraries comes with Arduino ecosystem.
 
   | Word | Usage    | Function                                   |
   |:-----|:---------|:-------------------------------------------|
   | CALL | ( n -- ) | call C API[n], defined by vm_cfunc(n, xt)  |
+
+*Example: [LED flipping](https://wokwi.com/projects/365630462031711233)
 
 ### To Learn More About Forth?
 If your programming language exposure has been with C, Java, or even Python so far, FORTH is quite **different**. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. No syntax? So, anyway, before you dive right into the deep-end, here's a good online materials.

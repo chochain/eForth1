@@ -43,90 +43,90 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
     
 ### Standard Built-in Words - for details, reference [Forth Standard](https://forth-standard.org/)
 
-  | Data stack words                 | parameters | function |
-  |:---------------------------------|:-----------|:---------|
-  | DUP  DROP  SWAP  OVER  ROT  PICK |            |          |
-  | ?DUP  DEPTH  S0  SP@             |            |          |
-
-  | Arithmetic words                      | parameters   | function         |
-  |:--------------------------------------|:-------------|:-----------------|
-  | +  -  *  /  MOD  MAX  MIN             | ( a b -- c ) | binary ops       |
-  | ABS  NEGATE  LSHIFT  RSHIFT           | ( a -- a' )  | unitary ops      |
-  | 1+  1-  2+  2-  2*  2/                | ( a -- a' )  | constant ops     |
-  | UM/MOD  UM*  M*  UM+  */MOD  /MOD  */ |              | multi-oprand ops |
-
-  | Binary and Logic words  | parameters | function |
-  |:------------------------|:-----------|:---------|
-  | AND  OR  XOR  INVERT    |            |          |
-  | >  =  <  0>  0=  0<  U< |            |          |
-
-  | IO words                                     | parameters | function |
-  |:---------------------------------------------|:-----------|:---------|
-  | ?KEY  EMIT  KEY  >CHAR  SPACE  CHARS  SPACES |            |          |
-  | TYPE  CR  .                                  |            |          |
-
-  | Branching and Return Stack words         | parameters | function |
-  |:-----------------------------------------|:-----------|:---------|
-  | IF  ELSE  THEN                           |            |          |
-  | BEGIN  AGAIN  UNTIL  WHILE  WHEN  REPEAT |            |          |
-  | FOR  AFT  NEXT                           |            |          |
-  | I  R>  R@  >R  RP                        |            |          |
-
-  | Word Defining and Compiler words    | parameters | function |
-  |:------------------------------------|:-----------|:---------|
-  | :  ;  CODE  CREATE  DOES>  '        |            |          |
-  | FIND  WORD  AHEAD  LITERAL  PARSE   |            |          |
-  | [  ]  [COMPILE]  COMPILE  IMMEDIATE |            |          |
-  | VARIABLE  CONSTANT                  |            |          |
-  | 2VARAIBLE  2CONSTANT                |            |          |
-  | QUIT  ABORT                         |            |          |
-
-  | Memory Management words          | parameters | function |
-  |:---------------------------------|:-----------|:---------|
-  | !  +!  @  C!  C@  ,(comma)  C  ? |            |          |
-  | ALLOT  CMOVE  MOVE  FILL         |            |          |
-
-  | Output Formatting words        | parameters | function |
-  |:-------------------------------|:-----------|:---------|
-  | <#  HOLD  #  #S  SIGN  #>  STR |            |          |
-  | .R  U.R  U.                    |            |          |
-
-  | Commenting words | parameters | function |
-  |:---------------|:-----------|:---------|
-  | .(  \  (       |            |          |
-
-  | String words | parameters | function |
-  |:-------------|:-----------|:---------|
-  | $"  ."       |            |          |
-  | ACCEPT       |            |          |
-
-  | Misc. words                          | parameters | function |
-  |:-------------------------------------|:-----------|:---------|
-  | BL  CELL  COUNT  CELL+  CELL-  CELLS |            |          |
-
-  | Double Precision words            | parameters | function |
-  |:----------------------------------|:-----------|:---------|
-  | DNEGATE  D+  D-                   |            |          |
-  | 2!  2@  2DUP  2DROP  2SWAP  2OVER |            |          |
-  | S>D  D>S                          |            |          |
-
-  | Debugging Tools words                | parameters | function |
-  |:-------------------------------------|:-----------|:---------|
-  | HERE  HEX  DECIMAL  DUMP  WORDS  SEE |            |          |
-  | FORGET  TRACE  BYE                   |            |          |
+  | Data stack words                             | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | DUP  DROP  SWAP  OVER  ROT  PICK             |              |                  |
+  | ?DUP  DEPTH  S0  SP@                         |              |                  |
+  |                                              |              |                  |
+  | Arithmetic words                             | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | +  -  *  /  MOD  MAX  MIN                    | ( a b -- c ) | binary ops       |
+  | ABS  NEGATE  LSHIFT  RSHIFT                  | ( a -- a' )  | unitary ops      |
+  | 1+  1-  2+  2-  2*  2/                       | ( a -- a' )  | constant ops     |
+  | UM/MOD  UM*  M*  UM+  */MOD  /MOD  */        |              | multi-oprand ops |
+  |                                              |              |                  |
+  | Binary and Logic words                       | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | AND  OR  XOR  INVERT                         |              |                  |
+  | >  =  <  0>  0=  0<  U<                      |              |                  |
+  |                                              |              |                  |
+  | IO words                                     | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | ?KEY  EMIT  KEY  >CHAR  SPACE  CHARS  SPACES |              |                  |
+  | TYPE  CR  .                                  |              |                  |
+  |                                              |              |                  |
+  | Branching and Return Stack words             | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | IF  ELSE  THEN                               |              |                  |
+  | BEGIN  AGAIN  UNTIL  WHILE  WHEN  REPEAT     |              |                  |
+  | FOR  AFT  NEXT                               |              |                  |
+  | I  R>  R@  >R  RP                            |              |                  |
+  |                                              |              |                  |
+  | Word Defining and Compiler words             | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | :  ;  CODE  CREATE  DOES>  '                 |              |                  |
+  | FIND  WORD  AHEAD  LITERAL  PARSE            |              |                  |
+  | [  ]  [COMPILE]  COMPILE  IMMEDIATE          |              |                  |
+  | VARIABLE  CONSTANT                           |              |                  |
+  | 2VARAIBLE  2CONSTANT                         |              |                  |
+  | QUIT  ABORT                                  |              |                  |
+  |                                              |              |                  |
+  | Memory Management words                      | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | !  +!  @  C!  C@  ,(comma)  C  ?             |              |                  |
+  | ALLOT  CMOVE  MOVE  FILL                     |              |                  |
+  |                                              |              |                  |
+  | Output Formatting words                      | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | <#  HOLD  #  #S  SIGN  #>  STR               |              |                  |
+  | .R  U.R  U.                                  |              |                  |
+  |                                              |              |                  |
+  | Commenting words                             | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | .(  \  (                                     |              |                  |
+  |                                              |              |                  |
+  | String words                                 | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | $"  ."                                       |              |                  |
+  | ACCEPT                                       |              |                  |
+  |                                              |              |                  |
+  | Misc. words                                  | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | BL  CELL  COUNT  CELL+  CELL-  CELLS         |              |                  |
+  |                                              |              |                  |
+  | Double Precision words                       | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | DNEGATE  D+  D-                              |              |                  |
+  | 2!  2@  2DUP  2DROP  2SWAP  2OVER            |              |                  |
+  | S>D  D>S                                     |              |                  |
+  |                                              |              |                  |
+  | Debugging Tools words                        | parameters   | function         |
+  |:---------------------------------------------|:-------------|:-----------------|
+  | HERE  HEX  DECIMAL  DUMP  WORDS  SEE         |              |                  |
+  | FORGET  TRACE  BYE                           |              |                  |
 
 ### eForth1 specific - for parsing and system interface
 
-  | String Processing words | parameters | function |
-  |:------------------------|:-----------|:---------|
-  | do$  $\|  ."\|          |            |          |
-
-  | Primitive words           | parameters | function |
-  |:--------------------------|:-----------|:---------|
-  | NOP  ENTER  EXIT  EXECUTE |            |          |
-  | DOLIT  DOVAR              |            |          |
-  | QBRANCH  BRANCH  DONEXT   |            |          |
-
+  | String Processing words                          | parameters | function |
+  |:-------------------------------------------------|:-----------|:---------|
+  | do$  $\|  ."\|                                   |            |          |
+  |                                                  |            |          |
+  | Primitive words                                  | parameters | function |
+  |:-------------------------------------------------|:-----------|:---------|
+  | NOP  ENTER  EXIT  EXECUTE                        |            |          |
+  | DOLIT  DOVAR                                     |            |          |
+  | QBRANCH  BRANCH  DONEXT                          |            |          |
+  |                                                  |            |          |
   | Outer Interpreter and Parser words               | parameters | function |
   |:-------------------------------------------------|:-----------|:---------|
   | >UPPER  DIGIT  EXTRACT  DIGIT?  NUMBER?  (parse) |            |          |

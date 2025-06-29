@@ -46,7 +46,7 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
   | Forth Standard Words                                | parameters     | function         |
   |:----------------------------------------------------|:---------------|:-----------------|
   | **Data Stack words**                                |                |                  |
-  | <pre>DUP  DROP  SWAP  OVER  ROT  PICK</pre>         |                |                  |
+  | <code>DUP  DROP  SWAP  OVER  ROT  PICK</code>         |                |                  |
   | <pre>?DUP  DEPTH  S0  SP@</pre>                     |                |                  |
   |                                                     |                |                  |
   | **Arithmetic words**                                |                |                  |
@@ -80,50 +80,52 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
   | <pre>QUIT  ABORT</pre>                              |                |                  |
   |                                                     |                |                  |
   | **Memory Management words**                         |                |                  |
-  | !  +!  @  C!  C@  ,(comma)  C  ?                    |                |                  |
-  | ALLOT  CMOVE  MOVE  FILL                            |                |                  |
+  | <pre>!  +!  @  C!  C@  ,(comma)  C  ?</pre>         |                |                  |
+  | <pre>ALLOT  CMOVE  MOVE  FILL</pre>                 |                |                  |
   |                                                     |                |                  |
   | **Output Formatting words**                         |                |                  |
-  | <#  HOLD  #  #S  SIGN  #>  STR                      |                |                  |
-  | .R  U.R  U.                                         |                |                  |
+  | <pre><#  HOLD  #  #S  SIGN  #>  STR</pre>           |                |                  |
+  | <pre>.R  U.R  U.</pre>                              |                |                  |
   |                                                     |                |                  |
   | **Commenting words**                                |                |                  |
-  | .(  \  (                                            |                |                  |
+  | <pre>.(  \  (</pre>                                 |                |                  |
   |                                                     |                |                  |
   | **String words***                                   |                |                  |
-  | $"  ."                                              |                |                  |
-  | ACCEPT                                              |                |                  |
+  | <pre>$"  ."</pre>                                   |                |                  |
+  | <pre>ACCEPT</pre>                                   |                |                  |
   |                                                     |                |                  |
   | **Misc. words**                                     |                |                  |
-  | BL  CELL  COUNT  CELL+  CELL-  CELLS                |                |                  |
+  | <pre>BL  CELL  COUNT  CELL+  CELL-  CELLS</pre>     |                |                  |
   |                                                     |                |                  |
   | **Double Precision words**                          |                |                  |
-  | DNEGATE  D+  D-                                     |                |                  |
-  | 2!  2@  2DUP  2DROP  2SWAP  2OVER                   |                |                  |
-  | S>D  D>S                                            |                |                  |
+  | <pre>DNEGATE  D+  D-</pre>                          |                |                  |
+  | <pre>2!  2@  2DUP  2DROP  2SWAP  2OVER</pre>        |                |                  |
+  | <pre>S>D  D>S</pre>                                 |                |                  |
   |                                                     |                |                  |
   | **Debugging Tools words**                           |                |                  |
-  | HERE  HEX  DECIMAL  DUMP  WORDS  SEE                |                |                  |
-  | FORGET  TRACE  BYE                                  |                |                  |
+  | <pre>NOP  HERE  HEX  DECIMAL</pre>                  |                |                  |
+  | <pre>DUMP  WORDS  SEE</pre>                         |                |                  |
+  | <pre>FORGET  TRACE  BYE</pre>                       |                |                  |
   |                                                     |                |                  |
+
 
 ### eForth1 specific - for parsing and system interface
 
-  | eForth1 specific                                 | Parameters | function |
-  |:-------------------------------------------------|:-----------|:---------|
-  | **String Processing words**                      |            |          |
-  | do$  $\|  ."\|                                   |            |          |
-  |                                                  |            |          |
-  | **Primitive words**                              |            |          |
-  | NOP  ENTER  EXIT  EXECUTE                        |            |          |
-  | DOLIT  DOVAR                                     |            |          |
-  | QBRANCH  BRANCH  DONEXT                          |            |          |
-  |                                                  |            |          |
-  | **Outer Interpreter and Parser words**           |            |          |
-  | >UPPER  DIGIT  EXTRACT  DIGIT?  NUMBER?  (parse) |            |          |
-  | PACK$  TOKEN  NAME?  NAME>  SAME?  >NAME  $,n    |            |          |
-  | ^H  TAP  kTAP  EXPECT  ?UNIQUE                   |            |          |
-  | $INTERPRET  $COMPILE  EVAL  COMPILE-ONLY         |            |          |
-  | .ADDR  .OP  .OK                                  |            |          |
-  | QUERY  ERROR  COLD                               |            |          |
+  | eForth1 specific                                            | Parameters | function |
+  |:------------------------------------------------------------|:-----------|:---------|
+  | **String Processing words**                                 |            |          |
+  | <pre>do$  $\|  ."\|</pre>                                   |            |          |
+  |                                                             |            |          |
+  | **Primitive words**                                         |            |          |
+  | <pre>ENTER  EXIT  EXECUTE</pre>                             |            |          |
+  | <pre>DOLIT  DOVAR</pre>                                     |            |          |
+  | <pre>QBRANCH  BRANCH  DONEXT</pre>                          |            |          |
+  |                                                             |            |          |
+  | **Outer Interpreter and Parser words**                      |            |          |
+  | <pre>>UPPER  DIGIT  EXTRACT  DIGIT?  NUMBER?  (parse)</pre> |            |          |
+  | <pre>PACK$  TOKEN  NAME?  NAME>  SAME?  >NAME  $,n</pre>    |            |          |
+  | <pre>^H  TAP  kTAP  EXPECT  ?UNIQUE</pre>                   |            |          |
+  | <pre>$INTERPRET  $COMPILE  EVAL  COMPILE-ONLY</pre>         |            |          |
+  | <pre>.ADDR  .OP  .OK</pre>                                  |            |          |
+  | <pre>QUERY  ERROR  COLD</pre>                               |            |          |
 

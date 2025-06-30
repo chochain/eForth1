@@ -1,9 +1,9 @@
 ### eForth1 Virtual Machine
 eForth1 is built in three parts.
 
-    1. It compiles eforth_asm.c which metacompile the ROM image of Forth and store it in eforth_rom.c which is pre-build for you.
-    2. The Forth image, treated as an byte array in C, is then compiled with the eForth1 VM library package (i.e. src/eforth1.cpp, src/eforth_vm.cpp, src/eforth_core.cpp, and their associated .h files)
-    3. Arduino IDE, include the eForth1 package downloaded by Library Manager, compiles the eforth1.ino into ATmega328p machine code then load and run on the microcontroller. One can then interact with eForth1 through the Serial Monitor.
+* 1. It compiles eforth_asm.c which metacompile the ROM image of Forth and store it in eforth_rom.c which is pre-build for you.
+* 2. The Forth image, treated as an byte array in C, is then compiled with the eForth1 VM library package (i.e. src/eforth1.cpp, src/eforth_vm.cpp, src/eforth_core.cpp, and their associated .h files)
+* 3. Arduino IDE, include the eForth1 package downloaded by Library Manager, compiles the eforth1.ino into ATmega328p machine code then load and run on the microcontroller. One can then interact with eForth1 through the Serial Monitor.
     
 Note: If you want to add custom words into the Forth image, eforth_rom.c needs to be rebuilt (see Makefile).
 
@@ -31,6 +31,8 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
     |             |      | Parameter   |      | Parameter   |
     |             |      | Field       |      | Field       |
     +-------------+      +-------------+      +-------------+
+    
+Note: Though ATmega328p is a Little-Endian processor, eForth1 uses Big-Endian encoding for memory layout with respect to eForth tradition and future interoperability.
 
 #### User Variables
 

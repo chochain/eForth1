@@ -1,16 +1,23 @@
 ### eForth1 Virtual Machine
+eForth1 is built in three parts.
+    1. It compiles eforth_asm.c which metacompile the ROM image of Forth and store it in eforth_rom.c which is pre-build for you.
+    2. The Forth image, treated as an byte array in C, is then compiled with the eForth1 VM library package (i.e. src/eforth1.cpp, src/eforth_vm.cpp, src/eforth_core.cpp, and their associated .h files)
+    3. Arduino IDE, include the eForth1 package downloaded by Library Manager, compiles the eforth1.ino into ATmega328p machine code then load and run on the microcontroller. One can then interact with eForth1 through the Serial Monitor.
+    
+Note: If you want to add custom words into the Forth image, eforth_rom.c needs to be rebuilt (see Makefile).
+
 #### Memory Map
-Arduino IDE load the compiled eForth1 onto UNO/Nano flash memory. Unlike 328eForth, it does not overwrite the bootloader. The following memory map is logical instead of the physical address of ATmega328p processor. Built-in words are somewhere inside the 16K flash memory functions as a ROM, and the user defined words and other data parts stay in static RAM. They are stitched togather by eForth1 virtually as one continuous memory map.
+Arduino IDE load the compiled eForth1 (~13KB) onto UNO/Nano 32K flash memory. Unlike 328eForth, it does not overwrite the bootloader. The following memory map is logical instead of the physical address of ATmega328p processor. Built-in words are stored as an array inside the flash memory and treated as a piece of ROM. On the other hand, user defined words and other data parts live in static RAM. The "ROM" and "RAM" are virtually stitched togather by eForth1 as one continuous memory space. A true virtual machine.
 
-  | Address       | Size (B) | Store | Desc                   | Save to EEPROM |
-  |:--------------|:---------|:------|:-----------------------|----------------|
-  | 0x0000-0x1FFF | 8K       | Flash | built-in words         |                |
-  | 0x2000-0x201F | 32       | SRAM  | user variables         | Yes            |
-  | 0x2020-0x23FF | 1K - 32  | SRAM  | user colon words       | Yes            |
-  | 0x2400-0x247F | 128      | SRAM  | data and return stacks |                |
-  | 0x2480-0x24FF | 128      | SRAM  | input buffer           |                |
+  | Address       | Size (B) | Store | Desc                    | Save to EEPROM |
+  |:--------------|:---------|:------|:------------------------|----------------|
+  | 0x0000-0x1FFF | 8K       | Flash | built-in words (as ROM) |                |
+  | 0x2000-0x201F | 32       | SRAM  | user variables          | Yes            |
+  | 0x2020-0x23FF | 1K - 32  | SRAM  | user colon words        | Yes            |
+  | 0x2400-0x247F | 128      | SRAM  | data and return stacks  |                |
+  | 0x2480-0x24FF | 128      | SRAM  | input buffer            |                |
 
-Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Many more can be added.
+Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Many more custom words can be added if desired.
         
 #### Dictionary - Indirect Threaded (built-in token, colon subroutine address)
 
@@ -26,20 +33,20 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
 
 #### User Variables
 
-  | User Variable | Address | Init Value | Function                                |
-  |:--------------|:--------|:-----------|:----------------------------------------|
-  | 'TIB          | 0x2000  | 0x2080     | Pointer to Terminal Input Buffer        |
-  | BASE          | 0x2002  | 0x10       | Numeric Radix                           |
-  | CP            | 0x2004  | 0x2020     | Top of dictionary                       |
-  | CONTEXT       | 0x2006  | 0xEB3      | Pointer to name field of last word      |
-  | LAST          | 0x2008  | 0xEB3      | Pointer to name field of last word      |
-  | 'MODE         | 0x200A  | 0x883      | Pointer to Compiler or Interpreter      |
-  | 'ABORT        | 0x200C  | 0x908      | Pointer to QUIT word, error handler     |
-  | HLD           | 0x200E  | 0x24FF     | Pointer to text buffer for number       |
-  | SPAN          | 0x2010  | 0x0        | Number of input characters              |
-  | >IN           | 0x2012  | 0x0        | Pointer to next input character         |
-  | #TIB          | 0x2014  | 0x0        | Number of character received from input |
-  | tmp           | 0x2016  | 0x0        | Scatch pad                              |
+  | User Variable | Address | Init Value | Function                                  |
+  |:--------------|:--------|:-----------|:------------------------------------------|
+  | 'TIB          | 0x2000  | 0x2080     | Pointer to Terminal Input Buffer          |
+  | BASE          | 0x2002  | 0x10       | Numeric Radix                             |
+  | CP            | 0x2004  | 0x2020     | Top of dictionary                         |
+  | CONTEXT       | 0x2006  | 0xEB3      | Pointer to name field of last word        |
+  | LAST          | 0x2008  | 0xEB3      | Pointer to name field of last word        |
+  | 'MODE         | 0x200A  | 0x883      | Pointer to Compiler or Interpreter        |
+  | 'ABORT        | 0x200C  | 0x908      | Pointer to QUIT word, error handler       |
+  | HLD           | 0x200E  | 0x2500     | Pointer to top of text buffer for numbers |
+  | SPAN          | 0x2010  | 0x0        | Number of input characters                |
+  | >IN           | 0x2012  | 0x0        | Pointer to next input character           |
+  | #TIB          | 0x2014  | 0x0        | Number of character received from input   |
+  | tmp           | 0x2016  | 0x0        | Scatch pad                                |
     
 ### Standard Built-in Words - for details, reference [Forth Standard](https://forth-standard.org/)
 

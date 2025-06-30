@@ -1,5 +1,6 @@
 ### eForth1 Virtual Machine
 eForth1 is built in three parts.
+
     1. It compiles eforth_asm.c which metacompile the ROM image of Forth and store it in eforth_rom.c which is pre-build for you.
     2. The Forth image, treated as an byte array in C, is then compiled with the eForth1 VM library package (i.e. src/eforth1.cpp, src/eforth_vm.cpp, src/eforth_core.cpp, and their associated .h files)
     3. Arduino IDE, include the eForth1 package downloaded by Library Manager, compiles the eforth1.ino into ATmega328p machine code then load and run on the microcontroller. One can then interact with eForth1 through the Serial Monitor.
@@ -7,7 +8,7 @@ eForth1 is built in three parts.
 Note: If you want to add custom words into the Forth image, eforth_rom.c needs to be rebuilt (see Makefile).
 
 #### Memory Map
-Arduino IDE load the compiled eForth1 (~13KB) onto UNO/Nano 32K flash memory. Unlike 328eForth, it does not overwrite the bootloader. The following memory map is logical instead of the physical address of ATmega328p processor. Built-in words are stored as an array inside the flash memory and treated as a piece of ROM. On the other hand, user defined words and other data parts live in static RAM. The "ROM" and "RAM" are virtually stitched togather by eForth1 as one continuous memory space. A true virtual machine.
+Arduino IDE load the compiled eForth1 (~13KB) onto UNO/Nano 32K flash memory. Unlike 328eForth, it does not overwrite the bootloader. The following memory map is logical instead of the physical address of ATmega328p processor. Built-in words are stored as an array inside the flash memory and treated as a piece of ROM. On the other hand, user defined words and other data parts occuping about 1.25K of the total 2K static RAM. The "ROM" and "RAM" are virtually stitched togather by eForth1 as one continuous memory space. A true virtual machine.
 
   | Address       | Size (B) | Store | Desc                    | Save to EEPROM |
   |:--------------|:---------|:------|:------------------------|----------------|
@@ -50,85 +51,85 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
     
 ### Standard Built-in Words - for details, reference [Forth Standard](https://forth-standard.org/)
 
-  | Forth Standard Words                                | parameters     | function         |
-  |:----------------------------------------------------|:---------------|:-----------------|
-  | **Data Stack words**                                |                |                  |
+  | Forth Standard Words                                  | parameters     | function         |
+  |:------------------------------------------------------|:---------------|:-----------------|
+  | **Data Stack words**                                  |                |                  |
   | <code>DUP  DROP  SWAP  OVER  ROT  PICK</code>         |                |                  |
   | <code>?DUP  DEPTH  S0  SP@</code>                     |                |                  |
-  |                                                     |                |                  |
-  | **Arithmetic words**                                |                |                  |
+  |                                                       |                |                  |
+  | **Arithmetic words**                                  |                |                  |
   | <code>+  -  *  /  MOD  MAX  MIN</code>                | ( a b -- c )   | binary ops       |
   | <code>ABS  NEGATE  LSHIFT  RSHIFT</code>              | ( a -- a' )    | unitary ops      |
   | <code>1+  1-  2+  2-  2*  2/</code>                   | ( a -- a' )    | constant ops     |
   | <code>UM/MOD  UM*  M*  UM+  */MOD  /MOD  */</code>    |                | multi-oprand ops |
-  |                                                     |                |                  |
-  | **Binary and Logic words**                          |                |                  |
+  |                                                       |                |                  |
+  | **Binary and Logic words**                            |                |                  |
   | <code>AND  OR  XOR  INVERT</code>                     | ( a -- a' )    | unitary ops      |
   | <code>0> 0= 0<</code>                                 | ( a -- f )     |                  |
   | <code>>  =  <  U<</code>                              | ( a b -- f )   |                  |
   | <code>WITHIN</code>                                   | ( L H a -- f ) | trinary op       |
-  |                                                     |                |                  |
-  | **IO words**                                        |                |                  |
+  |                                                       |                |                  |
+  | **IO words**                                          |                |                  |
   | <code>?KEY  KEY  >CHAR  CHARS</code>                  |                |                  |
   | <code>EMIT  TYPE  SPACE  SPACES CR  .</code>          |                |                  |
-  |                                                     |                |                  |
-  | **Branching and Return Stack words**                |                |                  |
+  |                                                       |                |                  |
+  | **Branching and Return Stack words**                  |                |                  |
   | <code>IF  ELSE  THEN</code>                           |                |                  |
   | <code>BEGIN  AGAIN  UNTIL  WHILE  WHEN  REPEAT</code> |                |                  |
   | <code>FOR  AFT  NEXT</code>                           |                |                  |
   | <code>I  R>  R@  >R  RP</code>                        |                |                  |
-  |                                                     |                |                  |
-  | **Word Defining and Compiler words**                |                |                  |
+  |                                                       |                |                  |
+  | **Word Defining and Compiler words**                  |                |                  |
   | <code>:  ;  CODE  CREATE  DOES>  '</code>             |                |                  |
   | <code>FIND  WORD  AHEAD  LITERAL  PARSE</code>        |                |                  |
   | <code>[  ]  [COMPILE]  COMPILE  IMMEDIATE</code>      |                |                  |
   | <code>VARIABLE  CONSTANT</code>                       |                |                  |
   | <code>2VARAIBLE  2CONSTANT</code>                     |                |                  |
   | <code>QUIT  ABORT</code>                              |                |                  |
-  |                                                     |                |                  |
-  | **Memory Management words**                         |                |                  |
+  |                                                       |                |                  |
+  | **Memory Management words**                           |                |                  |
   | <code>!  +!  @  C!  C@  ,(comma)  C  ?</code>         |                |                  |
   | <code>ALLOT  CMOVE  MOVE  FILL</code>                 |                |                  |
-  |                                                     |                |                  |
-  | **Output Formatting words**                         |                |                  |
+  |                                                       |                |                  |
+  | **Output Formatting words**                           |                |                  |
   | <code><#  HOLD  #  #S  SIGN  #>  STR</code>           |                |                  |
   | <code>.R  U.R  U.</code>                              |                |                  |
-  |                                                     |                |                  |
-  | **Commenting words**                                |                |                  |
+  |                                                       |                |                  |
+  | **Commenting words**                                  |                |                  |
   | <code>.(  \  (</code>                                 |                |                  |
-  |                                                     |                |                  |
-  | **String words***                                   |                |                  |
+  |                                                       |                |                  |
+  | **String words***                                     |                |                  |
   | <code>$"  ."</code>                                   |                |                  |
   | <code>ACCEPT</code>                                   |                |                  |
-  |                                                     |                |                  |
-  | **Misc. words**                                     |                |                  |
+  |                                                       |                |                  |
+  | **Misc. words**                                       |                |                  |
   | <code>BL  CELL  COUNT  CELL+  CELL-  CELLS</code>     |                |                  |
-  |                                                     |                |                  |
-  | **Double Precision words**                          |                |                  |
+  |                                                       |                |                  |
+  | **Double Precision words**                            |                |                  |
   | <code>DNEGATE  D+  D-</code>                          |                |                  |
   | <code>2!  2@  2DUP  2DROP  2SWAP  2OVER</code>        |                |                  |
   | <code>S>D  D>S</code>                                 |                |                  |
-  |                                                     |                |                  |
-  | **Debugging Tools words**                           |                |                  |
+  |                                                       |                |                  |
+  | **Debugging Tools words**                             |                |                  |
   | <code>NOP  HERE  HEX  DECIMAL</code>                  |                |                  |
   | <code>DUMP  WORDS  SEE</code>                         |                |                  |
   | <code>FORGET  TRACE  BYE</code>                       |                |                  |
-  |                                                     |                |                  |
+  |                                                       |                |                  |
 
 
 ### eForth1 specific - for parsing and system interface
 
-  | eForth1 specific                                            | Parameters | function |
-  |:------------------------------------------------------------|:-----------|:---------|
-  | **String Processing words**                                 |            |          |
+  | eForth1 specific                                              | Parameters | function |
+  |:--------------------------------------------------------------|:-----------|:---------|
+  | **String Processing words**                                   |            |          |
   | <code>do$  $\|  ."\|</code>                                   |            |          |
-  |                                                             |            |          |
-  | **Primitive words**                                         |            |          |
+  |                                                               |            |          |
+  | **Primitive words**                                           |            |          |
   | <code>ENTER  EXIT  EXECUTE</code>                             |            |          |
   | <code>DOLIT  DOVAR</code>                                     |            |          |
   | <code>QBRANCH  BRANCH  DONEXT</code>                          |            |          |
-  |                                                             |            |          |
-  | **Outer Interpreter and Parser words**                      |            |          |
+  |                                                               |            |          |
+  | **Outer Interpreter and Parser words**                        |            |          |
   | <code>>UPPER  DIGIT  EXTRACT  DIGIT?  NUMBER?  (parse)</code> |            |          |
   | <code>PACK$  TOKEN  NAME?  NAME>  SAME?  >NAME  $,n</code>    |            |          |
   | <code>^H  TAP  kTAP  EXPECT  ?UNIQUE</code>                   |            |          |

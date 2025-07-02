@@ -146,9 +146,11 @@ typedef void (*CFP)();                ///< function pointer
         OP(MSLAS), \
         OP(S2D),   \
         OP(D2S),   \
+    OP(DABS),   \
     OP(DNEG),   \
     OP(DADD),   \
     OP(DSUB),   \
+    OP(UDSMOD), \
         OP(SPAT),  \
         OP(TRC),   \
         OP(SAVE),  \

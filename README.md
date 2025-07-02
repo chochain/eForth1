@@ -119,11 +119,11 @@ Now type **WORDS** in the input bar and hit \<return\> to list all the words sup
     </pre>
 
 ### eForth1 Virtual Machine, User Variables, Dictionary and Standard FORTH words
-    See details in ~/docs/README [here](https://github.com/chochain/eForth1/tree/master/docs)
+See details in ~/docs/README [here](https://github.com/chochain/eForth1/tree/master/docs)
 
 ### eForth1 Arduino specific words
 #### Digital and Analog IO
-Instead of accessing memory mapped address (i.e. 0x20~0x3F), eForth1 uses the Arduino C functions to access GPIO pins. Not the preference by bare metal people but fast enough mostly and easier for new comers.
+Instead of accessing memory mapped address (i.e. 0x20-0x3F), eForth1 uses the Arduino C functions to access GPIO pins. Not the preference by bare metal people but fast enough mostly and easier for new comers.
 
   | Word    | Usage                  | Function                                |
   |:--------|:-----------------------|:----------------------------------------|
@@ -139,7 +139,7 @@ Instead of accessing memory mapped address (i.e. 0x20~0x3F), eForth1 uses the Ar
 *Note: Since Timer0 (pin 5, 6) is used for clock and Timer2 (pin 3, 11) is used for timer interrupt, eForth1 can only safely use Pin 9 and 10 for PWM (unless you don't need CLOCK or DELAY). Other pins behave like digital pins. Anything above and equals to 128 is treated as HIGH, below as LOW. On the other hand, AIN does not use any timer. It can be safely used with all Analog Pins.
 
 #### Timer and Pin Change Interrupts
-eForth1 uses a data structure to capture interrupts. It supports 11 ISRs (interrupt service routines). 8 for Timer and 3 for Pin Change. Arduino UNO/Nano timer2 is used, ticking at 1 millisecond as the base freq for timer interrupt. Timer0 is used for delay and Timer1 are left for other Arduino libraries such as servo driving. Pin Changes are flagged by port-D (pin D0~D7), Port-B (pin D8~D13), and Port-C (pin A0~A5). Only one xt (function address) per port so your ISR needs to figure out which pin actually been triggered if they use the same port.
+eForth1 uses a data structure to capture interrupts. It supports 11 ISRs (interrupt service routines). 8 for Timer and 3 for Pin Change. Arduino UNO/Nano timer2 is used, ticking at 1 millisecond as the base freq for timer interrupt. Timer0 is used for delay and Timer1 are left for other Arduino libraries such as servo driving. Pin Changes are flagged by port-D (pin D0-D7), Port-B (pin D8-D13), and Port-C (pin A0-A5). Only one xt (function address) per port so your ISR needs to figure out which pin actually been triggered if they use the same port.
 
   | Word  | Usage         | Function                                   |
   |:------|:--------------|:-------------------------------------------|
@@ -159,7 +159,7 @@ Arduino UNO/Nano has 1K of EEPROM which can cover eForth1 user variables, the ne
   | LOAD | ( -- )   | restore EEPROM into RAM:0x2000 ~ last_word |
 
 #### C API call
-eForth1 provides a C interface for accessing the vast amount of libraries comes with Arduino ecosystem.
+eForth1 provides a C interface for accessing the vast amount of libraries comes with Arduino ecosystem. It currently support upto 8 C functions but can be changed by updating CFUNC_MAX in eforth_config.h before compilation.
 
   | Word | Usage    | Function                                   |
   |:-----|:---------|:-------------------------------------------|

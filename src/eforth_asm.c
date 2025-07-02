@@ -171,13 +171,13 @@ int assemble(U8 *rom)
         _THEN(NOP);
         _NEXT(DROP, DROP, EXIT);
     }
-    _COLON("MOVE", CELL, DIV); {
+    IU MOVE  = _COLON("MOVE", CELL, DIV); {
         _FOR(NOP);
         _AFT(OVER, AT, OVER, STORE, TOR, CELL, ADD, RFROM, CELL, ADD);
         _THEN(NOP);
         _NEXT(DROP, DROP, EXIT);
     }
-    _COLON("FILL", SWAP); {
+    IU FILL  = _COLON("FILL", SWAP); {
         _FOR(SWAP);
         _AFT(DDUP, CSTOR, ONEP);
         _THEN(NOP);
@@ -201,8 +201,8 @@ int assemble(U8 *rom)
         _REPEAT(EXIT);
     }
     IU EDIGS = _COLON("#>",      DDROP, vHLD, AT, PAD, OVER, SUB, EXIT);
-    IU DSTR   = _COLON("DSTR",    DDUP, TOR, DROP, DABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
-    IU STR    = _COLON("STR",    S2D, DSTR, EXIT);
+    IU DSTR  = _COLON("DSTR",    DDUP, TOR, DROP, DABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
+    IU STR   = _COLON("STR",     S2D, DSTR, EXIT);
     IU HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
     IU DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
     IU DIGTQ = _COLON("DIGIT?",
@@ -254,14 +254,11 @@ int assemble(U8 *rom)
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, COUNT, EXIT);
     IU STRQP = _COLON("$\"|", DOSTR, EXIT);
        DOTQP = _COLON(".\"|", DOSTR, TYPE, EXIT);             /// Note: DOTQP export to _dotq
-    IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);  /// shown as string
-    IU UDOTR = _COLON("U.R",  TOR, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);
-    IU UDOT  = _COLON("U.",   BDIGS, DIGS, EDIGS, SPACE, TYPE, EXIT);
-    IU DOT   = _COLON(".",    vBASE, AT, DOLIT, 0xa, XOR); {
-        _IF(UDOT, EXIT);                                      /// base 10
-        _THEN(STR, SPACE, TYPE, EXIT);                        /// shown as string
-    }
-    IU QUEST = _COLON("?", AT, DOT, EXIT);
+    IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);  /// ( d n -- ) fixed width
+    IU UDOTR = _COLON("U.R",  TOR, S2D, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);                                                 /// ( u n -- ) unsigned fixed size
+    IU UDOT  = _COLON("U.",   DOLIT, 1, UDOTR, EXIT);         /// ( u -- ) unsigned
+    IU DOT   = _COLON(".",    STR, SPACE, TYPE, EXIT);        /// ( d -- ) print, extra space
+    IU QUEST = _COLON("?",    AT, DOT, EXIT);                 /// memory query
     /// TODO: add PAGE
     ///
     ///> Parsing

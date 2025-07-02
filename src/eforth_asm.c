@@ -105,15 +105,18 @@ int assemble(U8 *rom)
     
     IU S2D   = _PRIM("S>D",     S2D    );    ///> ( n -- dl dh )
     IU D2S   = _PRIM("D>S",     D2S    );    ///> ( dl dh -- n )
+    IU DABS  = _PRIM("DABS",    DABS   );    ///> ( dl dh -- dl' dh' )
     IU DNEG  = _PRIM("DNEGATE", DNEG   );
     IU DADD  = _PRIM("D+",      DADD   );
     IU DSUB  = _PRIM("D-",      DSUB   );
+    IU UDSMOD= _PRIM("UD/MOD",  UDSMOD );    ///> ( d1l d1h d2l d2h -- drl drh dql dqh )
+    IU DZEQ  = _COLON("D0=",    ZEQ, SWAP, ZEQ, AND, EXIT);
     IU DSTOR = _COLON("2!",     DUP, TOR, DOLIT, CELLSZ, ADD, STORE, RFROM, STORE, EXIT);
     IU DAT   = _COLON("2@",     DUP, TOR, AT, RFROM, DOLIT, CELLSZ, ADD, AT, EXIT);
     IU DDUP  = _COLON("2DUP",   OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP",  DROP, DROP, EXIT);
-    _COLON("2SWAP",   ROT, TOR, ROT, RFROM, EXIT);
-    _COLON("2OVER",   DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
+    IU DSWAP = _COLON("2SWAP",  ROT, TOR, ROT, RFROM, EXIT);
+    IU DOVER = _COLON("2OVER",  DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
     ///
     /// extended words
     ///
@@ -184,21 +187,22 @@ int assemble(U8 *rom)
     ///> Number Conversions and formatting
     ///
     IU DIGIT = _COLON("DIGIT",   DOLIT, 9, OVER, LT, DOLIT, 7, AND, ADD, DOLIT, 0x30, ADD, EXIT);
-    IU EXTRC = _COLON("EXTRACT", DOLIT, 0, SWAP, UMMOD, SWAP, DIGIT, EXIT);
-    IU BDIGS = _COLON("<#",      PAD, vHLD, STORE, EXIT);
     IU HOLD  = _COLON("HOLD",    vHLD, AT, ONEM, DUP, vHLD, STORE, CSTOR, EXIT);
-    IU DIG   = _COLON("#",       vBASE, AT, EXTRC, HOLD, EXIT);
-    IU DIGS  = _COLON("#S", NOP); {
-        _BEGIN(DIG, DUP);
-        _WHILE(NOP);
-        _REPEAT(EXIT);
-    }
+    IU BDIGS = _COLON("<#",      PAD, vHLD, STORE, EXIT);
     IU SIGN  = _COLON("SIGN", ZLT); {
         _IF(DOLIT, 0x2d, HOLD);
         _THEN(EXIT);
     }
-    IU EDIGS = _COLON("#>",      DROP, vHLD, AT, PAD, OVER, SUB, EXIT);
-    IU STR   = _COLON("STR",     DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
+    IU EXTRC = _COLON("EXTRACT", UDSMOD, DSWAP, DROP, DIGIT, EXIT);
+    IU DIG   = _COLON("#",       vBASE, AT, DOLIT, 0, EXTRC, HOLD, EXIT);
+    IU DIGS  = _COLON("#S", NOP); {
+        _BEGIN(DIG, DDUP, DZEQ, INV);
+        _WHILE(NOP);
+        _REPEAT(EXIT);
+    }
+    IU EDIGS = _COLON("#>",      DDROP, vHLD, AT, PAD, OVER, SUB, EXIT);
+    IU DSTR   = _COLON("DSTR",    DDUP, TOR, DROP, DABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
+    IU STR    = _COLON("STR",    S2D, DSTR, EXIT);
     IU HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
     IU DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
     IU DIGTQ = _COLON("DIGIT?",

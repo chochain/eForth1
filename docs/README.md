@@ -32,7 +32,7 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
     |             |      | Field       |      | Field       |
     +-------------+      +-------------+      +-------------+
     
-Note: Though ATmega328p is a Little-Endian processor, eForth1 uses Big-Endian encoding for memory layout with respect to eForth tradition and future interoperability.
+Note: Though ATmega328p is a little-endian processor, eForth1 uses big-endian encoding for memory layout with respect to eForth tradition and future interoperability.
 
 #### User Variables
 
@@ -94,7 +94,7 @@ Note: Though ATmega328p is a Little-Endian processor, eForth1 uses Big-Endian en
   | <code>ALLOT  CMOVE  MOVE  FILL</code>                 |                |                  |
   |                                                       |                |                  |
   | **Output Formatting words**                           |                |                  |
-  | <code><#  HOLD  #  #S  SIGN  #>  STR</code>           |                |                  |
+  | <code><#  HOLD  #  #S  SIGN  #></code>                |                |                  |
   | <code>.R  U.R  U.</code>                              |                |                  |
   |                                                       |                |                  |
   | **Commenting words**                                  |                |                  |
@@ -108,7 +108,8 @@ Note: Though ATmega328p is a Little-Endian processor, eForth1 uses Big-Endian en
   | <code>BL  CELL  COUNT  CELL+  CELL-  CELLS</code>     |                |                  |
   |                                                       |                |                  |
   | **Double Precision words**                            |                |                  |
-  | <code>DNEGATE  D+  D-</code>                          |                |                  |
+  | <code>DABS DNEGATE  D+  D- UD/MOD</code>              |                |                  |
+  | <code>D0=</code>                                      |                |                  |
   | <code>2!  2@  2DUP  2DROP  2SWAP  2OVER</code>        |                |                  |
   | <code>S>D  D>S</code>                                 |                |                  |
   |                                                       |                |                  |
@@ -124,7 +125,7 @@ Note: Though ATmega328p is a Little-Endian processor, eForth1 uses Big-Endian en
   | eForth1 specific                                              | Parameters | function |
   |:--------------------------------------------------------------|:-----------|:---------|
   | **String Processing words**                                   |            |          |
-  | <code>do$  $\|  ."\|</code>                                   |            |          |
+  | <code>do$  $\|  ."\| DSTR STR</code>                          |            |          |
   |                                                               |            |          |
   | **Primitive words**                                           |            |          |
   | <code>ENTER  EXIT  EXECUTE</code>                             |            |          |

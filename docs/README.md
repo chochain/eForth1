@@ -32,6 +32,8 @@ Note: currently, built-in words (defined in eforth_asm.c) occupied only 3.8K. Ma
     |             |      | Field       |      | Field       |
     +-------------+      +-------------+      +-------------+
     
+  <img src="https://chochain.github.io/eForth1/images/eforth1_mmap_02.png" width=600><br/>
+    
 Note: Though ATmega328p is a little-endian processor, eForth1 uses big-endian encoding for memory layout with respect to eForth tradition and future interoperability.
 
 #### User Variables

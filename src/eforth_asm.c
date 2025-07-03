@@ -193,8 +193,8 @@ int assemble(U8 *rom)
         _IF(DOLIT, 0x2d, HOLD);
         _THEN(EXIT);
     }
-    IU EXTRC = _COLON("EXTRACT", UDSMOD, DSWAP, DROP, DIGIT, EXIT);
-    IU DIG   = _COLON("#",       vBASE, AT, DOLIT, 0, EXTRC, HOLD, EXIT);
+    IU EXTRC = _COLON("EXTRACT", DOLIT, 0, UDSMOD, DSWAP, DROP, DIGIT, EXIT);  /// ( dl dh n -- dql dqh u )
+    IU DIG   = _COLON("#",       vBASE, AT, EXTRC, HOLD, EXIT);
     IU DIGS  = _COLON("#S", NOP); {
         _BEGIN(DIG, DDUP, DZEQ, INV);
         _WHILE(NOP);
@@ -490,14 +490,14 @@ int assemble(U8 *rom)
         _UNTIL(EXIT);
     }
     _COLON("DUMP", vBASE, AT, TOR, HEX_,                       /// save BASE, make HEX
-            DOLIT, 0x1f, ADD, DOLIT, 0x10, DIV); {             /// get row count
+        DOLIT, 0x1f, ADD, DOLIT, 0x10, DIV); {                 /// get row count
         _FOR(NOP);
         _AFT(CR, DOLIT, 0x10, DDUP, OVER, DOLIT, 5, UDOTR); {  /// dump one row
             _FOR(DOLIT, 0x3a, EMIT);                           /// :
-            _AFT(SPACE, DUP, CAT,
-                DOLIT, 0x10, EXTRC, SWAP,                      /// low-nibble
-                DOLIT, 0x10, EXTRC, EMIT, DROP, EMIT,          /// high-nibble
-                ONEP, RAT, DOLIT, 8, EQ); {
+            _AFT(SPACE, DUP, CAT, S2D,
+                DOLIT, 0x10, EXTRC, TOR,                       /// low-nibble
+                DOLIT, 0x10, EXTRC, EMIT, RFROM, EMIT,         /// high-nibble
+                DDROP, ONEP, RAT, DOLIT, 8, EQ); {             /// 
                 _IF(SPACE);
                 _THEN(NOP);
             }

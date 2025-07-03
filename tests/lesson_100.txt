@@ -1,3 +1,180 @@
+cr .( example 1.      the universal greeting )
+
+decimal
+
+: hello cr ." hello, world!" ;
+
+cr .( example 2.      the big f )
+
+: bar   cr ." *****" ;
+: post  cr ." *    " ;
+: f     bar post bar post post post ;
+
+.( type 'f' and a return on your keyboard, and you will see a large f character displayed on the screen )
+f
+
+cr .( example 3.      fig, forth interest group )
+
+: center cr ."   *  " ;
+: sides  cr ." *   *" ;
+: triad1 cr ." * * *" ;
+: triad2 cr ." **  *" ;
+: triad3 cr ." *  **" ;
+: triad4 cr ."  *** " ;
+: quart  cr ." ** **" ;
+: right  cr ." * ***" ;
+: bigt   bar center center center center center center ;
+: bigi   center center center center center center center ;
+: bign   sides triad2 triad2 triad1 triad3 triad2 sides ;
+: bigg   triad4 sides post right triad1 sides triad4 ;
+: fig    f bigi bigg ;
+fig
+
+cr .( example 4. repeated patterns )
+variable width ( number of asterisks to print )
+
+: asterisks    ( -- , print n asterisks on the screen, n=width )
+  width @      ( limit=width, initial index=0 )
+  for ." *"    ( print one asterisk at a time )
+  next         ( repeat n times )
+  ;
+
+: rectangle    ( height width -- , print a rectangle of asterisks )
+  width !      ( initialize width to be printed )
+  for cr
+    asterisks  ( print a line of asterisks )
+  next
+  ;
+
+: parallelogram ( height width -- )
+  width !
+  for cr
+    r@ spaces   ( shift the lines to the right )
+    asterisks   ( print one line )
+  next
+  ;
+
+: triangle ( width -- , print a triangle area with asterisks )
+  for cr
+    r@ width !  ( increase width every line )
+    asterisks   ( print one line )
+  next
+  ;
+
+.( try the following instructions: )
+
+3 10 rectangle
+5 18 parallelogram
+12 triangle  
+
+cr .( example 5.  money exchange )
+
+.( 33.55 nt        1 dollar )
+.( 7.73 hk         1 dollar )
+.( 9.47 rmb        1 dollar )
+.( 1 ounce gold    285 dollars )
+.( 1 ounce silver  4.95 dollars )
+
+decimal
+
+: nt      ( nnt -- $ )    100 3355 */  ;
+: $nt     ( $ -- nnt )    3355 100 */  ;
+: rmb     ( nrmb -- $ )   100 947 */  ;
+: $rmb    ( $ -- njmp )   947 100 */  ;
+: hk      ( nhk -- $ )    100 773 */  ;
+: $hk     ( $ -- $ )      773 100 */  ;
+: gold    ( nounce -- $ ) 285 *  ;
+: $gold   ( $ -- nounce ) 285 /  ;
+: silver  ( nounce -- $ ) 495 100 */  ;
+: $silver ( $ -- nounce ) 100 495 */  ;
+: ounce   ( n -- n, a word to improve syntax )  ;
+: dollars ( n -- ) . ;
+
+.( with this set of money exchange words, we can do some tests: )
+
+5 ounce gold .
+10 ounce silver .
+100 $nt .
+20 $rmb .
+
+.( if you have many different currency bills in your wallet, you )
+.( can add then all up in dollars: )
+
+1000 nt 500 hk + 
+320 rmb + 
+dollars .( should print out total worth in dollars = 126 )
+
+cr .( example 6. temperature conversion )
+
+: f>c ( nfarenheit -- ncelcius )
+  32 -
+  10 18 */
+  ;
+
+: c>f ( ncelcius -- nfarenheit )
+  18 10 */
+  32 +
+  ;
+
+.( try these commands )
+
+90 f>c .
+0  c>f .
+
+cr .( example 7.  weather reporting. )
+
+: weather ( nfarenheit -- )
+  dup     55 <
+  if      ."  too cold!" drop
+  else    85 <
+    if      ."  about right."
+    else    ."  too hot!"
+    then
+  then
+  ;
+
+
+.( you can type the following instructions )
+
+90 weather
+70 weather
+32 weather
+
+cr .( example 8.  print the multiplication table )
+
+: onerow ( nrow -- )
+  cr
+  dup 3 .r 4 spaces
+  1 11
+  for
+    2dup * 4 .r 1 +
+  next
+  2drop ;
+
+: multiply ( -- )
+  cr cr 7 spaces
+  1 11
+  for
+    dup 4 .r 1 +
+  next drop 
+  1 11
+  for
+    dup onerow 1 +
+  next drop cr
+  ;
+
+.( type multiply to print the multiplication table )
+multiply
+
+.( reset so we can reclaim the dictionary space )
+hex here .        ( show our dictionary size in hex ) 
+save              ( save current context )
+forget hello      ( clean dictionary )
+here .            ( see if it is clean )
+
+cr .( example 11.  calendars )
+.( print weekly calendars for any month in any year. )
+
 decimal
 
 variable julian   ( 0 is 1/1/1950, good until 2050 )
@@ -59,4 +236,154 @@ variable leap     ( 1 for a leap year, 0 otherwise. )
   days cr stars cr ;  ( print days   )
 
 2020 year 5 month
+
+cr .( example 12.      sines and cosines )
+
+.( we choose integer 10000 in decimal to represent 1.0 )
+
+31416 constant pi
+10000 constant 10k
+variable xs           ( square of scaled angle )
+
+: kn ( n1 n2 -- n3, n3=10000-n1*x*x/n2 where x is the angle )
+  xs @ swap /         ( x*x/n2 )
+  negate 10k */       ( -n1*x*x/n2 )
+  10k +               ( 10000-n1*x*x/n2 )
+  ;
+  
+: (sin) ( x -- sine*10k, x in radian*10k )
+  dup dup 10k */      ( x*x scaled by 10k )
+  xs !                ( save it in xs )
+  10k 72 kn           ( last term )
+  42 kn 20 kn 6 kn    ( terms 3, 2, and 1 )
+  10k */              ( times x )
+  ;
+  
+: (cos) ( x -- cosine*10k, x in radian*10k )
+  dup 10k */ xs !     ( compute and save x*x )
+  10k 56 kn 30 kn 12 kn 2 kn      ( serial expansion )
+  ;
+: sin_ ( degree -- sine*10k )
+  pi 180 */                       ( convert to radian )
+  (sin)                           ( compute sine )
+  ;
+: cos_ ( degree -- cosine*10k )
+  pi 180 */
+  (cos)
+  ;
+: sin ( degree -- sin )
+  360 mod dup 0< if 360 + then    ( mod may be negative )
+  dup  46 < if sin_ else
+  dup 136 < if 90 - cos_ else 
+  dup 226 < if 180 - sin_ negate else 
+  dup 316 < if 270 - cos_ negate else
+  360 - sin_ then then then then ;
+: cos 90 + sin ;
+
+.( test these routines )
+
+90 sin .
+45 sin .
+30 sin .
+0  sin .
+90 cos .
+45 cos .
+0  cos .
+
+cr .( example 13. square root )
+
+: sqrt ( n -- root )
+  32400 over <             ( largest square it can handle)
+  if drop -32400 exit then ( safety exit )
+  >r                       ( save sqaure )
+  1 1                      ( initial square and root )
+  begin                    ( set n1 as the limit )
+    over r@ <              ( next square )
+  while
+    dup 2 * 1 +            ( n*n+2n+1 )
+    rot + swap
+    1 +                    ( n+1 )
+  repeat
+  swap drop
+  r> drop
+ ;
+
+4     sqrt .
+100   sqrt .
+1600  sqrt .
+10000 sqrt .
+32401 sqrt .
+
+cr .( example 14. radix for number conversions )
+
+decimal
+
+: octal  8 base ! ;
+: binary 2 base ! ;
+
+.( try converting numbers among different radices: )
+
+decimal 12345        hex     .
+hex     abcd         decimal .
+decimal 100          binary  .
+binary  101010101010 decimal .
+
+cr .( example 15. ascii character table )
+
+: character ( n -- )
+  dup emit hex dup 3 .r
+  octal dup 4 .r
+  decimal 4 .r
+  2 spaces
+  ;
+
+: line ( n -- )
+  cr 
+  5 for
+    dup character
+    16 +
+  next
+  drop ;
+
+: table ( -- )
+  32
+  15 for
+    dup line
+    1 +
+  next
+  drop ;
+
+table
+
+cr .( example 16. random numbers )
+
+variable rnd        ( seed )
+clock drop rnd !    ( initialize seed )
+
+: random ( -- n, a random number within -32768 and 32767 )
+  rnd @ 31421 m*    ( rnd*31421 )
+  6926 0 d+         ( rnd*31421+6926 )
+  drop              ( mod 65536 )
+  dup rnd !         ( refresh he seed )
+  ;
+
+: choose ( n1 -- n2, randomize between 0 and n1 )
+  dup >r            ( keep range )
+  random m*         ( n1*random to a double product )
+  swap drop         ( discard lower part )
+  r> 2/ +           ( shift center +n1/2 )
+  ;
+
+.( to test the routine, type )
+
+100 choose .
+100 choose .
+100 choose .
+
+hex here .          ( see our current dictionary size )
+load                ( restore context from EEPROM )
+here .              ( check restored dictionary size )
+multiply            ( see whether it's still there )
+
+.( all tests done! )
 bye

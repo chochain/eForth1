@@ -3,7 +3,7 @@
 # 1) make rom
 #
 CC       = gcc
-CFLAGS   = -std=c17 -O2 -Wall
+CFLAGS   = -std=c17 -O2 -Wall -Wno-unused-value -Wno-unused-variable 
 CXX      = g++
 CXXFLAGS = -std=c++17 -O2 -Wall
 
@@ -21,12 +21,12 @@ OBJS = \
 all: rom $(EXE)
 
 rom: $(ASM)
-	$(CXX) -o tests/ef_$@ $(ASM)
+	$(CC) -o tests/ef_$@ $(ASM)
 	echo Geneating eForth ROM...
 	tests/ef_$@ > src/eforth_rom.c
 
 $(EXE): $(OBJS)
-	$(CXX) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 clean:
 	rm $(EXE) $(OBJS) $(ASM)

@@ -13,7 +13,7 @@
 #include "user_interface.h"
 #endif // ESP8266
 
-#define APP_NAME  "eForth1 v2.4"
+#define APP_NAME  "eForth1 v2.6"
 ///
 ///@name Portable Types
 ///@{
@@ -146,9 +146,11 @@ typedef void (*CFP)();                ///< function pointer
         OP(MSLAS), \
         OP(S2D),   \
         OP(D2S),   \
+    OP(DABS),   \
     OP(DNEG),   \
     OP(DADD),   \
     OP(DSUB),   \
+    OP(UDSMOD), \
         OP(SPAT),  \
         OP(TRC),   \
         OP(SAVE),  \

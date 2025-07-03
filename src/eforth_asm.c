@@ -37,7 +37,7 @@ int assemble(U8 *rom)
     ///
     IU NOP   = _PRIM("NOP",     NOP    );
     IU EXIT  = _PRIM("EXIT",    EXIT   );
-    IU ENTER = _PRIM("ENTER",   ENTER  );  // aka doLIST
+    IU ENTER = _PRIM("ENTER",   ENTER  );  /// aka doLIST
     IU BYE   = _PRIM("BYE",     BYE    );
     IU QKEY  = _PRIM("?KEY",    QRX    );
     IU EMIT  = _PRIM("EMIT",    TXSTO  );
@@ -105,15 +105,18 @@ int assemble(U8 *rom)
     
     IU S2D   = _PRIM("S>D",     S2D    );    ///> ( n -- dl dh )
     IU D2S   = _PRIM("D>S",     D2S    );    ///> ( dl dh -- n )
+    IU DABS  = _PRIM("DABS",    DABS   );    ///> ( dl dh -- dl' dh' )
     IU DNEG  = _PRIM("DNEGATE", DNEG   );
     IU DADD  = _PRIM("D+",      DADD   );
     IU DSUB  = _PRIM("D-",      DSUB   );
+    IU UDSMOD= _PRIM("UD/MOD",  UDSMOD );    ///> ( d1l d1h d2l d2h -- drl drh dql dqh )
+    IU DZEQ  = _COLON("D0=",    ZEQ, SWAP, ZEQ, AND, EXIT);
     IU DSTOR = _COLON("2!",     DUP, TOR, DOLIT, CELLSZ, ADD, STORE, RFROM, STORE, EXIT);
     IU DAT   = _COLON("2@",     DUP, TOR, AT, RFROM, DOLIT, CELLSZ, ADD, AT, EXIT);
     IU DDUP  = _COLON("2DUP",   OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP",  DROP, DROP, EXIT);
-    _COLON("2SWAP",   ROT, TOR, ROT, RFROM, EXIT);
-    _COLON("2OVER",   DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
+    IU DSWAP = _COLON("2SWAP",  ROT, TOR, ROT, RFROM, EXIT);
+    IU DOVER = _COLON("2OVER",  DOLIT, 3, PICK, DOLIT, 3, PICK, EXIT);
     ///
     /// extended words
     ///
@@ -159,8 +162,8 @@ int assemble(U8 *rom)
         _IF(DROP, DOLIT, 0x5f);
         _THEN(EXIT);
     }
-    IU HERE  = _COLON("HERE",  vCP, AT, EXIT);                // top of dictionary
-    IU PAD   = _COLON("PAD",   DOLIT, FORTH_MAX_ADDR, EXIT);  // use tail of TIB for output
+    IU HERE  = _COLON("HERE",  vCP, AT, EXIT);                /// top of dictionary
+    IU PAD   = _COLON("PAD",   DOLIT, FORTH_MAX_ADDR, EXIT);  /// use tail of TIB for output
     IU TIB   = _COLON("TIB",   vTTIB, AT, EXIT);
     IU CMOVE = _COLON("CMOVE", NOP); {
         _FOR(NOP);
@@ -168,13 +171,13 @@ int assemble(U8 *rom)
         _THEN(NOP);
         _NEXT(DROP, DROP, EXIT);
     }
-    _COLON("MOVE", CELL, DIV); {
+    IU MOVE  = _COLON("MOVE", CELL, DIV); {
         _FOR(NOP);
         _AFT(OVER, AT, OVER, STORE, TOR, CELL, ADD, RFROM, CELL, ADD);
         _THEN(NOP);
         _NEXT(DROP, DROP, EXIT);
     }
-    _COLON("FILL", SWAP); {
+    IU FILL  = _COLON("FILL", SWAP); {
         _FOR(SWAP);
         _AFT(DDUP, CSTOR, ONEP);
         _THEN(NOP);
@@ -184,40 +187,41 @@ int assemble(U8 *rom)
     ///> Number Conversions and formatting
     ///
     IU DIGIT = _COLON("DIGIT",   DOLIT, 9, OVER, LT, DOLIT, 7, AND, ADD, DOLIT, 0x30, ADD, EXIT);
-    IU EXTRC = _COLON("EXTRACT", DOLIT, 0, SWAP, UMMOD, SWAP, DIGIT, EXIT);
-    IU BDIGS = _COLON("<#",      PAD, vHLD, STORE, EXIT);
     IU HOLD  = _COLON("HOLD",    vHLD, AT, ONEM, DUP, vHLD, STORE, CSTOR, EXIT);
-    IU DIG   = _COLON("#",       vBASE, AT, EXTRC, HOLD, EXIT);
-    IU DIGS  = _COLON("#S", NOP); {
-        _BEGIN(DIG, DUP);
-        _WHILE(NOP);
-        _REPEAT(EXIT);
-    }
+    IU BDIGS = _COLON("<#",      PAD, vHLD, STORE, EXIT);
     IU SIGN  = _COLON("SIGN", ZLT); {
         _IF(DOLIT, 0x2d, HOLD);
         _THEN(EXIT);
     }
-    IU EDIGS = _COLON("#>",      DROP, vHLD, AT, PAD, OVER, SUB, EXIT);
-    IU STR   = _COLON("STR",     DUP, TOR, ABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
+    IU EXTRC = _COLON("EXTRACT", DOLIT, 0, UDSMOD, DSWAP, DROP, DIGIT, EXIT);  /// ( dl dh n -- dql dqh u )
+    IU DIG   = _COLON("#",       vBASE, AT, EXTRC, HOLD, EXIT);
+    IU DIGS  = _COLON("#S", NOP); {
+        _BEGIN(DIG, DDUP, DZEQ, INV);
+        _WHILE(NOP);
+        _REPEAT(EXIT);
+    }
+    IU EDIGS = _COLON("#>",      DDROP, vHLD, AT, PAD, OVER, SUB, EXIT);
+    IU DSTR  = _COLON("DSTR",    DDUP, TOR, DROP, DABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
+    IU STR   = _COLON("STR",     S2D, DSTR, EXIT);
     IU HEX_  = _COLON("HEX",     DOLIT, 16, vBASE, STORE, EXIT);
     IU DECIM = _COLON("DECIMAL", DOLIT, 10, vBASE, STORE, EXIT);
     IU DIGTQ = _COLON("DIGIT?",
          TOR, TOUPP, DOLIT, 0x30, SUB, DOLIT, 9, OVER, LT); {
-        _IF(DOLIT, 7, SUB, DUP, DOLIT, 10, LT, OR);           // handle hex number
-        _THEN(DUP, RFROM, ULESS, EXIT);                       // handle base > 10
+        _IF(DOLIT, 7, SUB, DUP, DOLIT, 10, LT, OR);           /// handle hex number
+        _THEN(DUP, RFROM, ULESS, EXIT);                       /// handle base > 10
     }
     /// TODO: add >NUMBER
     IU NUMBQ = _COLON("NUMBER?",
         vBASE, AT, TOR, DOLIT, 0, OVER, COUNT,
-        OVER, CAT, DOLIT, 0x24, EQ); {                        // leading with $ (i.e. 0x24)
+        OVER, CAT, DOLIT, 0x24, EQ); {                        /// leading with $ (i.e. 0x24)
         _IF(HEX_, SWAP, ONEP, SWAP, ONEM);
-        _THEN(OVER, CAT, DOLIT, 0x2d, EQ,                     // handle negative sign (i.e. 0x2d)
+        _THEN(OVER, CAT, DOLIT, 0x2d, EQ,                     /// handle negative sign (i.e. 0x2d)
              TOR, SWAP, RAT, SUB, SWAP, RAT, ADD, QDUP);
         _IF(ONEM); {
-            // a FOR..WHILE..NEXT..ELSE..THEN construct =~ for {..break..}
+            /// a FOR..WHILE..NEXT..ELSE..THEN construct =~ for {..break..}
             _FOR(DUP, TOR, CAT, vBASE, AT, DIGTQ);
-            _WHILE(SWAP, vBASE, AT, MUL, ADD, RFROM, ONEP);   // if digit, xBASE, else break to ELSE
-            _NEXT(DROP, RAT); {                               // whether negative number
+            _WHILE(SWAP, vBASE, AT, MUL, ADD, RFROM, ONEP);   /// if digit, xBASE, else break to ELSE
+            _NEXT(DROP, RAT); {                               /// whether negative number
                 _IF(NEG);
                 _THEN(SWAP);
             }
@@ -240,91 +244,88 @@ int assemble(U8 *rom)
     IU TYPE  = _COLON("TYPE", NOP); {
         _FOR(NOP);
         _AFT(COUNT, DOLIT, 0x7f, AND, DUP, DOLIT, 0x7f, BLANK, WITHI); {
-            _IF(DROP, DOLIT, 0x5f);    // out-of-range put '_' instead
+            _IF(DROP, DOLIT, 0x5f);    /// out-of-range put '_' instead
             _THEN(EMIT);
         }
         _THEN(NOP);
         _NEXT(DROP, EXIT);
     }
-    IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);               // LF i.e. \n actually
+    IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);         /// LF i.e. \n actually
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, COUNT, EXIT);
     IU STRQP = _COLON("$\"|", DOSTR, EXIT);
-       DOTQP = _COLON(".\"|", DOSTR, TYPE, EXIT);                       // Note: DOTQP export to _dotq
-    IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);  // shown as string
-    IU UDOTR = _COLON("U.R",  TOR, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);
-    IU UDOT  = _COLON("U.",   BDIGS, DIGS, EDIGS, SPACE, TYPE, EXIT);
-    IU DOT   = _COLON(".",    vBASE, AT, DOLIT, 0xa, XOR); {
-        _IF(UDOT, EXIT);                                            // base 10
-        _THEN(STR, SPACE, TYPE, EXIT);                              // shown as string
-    }
-    IU QUEST = _COLON("?", AT, DOT, EXIT);
+       DOTQP = _COLON(".\"|", DOSTR, TYPE, EXIT);             /// Note: DOTQP export to _dotq
+    IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);  /// ( d n -- ) fixed width
+    IU UDOTR = _COLON("U.R",  TOR, S2D, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);                                                 /// ( u n -- ) unsigned fixed size
+    IU UDOT  = _COLON("U.",   DOLIT, 1, UDOTR, EXIT);         /// ( u -- ) unsigned
+    IU DOT   = _COLON(".",    STR, SPACE, TYPE, EXIT);        /// ( d -- ) print, extra space
+    IU QUEST = _COLON("?",    AT, DOT, EXIT);                 /// memory query
     /// TODO: add PAGE
     ///
     ///> Parsing
     ///
-    IU PARSE0= _COLON("(parse)", vTMP, CSTOR, OVER, TOR, DUP); {   // ( addr len delim -- ) delimiter kept tmp, addr in R
-        _IF(ONEM, vTMP, CAT, BLANK, EQ); {                    // if (len) { --len; if (delim==" ") {...} }
+    IU PARSE0= _COLON("(parse)", vTMP, CSTOR, OVER, TOR, DUP); {   /// ( addr len delim -- ) delimiter kept tmp, addr in R
+        _IF(ONEM, vTMP, CAT, BLANK, EQ); {                    /// if (len) { --len; if (delim==" ") {...} }
             _IF(NOP); {
-                // a FOR..WHILE..NEXT..THEN construct =~ for {..break..}
-                _FOR(BLANK, OVER, CAT, SUB, ZLT, INV);        // for (len)
-                _WHILE(ONEP);                                 // break to THEN if is char, or next char
-                _NEXT(RFROM, DROP, DOLIT, 0, DUP, EXIT);      // no break, (R>, DROP to rm loop counter)
-                _THEN(RFROM);                                 // populate A0, i.e. break comes here, rm counter
+                /// a FOR..WHILE..NEXT..THEN construct =~ for {..break..}
+                _FOR(BLANK, OVER, CAT, SUB, ZLT, INV);        /// for (len)
+                _WHILE(ONEP);                                 /// break to THEN if is char, or next char
+                _NEXT(RFROM, DROP, DOLIT, 0, DUP, EXIT);      /// no break, (R>, DROP to rm loop counter)
+                _THEN(RFROM);                                 /// populate A0, i.e. break comes here, rm counter
             }
-            _THEN(OVER, SWAP); {                              // advance until next space found
-                // a FOR..WHILE..NEXT..ELSE..THEN construct =~ DO..LEAVE..+LOOP
+            _THEN(OVER, SWAP); {                              /// advance until next space found
+                /// a FOR..WHILE..NEXT..ELSE..THEN construct =~ DO..LEAVE..+LOOP
                 _FOR(vTMP, CAT, OVER, CAT, SUB, vTMP, CAT, BLANK, EQ); {
                   _IF(ZLT);
                   _THEN(NOP);
                 }
-                _WHILE(ONEP);                                  // if (char <= space) break to ELSE
-                _NEXT(DUP, TOR);                               // no break, if counter < limit loop back to FOR
-                _ELSE(RFROM, DROP, DUP, ONEP, TOR);            // R>, DROP to rm loop counter
-               _THEN(OVER, SUB, RFROM, RFROM, SUB, EXIT);      // put token length on stack
+                _WHILE(ONEP);                                 /// if (char <= space) break to ELSE
+                _NEXT(DUP, TOR);                              /// no break, if counter < limit loop back to FOR
+                _ELSE(RFROM, DROP, DUP, ONEP, TOR);           /// R>, DROP to rm loop counter
+               _THEN(OVER, SUB, RFROM, RFROM, SUB, EXIT);     /// put token length on stack
             }
         }
         _THEN(OVER, RFROM, SUB, EXIT);
     }
-    IU PACKS = _COLON("PACK$", DUP, TOR, DDUP, CSTOR, ONEP, SWAP, CMOVE, RFROM, EXIT);     // ( b u a -- a )
-    IU PARSE = _COLON("PARSE",                                                             // ( c -- b u )
+    IU PACKS = _COLON("PACK$", DUP, TOR, DDUP, CSTOR, ONEP, SWAP, CMOVE, RFROM, EXIT);     /// ( b u a -- a )
+    IU PARSE = _COLON("PARSE",                                                             /// ( c -- b u )
                        TOR, TIB, vIN, AT, ADD, vNTIB, AT, vIN, AT, SUB, RFROM,
                        PARSE0, vIN, PSTOR,
                        EXIT);
-    IU TOKEN = _COLON("TOKEN", BLANK, PARSE, DOLIT, 0x1f, MIN, HERE, CELL, ADD, PACKS, EXIT);  // ( -- a; <string>) put token at HERE
-    IU WORD  = _COLON("WORD",  PARSE, HERE, CELL, ADD, PACKS, EXIT);                           // ( c -- a; <string)
+    IU TOKEN = _COLON("TOKEN", BLANK, PARSE, DOLIT, 0x1f, MIN, HERE, CELL, ADD, PACKS, EXIT);  /// ( -- a; <string>) put token at HERE
+    IU WORD  = _COLON("WORD",  PARSE, HERE, CELL, ADD, PACKS, EXIT);                           /// ( c -- a; <string)
     ///
     ///> Dictionary serach
     ///
-    IU NAMET = _COLON("NAME>", COUNT, DOLIT, 0x1f, AND, ADD, EXIT);        // ( nfa -- cfa )
-    IU SAMEQ = _COLON("SAME?", NOP); {                                     // ( a1 a2 n - a1 a2 f ) compare a1, a2 byte-by-byte
+    IU NAMET = _COLON("NAME>", COUNT, DOLIT, 0x1f, AND, ADD, EXIT);        /// ( nfa -- cfa )
+    IU SAMEQ = _COLON("SAME?", NOP); {                                     /// ( a1 a2 n - a1 a2 f ) compare a1, a2 byte-by-byte
         _FOR(DDUP);
 #if CASE_SENSITIVE
-        _AFT(DUP, CAT, TOR, ONEP, SWAP,                                    // *a1++
-             DUP, CAT, TOR, ONEP, SWAP, RFROM, RFROM, SUB, QDUP); {        // *a2++
+        _AFT(DUP, CAT, TOR, ONEP, SWAP,                                    /// *a1++
+             DUP, CAT, TOR, ONEP, SWAP, RFROM, RFROM, SUB, QDUP); {        /// *a2++
 #else
-        _AFT(DUP, CAT, TOUPP, TOR, ONEP, SWAP,                             // *a1++
-             DUP, CAT, TOUPP, TOR, ONEP, SWAP, RFROM, RFROM, SUB, QDUP); { // *a2++
-#endif // CASE_SENSITIVE
-            _IF(RFROM, DROP, TOR, DDROP, RFROM, EXIT);     // pop off loop counter and pointers
+        _AFT(DUP, CAT, TOUPP, TOR, ONEP, SWAP,                             /// *a1++
+             DUP, CAT, TOUPP, TOR, ONEP, SWAP, RFROM, RFROM, SUB, QDUP); { /// *a2++
+#endif /// CASE_SENSITIVE
+            _IF(RFROM, DROP, TOR, DDROP, RFROM, EXIT);          /// pop off loop counter and pointers
             _THEN(NOP);
         }
         _THEN(NOP);
-        _NEXT(DDROP, DOLIT, FALSE, EXIT);                  // SAME!
+        _NEXT(DDROP, DOLIT, FALSE, EXIT);                       /// SAME!
     }
     /// TODO: add COMPARE
-    IU FIND = _COLON("FIND",                                    // ( a va -- cfa nfa, a F ) keep length in tmp
-        SWAP, DUP, CAT, vTMP, STORE, DUP, AT, TOR, CELL, ADD, SWAP); { // fetch 1st cell
-        _BEGIN(AT, DUP); {                                      // 0000 = end of dic
+    IU FIND = _COLON("FIND",                                    /// ( a va -- cfa nfa, a F ) keep length in tmp
+        SWAP, DUP, CAT, vTMP, STORE, DUP, AT, TOR, CELL, ADD, SWAP); { /// fetch 1st cell
+        _BEGIN(AT, DUP); {                                      /// 0000 = end of dic
 #if CASE_SENSITIVE
-            _IF(DUP, AT, DOLIT, 0x3fff, AND, RAT, XOR); {       // compare 2-byte
+            _IF(DUP, AT, DOLIT, 0x3fff, AND, RAT, XOR); {       /// compare 2-byte
 #else
             _IF(DUP, AT, DOLIT, 0x3fff, AND,
                     DOLIT, 0x5f5f, AND, RAT,
-                    DOLIT, 0x5f5f, AND, XOR); {                 // compare 2-byte (uppercased)
-#endif // CASE_SENSITIVE
-                _IF(CELL, ADD, DOLIT, TRUE);                    // miss, try next word
-                _ELSE(CELL, ADD, vTMP, AT, ONEM, DUP); {        // -1, since 1st byte has been compared
-                    _IF(SAMEQ);                                 // compare strings if larger than 2 bytes
+                    DOLIT, 0x5f5f, AND, XOR); {                 /// compare 2-byte (uppercased)
+#endif /// CASE_SENSITIVE
+                _IF(CELL, ADD, DOLIT, TRUE);                    /// miss, try next word
+                _ELSE(CELL, ADD, vTMP, AT, ONEM, DUP); {        /// -1, since 1st byte has been compared
+                    _IF(SAMEQ);                                 /// compare strings if larger than 2 bytes
                     _THEN(NOP);
                 }
                 _THEN(NOP);
@@ -332,8 +333,8 @@ int assemble(U8 *rom)
             _ELSE(RFROM, DROP, SWAP, CELL, SUB, SWAP, EXIT);
             _THEN(NOP);
         }
-        _WHILE(CELL, SUB, CELL, SUB);                                     // get thread field to previous word
-        _REPEAT(RFROM, DROP, SWAP, DROP, CELL, SUB, DUP, NAMET, SWAP, EXIT);  // word found, get name field
+        _WHILE(CELL, SUB, CELL, SUB);                                     /// get thread field to previous word
+        _REPEAT(RFROM, DROP, SWAP, DROP, CELL, SUB, DUP, NAMET, SWAP, EXIT);  /// word found, get name field
     }
     IU NAMEQ = _COLON("NAME?", vCNTX, FIND, EXIT);
     ///
@@ -343,23 +344,23 @@ int assemble(U8 *rom)
         _IF(DOLIT, 8, EMIT, ONEM, BLANK, EMIT, DOLIT, 8, EMIT);
         _THEN(EXIT);
     }
-    IU TAP   = _COLON("TAP", DUP, EMIT, OVER, CSTOR, ONEP, EXIT);                  // echo and store new char to TIB
-    IU KTAP  = _COLON("kTAP", DUP, DOLIT, 0xd, XOR, OVER, DOLIT, 0xa, XOR, AND); { // check <CR><LF>
-        _IF(DOLIT, 8, XOR); {                                                      // check <TAB>
-            _IF(BLANK, TAP);                                                       // check BLANK
+    IU TAP   = _COLON("TAP", DUP, EMIT, OVER, CSTOR, ONEP, EXIT);                  /// echo and store new char to TIB
+    IU KTAP  = _COLON("kTAP", DUP, DOLIT, 0xd, XOR, OVER, DOLIT, 0xa, XOR, AND); { /// check <CR><LF>
+        _IF(DOLIT, 8, XOR); {                                                      /// check <TAB>
+            _IF(BLANK, TAP);                                                       /// check BLANK
             _ELSE(HATH);
             _THEN(EXIT);
         }
         _THEN(DROP, SWAP, DROP, DUP, EXIT);
     }
-    IU ACCEP = _COLON("ACCEPT", OVER, ADD, OVER); {             // accquire token from console
-        _BEGIN(DDUP, XOR);                                      // loop through input stream
+    IU ACCEP = _COLON("ACCEPT", OVER, ADD, OVER); {             /// accquire token from console
+        _BEGIN(DDUP, XOR);                                      /// loop through input stream
         _WHILE(KEY, DUP, BLANK, SUB, DOLIT, 0x5f, ULESS); {
-            _IF(TAP);                                           // store new char into TIB
-            _ELSE(KTAP);                                        // check if done
+            _IF(TAP);                                           /// store new char into TIB
+            _ELSE(KTAP);                                        /// check if done
             _THEN(NOP);
         }
-        _REPEAT(DROP, OVER, SUB, EXIT);                         // keep token length in #TIB
+        _REPEAT(DROP, OVER, SUB, EXIT);                         /// keep token length in #TIB
     }
     IU EXPEC = _COLON("EXPECT", ACCEP, vSPAN, STORE, DROP, EXIT);
     IU QUERY = _COLON("QUERY", TIB, DOLIT, FORTH_TIB_SZ, ACCEP,
@@ -397,28 +398,28 @@ int assemble(U8 *rom)
     ///           \-No:                                                   .
     ///              \-An Error has occurred, prIU out an error message ->
     ///
-    IU ABORT = _COLON("ABORT", vTABRT, AT, QDUP); {  // load ABORT vector
-            _IF(EXECU);                              // @EXECUTE
+    IU ABORT = _COLON("ABORT", vTABRT, AT, QDUP); {  /// load ABORT vector
+            _IF(EXECU);                              /// @EXECUTE
             _THEN(EXIT);
         }
     /// TODO: add ?STACK
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLIT, 0x3f, EMIT, CR, ABORT);
-    IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  // scan dictionary for word
-        _IF(CAT, DOLIT, fCMPL, AND); {               // check for compile only word
+    IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  /// scan dictionary for word
+        _IF(CAT, DOLIT, fCMPL, AND); {               /// check for compile only word
             _IF(DROP); {
-                _DOTQ("compile only");               // INTER0 of Dr Ting's
+                _DOTQ("compile only");               /// INTER0 of Dr Ting's
             }
             _ELSE(EXECU);
             _THEN(EXIT);
         }
-        _THEN(NUMBQ);                                // word name not found, check if it is a number
+        _THEN(NUMBQ);                                /// word name not found, check if it is a number
         _IF(EXIT);
         _ELSE(ERROR);
         _THEN(NOP);
     }
     IU iLBRAC= _IMMED("[", DOLIT, INTER, vMODE, STORE, EXIT);
     IU DOTOK = _COLON(".OK", CR, DOLIT, INTER, vMODE, AT, EQ); {
-        _IF(DEPTH, DOLIT, 4, MIN); {                 // dump stack and ok prompt
+        _IF(DEPTH, DOLIT, 4, MIN); {                 /// dump stack and ok prompt
             _FOR(RAT, PICK, DOT);
             _NEXT(NOP);
             _DOTQ(" ok> ");
@@ -426,38 +427,38 @@ int assemble(U8 *rom)
         _THEN(EXIT);
     }
     IU EVAL  = _COLON("EVAL", NOP); {
-        _BEGIN(TOKEN, DUP, CAT);                     // fetch token length
-        _WHILE(vMODE, AT, QDUP); {                   // fetch operation mode ($INTERPRET or $COMPILE)
-            _IF(EXECU);                              // execute according to mode
+        _BEGIN(TOKEN, DUP, CAT);                     /// fetch token length
+        _WHILE(vMODE, AT, QDUP); {                   /// fetch operation mode ($INTERPRET or $COMPILE)
+            _IF(EXECU);                              /// execute according to mode
             _THEN(NOP);
         }
         _REPEAT(DROP, DOTOK, EXIT);
     }
-    IU QUIT = _COLON("QUIT", DOLIT, FORTH_TIB_ADDR, vTTIB, STORE, iLBRAC); {  // clear TIB, interpreter mode
-        _BEGIN(QUERY, EVAL);                         // main query-eval loop
+    IU QUIT = _COLON("QUIT", DOLIT, FORTH_TIB_ADDR, vTTIB, STORE, iLBRAC); {  /// clear TIB, interpreter mode
+        _BEGIN(QUERY, EVAL);                         /// main query-eval loop
         _AGAIN(NOP);
     }
     ///
     ///> Colon Compiler
     ///
-    IU COMMA = _COLON(",",  HERE, DUP, CELL, ADD, vCP, STORE, STORE, EXIT);   // store a byte
-    IU CCMMA = _COLON("C,", HERE, DUP, ONEP,  vCP, STORE, CSTOR, EXIT);       // store a word
+    IU COMMA = _COLON(",",  HERE, DUP, CELL, ADD, vCP, STORE, STORE, EXIT);   /// store a byte
+    IU CCMMA = _COLON("C,", HERE, DUP, ONEP,  vCP, STORE, CSTOR, EXIT);       /// store a word
     IU ALLOT = _COLON("ALLOT",    vCP, PSTOR, EXIT);
-    IU iLITR = _IMMED("LITERAL",  DOLIT, opDOLIT, CCMMA, COMMA, EXIT);        // create a literal
+    IU iLITR = _IMMED("LITERAL",  DOLIT, opDOLIT, CCMMA, COMMA, EXIT);        /// create a literal
     IU COMPI = _COLON("COMPILE",  RFROM, DUP, CAT, CCMMA, ONEP, TOR, EXIT);
-    IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); {    // name found?
-        _IF(CAT, DOLIT, fIMMD, AND); {               // is immediate?
-            _IF(EXECU);                              // execute
-            _ELSE(DUP, DUP, DOLIT, FORTH_ROM_SZ, LT, // a primitive?
-                  SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {  // XX08 <= this might break
-                _IF(CAT, CCMMA);                     // append just the opcode
-                _ELSE(DOLIT, fCOLON16, OR, COMMA);   // append colon word address with flag
+    IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); {    /// name found?
+        _IF(CAT, DOLIT, fIMMD, AND); {               /// is immediate?
+            _IF(EXECU);                              /// execute
+            _ELSE(DUP, DUP, DOLIT, FORTH_ROM_SZ, LT, /// a primitive?
+                  SWAP, ONEP, CAT, DOLIT, EXIT, EQ, AND); {  /// XX08 <= this might break
+                _IF(CAT, CCMMA);                     /// append just the opcode
+                _ELSE(DOLIT, fCOLON16, OR, COMMA);   /// append colon word address with flag
                 _THEN(NOP);
             }
             _THEN(EXIT);
         }
-        _THEN(NUMBQ);                                // a number?
-        _IF(iLITR, EXIT);                            // append as a literal
+        _THEN(NUMBQ);                                /// a number?
+        _IF(iLITR, EXIT);                            /// append as a literal
         _THEN(ERROR);
     }
     IU UNIQU = _COLON("?UNIQUE", DUP, NAMEQ, QDUP); {
@@ -466,7 +467,7 @@ int assemble(U8 *rom)
         }
         _THEN(DROP, EXIT);
     }
-    IU SNAME = _COLON("$,n", DUP, AT); {  // add new name field which is already build by PACK$
+    IU SNAME = _COLON("$,n", DUP, AT); {  /// add new name field which is already build by PACK$
         _IF(UNIQU,
             DUP, NAMET, vCP, STORE,    DUP, vLAST, STORE,
             CELL, SUB, vCNTX, AT, SWAP, STORE, EXIT);
@@ -476,27 +477,27 @@ int assemble(U8 *rom)
         _IF(EXIT);
         _THEN(ERROR);
     }
-    IU RBRAC = _COLON("]", DOLIT, SCOMP, vMODE, STORE, EXIT);  // switch into compiler-mode
+    IU RBRAC = _COLON("]", DOLIT, SCOMP, vMODE, STORE, EXIT);  /// switch into compiler-mode
     /// TODO: add [']
-    _IMMED("[COMPILE]", TICK, COMMA, EXIT);                    // add word address to dictionary
+    _IMMED("[COMPILE]", TICK, COMMA, EXIT);                    /// add word address to dictionary
     _COLON(":", TOKEN, SNAME, RBRAC, EXIT);
     _IMMED(";", COMPI, opEXIT, iLBRAC, vLAST, AT, vCNTX, STORE, EXIT);
     ///
     ///> Debugging Tools
     ///
-    IU TNAME = _COLON(">NAME", NOP); {                         // ( pfa -- nfa )
+    IU TNAME = _COLON(">NAME", NOP); {                         /// ( pfa -- nfa )
         _BEGIN(ONEM, DUP, CAT, DOLIT, 0x7f, AND, DOLIT, 0x20, LT);
         _UNTIL(EXIT);
     }
-    _COLON("DUMP", vBASE, AT, TOR, HEX_,                       // save BASE, make HEX
-            DOLIT, 0x1f, ADD, DOLIT, 0x10, DIV); {             // get row count
+    _COLON("DUMP", vBASE, AT, TOR, HEX_,                       /// save BASE, make HEX
+        DOLIT, 0x1f, ADD, DOLIT, 0x10, DIV); {                 /// get row count
         _FOR(NOP);
-        _AFT(CR, DOLIT, 0x10, DDUP, OVER, DOLIT, 5, UDOTR); {  // dump one row
-            _FOR(DOLIT, 0x3a, EMIT);                           // :
-            _AFT(SPACE, DUP, CAT,
-                DOLIT, 0x10, EXTRC, SWAP,                      // low-nibble
-                DOLIT, 0x10, EXTRC, EMIT, DROP, EMIT,          // high-nibble
-                ONEP, RAT, DOLIT, 8, EQ); {
+        _AFT(CR, DOLIT, 0x10, DDUP, OVER, DOLIT, 5, UDOTR); {  /// dump one row
+            _FOR(DOLIT, 0x3a, EMIT);                           /// :
+            _AFT(SPACE, DUP, CAT, S2D,
+                DOLIT, 0x10, EXTRC, TOR,                       /// low-nibble
+                DOLIT, 0x10, EXTRC, EMIT, RFROM, EMIT,         /// high-nibble
+                DDROP, ONEP, RAT, DOLIT, 8, EQ); {             /// 
                 _IF(SPACE);
                 _THEN(NOP);
             }
@@ -504,14 +505,14 @@ int assemble(U8 *rom)
             _NEXT(TOR, SPACE, SPACE, TYPE, RFROM);
         }
         _THEN(NOP);
-        _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                // restore BASE
+        _NEXT(DROP, RFROM, vBASE, STORE, EXIT);                /// restore BASE
     }
-    _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {       // tmp keeps width
+    _COLON("WORDS", CR, vCNTX, DOLIT, 0, vTMP, STORE); {       /// tmp keeps width
         _BEGIN(AT, QDUP);
-        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,                   // get name length
-             DUP, ONEP, ONEP, vTMP, PSTOR,                     // add to tmp
-             TYPE, SPACE, SPACE, CELL, SUB,                    // get LFA
-             vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {          // check row width
+        _WHILE(DUP, COUNT, DOLIT, 0x1f, AND,                   /// get name length
+             DUP, ONEP, ONEP, vTMP, PSTOR,                     /// add to tmp
+             TYPE, SPACE, SPACE, CELL, SUB,                    /// get LFA
+             vTMP, AT, DOLIT, WORDS_ROW_WIDTH, GT); {          /// check row width
             _IF(CR, DOLIT, 0, vTMP, STORE);
             _THEN(NOP);
         }
@@ -526,54 +527,54 @@ int assemble(U8 *rom)
     ///> display address with colon delimiter ( a -- )
     IU DOTAD = _COLON(".ADDR", CR, DUP, DOT, DOLIT, 0x3a, EMIT, EXIT);
     ///> display opcode at given address ( a0 op -- a1 )
-    IU DOTOP = _COLON(".OP", DUP, DOLIT, fCOLON8, AND); {      // check primitive flag?
+    IU DOTOP = _COLON(".OP", DUP, DOLIT, fCOLON8, AND); {      /// check primitive flag?
         /* poorman's CASE */
-        _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND, DUP,            // colon word - show name
+        _IF(DROP, DUP, AT, DOLIT, 0x7fff, AND, DUP,            /// colon word - show name
             SPACE, TNAME, COUNT, TYPE, DUP,
             DOLIT, DOTQP, EQ, SWAP, DOLIT, STRQP, EQ, OR); {
-            _IF(SPACE, CELL, ADD, COUNT, DDUP, TYPE,           // ."| or $"| (string)"
+            _IF(SPACE, CELL, ADD, COUNT, DDUP, TYPE,           /// ."| or $"| (string)"
                 DOLIT, 0x22, EMIT, ADD, EXIT);
             _ELSE(CELL, ADD, EXIT);
             _THEN(NOP);
         }
-        _THEN(DUP, DOLIT, opDOLIT, EQ);                        // a literal?
-        _IF(DROP, ONEP, DUP, AT, DOT, CELL, ADD, EXIT);        // show the number
+        _THEN(DUP, DOLIT, opDOLIT, EQ);                        /// a literal?
+        _IF(DROP, ONEP, DUP, AT, DOT, CELL, ADD, EXIT);        /// show the number
         _THEN(DUP, DOLIT, opDOVAR, EQ);
-        _IF(DROP, ONEP, ONEP, DUP, AT, DOT,                    // (var)v
+        _IF(DROP, ONEP, ONEP, DUP, AT, DOT,                    /// (var)v
             DOLIT, 0x76, EMIT, ONEM, EXIT);
         _THEN(DUP, DOLIT, opBRAN, EQ);
-        _IF(DROP, ONEP, DUP, AT, DOT,                          // show jump target
-            DOLIT, 0x6a, EMIT, CELL, ADD, DOTAD, EXIT);        // (jump target)j
-        _THEN(DUP, DOLIT, opQBRAN, EQ);                        // or a qbran
-        _IF(DROP, ONEP, DUP, AT, DOT,                          // show jump target
-            DOLIT, 0x3f, EMIT, CELL, ADD, DOTAD, EXIT);        // (jump target)?
-        _THEN(DUP, DOLIT, opDONEXT, EQ);                       // a bran or donext?
-        _IF(DROP, ONEP, DUP, AT, DOT,                          // show jump target
-            DOLIT, 0x6e, EMIT, CELL, ADD, DOTAD, EXIT);        // (jump target)n
-        _THEN(DUP, DOLIT, opDOES, EQ);                         // DOES>
+        _IF(DROP, ONEP, DUP, AT, DOT,                          /// show jump target
+            DOLIT, 0x6a, EMIT, CELL, ADD, DOTAD, EXIT);        /// (jump target)j
+        _THEN(DUP, DOLIT, opQBRAN, EQ);                        /// or a qbran
+        _IF(DROP, ONEP, DUP, AT, DOT,                          /// show jump target
+            DOLIT, 0x3f, EMIT, CELL, ADD, DOTAD, EXIT);        /// (jump target)?
+        _THEN(DUP, DOLIT, opDONEXT, EQ);                       /// a bran or donext?
+        _IF(DROP, ONEP, DUP, AT, DOT,                          /// show jump target
+            DOLIT, 0x6e, EMIT, CELL, ADD, DOTAD, EXIT);        /// (jump target)n
+        _THEN(DUP, DOLIT, opDOES, EQ);                         /// DOES>
         _IF(DROP, ONEP, DUP, CAT, SWAP,
-            DUP, ONEP, AT, DOT, DOLIT, 0x2a, EMIT,             // (var)*
-            ADD, ONEP, AT, DUP, DOT, DOLIT, 0x6a, EMIT,        // (does> target)j
-            DOTAD, EXIT);                                      // skip to defining word
-        _THEN(SPACE, vCNTX);                                   // show other opcode#
-        // opcode -> name ( a op -- a+1 )
-        _BEGIN(AT, DUP);                                       // 0000 = end of dic
-        _WHILE(DUP, NAMET,                                     // primitive words?
-               DUP, ONEP, CAT, DOLIT, opEXIT, EQ); {           // * check second byte is EXIT
-            _IF(CAT, TOR, OVER, RFROM, EQ); {                  // same as our opcode?
-                _IF(COUNT, TYPE, DROP, ONEP, EXIT);            // print name, done!
+            DUP, ONEP, AT, DOT, DOLIT, 0x2a, EMIT,             /// (var)*
+            ADD, ONEP, AT, DUP, DOT, DOLIT, 0x6a, EMIT,        /// (does> target)j
+            DOTAD, EXIT);                                      /// skip to defining word
+        _THEN(SPACE, vCNTX);                                   /// show other opcode#
+        /// opcode -> name ( a op -- a+1 )
+        _BEGIN(AT, DUP);                                       /// 0000 = end of dic
+        _WHILE(DUP, NAMET,                                     /// primitive words?
+               DUP, ONEP, CAT, DOLIT, opEXIT, EQ); {           /// * check second byte is EXIT
+            _IF(CAT, TOR, OVER, RFROM, EQ); {                  /// same as our opcode?
+                _IF(COUNT, TYPE, DROP, ONEP, EXIT);            /// print name, done!
                 _THEN(DUP);
             }
-            _THEN(DROP, CELL, SUB);                            // link to prev word
+            _THEN(DROP, CELL, SUB);                            /// link to prev word
         }
-        _REPEAT(DOT, DOLIT, 0x3f, EMIT, DROP, ONEP, EXIT);     // ?(unknown opcode)
+        _REPEAT(DOT, DOLIT, 0x3f, EMIT, DROP, ONEP, EXIT);     /// ?(unknown opcode)
     }
-    _COLON("SEE", TICK, DOTAD); {                              // word address
-        _BEGIN(DUP, CAT, DUP, DOLIT, opEXIT, EQ, INV);         // loop until EXIT
-        _WHILE(DOTOP);                                         // disasmble opcode
-        _REPEAT(DDROP, SPACE, DOLIT, 0x3b, EMIT, EXIT);        // semi colon
+    _COLON("SEE", TICK, DOTAD); {                              /// word address
+        _BEGIN(DUP, CAT, DUP, DOLIT, opEXIT, EQ, INV);         /// loop until EXIT
+        _WHILE(DOTOP);                                         /// disasmble opcode
+        _REPEAT(DDROP, SPACE, DOLIT, 0x3b, EMIT, EXIT);        /// semi colon
     }
-#endif // ENABLE_SEE
+#endif /// ENABLE_SEE
     ///
     ///> Control Structures
     ///
@@ -603,8 +604,8 @@ int assemble(U8 *rom)
     ///
     ///> String Literals
     ///
-    IU STRCQ  = _COLON("$,\"", DOLIT, 0x22, WORD,       // find quote in TIB (0x22 is " in ASCII)
-                    COUNT, ADD, vCP, STORE, EXIT);      // advance dic pointer
+    IU STRCQ  = _COLON("$,\"", DOLIT, 0x22, WORD,       /// find quote in TIB (0x22 is " in ASCII)
+                    COUNT, ADD, vCP, STORE, EXIT);      /// advance dic pointer
     _IMMED("$\"",   DOLIT, STRQP | fCOLON16, HERE, STORE, STRCQ, EXIT);
     _IMMED(".\"",   DOLIT, DOTQP | fCOLON16, HERE, STORE, STRCQ, EXIT);
     ///
@@ -628,15 +629,15 @@ int assemble(U8 *rom)
     ///
     ///> Comments
     ///
-    _IMMED(".(", DOLIT, 0x29, PARSE, TYPE, EXIT);       // print til hit ) i.e. 0x29
-    _IMMED("\\", DOLIT, 0xa,  WORD,  DROP, EXIT);       // skip til end of line
-    _IMMED("(",  DOLIT, 0x29, PARSE, DDROP, EXIT);      // skip til )
+    _IMMED(".(", DOLIT, 0x29, PARSE, TYPE, EXIT);       /// print til hit ) i.e. 0x29
+    _IMMED("\\", DOLIT, 0xa,  WORD,  DROP, EXIT);       /// skip til end of line
+    _IMMED("(",  DOLIT, 0x29, PARSE, DDROP, EXIT);      /// skip til )
     ///
     ///> Lexicon Bits
     ///
-    _COLON("COMPILE-ONLY", vLAST, AT, DUP,              // enable COMPILE-ONLY flag
+    _COLON("COMPILE-ONLY", vLAST, AT, DUP,              /// enable COMPILE-ONLY flag
         CAT, DOLIT, fCMPL, OR, SWAP, CSTOR, EXIT);
-    _COLON("IMMEDIATE",    vLAST, AT, DUP,              // enable IMMEDIATE flag
+    _COLON("IMMEDIATE",    vLAST, AT, DUP,              /// enable IMMEDIATE flag
         CAT, DOLIT, fIMMD, OR, SWAP, CSTOR, EXIT);
     ///
     ///> Arduino specific opcodes
@@ -659,14 +660,14 @@ int assemble(U8 *rom)
     ///
     ///> Cold Start address (End of dictionary)
     ///
-    int last  = PC + CELLSZ;                // name field of last word
+    int last  = PC + CELLSZ;                /// name field of last word
     IU  COLD  = _COLON("COLD",
-            DOLIT, last,  vCNTX, STORE,     // reset vectors
+            DOLIT, last,  vCNTX, STORE,     /// reset vectors
             DOLIT, last,  vLAST, STORE,
             DOLIT, INTER, vMODE, STORE,
             DOLIT, QUIT,  vTABRT,STORE,
-            CR, QUIT);                      // enter the main query loop (QUIT)
-    int here  = PC;                         // current pointer
+            CR, QUIT);                      /// enter the main query loop (QUIT)
+    int here  = PC;                         /// current pointer
     ///
     ///> Boot Vector Setup
     ///
@@ -714,4 +715,4 @@ int main(int ac, char* av[]) {
 
     return 0;
 }
-#endif // !ARDUINO
+#endif /// !ARDUINO

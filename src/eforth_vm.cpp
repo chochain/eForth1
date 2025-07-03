@@ -120,17 +120,6 @@ inline void _out(U16 p, U16 v)   ///> Arduino port setting
 #endif  // ARDUINO
 }
 ///@}
-    
-inline void _ummod()        ///> (udl udh u -- ur uq) unsigned double divided by a single
-{
-    U32 d = (U32)T;         ///> CC: auto variable uses C stack
-    U32 m = ((U32)*S<<16) + (U16)*(S-1);
-    POP();
-    *S   = (DU)(m % d);     ///> remainder
-    T    = (DU)(m / d);     ///> quotient
-}
-
-///@}
 }; // namespace EfVM
 ///
 /// eForth virtual machine initialization
@@ -367,7 +356,12 @@ void vm_outer() {
         _X(TOUPP, if (T >= 0x61 && T <= 0x7b) T &= 0x5f);
         _X(COUNT, *++S = T + 1; T = BGET(T));
         _X(ULESS, T = BOOL((U16)*S-- < (U16)T));
-        _X(UMMOD, _ummod());              /// (udl udh u -- ur uq) unsigned divide of a double by single
+        _X(UMMOD,                         /// (udl udh u -- ur uq) unsigned divide of a double by single
+            U32 d = (U32)T;               ///> CC: auto variable uses C stack
+            U32 m = ((U32)*S<<16) + (U16)*(S-1);
+            POP();
+            *S   = (DU)(m % d);           ///> remainder
+            T    = (DU)(m / d));          ///> quotient
         _X(UMSTAR,                        /// (u1 u2 -- ud) unsigned multiply return double product
             U32 u = (U32)*S * T;
             DTOP(u));
@@ -390,22 +384,34 @@ void vm_outer() {
             T = (DU)(d / T));
         _X(S2D,   S32 d = (S32)T; S++; DTOP(d));
         _X(D2S,
-           DU s = *S--;
-           T = (T < 0) ? -abs(s) : abs(s));
+            DU s = *S--;
+            T = (T < 0) ? -abs(s) : abs(s));
         /// @}
         /// @name Double precision ops
         /// @{
-        _X(DNEG,                          /// (d -- -d) two's complemente of T double
+        _X(DABS,                          /// ( d -- abs(d) ) absolute value
+            S32 d = S2D(T, *S);
+            DTOP(abs(d)));
+        _X(DNEG,                          /// ( d -- -d ) two's complemente of T double
             S32 d = S2D(T, *S);
             DTOP(-d));
-        _X(DADD,                          /// (d1 d2 -- d1+d2) add two double precision numbers
+        _X(DADD,                          /// ( d1 d2 -- d1+d2 ) add two double precision numbers
             S32 d0 = S2D(T, *S);
             S32 d1 = S2D(*(S-1), *(S-2));
-            S -= 2; DTOP(d1 + d0));
-        _X(DSUB,                          /// (d1 d2 -- d1-d2) subtract d2 from d1
+            S32 d2 = d1 + d0;
+            S -= 2; DTOP(d2));
+        _X(DSUB,                          /// ( d1 d2 -- d1-d2 ) subtract d2 from d1
             S32 d0 = S2D(T, *S);
             S32 d1 = S2D(*(S-1), *(S-2));
-            S -= 2; DTOP(d1 - d0));
+            S32 d2 = d1 - d0;
+            S -= 2; DTOP(d2));
+        _X(UDSMOD,                        /// ( d1 d2 -- drem dquo ) 
+            U32 m = ((U32)*(S-1)<<16) + (U16)*(S-2);
+            U32 n = (U32)S2D(T, *S);
+            U32 r = m % n;
+            U32 q = m / n;
+            *(S-2) = r & 0xffff; *(S-1) = r >> 16;
+            DTOP(q));
         /// TODO: add J
         _X(SPAT,
             DU r = (U8*)S - (U8*)RAM(FORTH_STACK_ADDR);

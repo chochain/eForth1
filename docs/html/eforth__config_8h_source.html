@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.4</span>
+   &#160;<span id="projectnumber">v2.6</span>
    </div>
   </td>
  </tr>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('eforth__config_8h_source.html',''); in
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;user_interface.h&quot;</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#endif // ESP8266</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="eforth__config_8h.html#af0b5cfa4242ae7f98ba80fd23ef8afa9">   16</a></span>&#160;<span class="preprocessor">#define APP_NAME  &quot;eForth1 v2.4&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="eforth__config_8h.html#af0b5cfa4242ae7f98ba80fd23ef8afa9">   16</a></span>&#160;<span class="preprocessor">#define APP_NAME  &quot;eForth1 v2.6&quot;</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">typedef</span> uint32_t  <a class="code" href="eforth__config_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a>;                </div>
 <div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="eforth__config_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">   21</a></span>&#160;<span class="keyword">typedef</span> uint16_t  <a class="code" href="eforth__config_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>;                </div>
 <div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">   22</a></span>&#160;<span class="keyword">typedef</span> uint8_t   <a class="code" href="eforth__config_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>;                 </div>
@@ -200,27 +200,29 @@ $(document).ready(function(){initNavTree('eforth__config_8h_source.html',''); in
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="preprocessor">        OP(MSLAS), \</span></div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="preprocessor">        OP(S2D),   \</span></div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor">        OP(D2S),   \</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="preprocessor">    OP(DNEG),   \</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor">    OP(DADD),   \</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor">    OP(DSUB),   \</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">        OP(SPAT),  \</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor">        OP(TRC),   \</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">        OP(SAVE),  \</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor">        OP(LOAD),  \</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="preprocessor">        OP(CALL),  \</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor">        OP(CLK),   \</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">        OP(PIN),   \</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor">        OP(MAP),   \</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">        OP(IN),    \</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">        OP(OUT),   \</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor">        OP(AIN),   \</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">        OP(PWM),   \</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor">        OP(TMISR), \</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">        OP(PCISR), \</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor">        OP(TMRE),  \</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor">        OP(PCIE)</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor">#endif // __EFORTH_CONFIG_H</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="preprocessor">    OP(DABS),   \</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor">    OP(DNEG),   \</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor">    OP(DADD),   \</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">    OP(DSUB),   \</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor">    OP(UDSMOD), \</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">        OP(SPAT),  \</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor">        OP(TRC),   \</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="preprocessor">        OP(SAVE),  \</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor">        OP(LOAD),  \</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">        OP(CALL),  \</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor">        OP(CLK),   \</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">        OP(PIN),   \</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">        OP(MAP),   \</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor">        OP(IN),    \</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">        OP(OUT),   \</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor">        OP(AIN),   \</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">        OP(PWM),   \</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor">        OP(TMISR), \</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor">        OP(PCISR), \</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor">        OP(TMRE),  \</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor">        OP(PCIE)</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor">#endif // __EFORTH_CONFIG_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aeforth__config_8h_html_a39c786017723555afb9e8b85accec0de"><div class="ttname"><a href="eforth__config_8h.html#a39c786017723555afb9e8b85accec0de">S32</a></div><div class="ttdeci">int32_t S32</div><div class="ttdoc">32-bit signed integer</div><div class="ttdef"><b>Definition:</b> eforth_config.h:24</div></div>

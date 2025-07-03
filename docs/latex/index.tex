@@ -170,7 +170,102 @@ Now type {\bfseries{W\+O\+R\+DS}} in the input bar and hit $<$return$>$ to list 
 
 \end{DoxyItemize}
 
-\#\doxysection*{To Learn More About Forth?}
+\#\doxysection*{e\+Forth1 Virtual Machine, User Variables, Dictionary and Standard F\+O\+R\+TH words}
+
+See details in $\sim$/docs/\+R\+E\+A\+D\+ME \href{https://github.com/chochain/eForth1/tree/master/docs}{\texttt{ here}}
+
+\doxysubsection*{e\+Forth1 Arduino specific words}
+
+\doxysubsubsection*{Digital and Analog IO}
+
+Instead of accessing memory mapped address (i.\+e. 0x20-\/0x3F), e\+Forth1 uses the Arduino C functions to access G\+P\+IO pins. Not the preference by bare metal people but fast enough mostly and easier for new comers.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Word }&\cellcolor{\tableheadbgcolor}\textbf{ Usage }&\cellcolor{\tableheadbgcolor}\textbf{ Function  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Word }&\cellcolor{\tableheadbgcolor}\textbf{ Usage }&\cellcolor{\tableheadbgcolor}\textbf{ Function  }\\\cline{1-3}
+\endhead
+P\+I\+N\+M\+O\+DE &( f p -- ) &pin\+Mode(f, p)  \\\cline{1-3}
+IN &( p -- 1$|$0 ) &digital\+Read(p)  \\\cline{1-3}
+O\+UT &( 1$|$0 p -- ) &digital\+Write(p, 1$|$0)  \\\cline{1-3}
+A\+IN &( p -- n ) &n = analog\+Read(p), n\+:0$\sim$1023  \\\cline{1-3}
+P\+WM &( n p -- ) &analog\+Write(p, n), n\+:0$\sim$255, duty cycle$\ast$  \\\cline{1-3}
+M\+AP &( l0 h0 l1 h1 x -- y ) &y = map(x, l0, h0, l1, h1)  \\\cline{1-3}
+C\+L\+O\+CK &( -- ul uh ) &fetch millis(), in double precision  \\\cline{1-3}
+D\+E\+L\+AY &( n -- ) &delay n milliseconds  \\\cline{1-3}
+\end{longtabu}
+
+
+$\ast$\+Note\+: Since Timer0 (pin 5, 6) is used for clock and Timer2 (pin 3, 11) is used for timer interrupt, e\+Forth1 can only safely use Pin 9 and 10 for P\+WM (unless you don\textquotesingle{}t need C\+L\+O\+CK or D\+E\+L\+AY). Other pins behave like digital pins. Anything above and equals to 128 is treated as H\+I\+GH, below as L\+OW. On the other hand, A\+IN does not use any timer. It can be safely used with all Analog Pins.
+
+\doxysubsubsection*{Timer and Pin Change Interrupts}
+
+e\+Forth1 uses a data structure to capture interrupts. It supports 11 I\+S\+Rs (interrupt service routines). 8 for Timer and 3 for Pin Change. Arduino U\+N\+O/\+Nano timer2 is used, ticking at 1 millisecond as the base freq for timer interrupt. Timer0 is used for delay and Timer1 are left for other Arduino libraries such as servo driving. Pin Changes are flagged by port-\/D (pin D0-\/\+D7), Port-\/B (pin D8-\/\+D13), and Port-\/C (pin A0-\/\+A5). Only one xt (function address) per port so your I\+SR needs to figure out which pin actually been triggered if they use the same port.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Word }&\cellcolor{\tableheadbgcolor}\textbf{ Usage }&\cellcolor{\tableheadbgcolor}\textbf{ Function  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Word }&\cellcolor{\tableheadbgcolor}\textbf{ Usage }&\cellcolor{\tableheadbgcolor}\textbf{ Function  }\\\cline{1-3}
+\endhead
+T\+M\+I\+SR &( xt t n -- ) &make xt Timer I\+SR\mbox{[}n\mbox{]}, ticks every t ms  \\\cline{1-3}
+T\+I\+M\+ER &( 1$|$0 -- ) &1\+: enable, 0\+: disable Timer2 Interrupt  \\\cline{1-3}
+P\+C\+I\+SR &( xt p -- ) &make xt when p Pin Changes  \\\cline{1-3}
+P\+C\+I\+NT &( n -- ) &1\+: enable, 0\+: disable Pin Change Interrupt  \\\cline{1-3}
+\end{longtabu}
+
+
+$\ast$\+Example\+: \href{https://github.com/chochain/eForth1/blob/master/examples/7_usound/7_usound.ino}{\texttt{ Ultrasound Ranging}}
+
+\doxysubsubsection*{E\+E\+P\+R\+OM Store/\+Restore}
+
+Arduino U\+N\+O/\+Nano has 1K of E\+E\+P\+R\+OM which can cover e\+Forth1 user variables, the newly defined words, and possible data stored within the 1K R\+AM. Your work can be saved onto E\+E\+P\+R\+OM and can be restored even after a reboot.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Word }&\cellcolor{\tableheadbgcolor}\textbf{ Usage }&\cellcolor{\tableheadbgcolor}\textbf{ Function  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Word }&\cellcolor{\tableheadbgcolor}\textbf{ Usage }&\cellcolor{\tableheadbgcolor}\textbf{ Function  }\\\cline{1-3}
+\endhead
+S\+A\+VE &( -- ) &save R\+AM\+:0x2000 $\sim$ last\+\_\+word into E\+E\+P\+R\+OM  \\\cline{1-3}
+L\+O\+AD &( -- ) &restore E\+E\+P\+R\+OM into R\+AM\+:0x2000 $\sim$ last\+\_\+word  \\\cline{1-3}
+\end{longtabu}
+
+
+\doxysubsubsection*{C A\+PI call}
+
+e\+Forth1 provides a C interface for accessing the vast amount of libraries comes with Arduino ecosystem. It currently support upto 8 C functions but can be changed by updating C\+F\+U\+N\+C\+\_\+\+M\+AX in \mbox{\hyperlink{eforth__config_8h}{eforth\+\_\+config.\+h}} before compilation.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Word }&\cellcolor{\tableheadbgcolor}\textbf{ Usage }&\cellcolor{\tableheadbgcolor}\textbf{ Function  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\cellcolor{\tableheadbgcolor}\textbf{ Word }&\cellcolor{\tableheadbgcolor}\textbf{ Usage }&\cellcolor{\tableheadbgcolor}\textbf{ Function  }\\\cline{1-3}
+\endhead
+C\+A\+LL &( n -- ) &call C A\+PI\mbox{[}n\mbox{]}, defined by vm\+\_\+cfunc(n, xt)  \\\cline{1-3}
+\end{longtabu}
+
+
+$\ast$\+Example\+: \href{https://wokwi.com/projects/365630462031711233}{\texttt{ L\+ED flipping}}
+
+\doxysubsection*{To Learn More About Forth?}
 
 If your programming language exposure has been with C, Java, or even Python so far, F\+O\+R\+TH is quite {\bfseries{different}}. Quote Nick\+: {\itshape \char`\"{}\+It\textquotesingle{}s no functional or object oriented, it doesn\textquotesingle{}t have type-\/checking, and it basically has zero syntax\char`\"{}}. No syntax? So, anyway, before you dive right into the deep-\/end, here\textquotesingle{}s a good online materials.
 \begin{DoxyItemize}

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['app_5fname_323',['APP_NAME',['../eforth__config_8h.html#af0b5cfa4242ae7f98ba80fd23ef8afa9',1,'eforth_config.h']]],
-  ['asm_5ftrace_324',['ASM_TRACE',['../eforth__asm_8h.html#afd97bab563464ed479ba96d704adf0bc',1,'eforth_asm.h']]]
+  ['app_5fname_324',['APP_NAME',['../eforth__config_8h.html#af0b5cfa4242ae7f98ba80fd23ef8afa9',1,'eforth_config.h']]],
+  ['asm_5ftrace_325',['ASM_TRACE',['../eforth__asm_8h.html#afd97bab563464ed479ba96d704adf0bc',1,'eforth_asm.h']]]
 ];

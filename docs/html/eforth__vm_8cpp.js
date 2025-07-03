@@ -8,7 +8,6 @@ var eforth__vm_8cpp =
     [ "_qrx", "eforth__vm_8cpp.html#a2afadbdf0e72c8707edfebe583a5dfa6", null ],
     [ "_txsto", "eforth__vm_8cpp.html#ad93fbce2cb609c605aa8df2355c8e16b", null ],
     [ "_out", "eforth__vm_8cpp.html#a015b593d5fa03ddd62e929786fe5ea8e", null ],
-    [ "_ummod", "eforth__vm_8cpp.html#a04b479eed7bc0fa0b9c8600f47c04cba", null ],
     [ "vm_init", "eforth__vm_8cpp.html#a2dfaa0bea7ac318a0d0c5a5dfa252ca3", null ],
     [ "_ccall", "eforth__vm_8cpp.html#a8523598e2c601507492ae113056d7ef4", null ],
     [ "vm_cfunc", "eforth__vm_8cpp.html#ac274d9a96db09bfc7ec4635be50d3aa5", null ],

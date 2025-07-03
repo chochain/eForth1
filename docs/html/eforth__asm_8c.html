@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">eForth1
-   &#160;<span id="projectnumber">v2.4</span>
+   &#160;<span id="projectnumber">v2.6</span>
    </div>
   </td>
  </tr>
@@ -185,6 +185,7 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>Kernel dictionary (primitive words) </p>
 </blockquote>
+<p>aka doLIST</p>
 <blockquote class="doxtable">
 <p>( u ul uh &ndash; f ) check 3rd item within [ul uh) </p>
 </blockquote>
@@ -214,6 +215,12 @@ Variables</h2></td></tr>
 </blockquote>
 <blockquote class="doxtable">
 <p>( dl dh &ndash; n ) </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( dl dh &ndash; dl' dh' ) </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>( d1l d1h d2l d2h &ndash; drl drh dql dqh ) </p>
 </blockquote>
 <p>extended words</p>
 <blockquote class="doxtable">
@@ -291,24 +298,85 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>Console Input and Common words </p>
 </blockquote>
+<p>top of dictionary</p>
+<p>use tail of TIB for output</p>
 <blockquote class="doxtable">
 <p>Number Conversions and formatting </p>
 </blockquote>
+<p>( dl dh n &ndash; dql dqh u )</p>
+<p>handle hex number</p>
+<p>handle base &gt; 10</p>
 <p>TODO: add &gt;NUMBER</p>
+<p>leading with $ (i.e. 0x24)</p>
+<p>a FOR..WHILE..NEXT..ELSE..THEN construct =~ for {..break..}</p>
+<p>if digit, xBASE, else break to ELSE</p>
+<p>whether negative number</p>
 <blockquote class="doxtable">
 <p>Console Output </p>
 </blockquote>
+<p>out-of-range put '_' instead</p>
+<p>LF i.e. <br  />
+ actually</p>
+<p>Note: DOTQP export to _dotq</p>
+<p>( d n &ndash; ) fixed width</p>
+<p>( u n &ndash; ) unsigned fixed size</p>
+<p>( u &ndash; ) unsigned</p>
+<p>( d &ndash; ) print, extra space</p>
+<p>memory query</p>
 <p>TODO: add PAGE</p>
 <blockquote class="doxtable">
 <p>Parsing </p>
 </blockquote>
+<p>( addr len delim &ndash; ) delimiter kept tmp, addr in R</p>
+<p>if (len) { &ndash;len; if (delim==" ") {...} }</p>
+<p>a FOR..WHILE..NEXT..THEN construct =~ for {..break..}</p>
+<p>for (len)</p>
+<p>break to THEN if is char, or next char</p>
+<p>no break, (R&gt;, DROP to rm loop counter)</p>
+<p>populate A0, i.e. break comes here, rm counter</p>
+<p>advance until next space found</p>
+<p>a FOR..WHILE..NEXT..ELSE..THEN construct =~ DO..LEAVE..+LOOP</p>
+<p>if (char &lt;= space) break to ELSE</p>
+<p>no break, if counter &lt; limit loop back to FOR</p>
+<p>R&gt;, DROP to rm loop counter</p>
+<p>put token length on stack</p>
+<p>( b u a &ndash; a )</p>
+<p>( c &ndash; b u )</p>
+<p>( &ndash; a; &lt;string&gt;) put token at HERE</p>
+<p>( c &ndash; a; &lt;string)</p>
 <blockquote class="doxtable">
 <p>Dictionary serach </p>
 </blockquote>
+<p>( nfa &ndash; cfa )</p>
+<p>( a1 a2 n - a1 a2 f ) compare a1, a2 byte-by-byte</p>
+<p>*a1++</p>
+<p>*a2++</p>
+<p>CASE_SENSITIVE</p>
+<p>pop off loop counter and pointers</p>
+<p>SAME!</p>
 <p>TODO: add COMPARE</p>
+<p>( a va &ndash; cfa nfa, a F ) keep length in tmp</p>
+<p>fetch 1st cell</p>
+<p>0000 = end of dic</p>
+<p>compare 2-byte (uppercased)</p>
+<p>CASE_SENSITIVE</p>
+<p>miss, try next word</p>
+<p>-1, since 1st byte has been compared</p>
+<p>compare strings if larger than 2 bytes</p>
+<p>get thread field to previous word</p>
+<p>word found, get name field</p>
 <blockquote class="doxtable">
 <p>Terminal Input </p>
 </blockquote>
+<p>echo and store new char to TIB</p>
+<p>check &lt;CR&gt;&lt;LF&gt;</p>
+<p>check &lt;TAB&gt;</p>
+<p>check BLANK</p>
+<p>accquire token from console</p>
+<p>loop through input stream</p>
+<p>store new char into TIB</p>
+<p>check if done</p>
+<p>keep token length in #TIB</p>
 <blockquote class="doxtable">
 <p>Text Interpreter </p>
 </blockquote>
@@ -341,20 +409,94 @@ EXECUTE - attempt to look up that word in the dictionary       .
       |      \-Push the number to the variable stack &gt;---------&gt;.
        \-No:                                                   .
           \-An Error has occurred, prIU out an error message -&gt;
-</pre><p>TODO: add ?STACK</p>
+</pre><p>load ABORT vector</p>
+<p>@EXECUTE</p>
+<p>TODO: add ?STACK</p>
+<p>scan dictionary for word</p>
+<p>check for compile only word</p>
+<p>INTER0 of Dr Ting's</p>
+<p>word name not found, check if it is a number</p>
+<p>dump stack and ok prompt</p>
+<p>fetch token length</p>
+<p>fetch operation mode ($INTERPRET or $COMPILE)</p>
+<p>execute according to mode</p>
+<p>clear TIB, interpreter mode</p>
+<p>main query-eval loop</p>
 <blockquote class="doxtable">
 <p>Colon Compiler </p>
 </blockquote>
+<p>store a byte</p>
+<p>store a word</p>
+<p>create a literal</p>
+<p>name found?</p>
+<p>is immediate?</p>
+<p>execute</p>
+<p>a primitive?</p>
+<p>XX08 &lt;= this might break</p>
+<p>append just the opcode</p>
+<p>append colon word address with flag</p>
+<p>a number?</p>
+<p>append as a literal</p>
+<p>add new name field which is already build by PACK$</p>
+<p>switch into compiler-mode</p>
 <p>TODO: add [']</p>
+<p>add word address to dictionary</p>
 <blockquote class="doxtable">
 <p>Debugging Tools </p>
 </blockquote>
+<p>( pfa &ndash; nfa )</p>
+<p>save BASE, make HEX</p>
+<p>get row count</p>
+<p>dump one row</p>
+<p>:</p>
+<p>low-nibble</p>
+<p>high-nibble</p>
+<p>restore BASE</p>
+<p>tmp keeps width</p>
+<p>get name length</p>
+<p>add to tmp</p>
+<p>get LFA</p>
+<p>check row width</p>
 <p>Optional: Takes ~300 bytes ROM space </p><blockquote class="doxtable">
 <p>display address with colon delimiter ( a &ndash; ) </p>
 </blockquote>
 <blockquote class="doxtable">
 <p>display opcode at given address ( a0 op &ndash; a1 ) </p>
 </blockquote>
+<p>check primitive flag?</p>
+<p>colon word - show name</p>
+<p>."| or $"| (string)"</p>
+<p>a literal?</p>
+<p>show the number</p>
+<p>(var)v</p>
+<p>show jump target</p>
+<p>(jump target)j</p>
+<p>or a qbran</p>
+<p>show jump target</p>
+<p>(jump target)?</p>
+<p>a bran or donext?</p>
+<p>show jump target</p>
+<p>(jump target)n</p>
+<p>DOES&gt;</p>
+<p>(var)*</p>
+<p>(does&gt; target)j</p>
+<p>skip to defining word</p>
+<p>show other opcode#</p>
+<p>opcode -&gt; name ( a op &ndash; a+1 )</p>
+<p>0000 = end of dic</p>
+<p>primitive words?</p>
+<ul>
+<li>check second byte is EXIT</li>
+</ul>
+<p>same as our opcode?</p>
+<p>print name, done!</p>
+<p>link to prev word</p>
+<p>?(unknown opcode)</p>
+<p>word address</p>
+<p>loop until EXIT</p>
+<p>disasmble opcode</p>
+<p>semi colon</p>
+<p>ENABLE_SEE</p>
 <blockquote class="doxtable">
 <p>Control Structures </p>
 </blockquote>
@@ -377,6 +519,8 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <blockquote class="doxtable">
 <p>String Literals </p>
 </blockquote>
+<p>find quote in TIB (0x22 is " in ASCII)</p>
+<p>advance dic pointer</p>
 <blockquote class="doxtable">
 <p>Defining Words - variable, constant, and comments </p>
 </blockquote>
@@ -395,9 +539,13 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <blockquote class="doxtable">
 <p>Comments </p>
 </blockquote>
+<p>print til hit ) i.e. 0x29</p>
+<p>skip til end of line</p>
 <blockquote class="doxtable">
 <p>Lexicon Bits </p>
 </blockquote>
+<p>enable COMPILE-ONLY flag</p>
+<p>enable IMMEDIATE flag</p>
 <blockquote class="doxtable">
 <p>Arduino specific opcodes </p>
 </blockquote>
@@ -415,6 +563,10 @@ EXECUTE - attempt to look up that word in the dictionary       .
 <blockquote class="doxtable">
 <p>Cold Start address (End of dictionary) </p>
 </blockquote>
+<p>name field of last word</p>
+<p>reset vectors</p>
+<p>enter the main query loop (QUIT)</p>
+<p>current pointer</p>
 <blockquote class="doxtable">
 <p>Boot Vector Setup </p>
 </blockquote>

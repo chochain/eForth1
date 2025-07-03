@@ -79,6 +79,8 @@ $<$ reserved for C\+O\+LD boot vector
 Kernel dictionary (primitive words) \end{quote}
 
 
+aka do\+L\+I\+ST
+
 \begin{quote}
 ( u ul uh -- f ) check 3rd item within \mbox{[}ul uh) \end{quote}
 
@@ -117,6 +119,14 @@ Kernel dictionary (primitive words) \end{quote}
 
 \begin{quote}
 ( dl dh -- n ) \end{quote}
+
+
+\begin{quote}
+( dl dh -- dl\textquotesingle{} dh\textquotesingle{} ) \end{quote}
+
+
+\begin{quote}
+( d1l d1h d2l d2h -- drl drh dql dqh ) \end{quote}
 
 
 extended words
@@ -229,15 +239,50 @@ Kernel constants
 Console Input and Common words \end{quote}
 
 
+top of dictionary
+
+use tail of T\+IB for output
+
 \begin{quote}
 Number Conversions and formatting \end{quote}
 
 
+( dl dh n -- dql dqh u )
+
+handle hex number
+
+handle base $>$ 10
+
 T\+O\+DO\+: add $>$N\+U\+M\+B\+ER
+
+leading with \$ (i.\+e. 0x24)
+
+a F\+OR..W\+H\+I\+LE..N\+E\+XT..E\+L\+SE..T\+H\+EN construct =$\sim$ for \{..break..\}
+
+if digit, x\+B\+A\+SE, else break to E\+L\+SE
+
+whether negative number
 
 \begin{quote}
 Console Output \end{quote}
 
+
+out-\/of-\/range put \textquotesingle{}\+\_\+\textquotesingle{} instead
+
+LF i.\+e. ~\newline
+ actually
+
+Note\+: D\+O\+T\+QP export to \+\_\+dotq
+
+( d n -- ) fixed width
+
+( u n -- ) unsigned fixed size
+
+( u -- ) unsigned
+
+( d -- ) print, extra space
+
+memory query
 
 T\+O\+DO\+: add P\+A\+GE
 
@@ -245,15 +290,101 @@ T\+O\+DO\+: add P\+A\+GE
 Parsing \end{quote}
 
 
+( addr len delim -- ) delimiter kept tmp, addr in R
+
+if (len) \{ --len; if (delim==\char`\"{} \char`\"{}) \{...\} \}
+
+a F\+OR..W\+H\+I\+LE..N\+E\+XT..T\+H\+EN construct =$\sim$ for \{..break..\}
+
+for (len)
+
+break to T\+H\+EN if is char, or next char
+
+no break, (R$>$, D\+R\+OP to rm loop counter)
+
+populate A0, i.\+e. break comes here, rm counter
+
+advance until next space found
+
+a F\+OR..W\+H\+I\+LE..N\+E\+XT..E\+L\+SE..T\+H\+EN construct =$\sim$ DO..L\+E\+A\+VE..+L\+O\+OP
+
+if (char $<$= space) break to E\+L\+SE
+
+no break, if counter $<$ limit loop back to F\+OR
+
+R$>$, D\+R\+OP to rm loop counter
+
+put token length on stack
+
+( b u a -- a )
+
+( c -- b u )
+
+( -- a; $<$string$>$) put token at H\+E\+RE
+
+( c -- a; $<$string)
+
 \begin{quote}
 Dictionary serach \end{quote}
 
 
+( nfa -- cfa )
+
+( a1 a2 n -\/ a1 a2 f ) compare a1, a2 byte-\/by-\/byte
+
+$\ast$a1++
+
+$\ast$a2++
+
+C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE
+
+pop off loop counter and pointers
+
+S\+A\+M\+E!
+
 T\+O\+DO\+: add C\+O\+M\+P\+A\+RE
+
+( a va -- cfa nfa, a F ) keep length in tmp
+
+fetch 1st cell
+
+0000 = end of dic
+
+compare 2-\/byte (uppercased)
+
+C\+A\+S\+E\+\_\+\+S\+E\+N\+S\+I\+T\+I\+VE
+
+miss, try next word
+
+-\/1, since 1st byte has been compared
+
+compare strings if larger than 2 bytes
+
+get thread field to previous word
+
+word found, get name field
 
 \begin{quote}
 Terminal Input \end{quote}
 
+
+echo and store new char to T\+IB
+
+check $<$\+C\+R$>$$<$\+L\+F$>$
+
+check $<$\+T\+A\+B$>$
+
+check B\+L\+A\+NK
+
+accquire token from console
+
+loop through input stream
+
+store new char into T\+IB
+
+check if done
+
+keep token length in \#\+T\+IB
 
 \begin{quote}
 Text Interpreter \end{quote}
@@ -289,17 +420,97 @@ EXECUTE - attempt to look up that word in the dictionary       .
 \end{DoxyVerb}
 
 
+load A\+B\+O\+RT vector
+
+@\+E\+X\+E\+C\+U\+TE
+
 T\+O\+DO\+: add ?S\+T\+A\+CK
+
+scan dictionary for word
+
+check for compile only word
+
+I\+N\+T\+E\+R0 of Dr Ting\textquotesingle{}s
+
+word name not found, check if it is a number
+
+dump stack and ok prompt
+
+fetch token length
+
+fetch operation mode (\$\+I\+N\+T\+E\+R\+P\+R\+ET or \$\+C\+O\+M\+P\+I\+LE)
+
+execute according to mode
+
+clear T\+IB, interpreter mode
+
+main query-\/eval loop
 
 \begin{quote}
 Colon Compiler \end{quote}
 
 
+store a byte
+
+store a word
+
+create a literal
+
+name found?
+
+is immediate?
+
+execute
+
+a primitive?
+
+X\+X08 $<$= this might break
+
+append just the opcode
+
+append colon word address with flag
+
+a number?
+
+append as a literal
+
+add new name field which is already build by P\+A\+CK\$
+
+switch into compiler-\/mode
+
 T\+O\+DO\+: add \mbox{[}\textquotesingle{}\mbox{]}
+
+add word address to dictionary
 
 \begin{quote}
 Debugging Tools \end{quote}
 
+
+( pfa -- nfa )
+
+save B\+A\+SE, make H\+EX
+
+get row count
+
+dump one row
+
+\+:
+
+low-\/nibble
+
+high-\/nibble
+
+restore B\+A\+SE
+
+tmp keeps width
+
+get name length
+
+add to tmp
+
+get L\+FA
+
+check row width
 
 Optional\+: Takes $\sim$300 bytes R\+OM space \begin{quote}
 display address with colon delimiter ( a -- ) \end{quote}
@@ -308,6 +519,73 @@ display address with colon delimiter ( a -- ) \end{quote}
 \begin{quote}
 display opcode at given address ( a0 op -- a1 ) \end{quote}
 
+
+check primitive flag?
+
+colon word -\/ show name
+
+.\char`\"{}$\vert$ or \$\char`\"{}$\vert$ (string)"
+
+a literal?
+
+show the number
+
+(var)v
+
+show jump target
+
+(jump target)j
+
+or a qbran
+
+show jump target
+
+(jump target)?
+
+a bran or donext?
+
+show jump target
+
+(jump target)n
+
+D\+O\+ES$>$
+
+(var)$\ast$
+
+(does$>$ target)j
+
+skip to defining word
+
+show other opcode\#
+
+opcode -\/$>$ name ( a op -- a+1 )
+
+0000 = end of dic
+
+primitive words?
+
+
+\begin{DoxyItemize}
+\item check second byte is E\+X\+IT
+\end{DoxyItemize}
+
+same as our opcode?
+
+print name, done!
+
+link to prev word
+
+?(unknown opcode)
+
+word address
+
+loop until E\+X\+IT
+
+disasmble opcode
+
+semi colon
+
+E\+N\+A\+B\+L\+E\+\_\+\+S\+EE
 
 \begin{quote}
 Control Structures \end{quote}
@@ -340,6 +618,10 @@ T\+O\+DO\+: add DO...L\+O\+OP, +L\+O\+OP, L\+E\+A\+VE
 String Literals \end{quote}
 
 
+find quote in T\+IB (0x22 is " in A\+S\+C\+II)
+
+advance dic pointer
+
 \begin{quote}
 Defining Words -\/ variable, constant, and comments \end{quote}
 
@@ -367,9 +649,17 @@ T\+O\+DO\+: add P\+O\+S\+T\+P\+O\+NE
 Comments \end{quote}
 
 
+print til hit ) i.\+e. 0x29
+
+skip til end of line
+
 \begin{quote}
 Lexicon Bits \end{quote}
 
+
+enable C\+O\+M\+P\+I\+L\+E-\/\+O\+N\+LY flag
+
+enable I\+M\+M\+E\+D\+I\+A\+TE flag
 
 \begin{quote}
 Arduino specific opcodes \end{quote}
@@ -400,6 +690,14 @@ Arduino specific opcodes \end{quote}
 \begin{quote}
 Cold Start address (End of dictionary) \end{quote}
 
+
+name field of last word
+
+reset vectors
+
+enter the main query loop (Q\+U\+IT)
+
+current pointer
 
 \begin{quote}
 Boot Vector Setup \end{quote}

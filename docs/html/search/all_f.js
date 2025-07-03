@@ -1,14 +1,13 @@
 var searchData=
 [
-  ['t_162',['T',['../namespaceEfVM.html#af1fd17a6ce9c9ccef3606ee4d593bb24',1,'EfVM']]],
-  ['t0_163',['t0',['../eforth1_8ino_8cpp.html#a7bb1ec7dd618711e249eb99af044e53a',1,'eforth1.ino.cpp']]],
-  ['t_5fcnt_164',['t_cnt',['../structIsrRec.html#ab57d0a4cae8d1658a8d239c0ebc7e200',1,'IsrRec']]],
-  ['t_5fhit_165',['t_hit',['../structIsrRec.html#aaa8c7585f095649cb258b9126a4a48be',1,'IsrRec']]],
-  ['t_5fidx_166',['t_idx',['../structIsrRec.html#a72444eadee9cf64ad21b7b42aa896060',1,'IsrRec']]],
-  ['t_5fmax_167',['t_max',['../structIsrRec.html#a014a1f07c541e3715b59903f96cfc5b4',1,'IsrRec']]],
-  ['tab_168',['TAB',['../eforth__vm_8h.html#ad2e226689a02d2b5f1256e7e98f03cf5',1,'eforth_vm.h']]],
-  ['trace_169',['TRACE',['../eforth__vm_8h.html#a3c8a1f84c94c2c9b68d99323967ac670',1,'eforth_vm.h']]],
-  ['trig_170',['trig',['../eforth1_8ino_8cpp.html#aef6059030299e1558622bd2d8b786c12',1,'eforth1.ino.cpp']]],
-  ['trig_5fpin_171',['TRIG_PIN',['../eforth1_8ino_8cpp.html#a8eab89acd7dcb0e77e7b00d1749022a6',1,'eforth1.ino.cpp']]],
-  ['true_172',['TRUE',['../eforth__config_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d',1,'eforth_config.h']]]
+  ['s_153',['S',['../namespaceEfVM.html#aaae459c4ea0977eed9159647babad85a',1,'EfVM']]],
+  ['s16_154',['S16',['../eforth__config_8h.html#a6d241ad21a823c90d4835380787db5d4',1,'eforth_config.h']]],
+  ['s2d_155',['S2D',['../eforth__vm_8h.html#a35a26ccdccc5949a9553ce8547b3814c',1,'eforth_vm.h']]],
+  ['s32_156',['S32',['../eforth__config_8h.html#a39c786017723555afb9e8b85accec0de',1,'eforth_config.h']]],
+  ['s8_157',['S8',['../eforth__config_8h.html#af1475a0bb1962ef08dd1f78bd5dba87a',1,'eforth_config.h']]],
+  ['sei_158',['SEI',['../eforth__core_8h.html#a52e81e3198871fa5ae5c84580a12c032',1,'eforth_core.h']]],
+  ['set_159',['SET',['../eforth__asm_8h.html#ac90aeca39f45fc56ac96c675d18a7e78',1,'SET():&#160;eforth_asm.h'],['../namespaceEfVM.html#a6704f4eed222b21f8754d5c4711c1a15',1,'EfVM::SET()']]],
+  ['setup_160',['setup',['../eforth1_8ino_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'eforth1.ino.cpp']]],
+  ['showop_161',['SHOWOP',['../eforth__asm_8h.html#a49fac1253499dd76c037d22a8b7bcadf',1,'eforth_asm.h']]],
+  ['store_162',['STORE',['../eforth__asm_8h.html#ad15c88ea1b3da2e52aac4a4d3810a045',1,'eforth_asm.h']]]
 ];

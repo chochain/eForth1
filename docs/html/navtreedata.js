@@ -24,6 +24,7 @@ var NAVTREE =
 [
   [ "eForth1", "index.html", [
     [ "eForth1 - eForth for Arduino UNO", "index.html", null ],
+    [ "jk", "md_jk.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -58,7 +59,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"group__Pseudo.html#ga490a9d625f51b7fcffd63cb67b8c7ef5"
+"group__Pseudo.html#ga4ba5bed6181c7835fef0970672569147"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

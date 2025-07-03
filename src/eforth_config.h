@@ -13,7 +13,7 @@
 #include "user_interface.h"
 #endif // ESP8266
 
-#define APP_NAME  "eForth1 v2.4"
+#define APP_NAME  "eForth1 v2.6"
 ///
 ///@name Portable Types
 ///@{

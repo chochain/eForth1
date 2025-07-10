@@ -243,10 +243,7 @@ int assemble(U8 *rom)
     IU SPACS = _COLON("SPACES", BLANK, CHARS, EXIT);
     IU TYPE  = _COLON("TYPE", NOP); {
         _FOR(NOP);
-        _AFT(COUNT, DOLIT, 0x7f, AND, DUP, DOLIT, 0x7f, BLANK, WITHI); {
-            _IF(DROP, DOLIT, 0x5f);    /// out-of-range put '_' instead
-            _THEN(EMIT);
-        }
+        _AFT(COUNT, TCHAR, EMIT);
         _THEN(NOP);
         _NEXT(DROP, EXIT);
     }

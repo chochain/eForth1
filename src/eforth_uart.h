@@ -36,8 +36,7 @@ struct UART {
         UBRR0H = BAUD_PRESCALE >> 8;
     
         UCSR0B = (1<<TXEN0) | (1<<RXEN0);      /// * Enable the interface
-        UCSR0C = (0<<UMSEL00) | (3<<UCSZ00) |  /// * Aync 8-bit
-                 (0<<UPM00) | (0<<USBS0);      /// * N 1
+        UCSR0C = (1<<UCSZ01) | (1<<UCSZ00);    /// * Async 8N1
     }
     int  available(void) { return UCSR0A & (1<<RXC0);  }
     int  ready(void)     { return UCSR0A & (1<<UDRE0); }

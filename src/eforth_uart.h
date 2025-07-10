@@ -1,48 +1,71 @@
+/**
+ * @file
+ * @brief eForth UART class
+ * @example
+ UART uart;
+ void setup() {
+     uart.init();
+ }
+ void loop() {
+     while (uart.available()) {
+         char c = uart.read();
+         uart.print(F("rx="));
+         uart.print(c);
+     }
+     delay(1000);
+     uart.print('.');
+ }
+ *
+ */
 #ifndef __EFORTH_UART_H
 #define __EFORTH_UART_H
 #include <avr/io.h>
 
-#define UART_BAUDRATE 115200
-#define BAUD_PRESCALE (((F_CPU / (UART_BAUDRATE * 16UL))) - 1)
+#define CPU_FREQ      16000000UL
+#define UART_BAUD     9600
+#define BAUD_PRESCALE (((CPU_FREQ / (16UL * UART_BAUD))) - 1)
 
 struct UART {
     void init(void) {
-        UCSRB = 0;                           /// * UART reset
+        UCSR0B = 0;                            /// * UART reset
     
-        DDRD  &= ~_BV(PD0);                  /// * Enable RXD pullup
-        PORTD |= _BV(PD0);                   /// * Default UART init
+        DDRD  &= ~_BV(PD0);                    /// * Enable RXD pullup
+        PORTD |= _BV(PD0);                     /// * Default UART init
 
-        UBRRL = BAUD_PRESCALE;               /// * Set the baudrate
-        UBRRH = BAUD_PRESCALE >> 8;
+        UBRR0L = BAUD_PRESCALE;                /// * Set the baudrate
+        UBRR0H = BAUD_PRESCALE >> 8;
     
-        UCSRB = _BV(TXEN) | _BV(RXEN);       /// * Enable the interface
-
-        UCSRC = _BV(URSEL) | _BV(USBS) |     /// * Use 8N1
-                _BV (UCSZ0) | _BV (UCSZ1);   /// * with two stop bits
+        UCSR0B = (1<<TXEN0) | (1<<RXEN0);      /// * Enable the interface
+        UCSR0C = (0<<UMSEL00) | (3<<UCSZ00) |  /// * Aync 8-bit
+                 (0<<UPM00) | (0<<USBS0);      /// * N 1
     }
-    U8   available(void) { return UCSRA & _BV(RXC); }
-    U8   read()          { return _rx_byte(); }
+    int  available(void) { return UCSR0A & (1<<RXC0);  }
+    int  ready(void)     { return UCSR0A & (1<<UDRE0); }
+    char read()          { return _rx_byte(); }
     void print(char c)   { _tx_byte(c); }
-    void print(PGM_P s)  { _tx_data(s, STRLEN(s)); }
-    void print(DU n)     { }
-    void flush()         {}
+    void print(char *s)  { _tx_data(s, strlen(s)); }
+    void print(PGM_P p)  {
+        for (int i=0, n=strlen_P(p); i < n; i++) {
+            _tx_byte(pgm_read_byte(p++));
+        }
+    }
+    void print(const __FlashStringHelper *s) { print((PGM_P)s); }
     
-    void _tx_byte(U8 byte) {
-        while (!(UCSRA & _BV(UDRE)));        /// * Wait until UART not busy
-        UDR = byte;                          /// * Send input byte
-        while (!(UCSRA & _BV(UDRE)));        /// * Wait until not busy (sent)
+    void _tx_byte(char c) {
+        while (!ready());
+        UDR0 = c;                              /// * Send input byte
     }
-    void _tx_data(const U8 *data, int len) { ///< send data buffer to UART
-        const U8 *tail = data + len;
-        while (data != tail) uart_tx_byte(*data++);
+    void _tx_data(const char *data, int len) { ///< send data buffer to UART
+        const char *tail = data + len;
+        while (data != tail) _tx_byte(*data++);
     }
-    U8   _rx_byte(void) {                    ///< receive one byte
-        while (!uart_data_available());      /// * Wait for UART
-        return UDR;                          /// * return received byte
+    char _rx_byte(void) {                      ///< receive one byte
+        while (!available());                  /// * Wait for UART
+        return UDR0;                           /// * return received byte
     }
-    void _rx_data(U8 *data, int len) {       ///< received bytes into data buffer
-        const U8 *tail = data + len;
-        while (tail != data) *data++ = uart_rx_byte();
+    void _rx_data(char *data, int len) {       ///< received bytes into data buffer
+        const char *tail = data + len;
+        while (tail != data) *data++ = _rx_byte();
     }
 };
 #endif // __EFORTH_UART_H

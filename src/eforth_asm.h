@@ -7,6 +7,7 @@
 #ifndef __EFORTH_ASM_H
 #define __EFORTH_ASM_H
 #include "eforth_config.h"
+#include "eforth_opcode.h"
 
 #define ASM_TRACE       0          /** create assembler trace */
 #define CASE_SENSITIVE  0          /** enable case sensitive  */

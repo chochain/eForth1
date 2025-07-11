@@ -2,45 +2,54 @@
  * @file
  * @brief eForth UART class
  * @example
- UART uart;
+ HardwareUART uart;
  void setup() {
-     uart.init();
+     uart.begin(9600);
  }
  void loop() {
+     uart.print('.');
      while (uart.available()) {
          char c = uart.read();
          uart.print(F("rx="));
-         uart.print(c);
+         uart.print((int)c, 16);
      }
      delay(1000);
-     uart.print('.');
  }
  *
  */
 #ifndef __EFORTH_UART_H
 #define __EFORTH_UART_H
+
 #include <avr/io.h>
 
+typedef unsigned long UL;
+#define HEX           16
 #define CPU_FREQ      16000000UL
 #define UART_BAUD     9600
-#define BAUD_PRESCALE (((CPU_FREQ / (16UL * UART_BAUD))) - 1)
 
-struct UART {
-    void init(void) {
-        UCSR0B = 0;                            /// * UART reset
-    
+struct HardwareUART
+{
+    /// Serial interface
+    void begin(UL baud) {
+        UL prescale = (CPU_FREQ / (16UL * baud)) - 1;
+
         DDRD  &= ~_BV(PD0);                    /// * Enable RXD pullup
         PORTD |= _BV(PD0);                     /// * Default UART init
 
-        UBRR0L = BAUD_PRESCALE;                /// * Set the baudrate
-        UBRR0H = BAUD_PRESCALE >> 8;
+        UBRR0L = prescale;                     /// * Set the baudrate
+        UBRR0H = prescale >> 8;
     
-        UCSR0B = (1<<TXEN0) | (1<<RXEN0);      /// * Enable the interface
+        UCSR0B = (1<<TXEN0)  | (1<<RXEN0);     /// * Enable the interface
         UCSR0C = (1<<UCSZ01) | (1<<UCSZ00);    /// * Async 8N1
     }
-    int  available(void) { return UCSR0A & (1<<RXC0);  }
-    int  ready(void)     { return UCSR0A & (1<<UDRE0); }
-    char read()          { return _rx(); }
+    void end(void)               { UCSR0B = 0; }
+    int  available(void)         { return UCSR0A & (1<<RXC0);  }
+    int  availableForWrite(void) { return UCSR0A & (1<<UDRE0); }
+    int  read()                  { return available() ? (int)_rx() : -1; }
+    void flush()                 { /* do nothing */ }
+    operator bool()              { return true; }
+    
+    /// Print interface
     void print(char c)   { _tx(c); }
     void print(char *s)  { _txn(s, strlen(s)); }
     void print(PGM_P p)  {                     ///< print program memory string
@@ -61,8 +70,10 @@ struct UART {
         buf[--i] = v < 0 ? '-' : ' ';          /// * sign
         print(&buf[i]);                        /// * dump as string
     }
+
+    /// private methods
     void _tx(char c) {
-        while (!ready());
+        while (!availableForWrite());
         UDR0 = c;                              /// * Send input byte
     }
     void _txn(const char *p, int len) {        ///< send data buffer to UART
@@ -76,4 +87,7 @@ struct UART {
         for (int i=0; i < len; i++) *p++ = _rx();
     }
 };
+
+extern HardwareUART UART;                      /// * static instance
+
 #endif // __EFORTH_UART_H

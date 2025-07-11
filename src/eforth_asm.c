@@ -247,7 +247,7 @@ int assemble(U8 *rom)
         _THEN(NOP);
         _NEXT(DROP, EXIT);
     }
-    IU CR    = _COLON("CR",   DOLIT, 10, EMIT, EXIT);         /// LF i.e. \n actually
+    IU CR    = _COLON("CR",   DOLIT, 0xd, EMIT, DOLIT, 0xa, EMIT, EXIT);      /// CRLF i.e. \n actually
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, COUNT, EXIT);
     IU STRQP = _COLON("$\"|", DOSTR, EXIT);
        DOTQP = _COLON(".\"|", DOSTR, TYPE, EXIT);             /// Note: DOTQP export to _dotq
@@ -343,9 +343,9 @@ int assemble(U8 *rom)
     }
     IU TAP   = _COLON("TAP", DUP, EMIT, OVER, CSTOR, ONEP, EXIT);                  /// echo and store new char to TIB
     IU KTAP  = _COLON("kTAP", DUP, DOLIT, 0xd, XOR, OVER, DOLIT, 0xa, XOR, AND); { /// check <CR><LF>
-        _IF(DOLIT, 8, XOR); {                                                      /// check <TAB>
-            _IF(BLANK, TAP);                                                       /// check BLANK
-            _ELSE(HATH);
+        _IF(DOLIT, 8, XOR); {                                                      /// check <BS>
+            _IF(BLANK, TAP);                                    /// erase char
+            _ELSE(HATH);                                        ///
             _THEN(EXIT);
         }
         _THEN(DROP, SWAP, DROP, DUP, EXIT);

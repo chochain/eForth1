@@ -40,31 +40,40 @@ struct UART {
     }
     int  available(void) { return UCSR0A & (1<<RXC0);  }
     int  ready(void)     { return UCSR0A & (1<<UDRE0); }
-    char read()          { return _rx_byte(); }
-    void print(char c)   { _tx_byte(c); }
-    void print(char *s)  { _tx_data(s, strlen(s)); }
+    char read()          { return _rx(); }
+    void print(char c)   { _tx(c); }
+    void print(char *s)  { _txn(s, strlen(s)+1); }
     void print(PGM_P p)  {
         for (int i=0, n=strlen_P(p); i < n; i++) {
-            _tx_byte(pgm_read_byte(p++));
+            _tx(pgm_read_byte(p++));
         }
     }
     void print(const __FlashStringHelper *s) { print((PGM_P)s); }
-    
-    void _tx_byte(char c) {
+    void print(int v, int base=10) {
+        char buf[32];
+        int  i = 32, n = abs(v);
+        buf[--i] = '\0';
+        while (i > 0 && n != 0) {
+            char c = (char)(n % base);
+            buf[--i] = c < 10 ? c + '0' : c + 'A';
+            n /= base;
+        }
+        buf[--i] = v < 0 ? '-' : ' ';
+        print(&buf[i]);
+    }
+    void _tx(char c) {
         while (!ready());
         UDR0 = c;                              /// * Send input byte
     }
-    void _tx_data(const char *data, int len) { ///< send data buffer to UART
-        const char *tail = data + len;
-        while (data != tail) _tx_byte(*data++);
+    void _txn(const char *p, int len) {        ///< send data buffer to UART
+        for (int i=0; i < len; i++) _tx(*p++);
     }
-    char _rx_byte(void) {                      ///< receive one byte
+    char _rx(void) {                           ///< receive one byte
         while (!available());                  /// * Wait for UART
         return UDR0;                           /// * return received byte
     }
-    void _rx_data(char *data, int len) {       ///< received bytes into data buffer
-        const char *tail = data + len;
-        while (tail != data) *data++ = _rx_byte();
+    void _rxn(char *p, int len) {              ///< received bytes into data buffer
+        for (int i=0; i < len; i++) *p++ = _rx();
     }
 };
 #endif // __EFORTH_UART_H

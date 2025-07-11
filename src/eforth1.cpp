@@ -8,7 +8,7 @@
 #include "eforth_core.h"
 #include "eForth1.h"
 
-void _stat(U8 *ram, int sz, Stream *io) {
+void _stat(U8 *ram, int sz, StreamIO *io) {
     LOG_H("\nROM_SZ=x",  sz);
     LOG_H(", RAM_SZ=x",  FORTH_RAM_SZ);
     LOG_V(", Addr=",     (U16)sizeof(IU)*8);
@@ -84,10 +84,11 @@ extern U32    forth_rom_sz;                ///< actual size of ROM
 static U8     forth_ram[FORTH_RAM_SZ];     ///< RAM pointer (malloc)
 
 #if ARDUINO
-static Stream *io;                         ///< IO stream (Serial Monito///
+static StreamIO *io;                       ///< Serial or UART
+///
 ///> setup (called by Arduino setup)
 ///
-void ef_setup(const char *code, Stream &io_stream)
+void ef_setup(const char *code, StreamIO &io_stream)
 {
     io = &io_stream;
 

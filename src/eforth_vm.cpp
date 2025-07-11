@@ -9,6 +9,7 @@
  *   202405 add computed_goto; DS,RS,top,rtop=>S,R,T,I
  */
 #include "eforth_vm.h"
+#include "eforth_opcode.h"
 
 namespace EfVM {
 ///
@@ -21,7 +22,7 @@ DU    I;               ///< RTOS, cached loop counter on return stack
 ///@}
 ///@name IO Streaming interface
 ///@{
-Stream *io;            ///< IO Stream, tied to Serial usually
+StreamIO *io;          ///< Stream IO, tie to Serial or UART
 ///@}
 ///@name Memory Management Unit
 ///@{
@@ -137,7 +138,7 @@ inline void _out(U16 p, U16 v)   ///> Arduino port setting
 using namespace EfVM;
 
 void vm_init(PGM_P rom, U8 *ram, void *io_stream, const char *code) {
-    io    = (Stream *)io_stream;
+    io    = (StreamIO*)io_stream;
     _rom  = rom;
     _ram  = ram;
     _pre  = (U8*)code;

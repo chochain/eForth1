@@ -14,9 +14,16 @@
 ///@name Arduino Support Macros
 ///@{
 #if ARDUINO
-
 #include <Arduino.h>
 #include <avr/pgmspace.h>
+
+#if defined(RAW_UART)
+#include "eforth_uart.h"
+#define StreamIO            HardwareUART
+#else
+#define StreamIO            Stream
+#endif
+
 #define LOG(s)              io->print(F(s))
 #define LOG_C(c)            { io->print(c); if (c=='\n') io->flush(); }
 #define LOG_V(s, n)         { io->print(F(s)); io->print((DU)(n)); }
@@ -28,9 +35,9 @@
 
 #include <stdlib.h>
 typedef const char          *PGM_P;
+#define StreamIO            char
 #define pgm_read_byte(b)    *((U8*)(b))
 #define PROGMEM
-#define Stream              char
 #define millis()            ((U32)clock())
 #define pinMode(a,b)
 #define digitalRead(p)      (0)

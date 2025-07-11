@@ -30,9 +30,9 @@
 namespace EfVM {
 ///@name MMU & IO interfaces
 ///@{
-extern PGM_P  _rom;               ///< ROM, Forth word stored in Arduino Flash Memory
-extern U8     *_ram;              ///< RAM, memory block for user define dictionary
-extern Stream *io;                ///< Stream IO interface
+extern PGM_P    _rom;             ///< ROM, Forth word stored in Arduino Flash Memory
+extern U8       *_ram;            ///< RAM, memory block for user define dictionary
+extern StreamIO *io;              ///< Stream or UART IO interface
 ///@}
 #define RAM_FLAG       0xe000     /**< RAM ranger      (0x2000~0x7fff) */
 #define IDX_MASK       0x07ff     /**< RAM index mask  (0x0000~0x07ff) */

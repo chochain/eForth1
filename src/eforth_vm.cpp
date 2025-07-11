@@ -61,7 +61,7 @@ void _init() {                        ///> VM initializer
     ///
     /// display init prompt
     ///
-    LOG("\n\n"); LOG(APP_NAME);
+    LOG("\r\n\r\n"); LOG(APP_NAME);
 }
 ///
 ///> console IO functions
@@ -71,7 +71,7 @@ inline void _qrx()           ///> ( -- c ) fetch a char from console
     static char *p = (char*)_pre;
 #if ARDUINO
     char c   = p ? pgm_read_byte(p) : 0;
-    DU   rst = (DU)(c ? (p++, c) : io->read());        ///> fetch from IO stream
+    DU   rst = (DU)(c ? (int)(p++, c) : io->read()); ///> fetch from IO stream
     if (rst > 0) PUSH(rst);
     PUSH(BOOL(rst >= 0));
 #else
@@ -87,7 +87,7 @@ inline void _txsto()         ///> (c -- ) send a char to console
 #if EXE_TRACE
     if (tCNT > 1) {
         switch (T) {
-        case 0xa: tCNT ? LOG("<LF>") : LOG("\n");  break;
+        case 0xa: tCNT ? LOG("<LF>") : LOG("\r\n");  break;
         case 0xd: LOG("<CR>");    break;
         case 0x8: LOG("<TAB>");   break;
         default: LOG("<"); LOG_C((char)T); LOG(">");
@@ -194,6 +194,14 @@ int vm_pop() {
 #endif // COMPUTED_GOTO
 
 void vm_outer() {
+#if 0    
+    while (io->available()) {
+        int c = io->read();
+        io->print(F("rx="));
+        io->print(c, 16);
+    }
+    return;
+#endif    
     VTABLE;
     IU ir = 0;                          ///< interrupt flag
     IU ip = GET(FORTH_BOOT_ADDR);       ///< ip = cold boot vector
@@ -424,11 +432,11 @@ void vm_outer() {
 #endif // EXE_TRACE
         _X(SAVE,
             U16 sz = ef_save(_ram);
-            LOG_V(" -> EEPROM ", sz); LOG(" bytes\n");
+            LOG_V(" -> EEPROM ", sz); LOG(" bytes\r\n");
         );
         _X(LOAD,
             U16 sz = ef_load(_ram);
-            LOG_V(" <- EEPROM ", sz); LOG(" bytes\n");
+            LOG_V(" <- EEPROM ", sz); LOG(" bytes\r\n");
         );
         _X(CALL,
             _ccall());                     /// * call C function

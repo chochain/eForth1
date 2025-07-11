@@ -6,20 +6,19 @@
 ///> display eForth system information
 ///
 #include "eforth_core.h"
-#include "eForth1.h"
 
 void _stat(U8 *ram, int sz, StreamIO *io) {
-    LOG_H("\nROM_SZ=x",  sz);
+    LOG_H("\r\nROM_SZ=x",  sz);
     LOG_H(", RAM_SZ=x",  FORTH_RAM_SZ);
     LOG_V(", Addr=",     (U16)sizeof(IU)*8);
     LOG_V("-bit, CELL=", CELLSZ);
-    LOG("-byte\nMemory MAP:");
-    LOG_H("\n  ROM  :x0000+", FORTH_ROM_SZ);
-    LOG_H("\n  VAR  :x", FORTH_UVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);  LOG("  <=> EEPROM");
-    LOG_H("\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ);   LOG(" <=> EEPROM");
-    LOG_H("\n  STACK:x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
-    LOG_H("\n  TIB  :x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
-    LOG_H("\n  ROOF :x", FORTH_MAX_ADDR);
+    LOG("-byte\r\nMemory MAP:");
+    LOG_H("\r\n  ROM  :x0000+", FORTH_ROM_SZ);
+    LOG_H("\r\n  VAR  :x", FORTH_UVAR_ADDR);  LOG_H("+", FORTH_UVAR_SZ);  LOG("  <=> EEPROM");
+    LOG_H("\r\n  DIC  :x", FORTH_DIC_ADDR);   LOG_H("+", FORTH_DIC_SZ);   LOG(" <=> EEPROM");
+    LOG_H("\r\n  STACK:x", FORTH_STACK_ADDR); LOG_H("+", FORTH_STACK_SZ);
+    LOG_H("\r\n  TIB  :x", FORTH_TIB_ADDR);   LOG_H("+", FORTH_TIB_SZ);
+    LOG_H("\r\n  ROOF :x", FORTH_MAX_ADDR);
 #if ARDUINO
     extern U8 *__flp;                         ///< freelist
     U16 h = (uintptr_t)&__flp;                ///< start of heap
@@ -84,16 +83,13 @@ extern U32    forth_rom_sz;                ///< actual size of ROM
 static U8     forth_ram[FORTH_RAM_SZ];     ///< RAM pointer (malloc)
 
 #if ARDUINO
-static StreamIO *io;                       ///< Serial or UART
 ///
 ///> setup (called by Arduino setup)
 ///
 void ef_setup(const char *code, StreamIO &io_stream)
 {
-    io = &io_stream;
-
-    vm_init((PGM_P)forth_rom, forth_ram, io, code);
-    _stat(forth_ram, forth_rom_sz, io);
+    vm_init((PGM_P)forth_rom, forth_ram, &io_stream, code);
+    _stat(forth_ram, forth_rom_sz, &io_stream);
 }
 ///
 ///> VM outer interpreter proxy
@@ -110,6 +106,8 @@ char *ef_ram(int i) {
 }
 
 #else  // !ARDUINO
+#include "eForth1.h"
+
 const char code[] =
     "words\n"
     "123 456\n"

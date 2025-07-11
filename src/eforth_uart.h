@@ -42,24 +42,24 @@ struct UART {
     int  ready(void)     { return UCSR0A & (1<<UDRE0); }
     char read()          { return _rx(); }
     void print(char c)   { _tx(c); }
-    void print(char *s)  { _txn(s, strlen(s)+1); }
-    void print(PGM_P p)  {
+    void print(char *s)  { _txn(s, strlen(s)); }
+    void print(PGM_P p)  {                     ///< print program memory string
         for (int i=0, n=strlen_P(p); i < n; i++) {
             _tx(pgm_read_byte(p++));
         }
     }
     void print(const __FlashStringHelper *s) { print((PGM_P)s); }
-    void print(int v, int base=10) {
-        char buf[32];
+    void print(int v, int base=10) {           ///< print integer
+        char buf[32];                          ///< output buffer
         int  i = 32, n = abs(v);
-        buf[--i] = '\0';
+        buf[--i] = '\0';                       /// * pad last byte just in case
         while (i > 0 && n != 0) {
             char c = (char)(n % base);
             buf[--i] = c < 10 ? c + '0' : c + 'A';
             n /= base;
         }
-        buf[--i] = v < 0 ? '-' : ' ';
-        print(&buf[i]);
+        buf[--i] = v < 0 ? '-' : ' ';          /// * sign
+        print(&buf[i]);                        /// * dump as string
     }
     void _tx(char c) {
         while (!ready());

@@ -1,18 +1,17 @@
 ///
 /// @file eforth_rom.c
 /// @brief eForth ROM (loaded in Arduino Flash Memory)
-/// @attention 8K max ROM before changing FORTH_ROM_SZ in eforth_core.h 
+/// @attention 8K max ROM before changing FORTH_ROM_SZ in eforth_config.h 
 ///
+#include <stdint.h>
 #if ARDUINO
 #include <Arduino.h>
-typedef unsigned long U32;
 #else
 #define PROGMEM
-typedef unsigned int U32;
 #endif
 
-const U32 forth_rom_sz PROGMEM = 0xee9;
-const U32 forth_rom[] PROGMEM = {
+const uint32_t forth_rom_sz PROGMEM = 0xee9;
+const uint32_t forth_rom[] PROGMEM = {
 0x0000cd0e,0x504f4e03,0x04000100,0x49584504,0x00010154,0x4e45050c,0x02524554,0x03150001, // 0000 __.._NOP._.__EXIT__.__ENTER__.__
 0x03455942,0x041f0001,0x59454b3f,0x27000104,0x494d4504,0x00010554,0x4f440530,0x0654494c, // 0020 BYE__.__?KEY__.'_EMIT__.0_DOLIT_
 0x05390001,0x41564f44,0x00010752,0x42510743,0x434e4152,0x00010b48,0x5242064d,0x48434e41, // 0040 _.9_DOVAR__.C_QBRANCH__.M_BRANCH

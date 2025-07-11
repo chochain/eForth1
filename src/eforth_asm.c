@@ -681,17 +681,16 @@ void _dump_rom(U8* rom, int len)
         "///\n"
         "/// @file eforth_rom.c\n"
         "/// @brief eForth ROM (loaded in Arduino Flash Memory)\n"
-        "/// @attention 8K max ROM before changing FORTH_ROM_SZ in eforth_core.h \n"
+        "/// @attention 8K max ROM before changing FORTH_ROM_SZ in eforth_config.h \n"
         "///\n"
+        "#include <stdint.h>\n"
         "#if ARDUINO\n"
         "#include <Arduino.h>\n"
-        "typedef unsigned long U32;\n"
         "#else\n"
         "#define PROGMEM\n"
-        "typedef unsigned int U32;\n"
         "#endif\n");
-    printf("\nconst U32 forth_rom_sz PROGMEM = 0x%x;", len);
-    printf("\nconst U32 forth_rom[] PROGMEM = {\n");
+    printf("\nconst uint32_t forth_rom_sz PROGMEM = 0x%x;", len);
+    printf("\nconst uint32_t forth_rom[] PROGMEM = {\n");
     for (int p=0; p<len+0x20; p+=0x20) {
         U32 *x = (U32*)&rom[p];
         for (int i=0; i<0x8; i++, x++) {

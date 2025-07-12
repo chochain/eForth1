@@ -342,10 +342,10 @@ int assemble(U8 *rom)
         _THEN(EXIT);
     }
     IU TAP   = _COLON("TAP", DUP, EMIT, OVER, CSTOR, ONEP, EXIT);                  /// echo and store new char to TIB
-    IU KTAP  = _COLON("kTAP", DUP, DOLIT, 0xd, XOR, OVER, DOLIT, 0xa, XOR, AND); { /// check <CR><LF>
-        _IF(DOLIT, 8, XOR); {                                                      /// check <BS>
-            _IF(BLANK, TAP);                                    /// erase char
-            _ELSE(HATH);                                        ///
+    IU KTAP  = _COLON("kTAP", DUP, DOLIT, 0xd, XOR); {          /// check <CR>
+        _IF(DOLIT, 8, XOR); {                                   /// check <BS>
+            _IF(BLANK, TAP);                                    /// put blank
+            _ELSE(HATH);                                        /// backspace
             _THEN(EXIT);
         }
         _THEN(DROP, SWAP, DROP, DUP, EXIT);

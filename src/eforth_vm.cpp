@@ -194,14 +194,6 @@ int vm_pop() {
 #endif // COMPUTED_GOTO
 
 void vm_outer() {
-#if 0    
-    while (io->available()) {
-        int c = io->read();
-        io->print(F("rx="));
-        io->print(c, 16);
-    }
-    return;
-#endif    
     VTABLE;
     IU ir = 0;                          ///< interrupt flag
     IU ip = GET(FORTH_BOOT_ADDR);       ///< ip = cold boot vector

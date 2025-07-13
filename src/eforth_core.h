@@ -17,7 +17,7 @@
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 
-#if defined(RAW_UART)
+#if USE_RAW_UART
 #include "eforth_uart.h"
 #define StreamIO            HardwareUART
 #else

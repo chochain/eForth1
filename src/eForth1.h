@@ -11,13 +11,13 @@ int  vm_pop();                    ///< pop TOS off VM data stack
 #include <Arduino.h>
 #include <time.h>
 
-#if defined(RAW_UART)
+#if defined(USE_RAW_UART)
 #include "eforth_uart.h"
 void ef_setup(const char *code=0, HardwareUART &io_stream=UART);
 
-#else  // !defined(RAW_UART)
+#else  // !defined(USE_RAW_UART)
 void ef_setup(const char *code=0, Stream &io_stream=Serial);
-#endif // defined(RAW_UART)
+#endif // defined(USE_RAW_UART)
 
 void ef_run();
 char *ef_ram(int i);              ///< expose VM RAM space to Sketch

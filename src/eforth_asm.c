@@ -342,10 +342,10 @@ int assemble(U8 *rom)
         _THEN(EXIT);
     }
     IU TAP   = _COLON("TAP", DUP, EMIT, OVER, CSTOR, ONEP, EXIT);                  /// echo and store new char to TIB
-    IU KTAP  = _COLON("kTAP", DUP, DOLIT, 0xd, XOR); {          /// check <CR>
+    IU KTAP  = _COLON("kTAP", DUP, DOLIT, 0xa, XOR); {          /// check <LF>
         _IF(DOLIT, 8, XOR); {                                   /// check <BS>
             _IF(BLANK, TAP);                                    /// put blank
-            _ELSE(HATH);                                        /// backspace
+            _ELSE(HATH);                                        /// handle backspace
             _THEN(EXIT);
         }
         _THEN(DROP, SWAP, DROP, DUP, EXIT);
@@ -354,7 +354,7 @@ int assemble(U8 *rom)
         _BEGIN(DDUP, XOR);                                      /// loop through input stream
         _WHILE(KEY, DUP, BLANK, SUB, DOLIT, 0x5f, ULESS); {
             _IF(TAP);                                           /// store new char into TIB
-            _ELSE(KTAP);                                        /// check if done
+            _ELSE(KTAP);                                        /// handle control chars
             _THEN(NOP);
         }
         _REPEAT(DROP, OVER, SUB, EXIT);                         /// keep token length in #TIB

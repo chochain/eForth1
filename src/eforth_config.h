@@ -14,7 +14,7 @@
 #endif // ESP8266
 
 #define APP_NAME      "eForth1 v2.6"
-#define USE_RAW_UART  1 
+#define USE_RAW_UART  0               /** default, use Serail interface */
 ///
 ///@name Portable Types
 ///@{

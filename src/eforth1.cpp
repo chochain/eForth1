@@ -115,7 +115,7 @@ const char code[] =
     "0 CALL\n"
     "123 456\n"
     "1 CALL\n"
-    "=\n";
+    "- .\" = 0 pass\" .\n";
 ///
 ///> main to support C development debugging
 ///

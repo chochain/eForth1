@@ -9,7 +9,7 @@
 #include "eforth_config.h"
 #include "eforth_opcode.h"
 
-#define ASM_TRACE       1          /** create assembler trace */
+#define ASM_TRACE       0          /** create assembler trace */
 #define CASE_SENSITIVE  0          /** enable case sensitive  */
 #define ENABLE_SEE      1          /** add SEE, +280 bytes    */
 ///
@@ -103,22 +103,29 @@ enum {
 #define VH(a, i)    (((U16)(a)+CELLSZ*(i))>>8)
 #define VAL(a, i)   opDOLIT,VH(a,i),VL(a,i),opEXIT
 ///@}
-///@defgroup Memory copy
+///@defgroup Assembler macro
 ///@{
-#define CELLCPY(n) {                            \
+#define ASSEMBLE(n) {                           \
     va_list argList;                            \
     va_start(argList, n);                       \
-    int lit=0;                                  \
+    int lit = 0, byte = 0;                      \
     for (; n; n--) {                            \
         IU j = (IU)va_arg(argList, int);        \
         if (lit) {      /** literal */          \
             STORE(j);                           \
-            lit = 0;                            \
             DEBUG(" %04x", j);                  \
+            lit = 0;                            \
+            continue;                           \
+        }                                       \
+        if (byte) {     /** 7-bit value */      \
+            BSET(PC++, j);                      \
+            DEBUG(" %02x", j);                  \
+            byte = 0;                           \
             continue;                           \
         }                                       \
         if (j < 0x80) {  /** max 128 opcode */  \
-            lit = (j==opDOLIT);                 \
+            lit  = (j==opDOLIT);                \
+            byte = (j==opBYTE);                 \
             if (j != opNOP) {                   \
                BSET(PC++, j);                   \
                DEBUG(" %02x", j);               \
@@ -218,7 +225,7 @@ int _colon(const char *seg, int len, ...) {
     _header(strlen(seg), seg);
     DEBUG(" %s", ":_COLON");
     int addr = PC;
-    CELLCPY(len);
+    ASSEMBLE(len);
     return addr;
 }
 ///
@@ -228,7 +235,7 @@ int _immed(const char *seg, int len, ...) {
     _header(fIMMD | strlen(seg), seg);
     SHOWOP("IMMD");
     int addr = PC;
-    CELLCPY(len);
+    ASSEMBLE(len);
     return addr;
 }
 ///
@@ -238,7 +245,7 @@ int _label(int len, ...) {
     SHOWOP("LABEL");
     int addr = PC;
     // label has no opcode here
-    CELLCPY(len);
+    ASSEMBLE(len);
     return addr;
 }
 ///
@@ -247,7 +254,7 @@ int _label(int len, ...) {
 void _begin(int len, ...) {        /// **BEGIN**-(once)-WHILE-(loop)-UNTIL/REPEAT
     SHOWOP("BEGIN");               /// **BEGIN**-AGAIN
     RPUSH(PC);                     /// * keep current address for looping
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 void _while(int len, ...) {        /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPEAT
     SHOWOP("WHILE");
@@ -256,32 +263,32 @@ void _while(int len, ...) {        /// BEGIN-(once)--**WHILE**-(loop)-UNTIL/REPE
     int k = RPOP();
     RPUSH(PC - CELLSZ);
     RPUSH(k);
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 void _repeat(int len, ...) {       /// BEGIN-(once)-WHILE-(loop)- **REPEAT**
     SHOWOP("REPEAT");
     BSET(PC++, opBRAN);
     STORE(RPOP());
     SET(RPOP(), PC);
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 void _until(int len, ...) {        /// BEGIN-(once)-WHILE-(loop)--**UNTIL**
     SHOWOP("UNTIL");
     BSET(PC++, opQBRAN);           /// * conditional branch
     STORE(RPOP());                 /// * loop begin address
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 void _again(int len, ...) {        /// BEGIN--**AGAIN**
     SHOWOP("AGAIN");
     BSET(PC++, opBRAN);            /// * unconditional branch
     STORE(RPOP());                 /// * store return address
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 void _for(int len, ...) {          /// **FOR**-(first)-AFT-(2nd,...)-THEN-(every)-NEXT
     SHOWOP("FOR");
     BSET(PC++, opTOR);             /// * put loop counter on return stack
     RPUSH(PC);                     /// * keep 1st loop repeat address A0
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(every)-NEXT
     SHOWOP("AFT");                 /// * code between FOR-AFT run only once
@@ -290,7 +297,7 @@ void _aft(int len, ...) {          /// FOR-(first)--**AFT**-(2nd,...)-THEN-(ever
     RPOP();                        /// * pop-off A0 (FOR-AFT once only)
     RPUSH(PC);                     /// * keep repeat address on return stack
     RPUSH(PC - CELLSZ);            /// * keep A1 address on return stack for AFT-THEN
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 ///
 ///> Note: _next() is multi-defined in vm
@@ -299,14 +306,14 @@ void _nxt(int len, ...) {          /// FOR-(first)-AFT-(2nd,...)-THEN-(every)--*
     SHOWOP("NEXT");
     BSET(PC++, opDONEXT);          /// * check loop counter (on return stack)
     STORE(RPOP());                 /// * add A0 (FOR-NEXT) or
-    CELLCPY(len);                  /// * A1 to repeat loop (conditional branch by DONXT)
+    ASSEMBLE(len);                 /// * A1 to repeat loop (conditional branch by DONXT)
 }
 void _if(int len, ...) {           /// **IF**-THEN, **IF**-ELSE-THEN
     SHOWOP("IF");
     BSET(PC++, opQBRAN);           /// * conditional branch
     RPUSH(PC);                     /// * keep A0 address on return stack for ELSE or THEN
     STORE(0);                      /// * reserve branching address (A0)
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 void _else(int len, ...) {         /// IF--**ELSE**-THEN
     SHOWOP("ELSE");
@@ -314,12 +321,12 @@ void _else(int len, ...) {         /// IF--**ELSE**-THEN
     STORE(0);                      /// * reserve branching address (A1)
     SET(RPOP(), PC);               /// * backfill A0 branching address
     RPUSH(PC - CELLSZ);            /// * keep A1 address on return stack for THEN
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 void _then(int len, ...) {         /// IF-ELSE--**THEN**
     SHOWOP("THEN");
     SET(RPOP(), PC);               /// * backfill branching address (A0) or (A1)
-    CELLCPY(len);
+    ASSEMBLE(len);
 }
 ///
 ///> IO Functions

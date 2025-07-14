@@ -79,10 +79,11 @@ int tTAB;           ///< tracing indentation counter
 ///
 ///@name Tracing Functions
 ///@{
-int constexpr opEXIT  = 1;    /// cross-check with OPCODE enum in eforth_core.h
+int constexpr opEXIT  = 1;    /// cross-check with OPCODE enum in eforth_opcode.h
 int constexpr opENTER = 2;
-int constexpr opDOLIT = 6;
-int constexpr opEXEC  = 8;
+int constexpr opBYTE  = 6;
+int constexpr opDOLIT = 7;
+int constexpr opEXEC  = 9;
 
 #define DEBUG(s,v)  if (tCNT) printf((s),(v))
 #define TAB()       if (tCNT) {           \
@@ -109,8 +110,9 @@ void TRACE(U8 op, U16 ip, U16 top, S16 s)
     LOG("_");
     /// special opcode handlers for DOLIT, ENTER, EXIT
     switch (op) {
-    case opDOLIT: LOG_H("$", GET(ip)); LOG(" "); break;
-    case opEXIT:  LOG(";");  --tTAB;             break;
+    case opBYTE:  LOG_H("$", BGET(ip)); LOG(" "); break;
+    case opDOLIT: LOG_H("$", GET(ip));  LOG(" "); break;
+    case opEXIT:  LOG(";");  --tTAB;              break;
     case opEXEC: w = top; /** no break */
     case opENTER:                                 /// * display word name
     	for (--w; (BGET(w) & 0x7f)>0x20; w--);    /// * retract pointer to word name (ASCII range: 0x21~0x7f)

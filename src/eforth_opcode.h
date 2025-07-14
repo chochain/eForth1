@@ -4,13 +4,18 @@
  */
 #ifndef __EFORTH_OPCODE_H
 #define __EFORTH_OPCODE_H
-
+///
+/// @name eForth opcode
+/// @brief - make sure total opcode is less than 128
+/// @        because the MSB (i.e. 0x80) is used to flag colon from primitive word
+/// @{
 #define OPCODES \
 	OP(EXIT),   \
 	OP(ENTER),  \
     OP(BYE),    \
     OP(QRX),    \
     OP(TXSTO),  \
+    OP(BYTE),   \
     OP(DOLIT),  \
     OP(DOVAR),  \
     OP(EXECU),  \
@@ -94,4 +99,5 @@
         OP(PCISR), \
         OP(TMRE),  \
         OP(PCIE)
+/// @}
 #endif // __EFORTH_OPCODE_H

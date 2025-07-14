@@ -42,7 +42,7 @@ void _init() {                        ///> VM initializer
     R = (DU*)RAM(FORTH_STACK_TOP);
 
 #if EXE_TRACE
-    tCNT = 1; tTAB = 0;               ///> setup tracing variables
+    tCNT = 0; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
 
     /// FORTH_UVAR_ADDR;

@@ -9,7 +9,7 @@
 #include "eforth_config.h"
 #include "eforth_opcode.h"
 
-#define ASM_TRACE       0          /** create assembler trace */
+#define ASM_TRACE       1          /** create assembler trace */
 #define CASE_SENSITIVE  0          /** enable case sensitive  */
 #define ENABLE_SEE      1          /** add SEE, +280 bytes    */
 ///

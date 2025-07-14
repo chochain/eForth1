@@ -8,7 +8,6 @@
 #include "eforth_asm.h"
 
 #define WORDS_ROW_WIDTH 64          /** WORDS row width control */
-#define DOLI8(b)        (((b)<<8) | opBYTE)
 ///
 ///@name eForth Assembler module variables
 ///@{
@@ -113,22 +112,22 @@ int assemble(U8 *rom)
     IU DSUB  = _PRIM("D-",      DSUB   );
     IU UDSMOD= _PRIM("UD/MOD",  UDSMOD );    ///> ( d1l d1h d2l d2h -- drl drh dql dqh )
     IU DZEQ  = _COLON("D0=",    ZEQ, SWAP, ZEQ, AND, EXIT);
-    IU DSTOR = _COLON("2!",     DUP, TOR, DOLI8(CELLSZ), ADD, STORE, RFROM, STORE, EXIT);
-    IU DAT   = _COLON("2@",     DUP, TOR, AT, RFROM, DOLI8(CELLSZ), ADD, AT, EXIT);
+    IU DSTOR = _COLON("2!",     DUP, TOR, BYTE, CELLSZ, ADD, STORE, RFROM, STORE, EXIT);
+    IU DAT   = _COLON("2@",     DUP, TOR, AT, RFROM, BYTE, CELLSZ, ADD, AT, EXIT);
     IU DDUP  = _COLON("2DUP",   OVER, OVER, EXIT);
     IU DDROP = _COLON("2DROP",  DROP, DROP, EXIT);
     IU DSWAP = _COLON("2SWAP",  ROT, TOR, ROT, RFROM, EXIT);
-    IU DOVER = _COLON("2OVER",  DOLI8(3), PICK, DOLI8(3), PICK, EXIT);
+    IU DOVER = _COLON("2OVER",  BYTE, 3, PICK, BYTE, 3, PICK, EXIT);
     ///
     /// extended words
     ///
     _COLON("CELL+", CELL, ADD, EXIT);
     _COLON("CELL-", CELL, SUB, EXIT);
     _COLON("CELLS", CELL, MUL, EXIT);
-    _COLON("2+",    DOLI8(2), ADD, EXIT);
-    _COLON("2-",    DOLI8(2), SUB, EXIT);
-    _COLON("2*",    DOLI8(1), LSH, EXIT);
-    _COLON("2/",    DOLI8(1), RSH, EXIT);
+    _COLON("2+",    BYTE, 2, ADD, EXIT);
+    _COLON("2-",    BYTE, 2, SUB, EXIT);
+    _COLON("2*",    BYTE, 1, LSH, EXIT);
+    _COLON("2/",    BYTE, 1, RSH, EXIT);
     _COLON("S0",    DOLIT, FORTH_STACK_ADDR, EXIT);   ///> base of data stack (fixed instead of user var)
     _PRIM("SP@",   SPAT);                    ///> address of stack pointer
     _PRIM("I",     RAT );
@@ -160,8 +159,8 @@ int assemble(U8 *rom)
         _BEGIN(QKEY);
         _UNTIL(EXIT);
     }
-    IU TCHAR = _COLON(">CHAR", DOLI8(0x7f), AND, DUP, DOLI8(0x7f), BLANK, WITHI); {
-        _IF(DROP, DOLI8(0x5f));
+    IU TCHAR = _COLON(">CHAR", BYTE, 0x7f, AND, DUP, BYTE, 0x7f, BLANK, WITHI); {
+        _IF(DROP, BYTE, 0x5f);
         _THEN(EXIT);
     }
     IU HERE  = _COLON("HERE",  vCP, AT, EXIT);                /// top of dictionary
@@ -188,14 +187,14 @@ int assemble(U8 *rom)
     ///
     ///> Number Conversions and formatting
     ///
-    IU DIGIT = _COLON("DIGIT",   DOLI8(9), OVER, LT, DOLI8(7), AND, ADD, DOLI8(0x30), ADD, EXIT);
+    IU DIGIT = _COLON("DIGIT",   BYTE, 9, OVER, LT, BYTE, 7, AND, ADD, BYTE, 0x30, ADD, EXIT);
     IU HOLD  = _COLON("HOLD",    vHLD, AT, ONEM, DUP, vHLD, STORE, CSTOR, EXIT);
     IU BDIGS = _COLON("<#",      PAD, vHLD, STORE, EXIT);
     IU SIGN  = _COLON("SIGN", ZLT); {
-        _IF(DOLI8(0x2d), HOLD);
+        _IF(BYTE, 0x2d, HOLD);
         _THEN(EXIT);
     }
-    IU EXTRC = _COLON("EXTRACT", DOLI8(0), UDSMOD, DSWAP, DROP, DIGIT, EXIT);  /// ( dl dh n -- dql dqh u )
+    IU EXTRC = _COLON("EXTRACT", BYTE, 0, UDSMOD, DSWAP, DROP, DIGIT, EXIT);  /// ( dl dh n -- dql dqh u )
     IU DIG   = _COLON("#",       vBASE, AT, EXTRC, HOLD, EXIT);
     IU DIGS  = _COLON("#S", NOP); {
         _BEGIN(DIG, DDUP, DZEQ, INV);
@@ -205,19 +204,19 @@ int assemble(U8 *rom)
     IU EDIGS = _COLON("#>",      DDROP, vHLD, AT, PAD, OVER, SUB, EXIT);
     IU DSTR  = _COLON("DSTR",    DDUP, TOR, DROP, DABS, BDIGS, DIGS, RFROM, SIGN, EDIGS, EXIT);
     IU STR   = _COLON("STR",     S2D, DSTR, EXIT);
-    IU HEX_  = _COLON("HEX",     DOLI8(16), vBASE, STORE, EXIT);
-    IU DECIM = _COLON("DECIMAL", DOLI8(10), vBASE, STORE, EXIT);
+    IU HEX_  = _COLON("HEX",     BYTE, 16, vBASE, STORE, EXIT);
+    IU DECIM = _COLON("DECIMAL", BYTE, 10, vBASE, STORE, EXIT);
     IU DIGTQ = _COLON("DIGIT?",
-        TOR, TOUPP, DOLI8(0x30), SUB, DOLI8(9), OVER, LT); {
-        _IF(DOLI8(7), SUB, DUP, DOLI8(10), LT, OR);           /// handle hex number
+        TOR, TOUPP, BYTE, 0x30, SUB, BYTE, 9, OVER, LT); {
+        _IF(BYTE, 7, SUB, DUP, BYTE, 10, LT, OR);             /// handle hex number
         _THEN(DUP, RFROM, ULESS, EXIT);                       /// handle base > 10
     }
     /// TODO: add >NUMBER
     IU NUMBQ = _COLON("NUMBER?",
-        vBASE, AT, TOR, DOLI8(0), OVER, COUNT,
-        OVER, CAT, DOLI8(0x24), EQ); {                        /// leading with $ (i.e. 0x24)
+        vBASE, AT, TOR, BYTE, 0, OVER, COUNT,
+        OVER, CAT, BYTE, 0x24, EQ); {                         /// leading with $ (i.e. 0x24)
         _IF(HEX_, SWAP, ONEP, SWAP, ONEM);
-        _THEN(OVER, CAT, DOLI8(0x2d), EQ,                     /// handle negative sign (i.e. 0x2d)
+        _THEN(OVER, CAT, BYTE, 0x2d, EQ,                      /// handle negative sign (i.e. 0x2d)
              TOR, SWAP, RAT, SUB, SWAP, RAT, ADD, QDUP);
         _IF(ONEM); {
             /// a FOR..WHILE..NEXT..ELSE..THEN construct =~ for {..break..}
@@ -227,7 +226,7 @@ int assemble(U8 *rom)
                 _IF(NEG);
                 _THEN(SWAP);
             }
-            _ELSE(RFROM, RFROM, DDROP, DDROP, DOLI8(0));
+            _ELSE(RFROM, RFROM, DDROP, DDROP, BYTE, 0);
             _THEN(DUP);
          }
          _THEN(RFROM, DDROP, RFROM, vBASE, STORE, EXIT);
@@ -236,7 +235,7 @@ int assemble(U8 *rom)
     ///> Console Output
     ///
     IU SPACE = _COLON("SPACE", BLANK, EMIT, EXIT);
-    IU CHARS = _COLON("CHARS", SWAP, DOLI8(0), MAX); {
+    IU CHARS = _COLON("CHARS", SWAP, BYTE, 0, MAX); {
         _FOR(NOP);
         _AFT(DUP, EMIT);
         _THEN(NOP);
@@ -249,13 +248,13 @@ int assemble(U8 *rom)
         _THEN(NOP);
         _NEXT(DROP, EXIT);
     }
-    IU CR    = _COLON("CR",   DOLI8(0xd), EMIT, DOLI8(0xa), EMIT, EXIT);       /// CRLF i.e. \n actually
+    IU CR    = _COLON("CR",   BYTE, 0xd, EMIT, BYTE, 0xa, EMIT, EXIT);         /// CRLF i.e. \n actually
     IU DOSTR = _COLON("do$",  RFROM, RAT, RFROM, COUNT, ADD, TOR, SWAP, TOR, COUNT, EXIT);
     IU STRQP = _COLON("$\"|", DOSTR, EXIT);
        DOTQP = _COLON(".\"|", DOSTR, TYPE, EXIT);             /// Note: DOTQP export to _dotq
     IU DOTR  = _COLON(".R",   TOR, STR, RFROM, OVER, SUB, SPACS, TYPE, EXIT);  /// ( d n -- ) fixed width
     IU UDOTR = _COLON("U.R",  TOR, S2D, BDIGS, DIGS, EDIGS, RFROM, OVER, SUB, SPACS, TYPE, EXIT);                                                 /// ( u n -- ) unsigned fixed size
-    IU UDOT  = _COLON("U.",   DOLI8(1), UDOTR, EXIT);         /// ( u -- ) unsigned
+    IU UDOT  = _COLON("U.",   BYTE, 1, UDOTR, EXIT);          /// ( u -- ) unsigned
     IU DOT   = _COLON(".",    STR, SPACE, TYPE, EXIT);        /// ( d -- ) print, extra space
     IU QUEST = _COLON("?",    AT, DOT, EXIT);                 /// memory query
     /// TODO: add PAGE
@@ -268,7 +267,7 @@ int assemble(U8 *rom)
                 /// a FOR..WHILE..NEXT..THEN construct =~ for {..break..}
                 _FOR(BLANK, OVER, CAT, SUB, ZLT, INV);        /// for (len)
                 _WHILE(ONEP);                                 /// break to THEN if is char, or next char
-                _NEXT(RFROM, DROP, DOLI8(0), DUP, EXIT);      /// no break, (R>, DROP to rm loop counter)
+                _NEXT(RFROM, DROP, BYTE, 0, DUP, EXIT);       /// no break, (R>, DROP to rm loop counter)
                 _THEN(RFROM);                                 /// populate A0, i.e. break comes here, rm counter
             }
             _THEN(OVER, SWAP); {                              /// advance until next space found
@@ -290,12 +289,12 @@ int assemble(U8 *rom)
                        TOR, TIB, vIN, AT, ADD, vNTIB, AT, vIN, AT, SUB, RFROM,
                        PARSE0, vIN, PSTOR,
                        EXIT);
-    IU TOKEN = _COLON("TOKEN", BLANK, PARSE, DOLI8(0x1f), MIN, HERE, CELL, ADD, PACKS, EXIT);  /// ( -- a; <string>) put token at HERE
+    IU TOKEN = _COLON("TOKEN", BLANK, PARSE, BYTE, 0x1f, MIN, HERE, CELL, ADD, PACKS, EXIT);   /// ( -- a; <string>) put token at HERE
     IU WORD  = _COLON("WORD",  PARSE, HERE, CELL, ADD, PACKS, EXIT);                           /// ( c -- a; <string)
     ///
     ///> Dictionary serach
     ///
-    IU NAMET = _COLON("NAME>", COUNT, DOLI8(0x1f), AND, ADD, EXIT);        /// ( nfa -- cfa )
+    IU NAMET = _COLON("NAME>", COUNT, BYTE, 0x1f, AND, ADD, EXIT);         /// ( nfa -- cfa )
     IU SAMEQ = _COLON("SAME?", NOP); {                                     /// ( a1 a2 n - a1 a2 f ) compare a1, a2 byte-by-byte
         _FOR(DDUP);
 #if CASE_SENSITIVE
@@ -309,7 +308,7 @@ int assemble(U8 *rom)
             _THEN(NOP);
         }
         _THEN(NOP);
-        _NEXT(DDROP, DOLI8(FALSE), EXIT);                       /// SAME!
+        _NEXT(DDROP, BYTE, FALSE, EXIT);                        /// SAME!
     }
     /// TODO: add COMPARE
     IU FIND = _COLON("FIND",                                    /// ( a va -- cfa nfa, a F ) keep length in tmp
@@ -340,12 +339,12 @@ int assemble(U8 *rom)
     ///> Terminal Input
     ///
     IU HATH  = _COLON("^H", TOR, OVER, RFROM, SWAP, OVER, XOR); {
-        _IF(DOLI8(8), EMIT, ONEM, BLANK, EMIT, DOLI8(8), EMIT);
+        _IF(BYTE, 8, EMIT, ONEM, BLANK, EMIT, BYTE, 8, EMIT);
         _THEN(EXIT);
     }
     IU TAP   = _COLON("TAP", DUP, EMIT, OVER, CSTOR, ONEP, EXIT);                  /// echo and store new char to TIB
-    IU KTAP  = _COLON("kTAP", DUP, DOLI8(0xa), XOR); {          /// check <LF>
-        _IF(DOLI8(8), XOR); {                                   /// check <BS>
+    IU KTAP  = _COLON("kTAP", DUP, BYTE, 0xa, XOR); {           /// check <LF>
+        _IF(BYTE, 8, XOR); {                                    /// check <BS>
             _IF(BLANK, TAP);                                    /// put blank
             _ELSE(HATH);                                        /// handle backspace
             _THEN(EXIT);
@@ -354,7 +353,7 @@ int assemble(U8 *rom)
     }
     IU ACCEP = _COLON("ACCEPT", OVER, ADD, OVER); {             /// accquire token from console
         _BEGIN(DDUP, XOR);                                      /// loop through input stream
-        _WHILE(KEY, DUP, BLANK, SUB, DOLI8(0x5f), ULESS); {
+        _WHILE(KEY, DUP, BLANK, SUB, BYTE, 0x5f, ULESS); {
             _IF(TAP);                                           /// store new char into TIB
             _ELSE(KTAP);                                        /// handle control chars
             _THEN(NOP);
@@ -362,8 +361,8 @@ int assemble(U8 *rom)
         _REPEAT(DROP, OVER, SUB, EXIT);                         /// keep token length in #TIB
     }
     IU EXPEC = _COLON("EXPECT", ACCEP, vSPAN, STORE, DROP, EXIT);
-    IU QUERY = _COLON("QUERY", TIB, DOLI8(FORTH_TIB_SZ), ACCEP,
-                      vNTIB, STORE, DROP, DOLI8(0), vIN, STORE, EXIT);
+    IU QUERY = _COLON("QUERY", TIB, BYTE, FORTH_TIB_SZ, ACCEP,
+                      vNTIB, STORE, DROP, BYTE, 0, vIN, STORE, EXIT);
     ///
     ///> Text Interpreter
     ///
@@ -402,9 +401,9 @@ int assemble(U8 *rom)
             _THEN(EXIT);
         }
     /// TODO: add ?STACK
-    IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, DOLI8(0x3f), EMIT, CR, ABORT);
+    IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, BYTE, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  /// scan dictionary for word
-        _IF(CAT, DOLI8(fCMPL), AND); {               /// check for compile only word
+        _IF(CAT, BYTE, fCMPL, AND); {                /// check for compile only word
             _IF(DROP); {
                 _DOTQ("compile only");               /// INTER0 of Dr Ting's
             }
@@ -713,9 +712,7 @@ static U8 _rom[FORTH_ROM_SZ] = {};            ///< fake rom to simulate run time
 int main(int ac, char* av[]) {
     setvbuf(stdout, NULL, _IONBF, 0);         /// * autoflush (turn STDOUT buffering off)
 
-    printf("#if 0\n");
     int sz = assemble(_rom);
-    printf("#endif\n");
 
     _dump_rom(_rom, sz);
 

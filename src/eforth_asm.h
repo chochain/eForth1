@@ -117,7 +117,7 @@ enum {
             lit = 0;                            \
             continue;                           \
         }                                       \
-        if (byte) {     /** 7-bit value */      \
+        if (byte) {     /** 8-bit value */      \
             BSET(PC++, j);                      \
             DEBUG(" %02x", j);                  \
             byte = 0;                           \

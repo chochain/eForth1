@@ -42,7 +42,7 @@ void _init() {                        ///> VM initializer
     R = (DU*)RAM(FORTH_STACK_TOP);
 
 #if EXE_TRACE
-    tCNT = 0; tTAB = 0;               ///> setup tracing variables
+    tCNT = 1; tTAB = 0;               ///> setup tracing variables
 #endif  // EXE_TRACE
 
     /// FORTH_UVAR_ADDR;
@@ -243,6 +243,8 @@ void vm_outer() {
         /// @}
         /// @name Built-in ops
         /// @{
+        _X(BYTE,                        ///> push 8-bit literal
+           PUSH(BGET(ip++)));
         _X(DOLIT,
             PUSH(GET(ip));              ///> push literal onto data stack
             ip += CELLSZ);

@@ -8,7 +8,7 @@
 ///
 ///@name Compiler options
 ///@{
-#define EXE_TRACE     0  /**< VM execution tracing flag */
+#define EXE_TRACE     1  /**< VM execution tracing flag */
 #define COMPUTED_GOTO 0  /**< dispatcher (~5% faster, +180 bytes RAM) */
 ///@}
 ///@name Arduino Support Macros

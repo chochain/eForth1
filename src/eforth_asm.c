@@ -206,18 +206,21 @@ int assemble(U8 *rom)
     IU STR   = _COLON("STR",     S2D, DSTR, EXIT);
     IU HEX_  = _COLON("HEX",     BYTE, 16, vBASE, STORE, EXIT);
     IU DECIM = _COLON("DECIMAL", BYTE, 10, vBASE, STORE, EXIT);
-    IU DIGTQ = _COLON("DIGIT?",
-        TOR, TOUPP, BYTE, 0x30, SUB, BYTE, 9, OVER, LT); {
+    ///
+    /// Numeric inputs
+    ///
+    IU DIGTQ = _COLON("DIGIT?",                               /// ( c base -- n t )
+        TOR, TOUPP, BYTE, 0x30, SUB, BYTE, 9, OVER, LT); {    /// char to numeric value
         _IF(BYTE, 7, SUB, DUP, BYTE, 10, LT, OR);             /// handle hex number
         _THEN(DUP, RFROM, ULESS, EXIT);                       /// handle base > 10
     }
     /// TODO: add >NUMBER
-    IU NUMBQ = _COLON("NUMBER?",
-        vBASE, AT, TOR, BYTE, 0, OVER, COUNT,
+    IU NUMBQ = _COLON("NUMBER?",                              /// ( a -- n T | a F )
+        vBASE, AT, TOR, BYTE, 0, OVER, COUNT,                 /// convert a string to int
         OVER, CAT, BYTE, 0x24, EQ); {                         /// leading with $ (i.e. 0x24)
         _IF(HEX_, SWAP, ONEP, SWAP, ONEM);
         _THEN(OVER, CAT, BYTE, 0x2d, EQ,                      /// handle negative sign (i.e. 0x2d)
-             TOR, SWAP, RAT, SUB, SWAP, RAT, ADD, QDUP);
+            TOR, SWAP, RAT, SUB, SWAP, RAT, ADD, QDUP);
         _IF(ONEM); {
             /// a FOR..WHILE..NEXT..ELSE..THEN construct =~ for {..break..}
             _FOR(DUP, TOR, CAT, vBASE, AT, DIGTQ);
@@ -228,8 +231,8 @@ int assemble(U8 *rom)
             }
             _ELSE(RFROM, RFROM, DDROP, DDROP, BYTE, 0);
             _THEN(DUP);
-         }
-         _THEN(RFROM, DDROP, RFROM, vBASE, STORE, EXIT);
+        }
+        _THEN(RFROM, DDROP, RFROM, vBASE, STORE, EXIT);       /// restore base
     }
     ///
     ///> Console Output
@@ -261,16 +264,21 @@ int assemble(U8 *rom)
     ///
     ///> Parsing
     ///
-    IU PARSE0= _COLON("(parse)", vTMP, CSTOR, OVER, TOR, DUP); {   /// ( addr len delim -- ) delimiter kept tmp, addr in R
-        _IF(ONEM, vTMP, CAT, BLANK, EQ); {                    /// if (len) { --len; if (delim==" ") {...} }
+    ///  (parse) scan string delimited by c, return found string and offset
+    ///  PARSE   scan TIB from >IN points to, return counted string delimited by c
+    ///  TOKEN   parse next string delim by <SPC>, paste it as NAME to HERE
+    ///  WORD    parse next string delim by c, paste it as counted string to HERE
+    ///
+    IU PARSE0= _COLON("(parse)", vTMP, CSTOR, OVER, TOR, DUP); {   /// ( addr len delim -- addr len delta ) delim in tmp, addr on R
+        _IF(ONEM, vTMP, CAT, BLANK, EQ); {                    /// check for leading blank
             _IF(NOP); {
                 /// a FOR..WHILE..NEXT..THEN construct =~ for {..break..}
-                _FOR(BLANK, OVER, CAT, SUB, ZLT, INV);        /// for (len)
+                _FOR(BLANK, OVER, CAT, SUB, ZLT, INV);        /// scan for delimiter
                 _WHILE(ONEP);                                 /// break to THEN if is char, or next char
                 _NEXT(RFROM, DROP, BYTE, 0, DUP, EXIT);       /// no break, (R>, DROP to rm loop counter)
                 _THEN(RFROM);                                 /// populate A0, i.e. break comes here, rm counter
             }
-            _THEN(OVER, SWAP); {                              /// advance until next space found
+            _THEN(OVER, SWAP); {                              /// skip leading blanks
                 /// a FOR..WHILE..NEXT..ELSE..THEN construct =~ DO..LEAVE..+LOOP
                 _FOR(vTMP, CAT, OVER, CAT, SUB, vTMP, CAT, BLANK, EQ); {
                   _IF(ZLT);
@@ -279,16 +287,15 @@ int assemble(U8 *rom)
                 _WHILE(ONEP);                                 /// if (char <= space) break to ELSE
                 _NEXT(DUP, TOR);                              /// no break, if counter < limit loop back to FOR
                 _ELSE(RFROM, DROP, DUP, ONEP, TOR);           /// R>, DROP to rm loop counter
-               _THEN(OVER, SUB, RFROM, RFROM, SUB, EXIT);     /// put token length on stack
+                _THEN(OVER, SUB, RFROM, RFROM, SUB, EXIT);    /// put token length on stack
             }
         }
         _THEN(OVER, RFROM, SUB, EXIT);
     }
     IU PACKS = _COLON("PACK$", DUP, TOR, DDUP, CSTOR, ONEP, SWAP, CMOVE, RFROM, EXIT);     /// ( b u a -- a )
     IU PARSE = _COLON("PARSE",                                                             /// ( c -- b u )
-                       TOR, TIB, vIN, AT, ADD, vNTIB, AT, vIN, AT, SUB, RFROM,
-                       PARSE0, vIN, PSTOR,
-                       EXIT);
+         TOR, TIB, vIN, AT, ADD, vNTIB, AT, vIN, AT, SUB, RFROM,
+         PARSE0, vIN, PSTOR, EXIT);
     IU TOKEN = _COLON("TOKEN", BLANK, PARSE, BYTE, 0x1f, MIN, HERE, CELL, ADD, PACKS, EXIT);   /// ( -- a; <string>) put token at HERE
     IU WORD  = _COLON("WORD",  PARSE, HERE, CELL, ADD, PACKS, EXIT);                           /// ( c -- a; <string)
     ///
@@ -364,7 +371,7 @@ int assemble(U8 *rom)
     IU QUERY = _COLON("QUERY", TIB, BYTE, FORTH_TIB_SZ, ACCEP,
                       vNTIB, STORE, DROP, BYTE, 0, vIN, STORE, EXIT);
     ///
-    ///> Text Interpreter
+    ///> Outer Interpreter
     ///
     ///    QUERY/TIB/ACCEPT - start the interpreter loop <-------<------.
     ///    TOKEN/PARSE - get a space delimited word                      .
@@ -394,12 +401,12 @@ int assemble(U8 *rom)
     ///          |     |                                                   |
     ///          |      \-Push the number to the variable stack >--------->.
     ///           \-No:                                                   .
-    ///              \-An Error has occurred, prIU out an error message ->
+    ///              \-An Error has occurred, print out an error message ->
     ///
     IU ABORT = _COLON("ABORT", vTABRT, AT, QDUP); {  /// load ABORT vector
-            _IF(EXECU);                              /// @EXECUTE
-            _THEN(EXIT);
-        }
+        _IF(EXECU);                                  /// @EXECUTE
+        _THEN(EXIT);
+    }
     /// TODO: add ?STACK
     IU ERROR = _COLON("ERROR", SPACE, COUNT, TYPE, BYTE, 0x3f, EMIT, CR, ABORT);
     IU INTER = _COLON("$INTERPRET", NAMEQ, QDUP); {  /// scan dictionary for word
@@ -437,12 +444,16 @@ int assemble(U8 *rom)
         _AGAIN(NOP);
     }
     ///
-    ///> Colon Compiler
+    ///> Colon Word Compiler
     ///
     IU COMMA = _COLON(",",  HERE, DUP, CELL, ADD, vCP, STORE, STORE, EXIT);   /// store a byte
     IU CCMMA = _COLON("C,", HERE, DUP, ONEP,  vCP, STORE, CSTOR, EXIT);       /// store a word
     IU ALLOT = _COLON("ALLOT",    vCP, PSTOR, EXIT);
-    IU iLITR = _IMMED("LITERAL",  DOLIT, opDOLIT, CCMMA, COMMA, EXIT);        /// create a literal
+    IU iLITR = _IMMED("LITERAL",  DUP, DOLIT, 0xff00, AND); {
+        _IF(DOLIT, opDOLIT, CCMMA, COMMA);           /// create a literal
+        _ELSE(DOLIT, opBYTE, CCMMA, CCMMA);          /// 8-bit literal
+        _THEN(EXIT);
+    }
     IU COMPI = _COLON("COMPILE",  RFROM, DUP, CAT, CCMMA, ONEP, TOR, EXIT);
     IU SCOMP = _COLON("$COMPILE", NAMEQ, QDUP); {    /// name found?
         _IF(CAT, DOLIT, fIMMD, AND); {               /// is immediate?

@@ -136,10 +136,16 @@ Instead of accessing memory mapped address (i.e. 0x20-0x3F), eForth1 uses the Ar
   | CLOCK   | ( -- ul uh )           | fetch millis(), in double precision     |
   | DELAY   | ( n -- )               | delay n milliseconds                    |
 
-*Note: Since Timer0 (pin 5, 6) is used for clock and Timer2 (pin 3, 11) is used for timer interrupt, eForth1 can only safely use Pin 9 and 10 for PWM (unless you don't need CLOCK or DELAY). Other pins behave like digital pins. Anything above and equals to 128 is treated as HIGH, below as LOW. On the other hand, AIN does not use any timer. It can be safely used with all Analog Pins.
+*Note1: Since Timer0 (pin 5, 6) is used for clock and Timer2 (pin 3, 11) is used for timer interrupt, eForth1 can only safely use Pin 9 and 10 for PWM (unless you don't need CLOCK or DELAY). Other pins behave like digital pins. Anything above and equals to 128 is treated as HIGH, below as LOW. On the other hand, AIN does not use any timer. It can be safely used with all Analog Pins.
+*Note2: AIN can read Arduino UNO/Nano pin A0~A7. However, the max frequency and accuracy are affected by Timer prescaler.
 
 #### Timer and Pin Change Interrupts
-eForth1 uses a data structure to capture interrupts. It supports 11 ISRs (interrupt service routines). 8 for Timer and 3 for Pin Change. Arduino UNO/Nano timer2 is used, ticking at 1 millisecond as the base freq for timer interrupt. Timer0 is used for delay and Timer1 are left for other Arduino libraries such as servo driving. Pin Changes are flagged by port-D (pin D0-D7), Port-B (pin D8-D13), and Port-C (pin A0-A5). Only one xt (function address) per port so your ISR needs to figure out which pin actually been triggered if they use the same port.
+eForth1 uses a data structure to setup ISRs and capture interrupts. It supports 11 ISRs (interrupt service routines). 8 for Timer and 3 for Pin Change.
+* Arduino UNO/Nano Timer2 is used for interrupt timing. It ticks at 1 millisecond as the base freq for timer interrupts.
+* Timer0 is used for delay, and
+* Timer1 is not used. It is delibrately left for other Arduino libraries such as servo driving.
+* Pin Changes are flagged by port-D (pin D0-D7), Port-B (pin D8-D13), and Port-C (pin A0-A5).
+Note: Pin Change accept only one xt (function address) per port, so your ISR needs to figure out which pin actually been triggered if they use the same port.
 
   | Word  | Usage         | Function                                   |
   |:------|:--------------|:-------------------------------------------|

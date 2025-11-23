@@ -145,7 +145,6 @@ eForth1 uses a data structure to setup ISRs and capture interrupts. It supports 
 * Timer0 is used for delay, and
 * Timer1 is not used. It is delibrately left for other Arduino libraries such as servo driving.
 * Pin Changes are flagged by port-D (pin D0-D7), Port-B (pin D8-D13), and Port-C (pin A0-A5).
-Note: Pin Change accept only one xt (function address) per port, so your ISR needs to figure out which pin actually been triggered if they use the same port.
 
   | Word  | Usage         | Function                                   |
   |:------|:--------------|:-------------------------------------------|
@@ -153,6 +152,8 @@ Note: Pin Change accept only one xt (function address) per port, so your ISR nee
   | TIMER | ( 1\|0 -- )   | 1: enable, 0: disable Timer2 Interrupt     |
   | PCISR | ( xt p -- )   | make xt when p Pin Changes                 |
   | PCINT | ( n -- )      | 1: enable, 0: disable Pin Change Interrupt |
+
+Note: Pin Change accept only one xt (function address) per port, so your ISR needs to figure out which pin actually been triggered if they use the same port.
 
 *Example: [Ultrasound Ranging](https://github.com/chochain/eForth1/blob/master/examples/7_usound/7_usound.ino)
 

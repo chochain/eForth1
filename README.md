@@ -137,14 +137,11 @@ Instead of accessing memory mapped address (i.e. 0x20-0x3F), eForth1 uses the Ar
   | DELAY   | ( n -- )               | delay n milliseconds                    |
 
 *Note1: Since Timer0 (pin 5, 6) is used for clock and Timer2 (pin 3, 11) is used for timer interrupt, eForth1 can only safely use Pin 9 and 10 for PWM (unless you don't need CLOCK or DELAY). Other pins behave like digital pins. Anything above and equals to 128 is treated as HIGH, below as LOW. On the other hand, AIN does not use any timer. It can be safely used with all Analog Pins.
+
 *Note2: AIN can read Arduino UNO/Nano pin A0~A7. However, the max frequency and accuracy are affected by Timer prescaler.
 
 #### Timer and Pin Change Interrupts
 eForth1 uses a data structure to setup ISRs and capture interrupts. It supports 11 ISRs (interrupt service routines). 8 for Timer and 3 for Pin Change.
-* Arduino UNO/Nano Timer2 is used for interrupt timing. It ticks at 1 millisecond as the base freq for timer interrupts.
-* Timer0 is used for delay, and
-* Timer1 is not used. It is delibrately left for other Arduino libraries such as servo driving.
-* Pin Changes are flagged by port-D (pin D0-D7), Port-B (pin D8-D13), and Port-C (pin A0-A5).
 
   | Word  | Usage         | Function                                   |
   |:------|:--------------|:-------------------------------------------|
@@ -153,9 +150,14 @@ eForth1 uses a data structure to setup ISRs and capture interrupts. It supports 
   | PCISR | ( xt p -- )   | make xt when p Pin Changes                 |
   | PCINT | ( n -- )      | 1: enable, 0: disable Pin Change Interrupt |
 
-Note: Pin Change accept only one xt (function address) per port, so your ISR needs to figure out which pin actually been triggered if they use the same port.
+Note:
+* Arduino UNO/Nano Timer2 is used for interrupt timing. It ticks at 1 millisecond as the base freq for timer interrupts.
+* Timer0 is used for delay, and
+* Timer1 is not used. It is delibrately left for other Arduino libraries such as servo driving.
+* Pin Changes are flagged by port-D (pin D0-D7), Port-B (pin D8-D13), and Port-C (pin A0-A5).
+* Pin Change accept only one xt (function address) per port, so your ISR needs to figure out which pin actually been triggered if they use the same port.
 
-*Example: [Ultrasound Ranging](https://github.com/chochain/eForth1/blob/master/examples/7_usound/7_usound.ino)
+Example: [Ultrasound Ranging](https://github.com/chochain/eForth1/blob/master/examples/7_usound/7_usound.ino)
 
 #### EEPROM Store/Restore
 Arduino UNO/Nano has 1K of EEPROM which can cover eForth1 user variables, the newly defined words, and possible data stored within the 1K RAM. Your work can be saved onto EEPROM and can be restored even after a reboot.
